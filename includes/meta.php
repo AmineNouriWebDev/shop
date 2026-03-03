@@ -8,7 +8,7 @@
     <title><?php if($title_page !='') echo $title_page; else echo 'Accueil'; ?></title>
     <meta name="description" content="<?php echo $description_page; ?>" />
     <meta name="keywords" content="<?php echo $keywords_page; ?>" />
-    <meta name="author" content="ONLYTECH">
+    <meta name="author" content="maxsolving.com">
     <?php 
         if(isset($price) && $price!="" && $price!="0.000"){
     ?>

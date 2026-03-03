@@ -59,14 +59,39 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
 				if ($etatStock == '1') $availability="in stock"; else $availability="out of stock";
 
             
-            if(afficheChamp($data['titre_page']) != '') { $title_page=afficheChamp($data['titre_page']); } else { $title_page = str_replace("%%PRODUIT%%",$titre,$title_prod); $title_page = str_replace("%%CATEGORIE%%",$categorie_title,$title_page); }
+            // Fix SEO Variables Initialization
+            $titre_db = afficheChamp($data['titre_page']);
+            $keywords_db = afficheChamp($data['keywords']);
+            $desc_db = afficheChamp($data['description']);
+
+            if($titre_db != '') { 
+                $title_page = $titre_db; 
+            } else { 
+                $title_page = str_replace("%%PRODUIT%%",$titre,$title_prod); 
+                $title_page = str_replace("%%CATEGORIE%%",$categorie_title,$title_page); 
+            }
             
-            // Initialize variables if not set
-            $keywords_page = isset($keywords_page) ? $keywords_page : '';
-            $description_page = isset($description_page) ? $description_page : '';
+            if($keywords_db != '') { 
+                $keywords_page = $keywords_db; 
+            } else { 
+                $keywords_page = str_replace("%%PRODUIT%%",$titre,$keywords_prod); 
+                $keywords_page = str_replace("%%CATEGORIE%%",$categorie_title,$keywords_page); 
+            }
             
-            if(afficheChamp($data['keywords']) != '') { $keywords_page=afficheChamp($data['keywords']); } else { $keywords_page = str_replace("%%PRODUIT%%",$titre,$keywords_prod); $keywords_page = str_replace("%%CATEGORIE%%",$categorie_title,$keywords_page); }
-            if(afficheChamp($data['description']) != '') { $description_page=afficheChamp($data['description']); } else { $description_page = str_replace("%%PRODUIT%%",$titre,$description_prod); $description_page = str_replace("%%CATEGORIE%%",$categorie_title,$description_page); }
+            if($desc_db != '') { 
+                $description_page = $desc_db; 
+            } else { 
+                $description_page = str_replace("%%PRODUIT%%",$titre,$description_prod); 
+                $description_page = str_replace("%%CATEGORIE%%",$categorie_title,$description_page); 
+            }
+            
+            // Convert Youtube Link to Embed
+            if($video != "") {
+                if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $video, $match)) {
+                    $video_id = $match[1];
+                    $video = '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/'.$video_id.'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                }
+            }
 		}
     }else{
         $url = current_url();

@@ -72,13 +72,19 @@
                                 </div>
                             <?php } ?>
                             
+                            <?php if($contenu != "") { ?>
+                                <a href="#details-complets" class="btn-secondary-tw d-inline-block p-2 px-4 mb-4" style="border-radius:2rem; font-size:0.85rem;">
+                                    <i class="fa fa-arrow-down me-2"></i> Afficher plus de détails
+                                </a>
+                            <?php } ?>
+                            
                             <?php if ($etatStock == '1'){  ?>
                                 <div class="cart-table-area mt-4">
                                     <div class="cart-summary m-0 p-4 border rounded-3xl shadow-sm bg-white">
                                         <a href="applications.php" class="btn-secondary-tw w-100 d-block text-center text-uppercase mb-4">Télécharger nos applications</a>
                                         
                                         <!-- Commande Express Toggle -->
-                                        <button class="btn-primary-tw w-100 d-flex justify-content-between align-items-center fw-bold btn-express-toggle" type="button" data-toggle="collapse" data-target="#collapseExpress" aria-expanded="false" aria-controls="collapseExpress">
+                                        <button class="btn-primary-tw w-100 d-flex justify-content-between align-items-center fw-bold btn-express-toggle collapsed" type="button" data-toggle="collapse" data-target="#collapseExpress" aria-expanded="false" aria-controls="collapseExpress">
                                             <span><i class="fa fa-bolt text-warning me-2"></i> Commande Express Rapide</span>
                                             <i class="fa fa-chevron-down toggle-icon"></i>
                                         </button>
@@ -211,7 +217,7 @@ while($datapay = mysqli_fetch_array($respay)){
                             <?php } ?>
                             
                             <!-- LONG CONTENT INJECTION -->
-                            <div class="mt-5">
+                            <div class="mt-5" id="details-complets">
                                 <?php if($contenu != "") { ?>
                                     <h4 class="fw-bold mb-4 border-bottom pb-2">Détails du produit</h4>
                                     <div class="product-long-content text-secondary lh-lg" style="font-size: 0.95rem;">
@@ -241,23 +247,22 @@ while($datapay = mysqli_fetch_array($respay)){
                             <div class="single_product_desc bg-white shadow-sm border px-3 py-4 rounded-3xl text-center">
     	                        
                                 <div class="product-meta-data mb-4">
-    	                            <p class="fs-4 fw-bold text-dark mt-2"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <br/><span class="text-muted text-decoration-line-through fs-6 fw-normal">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
+    	                            <p class="fs-1 fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important;"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <br/><span class="text-muted text-decoration-line-through fs-5 fw-normal" style="color:#9ca3af !important;">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
                                 </div>
                                     
                                 <!-- Add to Cart Form -->
                                 <form class="cart clearfix d-flex flex-column align-items-center" method="post">
-                                    <div class="cart-btn d-flex mx-auto mb-4 align-items-center bg-light rounded-pill px-3 py-1">
-                                        <p class="m-0 me-3 fw-semibold text-secondary">Qté</p>
+                                    <div class="cart-btn d-flex mx-auto mb-4 align-items-center bg-white border border-2 border-primary rounded-pill px-2 py-1 shadow-sm" style="border-color: var(--shop-primary) !important;">
                                         <div class="quantity d-flex align-items-center">
-                                            <span class="qty-minus text-primary fw-bold" style="cursor:pointer;font-size:1.2rem;padding:0 10px;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;"><i class="fa fa-minus"></i></span>
-                                            <input type="number" class="qty-text border-0 bg-transparent text-center fw-bold" style="width:40px;outline:none" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                            <span class="qty-plus text-primary fw-bold" style="cursor:pointer;font-size:1.2rem;padding:0 10px;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus"></i></span>
+                                            <span class="qty-minus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;"><i class="fa fa-minus"></i></span>
+                                            <input type="number" class="qty-text border-0 bg-transparent text-center fw-bold fs-5 mx-2" style="width:50px; outline:none;" id="qty" step="1" min="1" max="300" name="quantity" value="1">
+                                            <span class="qty-plus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus"></i></span>
                                         </div>
                                     </div>
     								<?php if ($etatStock == '1'){  ?>
-                                    <button type="button" name="addtocart" value="5" class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3" onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);"><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
+                                    <button type="button" name="addtocart" value="5" class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3 fs-6" style="border-radius:1rem" onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);"><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
                                     <?php }else{?>
-    								<button type="button" name="addtocart" value="5" class="btn-secondary-tw w-100 border-0 text-uppercase py-3" onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);" disabled><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
+    								<button type="button" name="addtocart" value="5" class="btn-secondary-tw w-100 border-0 text-uppercase py-3 fs-6" style="border-radius:1rem" onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);" disabled><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
     								<?php } ?>
     							</form>
                             </div>
@@ -268,7 +273,12 @@ while($datapay = mysqli_fetch_array($respay)){
                                 $ress =executeRequete($reqs);
                                 while($datas = mysqli_fetch_array($ress)){
                             ?>
-                            <div class="bg-light p-2 mt-2 rounded" style="font-size:13px"><img src="<?php echo photoServiceSite($datas['id']); ?>" width="40px" class="bg-white me-2 p-2 rounded" /> <?php echo titreService($datas['id']); ?></div>    
+                            <div class="bg-white p-3 mt-3 rounded-2xl shadow-sm border d-flex align-items-center" style="font-size:0.85rem; font-weight:600; color:#374151;">
+                                <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width:45px; height:45px; background:var(--shop-bg-alt);">
+                                    <img src="<?php echo photoServiceSite($datas['id']); ?>" width="24px" alt="Service" /> 
+                                </div>
+                                <span class="lh-sm"><?php echo titreService($datas['id']); ?></span>
+                            </div>    
                             <?php
                                 }
                             ?>
