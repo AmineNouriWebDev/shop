@@ -158,6 +158,7 @@ while($datapay = mysqli_fetch_array($respay)){
             <?php if ($first) { echo 'required'; $first = false; } ?>
         >
         <label class="custom-control-label" for="payment_<?php echo $datapay['id']; ?>">
+            <?php
             $label = moyen_paiement($datapay['id']);
             // We just output the text label. Images removed to save space on mobile form.
             echo '<span class="fw-semibold text-secondary mx-2">' . $label . '</span>';
@@ -486,6 +487,7 @@ document.querySelectorAll('a[href="#details-complets"]').forEach(anchor => {
 /* Mobile precise fixes */
 @media (max-width: 991.98px) {
     .mobile-center-img { text-align: center !important; }
+    .mobile-center-img .myImage { width: 85% !important; margin: 0 auto; display: block; }
 }
 
 /* Commande Express accordion state */
