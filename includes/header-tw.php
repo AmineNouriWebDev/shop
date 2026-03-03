@@ -20,7 +20,8 @@ $nbArticlesHeader = isset($nbArticles) ? intval($nbArticles) : 0;
 
 // Récupérer les catégories parentes pour la nav
 $nav_categories = [];
-$req_nav = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' ORDER BY `ordre`";
+// Exclude promotional categories from main nav (managed only in admin)
+$req_nav = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' AND `titre` NOT LIKE '%Promo%' ORDER BY `ordre`";
 $res_nav = executeRequete($req_nav);
 while ($cat = mysqli_fetch_array($res_nav)) {
     $req_sub = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='".$cat['id']."' ORDER BY `ordre`";
@@ -234,10 +235,14 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     align-items: center;
     gap: 0.25rem;
     height: 48px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    /* overflow must stay visible so dropdowns appear above carousel */
+    overflow: visible;
   }
-  .sh-navbar-inner::-webkit-scrollbar { display: none; }
+  /* Horizontal scroll only on smaller screens where dropdowns are replaced by drawer */
+  @media (max-width: 1199px) {
+    .sh-navbar-inner { overflow-x: auto; overflow-y: visible; scrollbar-width: none; }
+    .sh-navbar-inner::-webkit-scrollbar { display: none; }
+  }
 
   /* Nav items */
   .sh-nav-item {
