@@ -432,6 +432,165 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     .sh-mobile-drawer { display: none !important; }
     .sh-drawer-overlay { display: none !important; }
   }
+
+  /* ── LIVE SEARCH DROPDOWN ─────────────────────────── */
+  .ls-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 540px;
+  }
+  /* Keep the sh-search inside wrapper flex-fitting */
+  .ls-wrapper .sh-search { max-width: 100%; width: 100%; }
+  .ls-wrapper .sh-mobile-search { position: relative; }
+
+  .ls-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--shop-surface);
+    border: 1px solid var(--shop-border);
+    border-radius: 1rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.08);
+    z-index: 1200;
+    overflow: hidden;
+    max-height: 480px;
+    overflow-y: auto;
+    animation: ls-fade-in 150ms ease;
+  }
+  @keyframes ls-fade-in {
+    from { opacity:0; transform: translateY(-6px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .ls-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    text-decoration: none;
+    color: var(--shop-text-primary);
+    transition: background 120ms ease;
+    border-bottom: 1px solid var(--shop-border);
+  }
+  .ls-item:last-of-type { border-bottom: none; }
+  .ls-item:hover,
+  .ls-item:focus {
+    background: color-mix(in srgb, var(--shop-primary) 7%, transparent);
+    outline: none;
+    text-decoration: none;
+    color: var(--shop-text-primary);
+  }
+
+  .ls-item-img {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--shop-bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ls-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ls-item-info { flex: 1; min-width: 0; }
+  .ls-item-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+  }
+  .ls-item-price { display: flex; align-items: center; gap: 0.5rem; }
+  .ls-price-main {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--shop-primary);
+  }
+  .ls-price-old {
+    font-size: 0.75rem;
+    color: var(--shop-text-disabled);
+    text-decoration: line-through;
+  }
+  .ls-price-badge {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    background: var(--shop-accent);
+    color: white;
+    padding: 1px 6px;
+    border-radius: 999px;
+  }
+
+  .ls-item-arrow {
+    color: var(--shop-text-disabled);
+    flex-shrink: 0;
+    transition: transform 150ms ease;
+  }
+  .ls-item:hover .ls-item-arrow,
+  .ls-item:focus .ls-item-arrow { transform: translateX(3px); color: var(--shop-primary); }
+
+  .ls-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--shop-primary);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--shop-primary) 5%, transparent);
+    border-top: 1px solid var(--shop-border);
+    transition: background 120ms ease;
+  }
+  .ls-footer:hover { background: color-mix(in srgb, var(--shop-primary) 12%, transparent); text-decoration: none; color: var(--shop-primary); }
+
+  .ls-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 1.25rem 1rem;
+    color: var(--shop-text-secondary);
+    font-size: 0.875rem;
+  }
+
+  /* Spinner */
+  .ls-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    color: var(--shop-text-secondary);
+    font-size: 0.875rem;
+  }
+  .ls-spinner {
+    width: 18px; height: 18px;
+    border: 2.5px solid var(--shop-border);
+    border-top-color: var(--shop-primary);
+    border-radius: 50%;
+    animation: ls-spin 0.6s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes ls-spin { to { transform: rotate(360deg); } }
+
+  /* Dark mode adjustments */
+  [data-theme="dark"] .ls-dropdown {
+    box-shadow: 0 8px 40px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.2);
+  }
+
+  /* Mobile search wrapper */
+  @media (max-width: 1023px) {
+    .ls-wrapper { max-width: 100%; flex: 1; }
+  }
 </style>
 
 <div id="main-header">
@@ -740,3 +899,10 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   });
 })();
 </script>
+
+<!-- Live Search -->
+<script>
+  // Expose base path to live-search.js so it resolves the AJAX endpoint correctly
+  window.__shopBasePath = '<?php echo rtrim($chemin_absolu, '/'); ?>/';
+</script>
+<script src="<?php echo $chemin_absolu; ?>dist/js/live-search.js" defer></script>
