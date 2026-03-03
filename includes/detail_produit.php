@@ -3,9 +3,9 @@
     <div class="single-product-area section-padding-20 clearfix pb-5">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-12 col-lg-9 row mx-0">
+                <div class="col-12 col-lg-9 row">
                     <div class="col-12 col-lg-6">
-                        <div class="single_product_thumb mb-4 mb-lg-0 text-center text-lg-start">
+                        <div class="single_product_thumb mb-4 mb-lg-0 mobile-center-img">
                             
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                                 <ul class="carousel-indicators">
@@ -482,6 +482,11 @@ document.querySelectorAll('a[href="#details-complets"]').forEach(anchor => {
 .product-price { font-weight: 700; color: var(--shop-primary, #5A31F4); }
 .product-long-content img { max-width: 100%; height: auto; border-radius: 0.75rem; margin-top: 1rem; margin-bottom: 1rem; }
 .product-long-content h1, .product-long-content h2, .product-long-content h3 { color: var(--shop-text-primary); font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem;}
+
+/* Mobile precise fixes */
+@media (max-width: 991.98px) {
+    .mobile-center-img { text-align: center !important; }
+}
 
 /* Commande Express accordion state */
 .btn-express-toggle[aria-expanded="true"] .toggle-icon { transform: rotate(180deg); }
