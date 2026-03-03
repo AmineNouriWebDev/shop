@@ -2,15 +2,23 @@
     <?php include('meta.php');?>
     <link rel="icon" type="image/png" href="media/site/favicon-cooon.png" />
     <link rel="shortcut icon" type="image/png" href="media/site/favicon-cooon.png" />
-  	  	<!-- Custom Font awesome -->
-    <link rel="stylesheet" href="dist/fontawesome-free-6.5.1-web/css/all.min.css">
-    <link rel="stylesheet" href="dist/font-awesome-4.7.0/css/font-awesome.min.css">
-	
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-	
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Dark mode : PREMIER script chargé (anti-FOUC) -->
+    <script src="dist/js/dark-mode.js"></script>
+
+    <!-- Design tokens CSS (variables --shop-*) -->
+    <link rel="stylesheet" href="dist/css/design-tokens.css" />
+
+    <!-- Inter Variable font (2026 premium) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <!-- Fonts legacy (Poppins, Nunito, Montserrat) — conservées pendant la migration -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     
   	<!-- Latest compiled and minified CSS -->
