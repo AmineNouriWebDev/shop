@@ -70,7 +70,8 @@
   <?php include('includes/header-tw.php'); ?>
 
     <?php 
-		$variable2='<li class="breadcrumb-item active" aria-current="page">'.titrePage(12).'</li>';
+		$titre = str_ireplace('Technoplus.tn', $nomSite ?? 'notre boutique', titrePage(12));
+		$variable2='<li class="breadcrumb-item active" aria-current="page">'.$titre.'</li>';
 		include("includes/breadcrumb.php");     
         include("includes/cart_detail.php");
     ?>

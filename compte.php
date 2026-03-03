@@ -6,6 +6,7 @@
 	include("include.php");
     require_once "User.class.php";
 
+    if(isset($_SESSION['client_id'])) {
 /*-----------------------------------------------------------------------------------------*/
 
     $requete = "SELECT * FROM `site_menu` WHERE `id` = '9'";
@@ -47,8 +48,7 @@
   <?php include('includes/feedback.php'); ?>
   <?php include('includes/header-tw.php'); ?>
 	
-	
-
+  <?php include('includes/compte.php'); ?>
 
       <!-- ======= Footer ======= -->
     <?php include('includes/footer-tw.php');?>

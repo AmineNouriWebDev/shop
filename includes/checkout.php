@@ -200,8 +200,6 @@
     
     }else{ ?>
     <script language="javascript">
-    
-        alert('<?php echo $msg; ?>');
 	 <!--
 	  window.location = '<?php echo lienConfirm($cmd); ?>';
 	 -->
@@ -210,59 +208,63 @@
         
 } ?>    
     
-    <div class="main main-content-wrapper d-flex clearfix">
-        
-        <div class="cart-table-area section-padding-20 animated fadeInUp " data-delay="0.8s">
-            <div class="container">
-				
-				
-				<form action="<?php echo lienCommande(); ?>" method="post">
-                <div class="row">
-                    <div class="col-12">
-						<div class="title">
-                            <h2>Caisse</h2>
-							<div class="shop_sidebar_area p-0 bg-transparent mb-5">
-								<div class="line"></div>
-							</div>
-                        </div>
-					</div>
-                    <div class="col-12 col-lg-8">
-                        <div class="checkout_details_area mt-0 clearfix">
-                                <div class="row">
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <input type="text" name="nom" class="form-control" id="last_name" value="<?php echo nomClient($id_client); ?>" placeholder="Nom" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <input type="text" name="prenom" class="form-control" id="first_name" value="<?php echo prenomClient($id_client); ?>" placeholder="Prenom" required>
-                                    </div>
-                                    <div class="col-6 mb-3">
-                                        <input type="email" name="email" class="form-control" id="email" placeholder="Email" value="<?php echo emailClient($id_client); ?>" required>
-                                    </div> 
-                                    <div class="col-md-6 mb-3">
-                                        <input type="text" name="phone" class="form-control" id="phone_number" placeholder="N° téléphone" value="" required>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <input type="text" name="adresse" class="form-control mb-3" id="street_address" placeholder="Adresse" value="" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <input type="text" name="ville" class="form-control" id="city" placeholder="Ville" value="" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <input type="text" name="cp" class="form-control" id="zipCode" placeholder="Code postale" value="" required>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <textarea name="commentaire" class="form-control w-100" id="comment" cols="30" rows="10" placeholder="Laissez un commentaire sur votre commande"></textarea>
-                                    </div>
-                                </div>
+    <div class="container py-5">
+        <form action="<?php echo lienCommande(); ?>" method="post">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <h2 style="color:var(--shop-text-primary); font-weight:700; margin-bottom:1rem;">Caisse</h2>
+                    <div style="height:2px; width:60px; background:var(--shop-primary); margin-bottom:2rem;"></div>
+                </div>
+
+                <div class="col-12 col-lg-8">
+                    <div class="cx-form-panel cx-surface cx-border" style="padding: 2rem; border-radius: 1rem; margin-bottom: 2rem;">
+                        <h4 style="color:var(--shop-text-primary); margin-bottom:1.5rem; font-weight:600;">Détails de facturation</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Nom</label>
+                                <input type="text" name="nom" class="cx-input" id="last_name" value="<?php echo nomClient($id_client); ?>" placeholder="Nom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Prénom</label>
+                                <input type="text" name="prenom" class="cx-input" id="first_name" value="<?php echo prenomClient($id_client); ?>" placeholder="Prénom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Email</label>
+                                <input type="email" name="email" class="cx-input" id="email" placeholder="Email" value="<?php echo emailClient($id_client); ?>" required>
+                            </div> 
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">N° téléphone</label>
+                                <input type="text" name="phone" class="cx-input" id="phone_number" placeholder="N° téléphone" value="" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Adresse</label>
+                                <input type="text" name="adresse" class="cx-input" id="street_address" placeholder="Adresse" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Ville</label>
+                                <input type="text" name="ville" class="cx-input" id="city" placeholder="Ville" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Code postal</label>
+                                <input type="text" name="cp" class="cx-input" id="zipCode" placeholder="Code postale" value="" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Commentaire</label>
+                                <textarea name="commentaire" class="cx-input" id="comment" cols="30" rows="4" placeholder="Laissez un commentaire sur votre commande"></textarea>
+                            </div>
                         </div>
                     </div>
-					
-					<?php $nbArticles=count($_SESSION['panier']['idcart']); ?>
-                    <div class="col-12 col-lg-4">
-                        <div class="cart-summary  mt-0">
-                            <h5> Total du panier <span class="badge badge-primary badge-pill pull-right"><?php echo $nbArticles; ?></span></h5>
-                            <ul class="summary-table">
+                </div>
+                
+                <?php $nbArticles=count($_SESSION['panier']['idcart']); ?>
+                <div class="col-12 col-lg-4">
+                    <div class="cx-form-panel cx-surface cx-border" style="padding: 2rem; border-radius: 1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                            <h4 style="color:var(--shop-text-primary); font-weight:600; margin:0;">Votre panier</h4>
+                            <span class="badge badge-primary badge-pill" style="background:var(--shop-primary); font-size:1rem; padding:0.5em 0.8em; border-radius:1rem;"><?php echo $nbArticles; ?></span>
+                        </div>
+                        
+                        <ul class="summary-table" style="list-style:none; padding:0; margin:0 0 2rem 0;">
 								<?php 
 								if($nbArticles) { 
 								$sous_total= 0;
@@ -322,50 +324,44 @@
                         			    
                         			}
 							    ?>
-                                <li><span>sous-total:</span> <span><?php echo number_format($sous_total,3, '.', ' ').' '.$devise; ?> </span></li>
+                                <li style="display:flex; justify-content:space-between; padding:0.75rem 0; font-size:1.05rem; color:var(--shop-text-primary); border-bottom:1px solid var(--shop-border);"><span>Sous-total:</span> <span style="font-weight:600;"><?php echo number_format($sous_total,3, '.', ' ').' '.$devise; ?> </span></li>
      
-                                <li><span>livraison:</span> <span id="cout_mod_liv"><?php echo $cout; ?></span></li>
-                                <li><span>total:</span> <span id="total_cmd"><?php echo $total.' '.$devise; ?> </span></li>
+                                <li style="display:flex; justify-content:space-between; padding:0.75rem 0; font-size:1.05rem; color:var(--shop-text-primary); border-bottom:1px solid var(--shop-border);"><span>Livraison:</span> <span id="cout_mod_liv" style="font-weight:600;"><?php echo $cout; ?></span></li>
+                                
+                                <li style="display:flex; justify-content:space-between; padding:1rem 0 0 0; font-size:1.2rem; color:var(--shop-text-primary); font-weight:700;"><span>Total:</span> <span id="total_cmd" style="color:var(--shop-primary);"><?php echo $total.' '.$devise; ?> </span></li>
 								
 								<?php } ?>
 								
                             </ul>
-							<input type="hidden" name="soustotal" value="<?php echo number_format($sous_total,3, '.', ' '); ?>" />
-							<input type="hidden" name="total" id="total_commande" value="<?php echo $total; ?>" />
-							<input type="hidden" name="frais_livraison" id="frais_livraison" value="<?php echo $frais; ?>" />
+                        </ul>
+                        <input type="hidden" name="soustotal" value="<?php echo number_format($sous_total,3, '.', ' '); ?>" />
+                        <input type="hidden" name="total" id="total_commande" value="<?php echo $total; ?>" />
+                        <input type="hidden" name="frais_livraison" id="frais_livraison" value="<?php echo $frais; ?>" />
 
-                            <div class="payment-method">
-								<?php
-									$requete = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1"';
-									$res     = executeRequete($requete);
-								   while($data    = mysqli_fetch_array($res)){
-								?>
-                                <!-- Cash on delivery -->
-                                <div class="custom-control custom-radio mr-sm-2">
-                                    <input type="radio" name="paymentMethod" class="custom-control-input" value="<?php echo $data['id']; ?>" id="payment_<?php echo $data['id'];?>" <?php if($data['id'] == 9){ echo "checked"; } ?>  required>
-                                     <label class="custom-control-label" for="payment_<?php echo $data['id'];?>"><?php echo moyen_paiement($data['id']); 
-                                                    if(moyen_paiement($data['id']) == "Paiement en ligne") echo '<img class="ml-15" src="dist/img/paiement_en_ligne.png" alt="">';
-                                                    if(moyen_paiement($data['id']) == "Paiement Paypal") echo '<img class="ml-15" src="dist/img/paypal.png" alt="">';
-                                                    if(moyen_paiement($data['id']) == "Paiement par D17") echo '<img class="ml-15" src="dist/img/d17.png" alt="">';
-
-                                                    ?></label>
-                                    </div>
-								<?php } //onclick="SetSessionPayment(this.value)" ?>
+                        <div class="payment-method" style="margin-bottom: 2rem;">
+                            <h5 style="color:var(--shop-text-primary); font-weight:600; margin-bottom:1rem; font-size:1.1rem;">Moyen de paiement</h5>
+                            <?php
+                                $requete = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1"';
+                                $res     = executeRequete($requete);
+                               while($data    = mysqli_fetch_array($res)){
+                            ?>
+                            <div class="custom-control custom-radio" style="margin-bottom:0.75rem; display:flex; align-items:center;">
+                                <input type="radio" name="paymentMethod" class="custom-control-input" value="<?php echo $data['id']; ?>" id="payment_<?php echo $data['id'];?>" <?php if($data['id'] == 9){ echo "checked"; } ?>  required style="cursor:pointer; width:1.1rem; height:1.1rem; accent-color:var(--shop-primary);">
+                                <label class="custom-control-label" for="payment_<?php echo $data['id'];?>" style="cursor:pointer; padding-left:0.5rem; margin:0; color:var(--shop-text-secondary); font-weight:500;">
+                                    <?php echo moyen_paiement($data['id']); ?>
+                                </label>
                             </div>
+                            <?php } ?>
+                        </div>
 
-                            <div class="cart-btn mt-50">
-                                <button type="submit" class="btn amado-btn w-100">Confirmez la commande</button>
-                               
-								<input type="hidden" name="action" id="confirmVal"  value="confirm_cmd" />	
-								
-                            </div>
+                        <div class="cart-btn mt-50">
+                            <button type="submit" class="cx-btn" style="width: 100%;">Confirmer la commande</button>
+                            <input type="hidden" name="action" id="confirmVal"  value="confirm_cmd" />	
                         </div>
                     </div>
                 </div>
-				</form>
             </div>
-        </div>
-        
+        </form>
     </div>
     
     <script>

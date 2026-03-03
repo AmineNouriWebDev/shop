@@ -1,11 +1,52 @@
 <div class="col-lg-12">
     <div class="messages"></div>
-    <?php if(isset($succes) && $succes!=""){
-    ?> 
-    <div class="alert alert-success"><?php echo $succes;?></div>
-    <?php
-        }
-    ?>
+    <?php if(isset($succes) && $succes!=""): ?> 
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Toastify({
+            text: "✅ <?php echo addslashes($succes); ?>",
+            duration: 4000,
+            gravity: "bottom",
+            position: "right",
+            className: "toast-tw",
+            style: {
+                background: "var(--shop-primary, #5A31F4)",
+                color: "#fff",
+                borderRadius: "0.75rem",
+                boxShadow: "0 10px 30px rgba(90,49,244,0.3)",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.875rem",
+                fontWeight: "500",
+                padding: "1rem 1.25rem"
+            }
+        }).showToast();
+    });
+    </script>
+    <?php endif; ?>
+    
+    <?php if(isset($erreur) && $erreur!=""): ?> 
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Toastify({
+            text: "❌ <?php echo addslashes($erreur); ?>",
+            duration: 5000,
+            gravity: "bottom",
+            position: "right",
+            className: "toast-tw",
+            style: {
+                background: "#ef4444",
+                color: "#fff",
+                borderRadius: "0.75rem",
+                boxShadow: "0 10px 30px rgba(239, 68, 68, 0.3)",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.875rem",
+                fontWeight: "500",
+                padding: "1rem 1.25rem"
+            }
+        }).showToast();
+    });
+    </script>
+    <?php endif; ?>
     <div class="controls">
        
 <form id="contact-form" method="post" action="<?php echo lienCompte();?>" data-toggle="validator" role="form">

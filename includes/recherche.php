@@ -176,7 +176,7 @@
             </div>
     
     			<div class="line"></div>
-    			 <?php $nbArticles=count($_SESSION['panier']['idcart']); ?>
+    			 <?php $nbArticles = isset($_SESSION['panier']['idcart']) ? count($_SESSION['panier']['idcart']) : 0; ?>
     			<!-- Cart Menu -->
                 <div class="cart-fav-search mb-100">
                     <a href="<?php echo lienPanier();?>" class="cart-nav" id="blocDepartementsPanier"><img src="dist/img/cart.png" alt=""> Panier <span id="lblCartCount">(<?php  if ($nbArticles) echo ''.$nbArticles.''; else echo '0'; ?>)</span></a>

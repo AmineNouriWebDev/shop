@@ -1,4 +1,3 @@
-
 <table class="table table-bordered table-responsive-lg table-hover" id="commandes">
   <thead>
     <tr>
@@ -27,9 +26,9 @@
         while ($data11 = mysqli_fetch_array($resultat11))  {
       ?>
       <tr>
-      <td><?php echo '#CMD-'.numCommande($data11['id']);?></td>
-      <td><?php echo dateCommande($data11['id']);?></td>
-      <td><?php echo totalCommande($data11['id']);?></td>
+      <td><?php echo '#CMD-'.afficheChamp($data11['id']);?></td>
+      <td><?php echo timestampTDtodate($data11['date']);?></td>
+      <td><?php echo afficheChamp($data11['total'])." TND";?></td>
       <td style="text-align: center;"><?php echo etatCommande($data11['id'])."</span>";?>
        </td>
       <td>
@@ -37,15 +36,7 @@
             $urlOg  = "";
 		    $urlOg .= qteCommande($data11['id']).' x '.produitCommande($data11['id'])." / ";
 		    $urlOg = rtrim($urlOg," / ");
-		    //$payment_link = "https://wa.me/".$cmd_num_whatsapp."?text=".urlencode(str_replace('%%lien_produit%%',$urlOg,$message_cmd_whatsapp));
-       /* if($payment_link !=""){
-        $payment_link = $data11['lien_paiement'];
-        }else{
-        */
-          $urlOg .= qteCommande($data11['id']).' x '.produitCommande($data11['id'])." / ";
-          $urlOg = rtrim($urlOg," / ");
           $payment_link = "https://wa.me/".$cmd_num_whatsapp."?text=".urlencode(str_replace('%%lien_produit%%',$urlOg,$message_cmd_whatsapp));
-        //}
         ?>
         <button class="btn btn-sm btn-danger" style="margin-top: 10px;" data-toggle="tooltip" data-placement="top" title="Finaliser le paiement" onclick="window.open('<?php echo $payment_link;?>', '_blank');"><i class="fa fa-credit-card"></i> </button>
         <?php } } ?>
