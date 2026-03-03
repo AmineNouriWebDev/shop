@@ -3,9 +3,9 @@
     <div class="single-product-area section-padding-20 clearfix pb-5">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-12 col-lg-9 row mx-0 text-center text-lg-start">
-                    <div class="col-12 col-lg-6 mx-auto">
-                        <div class="single_product_thumb mb-4 mb-lg-0">
+                <div class="col-12 col-lg-9 row mx-0">
+                    <div class="col-12 col-lg-6">
+                        <div class="single_product_thumb mb-4 mb-lg-0 text-center text-lg-start">
                             
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                                 <ul class="carousel-indicators">
