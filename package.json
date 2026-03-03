@@ -1,0 +1,19 @@
+{
+  "name": "shop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "tw:dev": "npx @tailwindcss/cli -i dist/css/tailwind.css -o dist/css/tailwind.output.css --watch",
+    "tw:build": "npx @tailwindcss/cli -i dist/css/tailwind.css -o dist/css/tailwind.output.css --minify",
+    "dev": "npm run tw:dev",
+    "build": "npm run tw:build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  }
+}

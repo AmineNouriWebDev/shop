@@ -9,6 +9,9 @@ vendor/
 # Environment configurations
 env.php
 
+# Tailwind compiled output (generated — not to version)
+dist/css/tailwind.output.css
+
 # OS generated files
 .DS_Store
 Thumbs.db

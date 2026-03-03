@@ -1,0 +1,566 @@
+/*
+ * ============================================================
+ * SHOP — Tailwind CSS v4 Entry Point
+ * ============================================================
+ * Tailwind v4 utilise un systeme CSS-first :
+ * - Les tokens du theme sont définis dans @theme
+ * - Pas besoin de tailwind.config.js pour les couleurs
+ * - @apply fonctionne avec toutes les classes utilitaires
+ *
+ * Compilation :
+ *   npm run tw:build   → Production (minified)
+ *   npm run dev        → Watch mode
+ * ============================================================
+ */
+
+@import "tailwindcss";
+
+/*
+ * ============================================================
+ * @THEME — Design Tokens (Tailwind v4 CSS-first)
+ * ============================================================
+ */
+@theme {
+    /* ── Couleurs primaires ── */
+    --color-primary: #5A31F4;
+    --color-primary-glow: #7B5EF8;
+    --color-primary-hover: #4A24E8;
+    --color-primary-active: #3A18CC;
+
+    /* ── Couleurs secondaires & accent ── */
+    --color-secondary: #0EA5E9;
+    --color-accent: #F43F5E;
+
+    /* ── Backgrounds ── */
+    --color-bg-base: #F8F7FF;
+    --color-bg-alt: #EEF0F8;
+
+    /* ── Surfaces (cards) ── */
+    --color-surface: #FFFFFF;
+    --color-surface-raised: #F0EFFE;
+
+    /* ── Borders ── */
+    --color-border: #E0DEFF;
+
+    /* ── Textes ── */
+    --color-text-primary: #120B2E;
+    --color-text-secondary: #6B6589;
+    --color-text-disabled: #B0AABB;
+
+    /* ── États sémantiques ── */
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+    --color-info: #0EA5E9;
+
+    /* ── Dark mode (overridées dans html.dark) ── */
+    --color-primary-dark: #7B5EF8;
+    --color-secondary-dark: #38BDF8;
+    --color-accent-dark: #FB7185;
+    --color-bg-base-dark: #0D0B1A;
+    --color-bg-alt-dark: #13111F;
+    --color-surface-dark: #1C1930;
+    --color-surface-raised-dark: #231E3A;
+    --color-border-dark: #2E2752;
+    --color-text-primary-dark: #EDE9FF;
+    --color-text-secondary-dark: #9B96BB;
+
+    /* ── Fonts ── */
+    --font-family-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+    --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* ── Shadows custom ── */
+    --shadow-glow-sm: 0 0 12px rgba(90, 49, 244, 0.25);
+    --shadow-glow: 0 0 24px rgba(90, 49, 244, 0.35);
+    --shadow-glow-lg: 0 0 48px rgba(90, 49, 244, 0.45);
+    --shadow-soft: 0 4px 24px rgba(18, 11, 46, 0.08);
+    --shadow-soft-lg: 0 8px 40px rgba(18, 11, 46, 0.12);
+    --shadow-card: 0 2px 12px rgba(90, 49, 244, 0.08), 0 1px 3px rgba(18, 11, 46, 0.05);
+    --shadow-card-hover: 0 8px 32px rgba(90, 49, 244, 0.18), 0 2px 8px rgba(18, 11, 46, 0.08);
+
+    /* ── Border radius ── */
+    --radius-xl2: 1rem;
+    --radius-xl3: 1.5rem;
+    --radius-xl4: 2rem;
+
+    /* ── Animations keyframes ── */
+    --animate-fade-in: fade-in 0.3s ease-out both;
+    --animate-slide-in-right: slide-in-right 0.3s ease-out both;
+    --animate-bounce-in: bounce-in 0.4s ease-out both;
+    --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+    --animate-scroll-infinite: scroll-infinite 25s linear infinite;
+
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slide-in-right {
+        0% {
+            opacity: 0;
+            transform: translateX(16px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes bounce-in {
+        0% {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        70% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes glow-pulse {
+
+        0%,
+        100% {
+            box-shadow: 0 0 12px rgba(90, 49, 244, 0.2);
+        }
+
+        50% {
+            box-shadow: 0 0 28px rgba(90, 49, 244, 0.5);
+        }
+    }
+
+    @keyframes scroll-infinite {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+/*
+ * ============================================================
+ * BASE — Reset ciblé pour coexister avec Bootstrap
+ * ============================================================
+ */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        color-scheme: light dark;
+    }
+
+    /* Transition douce lors du switch dark/light */
+    html.theme-transitioning,
+    html.theme-transitioning *,
+    html.theme-transitioning *::before,
+    html.theme-transitioning *::after {
+        transition:
+            background-color 250ms ease,
+            color 200ms ease,
+            border-color 200ms ease,
+            box-shadow 200ms ease !important;
+    }
+
+    /* Override dark mode tokens sur <html class="dark"> */
+    html.dark {
+        --color-primary: var(--color-primary-dark);
+        --color-secondary: var(--color-secondary-dark);
+        --color-accent: var(--color-accent-dark);
+        --color-bg-base: var(--color-bg-base-dark);
+        --color-bg-alt: var(--color-bg-alt-dark);
+        --color-surface: var(--color-surface-dark);
+        --color-surface-raised: var(--color-surface-raised-dark);
+        --color-border: var(--color-border-dark);
+        --color-text-primary: var(--color-text-primary-dark);
+        --color-text-secondary: var(--color-text-secondary-dark);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    img,
+    video {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Scrollbar Chromium */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-primary);
+        border-radius: 999px;
+    }
+}
+
+/*
+ * ============================================================
+ * COMPONENTS — Composants réutilisables
+ * ============================================================
+ */
+@layer components {
+
+    /* ── Boutons ── */
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        background-color: var(--color-primary);
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem;
+        letter-spacing: 0.025em;
+        cursor: pointer;
+        border: none;
+        transition: all 200ms ease-out;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--color-primary-hover);
+        box-shadow: var(--shadow-glow);
+        transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+        background-color: var(--color-primary-active);
+        transform: scale(0.95);
+        box-shadow: none;
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        background-color: transparent;
+        border: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 200ms ease-out;
+    }
+
+    .btn-ghost:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background-color: color-mix(in srgb, var(--color-primary) 5%, transparent);
+    }
+
+    .btn-accent {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        background-color: var(--color-accent);
+        color: white;
+        font-weight: 700;
+        font-size: 0.875rem;
+        letter-spacing: 0.025em;
+        cursor: pointer;
+        border: none;
+        transition: all 200ms ease-out;
+    }
+
+    .btn-accent:hover {
+        filter: brightness(1.1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35);
+    }
+
+    .btn-accent:active {
+        transform: scale(0.95);
+    }
+
+    /* ── Cards ── */
+    .card-product {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-surface);
+        border-radius: 1.5rem;
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        transition: all 300ms ease-out;
+    }
+
+    .card-product:hover {
+        box-shadow: var(--shadow-card-hover);
+        transform: translateY(-4px);
+    }
+
+    .card-surface {
+        background-color: var(--color-surface);
+        border-radius: 1.5rem;
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-soft);
+        padding: 1.5rem;
+    }
+
+    /* ── Badges ── */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.125rem 0.625rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .badge-primary {
+        background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+        color: var(--color-primary);
+    }
+
+    .badge-accent {
+        background-color: var(--color-accent);
+        color: white;
+    }
+
+    .badge-success {
+        background-color: color-mix(in srgb, var(--color-success) 12%, transparent);
+        color: var(--color-success);
+    }
+
+    /* ── Typographie ── */
+    .section-title {
+        font-size: clamp(1.875rem, 1rem + 4.375vw, 3rem);
+        font-weight: 700;
+        color: var(--color-text-primary);
+        letter-spacing: -0.025em;
+        line-height: 1.25;
+    }
+
+    .section-subtitle {
+        font-size: clamp(1.125rem, 1rem + 0.625vw, 1.375rem);
+        color: var(--color-text-secondary);
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    .price-main {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--color-primary);
+    }
+
+    .price-old {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        text-decoration: line-through;
+    }
+
+    /* ── Inputs ── */
+    .input-field {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        background-color: var(--color-bg-base);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+        font-size: 0.9375rem;
+        transition: all 200ms ease;
+    }
+
+    .input-field::placeholder {
+        color: var(--color-text-disabled);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+    }
+
+    /* ── Layout ── */
+    .tw-container {
+        max-width: 80rem;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    @media (min-width: 640px) {
+        .tw-container {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .tw-container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    }
+
+    .tw-section {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    @media (min-width: 1024px) {
+        .tw-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+    }
+
+    /* ── Dark mode toggle ── */
+    .dark-toggle-btn {
+        position: relative;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.75rem;
+        border: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+        background: transparent;
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .dark-toggle-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+    }
+
+    .dark-toggle-btn .icon-sun,
+    .dark-toggle-btn .icon-moon {
+        position: absolute;
+        transition: all 300ms ease;
+    }
+
+    .dark-toggle-btn .icon-sun {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+
+    .dark-toggle-btn .icon-moon {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.75);
+    }
+
+    html.dark .dark-toggle-btn .icon-sun {
+        opacity: 0;
+        transform: rotate(90deg) scale(0.75);
+    }
+
+    html.dark .dark-toggle-btn .icon-moon {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+
+    /* ── Glassmorphism ── */
+    .glass {
+        background: color-mix(in srgb, white 60%, transparent);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid color-mix(in srgb, white 30%, transparent);
+    }
+
+    html.dark .glass {
+        background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+        border-color: color-mix(in srgb, white 10%, transparent);
+    }
+
+    /* ── Divider décoratif ── */
+    .divider-gradient {
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+        opacity: 0.3;
+        border: none;
+    }
+}
+
+/*
+ * ============================================================
+ * UTILITIES — Custom
+ * ============================================================
+ */
+@layer utilities {
+    .text-gradient {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .heading-underline {
+        position: relative;
+        padding-bottom: 0.75rem;
+    }
+
+    .heading-underline::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 3rem;
+        height: 3px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .aspect-product {
+        aspect-ratio: 1 / 1;
+    }
+
+    .aspect-banner {
+        aspect-ratio: 16 / 6;
+    }
+}
