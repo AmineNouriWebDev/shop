@@ -1,6 +1,6 @@
-<div class="main main-content-wrapper">
+<div class="main main-content-wrapper pb-5 mb-5">
     <!-- Product Details Area Start -->
-    <div class="single-product-area section-padding-20 clearfix">
+    <div class="single-product-area section-padding-20 clearfix pb-5">
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9 row">
@@ -47,9 +47,9 @@
                     <div class="col-12 col-lg-6">
                         <div class="single_product_desc">
                             <div class="product-meta-data">
-                                <div class="mobile-sc">
+                                <div class="d-lg-none">
                                     <div class="product-meta-data mb-3">
-                                        <p class="product-price mt-3 text-left"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <span style="text-decoration:line-through;color:#aaa;font-size: 22px;">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
+                                        <p class="fs-1 fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important;"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <span style="text-decoration:line-through;color:#aaa;font-size: 22px;">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
                                     </div>
                                 </div>  
                                 <div class="line"></div>
@@ -84,12 +84,12 @@
                                         <a href="applications.php" class="btn-secondary-tw w-100 d-block text-center text-uppercase mb-4">Télécharger nos applications</a>
                                         
                                         <!-- Commande Express Toggle -->
-                                        <button class="btn-primary-tw w-100 d-flex justify-content-between align-items-center fw-bold btn-express-toggle collapsed" type="button" data-toggle="collapse" data-target="#collapseExpress" aria-expanded="false" aria-controls="collapseExpress">
+                                        <button class="btn-primary-tw w-100 d-flex justify-content-between align-items-center fw-bold btn-express-toggle collapsed" type="button" onclick="$('#collapseExpress').slideToggle(); $(this).find('.toggle-icon').toggleClass('fa-chevron-down fa-chevron-up');">
                                             <span><i class="fa fa-bolt text-warning me-2"></i> Commande Express Rapide</span>
                                             <i class="fa fa-chevron-down toggle-icon"></i>
                                         </button>
 
-                                        <div class="collapse mt-3" id="collapseExpress">
+                                        <div class="mt-3" id="collapseExpress" style="display:none;">
                                             <hr class="mb-4">
                                             <form class="cart" id="commandeExpressForm" method="post" enctype="multipart/form-data">
                                             <div class="row">
@@ -254,9 +254,9 @@ while($datapay = mysqli_fetch_array($respay)){
                                 <form class="cart clearfix d-flex flex-column align-items-center" method="post">
                                     <div class="cart-btn d-flex mx-auto mb-4 align-items-center bg-white border border-2 border-primary rounded-pill px-2 py-1 shadow-sm" style="border-color: var(--shop-primary) !important;">
                                         <div class="quantity d-flex align-items-center">
-                                            <span class="qty-minus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;"><i class="fa fa-minus"></i></span>
+                                            <span class="qty-minus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6; font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;">−</span>
                                             <input type="number" class="qty-text border-0 bg-transparent text-center fw-bold fs-5 mx-2" style="width:50px; outline:none;" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                            <span class="qty-plus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus"></i></span>
+                                            <span class="qty-plus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6; font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;">+</span>
                                         </div>
                                     </div>
     								<?php if ($etatStock == '1'){  ?>

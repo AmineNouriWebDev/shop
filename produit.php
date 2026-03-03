@@ -39,7 +39,8 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
 			if(empty($photo)) $photo = 'image_non_dispo.jpg';		        
 			$caracteristique  = afficheChamp($data['caracteristique']);		        
 			$etatStock		  = afficheChamp($data['etat_stock']);
-			$contenu		  = isset($data['contenu']) ? afficheChamp($data['contenu']) : '';
+			// The database stores the long HTML format in the "caracteristique" column
+			$contenu		  = $caracteristique;
 			$title_page		  = afficheChamp($data['titre_page']);
 			$id_categ		  = afficheChamp($data['categorie']);
 			$video		      = isset($data['video']) ? afficheChamp($data['video']) : '';
@@ -61,14 +62,17 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
             
             // Fix SEO Variables Initialization
             $titre_db = afficheChamp($data['titre_page']);
-            $keywords_db = afficheChamp($data['keywords']);
-            $desc_db = afficheChamp($data['description']);
+            
+            // In the DB insert query (ajouter_produits.php), description and keywords are inverted.
+            // i.e., admin input for keywords goes to description column, and vice-versa.
+            // We fix it by swapping them here when reading.
+            $keywords_db = afficheChamp($data['description']); 
+            $desc_db = afficheChamp($data['keywords']);
 
             if($titre_db != '') { 
                 $title_page = $titre_db; 
             } else { 
-                $title_page = str_replace("%%PRODUIT%%",$titre,$title_prod); 
-                $title_page = str_replace("%%CATEGORIE%%",$categorie_title,$title_page); 
+                $title_page = $titre; 
             }
             
             if($keywords_db != '') { 
