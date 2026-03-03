@@ -86,8 +86,18 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--shop-bg-base); color: var(--shop-text-primary); }
-    .marque-logo .card { width:100%; height:100%; overflow:hidden; justify-content:center; }
-    .marque-logo .card img { width:100%; object-fit:contain; height:-webkit-fill-available; background:#e4e4e4; }
+    .marque-logo .card { width:100%; height:100%; overflow:hidden; justify-content:center; border-radius: 1rem; border: 1px solid var(--shop-border, #e5e7eb); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .marque-logo .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); border-color: var(--shop-primary, #5a31f4); }
+    .marque-logo .card img { width:100%; object-fit:contain; height:-webkit-fill-available; padding: 1rem; }
+    /* jQuery UI slider: brand purple */
+    #price_range.ui-slider { height:5px !important; background:var(--shop-border,#E0DEFF) !important; border:none !important; border-radius:3px !important; width: 85% !important; margin: 1.5rem auto 1rem auto !important; }
+    #price_range .ui-slider-range { background:var(--shop-primary,#5A31F4) !important; }
+    #price_range .ui-slider-handle { width:16px !important;height:16px !important;top:-6px !important;border-radius:50% !important;background:var(--shop-primary,#5A31F4) !important;border:2px solid #fff !important;box-shadow:0 2px 6px rgba(90,49,244,.4) !important;cursor:pointer !important; }
+    #price_range .ui-slider-handle:focus { outline:none !important; box-shadow:0 0 0 3px rgba(90,49,244,.25) !important; }
+    /* Prevent sidebar horizontal overflow */
+    .shop_sidebar_area { overflow-x: hidden; }
+    /* Prevent product area from shrinking when few products are loaded */
+    .amado_product_area { flex: 1; min-width: 0; }
   </style>
 </head>
 <body>
@@ -125,11 +135,15 @@
  	
     $(document).ready(function(){
 
-		filter_data();
+        var currentPage = 1;
 
-		function filter_data()
+		filter_data(1);
+
+		function filter_data(page)
 		{
-			$('.filter_data').html('<div class="row"> <div class="col-12"><div id="loading"></div></div></div>');
+            if(typeof page === 'undefined') page = 1;
+            currentPage = page;
+			$('.filter_data').html('<div style="min-height:200px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-spinner fa-spin fa-2x" style="color:var(--shop-primary,#5A31F4);"></i></div>');
 			var action = 'fetch_data';
             var minimum_price = $('#hidden_minimum_price').val();
             var maximum_price = $('#hidden_maximum_price').val();
@@ -142,12 +156,26 @@
 			$.ajax({
 				url:"includes/fetch_data_test.php",
 				method:"POST",
-				data:{action:action,brand:brand, category:category,caracteristique:caracteristique, type:type, minimum_price:minimum_price, maximum_price:maximum_price,link:link,promo:promo },
+				data:{
+                    action:action,
+                    brand:brand,
+                    category:category,
+                    caracteristique:caracteristique,
+                    type:type,
+                    minimum_price:minimum_price,
+                    maximum_price:maximum_price,
+                    link:link,
+                    promo:promo,
+                    page:currentPage
+                },
 				success:function(data){
 					$('.filter_data').html(data);
 				}
 			});
 		}
+
+        /* Exposed globally so pagination buttons in AJAX response can call this */
+        window.filter_data_page = function(page){ filter_data(page); };
 
 		function get_filter(class_name)
 		{
@@ -155,11 +183,18 @@
 			$('.'+class_name+':checked').each(function(){
 				filter.push($(this).val());
 			});
+			/* Support for mobile select dropdowns */
+			$('select.'+class_name).each(function(){
+				if($(this).val() && $(this).val() !== '') {
+					filter.push($(this).val());
+				}
+			});
 			return filter;
 		}
 
-		$('.common_selector').click(function(){
-			filter_data();
+        /* Reset to page 1 on any filter change */
+		$('.common_selector').on('click change', function(){
+			filter_data(1);
 		});
 
         $('#price_range').slider({
@@ -175,7 +210,7 @@
                 $('#price_show').html(ui.values[0] + ' DT - ' + ui.values[1] +' DT');
                 $('#hidden_minimum_price').val(ui.values[0]);
                 $('#hidden_maximum_price').val(ui.values[1]);
-                filter_data();
+                filter_data(1);
             }
         });
 

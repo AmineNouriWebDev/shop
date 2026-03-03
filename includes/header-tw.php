@@ -426,11 +426,44 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     .sh-navbar { display: none; }
     .sh-mobile-bar { display: flex; }
     .sh-desktop-cart { display: none; }
+    /* Hide logo and dark toggle inside the desktop header on mobile — they are shown in .sh-mobile-bar */
+    .sh-header .sh-logo { display: none !important; }
+    .sh-header .sh-dark-toggle { display: none !important; }
+    .sh-header .sh-actions { display: none !important; }
+    /* Prevent horizontal overflow on mobile */
+    html, body { overflow-x: hidden !important; max-width: 100vw; }
+    .main.main-content-wrapper { overflow-x: hidden; }
+    .amado_product_area { overflow-x: hidden; }
   }
   @media (min-width: 1024px) {
     .sh-mobile-bar { display: none; }
     .sh-mobile-drawer { display: none !important; }
     .sh-drawer-overlay { display: none !important; }
+  }
+
+  /* Mobile bar — prevent overflow */
+  @media (max-width: 1023px) {
+    .sh-mobile-bar {
+      flex-wrap: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100vw;
+    }
+    .sh-mobile-bar .sh-mobile-search {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: none;
+    }
+    .sh-mobile-bar .sh-mobile-search input {
+      min-width: 0;
+      width: 100%;
+    }
+    .sh-mobile-bar > a,
+    .sh-mobile-bar > button.sh-dark-toggle,
+    .sh-mobile-bar > button.sh-hamburger {
+      flex-shrink: 0;
+    }
   }
 
   /* ── LIVE SEARCH DROPDOWN ─────────────────────────── */

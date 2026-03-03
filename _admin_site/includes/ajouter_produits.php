@@ -11,6 +11,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$categorie 	         = formReception($_POST['categorie']);
     $idprt               = idparentCategBlog($categorie);
 	$prix_vente	         = formReception($_POST['prix_vente']);
+	$prix_promo	         = formReception($_POST['prix_promo']);
 	$quantite	         = formReception($_POST['quantite']);
 	$etat_stock	         = formReception($_POST['etat_stock']);
 	$marque 	         = formReception($_POST['marque']);
@@ -35,10 +36,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$auteur       = auteur_id();
 	
 	$requete = 'INSERT INTO `produits`
-	(`titre`,`court_contenu`, `caracteristique`,`remarque`, `link`, `categorie`,`idparent_categ`, `prix_vente`, `etat_stock`, `quantite`, `marque`, `type`, `afficher_accueil`,
+	(`titre`,`court_contenu`, `caracteristique`,`remarque`, `link`, `categorie`,`idparent_categ`, `prix_vente`, `prix_promo`, `etat_stock`, `quantite`, `marque`, `type`, `afficher_accueil`,
 	`video`, `delai`, `nbr_vod`, `nbr_chaine_hd`, `ancre`, `ordre`, `etat`, `titre_page`, `description`, `keywords`, `auteur`, `datecreation`) 
 	VALUES
-	("'. $titre .'","'. $court_contenu .'","'. $contenu .'","'. $remarque .'","'. $link .'","'. $categorie .'","'. $idprt .'","'. $prix_vente .'","'. $etat_stock .'","'. $quantite .'","'. $marque .'","'. $type .'","'
+	("'. $titre .'","'. $court_contenu .'","'. $contenu .'","'. $remarque .'","'. $link .'","'. $categorie .'","'. $idprt .'","'. $prix_vente .'","'. $prix_promo .'","'. $etat_stock .'","'. $quantite .'","'. $marque .'","'. $type .'","'
 	. $afficher_accueil .'","'.$video.'","'. $duree .'","'. $ancre .'","'. $nbr_vod .'","'. $nbr_chaine_hd .'","'. $ordre .'", "'. $etat .'","'. $titre_page .'","'. $keywords .'",
 	"'. $description .'","'. $auteur .'","'. $datec .'")';
 		
@@ -95,10 +96,21 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                         <div class="controls">
                                             <input type="text" name="titre" value="" class="form-control" required data-validation-required-message="Ce champ est obligatoire"> </div>
                                     </div>
-                                    <div class="form-group">
-                                        <h5>Prix vente </h5>
-                                        <div class="controls">
-                                            <input type="text" name="prix_vente" value="" class="form-control"> </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Prix vente </h5>
+                                                <div class="controls">
+                                                    <input type="text" name="prix_vente" value="" class="form-control"> </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Prix promo </h5>
+                                                <div class="controls">
+                                                    <input type="text" name="prix_promo" value="" class="form-control"> </div>
+                                            </div>
+                                        </div>
                                     </div>
                                                                         
                                     <div class="form-group">
