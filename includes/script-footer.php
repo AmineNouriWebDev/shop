@@ -87,7 +87,7 @@
 
             	$(window).scroll(function () {
 
-            			if ($(this).scrollTop() > 50) {
+            			if ($(this).scrollTop() > 400) {
 
             				$('#scrollUP').fadeIn();
 

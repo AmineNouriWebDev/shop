@@ -50,8 +50,8 @@ if (lienAccueil()) {
     <!-- ═══ CONTENU HOMEPAGE TAILWIND ═══ -->
     <?php include('includes/contenu-home-tw.php'); ?>
 
-    <!-- ═══ FOOTER (legacy — sera migré Phase 6) ═══ -->
-    <?php include('includes/footer.php'); ?>
+    <!-- ═══ FOOTER TAILWIND ═══ -->
+    <?php include('includes/footer-tw.php'); ?>
 
     <?php include('includes/script-footer.php'); ?>
 

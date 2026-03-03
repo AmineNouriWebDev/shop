@@ -72,37 +72,20 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
         $url = current_url();
         $date = timestampTD(date("d/m/Y H:i:s"));
         executeRequete("INSERT INTO `pages_introuvables`(`url_page`, `date`) VALUES ('".$url."','".$date."')");
-        ?>
-	<script language="javascript">
-	<!--
-		window.location = '/error404.html';
-	-->
-	</script>
-	<?php
-	//echo $strSQL;
-	exit;
+    header('Location: /error404.html'); exit;
     }
 }
 ?>
 <!DOCTYPE html>
-
-<html lang="en">
-
+<html lang="fr">
 <head>
-
-	<?php include('includes/script-header.php');?>
-    <?php include('includes/script_panier.php');?>
-	
-	<link rel="stylesheet" href="dist/scss/style.css" />
-	
+  <?php include('includes/script-header.php'); ?>
+  <?php include('includes/script_panier.php'); ?>
+  <style>*, *::before, *::after{box-sizing:border-box;} body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--shop-bg-base);color:var(--shop-text-primary);}</style>
 </head>
-
 <body>
-	<?php include('includes/feedback.php');?>
-	
-	<?php include('includes/top-bar.php');?>
-	
-	<?php include('includes/banniere.php');?>
+  <?php include('includes/feedback.php'); ?>
+  <?php include('includes/header-tw.php'); ?>
 	
 	
 	<?php 
@@ -119,12 +102,7 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
     ?>
 
 
-      <!-- ======= Footer ======= -->
-      <?php include('includes/footer.php');?>
-
-
- 	 <?php include('includes/script-footer.php');?>
-	
+  <?php include('includes/footer-tw.php'); ?>
+  <?php include('includes/script-footer.php'); ?>
 </body>
-
 </html>

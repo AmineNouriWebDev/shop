@@ -59,23 +59,15 @@
 	}
 ?>
 <!DOCTYPE html>
-
-<html lang="en">
-
+<html lang="fr">
 <head>
-
-	<?php include('includes/script-header.php');?>	
-	<link rel="stylesheet" href="dist/scss/style.css" />
-    <?php include('includes/script_panier.php');?>
-	
+  <?php include('includes/script-header.php'); ?>
+  <?php include('includes/script_panier.php'); ?>
+  <style>*, *::before, *::after{box-sizing:border-box;} body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--shop-bg-base);color:var(--shop-text-primary);}</style>
 </head>
-
 <body>
-	<?php include('includes/feedback.php');?>
-	
-	<?php include('includes/top-bar.php');?>
-	
-	<?php include('includes/banniere.php');?>
+  <?php include('includes/feedback.php'); ?>
+  <?php include('includes/header-tw.php'); ?>
 
     <?php 
 		$variable2='<li class="breadcrumb-item active" aria-current="page">'.titrePage(12).'</li>';
@@ -84,12 +76,7 @@
     ?>
 
 
-      <!-- ======= Footer ======= -->
-      <?php include('includes/footer.php');?>
-
-
- 	 <?php include('includes/script-footer.php');?>
-	
+  <?php include('includes/footer-tw.php'); ?>
+  <?php include('includes/script-footer.php'); ?>
 </body>
-
 </html>

@@ -80,50 +80,28 @@
 	}
 ?>
 <!DOCTYPE html>
-
-<html lang="en">
-
+<html lang="fr">
 <head>
-
-	<?php include('includes/script-header.php');?>
-
-	
-	<link rel="stylesheet" href="dist/scss/style.css" />
-		<style>
-    	.marque-logo .card {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            justify-content: center;
-        }
-        .marque-logo .card img {
-            width: 100%;
-            object-fit: contain;
-            height: -webkit-fill-available;
-            background: #e4e4e4;
-        }
-	</style>
-	
+  <?php include('includes/script-header.php'); ?>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--shop-bg-base); color: var(--shop-text-primary); }
+    .marque-logo .card { width:100%; height:100%; overflow:hidden; justify-content:center; }
+    .marque-logo .card img { width:100%; object-fit:contain; height:-webkit-fill-available; background:#e4e4e4; }
+  </style>
 </head>
-
 <body>
-	<?php include('includes/feedback.php');?>
-	
-	<?php include('includes/top-bar.php');?>
-	
-	<?php include('includes/banniere.php');?>
+  <?php include('includes/feedback.php'); ?>
+  <?php include('includes/header-tw.php'); ?>
 
     <?php 
        include("includes/categorie.php");
     ?>
 
 
-      <!-- ======= Footer ======= -->
-      <?php include('includes/footer.php');?>
-
-
- 	 <?php include('includes/script-footer.php');?>
- 	 <?php include('includes/script_panier.php');?>
+  <?php include('includes/footer-tw.php'); ?>
+  <?php include('includes/script-footer.php'); ?>
+  <?php include('includes/script_panier.php'); ?>
 	 
 	 
 	 
