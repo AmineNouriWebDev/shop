@@ -638,12 +638,10 @@
     $d_p = mysqli_fetch_array($r_p);
     $is_promo = ($d_p && $d_p['en_promo'] == '1');
 
-    if ($num_cols == '2'){ $limit = 6; }
-    elseif ($num_cols == '3'){ $limit = 9; }  // was 12 - reduced for homepage
-    elseif ($num_cols == '4'){ $limit = 8; }
-    elseif ($num_cols == '5'){ $limit = 10; }
-    elseif ($num_cols == '6'){ $limit = 12; }
-    else { $limit = 8; }
+    // numColBloc() = direct columns per row (e.g. 6 = 6 per row, 4 = 4 per row)
+    // Limit = 2 rows of products (matching original bloc_accueil.php logic)
+    $limit_map = [2=>4, 3=>6, 4=>8, 5=>10, 6=>12];
+    $limit = $limit_map[$num_cols] ?? ($num_cols * 2);
 
     if ($is_promo) {
       $req_products = "SELECT DISTINCT pr.id, pr.link FROM `produits` pr, `liste_produits` lpr
@@ -685,26 +683,20 @@
         </a>
       </div>
 
-      <!-- Product grid — column count from DB (numColBloc) via inline style -->
+      <!-- Product grid — numColBloc = DIRECT columns per row (admin-controlled) -->
       <?php
-        // Map Bootstrap col-lg-X → desktop columns
-        $col_desktop_map = [2=>6, 3=>4, 4=>4, 5=>5, 6=>2];
-        $col_mobile_map  = [2=>3, 3=>2, 4=>3, 5=>3, 6=>1];
-        $cols_desktop = $col_desktop_map[$num_cols] ?? 4;
-        $cols_mobile  = $col_mobile_map[$num_cols]  ?? 2;
-        $grid_id = 'grid-bloc-' . $bloc_id;
-        $grid_style = "display:grid; gap:0.875rem; grid-template-columns:repeat({$cols_mobile},1fr);";
+        // numColBloc() = number of cols per row set in admin (directly)
+        $cols_desktop = max(1, $num_cols); // e.g. 6 → 6 cols desktop
+        $cols_tablet  = max(2, (int)ceil($cols_desktop / 2)); // half on tablet, min 2
+        $cols_mobile  = min(3, max(2, (int)ceil($cols_desktop / 3))); // ~1/3 on mobile, between 2-3
+        $grid_id      = 'grid-bloc-' . $bloc_id;
+        $grid_style   = "display:grid; gap:0.75rem; grid-template-columns:repeat({$cols_mobile},1fr);";
       ?>
-      <!-- Responsive override: can't use media query in inline style, so we inject a style tag -->
       <style>
-        @media (min-width: 768px) {
-          #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo max(2, (int)($cols_desktop / 2)); ?>, 1fr) !important; }
-        }
-        @media (min-width: 1024px) {
-          #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo $cols_desktop; ?>, 1fr) !important; gap: 1rem !important; }
-        }
+        @media (min-width: 640px)  { #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo $cols_tablet; ?>, 1fr) !important; gap: 0.875rem !important; } }
+        @media (min-width: 1024px) { #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo $cols_desktop; ?>, 1fr) !important; gap: 1rem !important; } }
       </style>
-      <div id="<?php echo $grid_id; ?>" class="hp-grid-dynamic" data-cols="<?php echo $num_cols; ?>" style="<?php echo $grid_style; ?>">
+      <div id="<?php echo $grid_id; ?>" style="<?php echo $grid_style; ?>">
         <?php while ($prod = mysqli_fetch_array($res_products)):
           $pid   = $prod['id'];
           $plink = $prod['link'];
@@ -814,10 +806,22 @@
         </div>
       <?php endif; ?>
 
-      <div class="hp-promo-grid">
+      <?php
+        // numColBloc() = direct columns per row (same logic as type 4)
+        $bnr_cols_desktop = max(1, $num_cols);
+        $bnr_cols_tablet  = max(2, (int)ceil($bnr_cols_desktop / 2));
+        $bnr_cols_mobile  = min(2, max(1, (int)ceil($bnr_cols_desktop / 3)));
+        $bnr_grid_id      = 'bnr-bloc-' . $bloc_id;
+        $bnr_style        = "display:grid; gap:0.875rem; grid-template-columns:repeat({$bnr_cols_mobile},1fr);";
+      ?>
+      <style>
+        @media (min-width: 640px)  { #<?php echo $bnr_grid_id; ?> { grid-template-columns: repeat(<?php echo $bnr_cols_tablet; ?>, 1fr) !important; } }
+        @media (min-width: 1024px) { #<?php echo $bnr_grid_id; ?> { grid-template-columns: repeat(<?php echo $bnr_cols_desktop; ?>, 1fr) !important; gap: 1rem !important; } }
+      </style>
+      <div id="<?php echo $bnr_grid_id; ?>" style="<?php echo $bnr_style; ?>">
         <!-- Optional main bloc image -->
         <?php if ($main_img && ApercuBloc($bloc_id)): ?>
-          <a href="<?php echo lienBloc($bloc_id); ?>" class="hp-promo-card" style="grid-row: span 1;">
+          <a href="<?php echo lienBloc($bloc_id); ?>" class="hp-promo-card">
             <img src="<?php echo $main_img; ?>" alt="" loading="lazy">
             <div class="hp-promo-card-overlay">
               <div>
