@@ -1,0 +1,19 @@
+# Ignore media directory (large files)
+media/
+_admin_site/media/
+
+# Node/Composer dependencies if any
+node_modules/
+vendor/
+
+# Environment configurations
+env.php
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Any other temp files
+*.tmp
+*.bak
+error_log

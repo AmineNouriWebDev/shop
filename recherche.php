@@ -1,0 +1,179 @@
+<?php
+
+	session_start();
+
+
+	include("include.php");
+
+
+        $Request = 'SELECT * FROM `site_menu` WHERE `id` = "20" AND `etat` = "1" ';
+		
+    	$Result  = executeRequete($Request) ;
+		
+    	$Datum = mysqli_fetch_array($Result);
+            
+        if(isset($_GET['marque']) && isset($_GET['categorie'])) { $title_page = str_replace("%%CATEGORIE%%",titreCategories($_GET['categorie']),$title_marque);  $title_page = str_replace("%%MARQUE%%",$_GET['marque'],$title_page); }elseif($Datum['titre_page'] != '') $title_page=afficheChamp($Datum['titre_page']); 
+            
+        if(isset($_GET['marque']) && isset($_GET['categorie'])) { $keywords_page = str_replace("%%CATEGORIE%%",titreCategories($_GET['categorie']),$keywords_marque); $keywords_page = str_replace("%%MARQUE%%",$_GET['marque'],$keywords_page);  }elseif($Datum['keywords'] != '') $keywords_page=afficheChamp($Datum['keywords']);  
+            
+        if(isset($_GET['marque']) && isset($_GET['categorie'])) { $description_page = str_replace("%%CATEGORIE%%",titreCategories($_GET['categorie']),$description_marque); $description_page = str_replace("%%MARQUE%%",$_GET['marque'],$description_page);  }elseif($Datum['description'] != '') $description_page=afficheChamp($Datum['description']); 
+		
+        $contenu = afficheChamp($Datum['contenu']);
+		
+    	$titre   = afficheChamp($Datum['titre']);
+		
+    	$id = $Datum['id'];
+    	
+        $img=afficheChamp($Datum['image']);
+        
+        $img_entete = photoPageSite($id);
+    	
+    	
+	$variable2='<li class="breadcrumb-item active" aria-current="page">'.$titre.'</li>';
+?>
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+	<?php include('includes/script-header.php');?>
+    <?php include('includes/script_panier.php');?>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" href="dist/scss/style.css" />
+	
+	<style>
+    	.marque-logo .card {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            justify-content: center;
+        }
+        .marque-logo .card img {
+            width: 100%;
+            object-fit: contain;
+            height: -webkit-fill-available;
+            background: #e4e4e4;
+        }
+        .select2-container{ width:100%!important;}
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            height: 38px;
+        }
+    	.select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 38px;
+        }
+	    .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 38px;
+        }
+	</style>
+    
+</head>
+
+<body>
+	<?php include('includes/feedback.php');?>
+	
+	<?php include('includes/top-bar.php');?>
+	
+	<?php include('includes/banniere.php');?>
+	
+	<?php include('includes/recherche.php');?>
+
+
+      <!-- ======= Footer ======= -->
+      <?php include('includes/footer.php');?>
+
+
+ 	 <?php include('includes/script-footer.php');?>
+	 
+	 
+	 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
+	 
+	 
+	<?php
+    if ((isset($_GET['categorie']) && $_GET['categorie'] != '')){ 
+    $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits` WHERE categorie="'.idCategBlog($_GET['categorie']).'" || idparent_categ="'.idCategBlog($_GET['categorie']).'"';
+    $resprice = executeRequete($reqprice);
+    $dataprice = mysqli_fetch_array($resprice);
+	}else{
+    $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits`';
+    $resprice = executeRequete($reqprice);
+    $dataprice = mysqli_fetch_array($resprice);
+	}
+    ?>	
+	
+ 	<script type="text/javascript">
+ 	
+    $(document).ready(function(){
+
+		filter_data();
+
+		function filter_data()
+		{
+			$('.filter_data').html('<div class="row"> <div class="col-12"><div id="loading"></div></div></div>');
+			var action = 'fetch_data';
+            var minimum_price = $('#hidden_minimum_price').val();
+            var maximum_price = $('#hidden_maximum_price').val();
+			var search    = "<?php if ((isset($_POST['recherche']) && $_POST['recherche'] != '')){ echo $_POST['recherche']; } /*elseif ((isset($_GET['marque']) && $_GET['marque'] != '')){ echo $_GET['marque']; }*/elseif((isset($_POST['action']) && $_POST['action'] == 'search') || (isset($_POST['action']) && $_POST['action'] == 'search1')){ echo addslashes($_POST['recherche']); }else{ echo  ''; }  ?>";
+			var brand = get_filter('brand') ;
+            var promo         = "<?php if(isset($_GET['promo'])) echo 'promo';else echo ''; ?>";
+			var marque = "<?php if((isset($_GET['marque']) && $_GET['marque'] != '')){ echo $_GET['marque']; }else{ echo  ''; }  ?>";
+			var type = document.getElementById('typeProd').value;
+			var link = document.getElementById('linkProd').value;
+			var category = get_filter('category');
+			var caracteristique = get_filter('caracteristique');
+			var categoryByTitre = '<?php if ((isset($_GET['categorie']) && $_GET['categorie'] != '')){ echo $_GET['categorie']; }elseif ((isset($_POST['categorie']) && $_POST['categorie'] != '')){ echo linkCategBlog($_POST['categorie']); }else{ echo ''; } ?>';
+			$.ajax({
+				url:"includes/fetch_data_test.php",
+				method:"POST",
+				data:{action:action,brand:brand, category:category,caracteristique:caracteristique, type:type,link:link,search:search, minimum_price:minimum_price, maximum_price:maximum_price,categoryByTitre:categoryByTitre,marque:marque,promo:promo },
+				
+				success:function(data){
+					$('.filter_data').html(data);
+				}
+			});
+		}
+
+		function get_filter(class_name)
+		{
+			var filter = [];
+			$('.'+class_name+':checked').each(function(){
+				filter.push($(this).val());
+			});
+			return filter;
+		}
+
+		$('.common_selector').click(function(){
+			filter_data();
+		});
+
+        $('#price_range').slider({
+            range:true,
+            min:<?php echo $dataprice['min']; ?>,
+            max:<?php echo $dataprice['max']; ?>,
+            values:[<?php echo $dataprice['min']; ?>, <?php echo $dataprice['max']; ?>],
+            step:0.001,
+            format:'DT',
+            stop:function(event, ui)
+            {
+                $('#price_show').html(ui.values[0] + ' DT - ' + ui.values[1] +' DT');
+                $('#hidden_minimum_price').val(ui.values[0]);
+                $('#hidden_maximum_price').val(ui.values[1]);
+                filter_data();
+            }
+        });
+		$('.slect2').select2();
+
+    });
+    
+    </script>
+	
+</body>
+
+</html>

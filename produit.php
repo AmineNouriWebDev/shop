@@ -1,0 +1,130 @@
+<?php
+include("include.php");
+
+// Initialize all variables to prevent undefined variable warnings
+$titre = '';
+$categorie_link = '';
+$categorie_title = '';
+$categorie_link2 = '';
+$categorie_title2 = '';
+$id = '';
+$PrixVente = '';
+$PrixPromo = '';
+$photo = '';
+$caracteristique = '';
+$etatStock = '';
+$contenu = '';
+$title_page = '';
+$id_categ = '';
+$video = '';
+$idp_categ = '';
+$keywords_page = '';
+$description_page = '';
+
+if(isset($_GET['link']) && $_GET['link'] != '' ){
+$link=sanitize($_GET['link']);
+$type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
+
+	$requete = "SELECT * FROM `produits` WHERE `link` = '".$link."'";
+    $resultat = executeRequete($requete);
+    $num_rows = mysqli_num_rows($resultat);
+    $data = mysqli_fetch_array($resultat);
+	if($num_rows <> 0){
+		if($data['id']!=""){
+			$id				  = afficheChamp($data['id']);
+			$titre			  = afficheChamp($data['titre']);		        
+			$PrixVente	      = afficheChamp($data['prix_vente']);		        
+			$PrixPromo	      = afficheChamp($data['prix_promo']);	        
+			$photo		      = afficheChamp($data['photo']);		        
+			if(empty($photo)) $photo = 'image_non_dispo.jpg';		        
+			$caracteristique  = afficheChamp($data['caracteristique']);		        
+			$etatStock		  = afficheChamp($data['etat_stock']);
+			$contenu		  = isset($data['contenu']) ? afficheChamp($data['contenu']) : '';
+			$title_page		  = afficheChamp($data['titre_page']);
+			$id_categ		  = afficheChamp($data['categorie']);
+			$video		      = isset($data['video']) ? afficheChamp($data['video']) : '';
+			$idp_categ		  = afficheChamp($data['idparent_categ']);
+				$req1 = "SELECT * FROM `categories_blog` WHERE `id` = '".$id_categ."'";
+				$res1 = executeRequete($req1);				
+				$data1 = mysqli_fetch_array($res1);
+				$categorie_title = afficheChamp1($data1['titre']);
+				$categorie_link = $data1['link'];
+				$categorie_title2 = titreCategBlog(afficheChamp($data1['idparent']));
+				$categorie_link2 = linkCategBlog(afficheChamp($data1['idparent']));
+				$typeOg = "Product";
+				$imgOg = 'media/products/'.$photo;
+				$urlOg = lienAccueil().''.lienProduits($link);
+
+				if($PrixPromo != '0.000') $price=$PrixPromo; else $price=$PrixVente;
+				if ($etatStock == '1') $availability="in stock"; else $availability="out of stock";
+
+            
+            if($title_page != '') $title_page=afficheChamp($data['titre_page']); else { $title_page = str_replace("%%PRODUIT%%",$titre,$title_prod); $title_page = str_replace("%%CATEGORIE%%",$categorie_title,$title_page); }
+            
+            // Initialize variables if not set
+            $keywords_page = isset($keywords_page) ? $keywords_page : '';
+            $description_page = isset($description_page) ? $description_page : '';
+            
+            if($keywords_page != '') $keywords_page=afficheChamp($data['keywords']); else { $keywords_page = str_replace("%%PRODUIT%%",$titre,$keywords_prod); $keywords_page = str_replace("%%CATEGORIE%%",$categorie_title,$keywords_page); }
+            if($description_page != '') $description_page=afficheChamp($data['description']); else { $description_page = str_replace("%%PRODUIT%%",$titre,$description_prod); $description_page = str_replace("%%CATEGORIE%%",$categorie_title,$description_page); }
+		}
+    }else{
+        $url = current_url();
+        $date = timestampTD(date("d/m/Y H:i:s"));
+        executeRequete("INSERT INTO `pages_introuvables`(`url_page`, `date`) VALUES ('".$url."','".$date."')");
+        ?>
+	<script language="javascript">
+	<!--
+		window.location = '/error404.html';
+	-->
+	</script>
+	<?php
+	//echo $strSQL;
+	exit;
+    }
+}
+?>
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+	<?php include('includes/script-header.php');?>
+    <?php include('includes/script_panier.php');?>
+	
+	<link rel="stylesheet" href="dist/scss/style.css" />
+	
+</head>
+
+<body>
+	<?php include('includes/feedback.php');?>
+	
+	<?php include('includes/top-bar.php');?>
+	
+	<?php include('includes/banniere.php');?>
+	
+	
+	<?php 
+	$variable2='<li class="breadcrumb-item " aria-current="page"><a href="'.lienCategorie().'">Catalogue</a></li>';
+	$variable3='<li class="breadcrumb-item " aria-current="page"><a href="'.lienCategories($categorie_link2).'">'.$categorie_title2.'</a></li>';
+	$variable4='<li class="breadcrumb-item " aria-current="page"><a href="'.lienCategorieEquipements($categorie_link).'">'.$categorie_title.'</a></li>';
+	$variable5='<li class="breadcrumb-item active" aria-current="page">'.$titre.'</li>';
+	include('includes/breadcrumb.php'); 
+	
+	?>
+    <?php 
+     
+        include("includes/detail_produit.php");
+    ?>
+
+
+      <!-- ======= Footer ======= -->
+      <?php include('includes/footer.php');?>
+
+
+ 	 <?php include('includes/script-footer.php');?>
+	
+</body>
+
+</html>
