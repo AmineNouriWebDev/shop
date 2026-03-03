@@ -181,8 +181,12 @@ if(isset($_POST["action"])){
     $output .= '<div class="cat-topbar">';
     $output .= '<span class="cat-count">'.$total_row.' produit'.($total_row>1?'s':'').'</span>';
     $output .= '<div class="view-toggle">';
-    $output .= '<a href="javascript:void(0)" id="grid" class="vt-btn vt-active" title="Grille"><i class="fa fa-th-large"></i></a>';
-    $output .= '<a href="javascript:void(0)" id="list" class="vt-btn" title="Liste"><i class="fa fa-bars"></i></a>';
+    $output .= '<a href="javascript:void(0)" id="grid" class="vt-btn vt-active" title="Grille">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </a>';
+    $output .= '<a href="javascript:void(0)" id="list" class="vt-btn" title="Liste">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </a>';
     $output .= '</div>';
     $output .= '</div>';
 

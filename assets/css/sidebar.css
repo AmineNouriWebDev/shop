@@ -56,6 +56,20 @@
     font-size: 0.85rem;
 }
 
+/* ── Dark Mode Overrides for Sidebar ── */
+html.dark .shop_sidebar_area.bg-white {
+    background-color: var(--shop-surface, #1e1e2d) !important;
+    border-color: var(--shop-border, #323248) !important;
+}
+
+html.dark .shop_sidebar_area .form-check-label {
+    color: var(--shop-text-secondary, #9a9cae);
+}
+
+html.dark .shop_sidebar_area .widget-title {
+    color: var(--shop-text-primary, #ffffff);
+    border-left-color: var(--shop-primary, #5A31F4);
+}
 
 /* Sidebar Overlay */
 .sidebar-overlay {
