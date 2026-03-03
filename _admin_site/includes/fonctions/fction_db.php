@@ -157,12 +157,12 @@ function rewriteTitre($msg, $nombreMots = 7) {
 	
 	$text = strtolower($text);
 	
-	$text = ereg_replace("[^a-zA-Z0-9]", "-", $text);
+	$text = preg_replace('/[^a-zA-Z0-9]/', '-', $text);
 	
 	while (strstr($text, '--'))
 		$text = str_replace('--', '-', $text);
 	 
-	return(ereg_replace("-$", "", $text));
+	return preg_replace('/-$/', '', $text);
 
 	/*
 	$destination = str_replace('é', 'e', $NewString);
