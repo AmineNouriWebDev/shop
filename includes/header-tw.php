@@ -21,7 +21,7 @@ $nbArticlesHeader = isset($nbArticles) ? intval($nbArticles) : 0;
 // Récupérer les catégories parentes pour la nav
 $nav_categories = [];
 // Exclude promotional categories from main nav (managed only in admin)
-$req_nav = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' AND `titre` NOT LIKE '%Promo%' ORDER BY `ordre`";
+$req_nav = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' ORDER BY `ordre`";
 $res_nav = executeRequete($req_nav);
 while ($cat = mysqli_fetch_array($res_nav)) {
     $req_sub = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='".$cat['id']."' ORDER BY `ordre`";
@@ -34,9 +34,9 @@ while ($cat = mysqli_fetch_array($res_nav)) {
     $nav_categories[] = $cat;
 }
 
-// Récupérer les pages de menu
+// Récupérer les pages de menu (exclure promos)
 $nav_pages = [];
-$req_pages = "SELECT * FROM `site_menu` WHERE `etat` = '1' AND `affichage_menu`='1' AND `idparent`='0' ORDER BY `ordre`";
+$req_pages = "SELECT * FROM `site_menu` WHERE `etat` = '1' AND `affichage_menu`='1' AND `idparent`='0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' ORDER BY `ordre`";
 $res_pages = executeRequete($req_pages);
 while ($page = mysqli_fetch_array($res_pages)) {
     $req_sub = "SELECT * FROM `site_menu` WHERE `etat` = '1' AND `affichage_menu`='1' AND `idparent`='".$page['id']."' ORDER BY `ordre`";

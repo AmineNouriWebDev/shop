@@ -685,9 +685,26 @@
         </a>
       </div>
 
-      <!-- Product grid — column count from DB (numColBloc) -->
-      <?php $grid_class = 'hp-grid-' . $num_cols; ?>
-      <div class="<?php echo $grid_class; ?>">
+      <!-- Product grid — column count from DB (numColBloc) via inline style -->
+      <?php
+        // Map Bootstrap col-lg-X → desktop columns
+        $col_desktop_map = [2=>6, 3=>4, 4=>4, 5=>5, 6=>2];
+        $col_mobile_map  = [2=>3, 3=>2, 4=>3, 5=>3, 6=>1];
+        $cols_desktop = $col_desktop_map[$num_cols] ?? 4;
+        $cols_mobile  = $col_mobile_map[$num_cols]  ?? 2;
+        $grid_id = 'grid-bloc-' . $bloc_id;
+        $grid_style = "display:grid; gap:0.875rem; grid-template-columns:repeat({$cols_mobile},1fr);";
+      ?>
+      <!-- Responsive override: can't use media query in inline style, so we inject a style tag -->
+      <style>
+        @media (min-width: 768px) {
+          #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo max(2, (int)($cols_desktop / 2)); ?>, 1fr) !important; }
+        }
+        @media (min-width: 1024px) {
+          #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo $cols_desktop; ?>, 1fr) !important; gap: 1rem !important; }
+        }
+      </style>
+      <div id="<?php echo $grid_id; ?>" class="hp-grid-dynamic" data-cols="<?php echo $num_cols; ?>" style="<?php echo $grid_style; ?>">
         <?php while ($prod = mysqli_fetch_array($res_products)):
           $pid   = $prod['id'];
           $plink = $prod['link'];
