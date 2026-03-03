@@ -3,9 +3,9 @@
     <div class="single-product-area section-padding-20 clearfix pb-5">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-12 col-lg-9 row">
-                    <div class="col-12 col-lg-6">
-                        <div class="single_product_thumb">
+                <div class="col-12 col-lg-9 row mx-0 text-center text-lg-start">
+                    <div class="col-12 col-lg-6 mx-auto">
+                        <div class="single_product_thumb mb-4 mb-lg-0">
                             
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                                 <ul class="carousel-indicators">
@@ -111,18 +111,20 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Choisissez la plateforme pour recevoir la confirmation:</label>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" name="platform" value="whatsapp" id="platform_whatsapp" class="custom-control-input" required>
-                                                    <label class="custom-control-label" for="platform_whatsapp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:25px;height:25px;"> WhatsApp</label>
-                                                </div>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" name="platform" value="messenger" id="platform_messenger" class="custom-control-input">
-                                                    <label class="custom-control-label" for="platform_messenger"><img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg" alt="Messenger" style="width:20px;height:20px;"> Messenger</label>
-                                                </div>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" name="platform" value="telegram" id="platform_telegram" class="custom-control-input">
-                                                    <label class="custom-control-label" for="platform_telegram"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" style="width:20px;height:20px;"> Telegram</label>
+                                                <label class="mb-2 fw-semibold text-secondary small">Choisissez la plateforme pour recevoir la confirmation:</label>
+                                                <div class="d-flex flex-wrap gap-3 align-items-center justify-content-center justify-content-lg-start">
+                                                    <div class="custom-control custom-radio mr-3">
+                                                        <input type="radio" name="platform" value="whatsapp" id="platform_whatsapp" class="custom-control-input" required>
+                                                        <label class="custom-control-label d-flex align-items-center" for="platform_whatsapp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:20px;height:20px;margin-right:8px;"> WhatsApp</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3">
+                                                        <input type="radio" name="platform" value="messenger" id="platform_messenger" class="custom-control-input">
+                                                        <label class="custom-control-label d-flex align-items-center" for="platform_messenger"><img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg" alt="Messenger" style="width:20px;height:20px;margin-right:8px;"> Messenger</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" name="platform" value="telegram" id="platform_telegram" class="custom-control-input">
+                                                        <label class="custom-control-label d-flex align-items-center" for="platform_telegram"><img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" style="width:20px;height:20px;margin-right:8px;"> Telegram</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -156,44 +158,9 @@ while($datapay = mysqli_fetch_array($respay)){
             <?php if ($first) { echo 'required'; $first = false; } ?>
         >
         <label class="custom-control-label" for="payment_<?php echo $datapay['id']; ?>">
-            <?php 
             $label = moyen_paiement($datapay['id']);
-            echo $label;
-
-            // Display corresponding image if matched
-            switch ($label) {
-               
-                case "Paiement Paypal":
-                    echo '<img class="ml-15" src="dist/img/paypal.png" alt="">';
-                    break;
-                case "Paiement par D17":
-                    echo '<img class="ml-15" src="dist/img/d17.png" alt="">';
-                    break;
-                case "Western Union":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/2.png" alt="" width="52px" height="52px">';
-                    break;
-                case "Ria":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/3.png" alt="" width="52px" height="52px">';
-                    break;
-                case "Carte Bancaire Tunisienne":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/5.png" alt="" width="52px" height="52px">';
-                    break;
-                case "Virement bancaire international":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/1.png" alt="" width="52px" height="52px">';
-                    break;
-                case "Wise":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/4.png" alt="" width="52px" height="52px">';
-                    break;
-                case "CoinBase":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/7.png" alt="" width="52px" height="52px">';
-                    break;
-                case "Binance":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/6.png" alt="" width="52px" height="52px">';
-                    break;
-                     case "Revolut":
-                    echo '<img class="ml-15" src="dist/img/paymentmethode/8.png" alt="" width="52px" height="52px">';
-                    break;
-            }
+            // We just output the text label. Images removed to save space on mobile form.
+            echo '<span class="fw-semibold text-secondary mx-2">' . $label . '</span>';
             ?>
         </label>
     </div>
@@ -217,7 +184,7 @@ while($datapay = mysqli_fetch_array($respay)){
                             <?php } ?>
                             
                             <!-- LONG CONTENT INJECTION -->
-                            <div class="mt-5" id="details-complets">
+                            <div class="mt-5 text-start" id="details-complets">
                                 <?php if($contenu != "") { ?>
                                     <h4 class="fw-bold mb-4 border-bottom pb-2">Détails du produit</h4>
                                     <div class="product-long-content text-secondary lh-lg" style="font-size: 0.95rem;">
@@ -359,7 +326,22 @@ document.getElementById('commandeExpressForm').addEventListener('submit', functi
     }
     window.location.href = url;
 });
-</script> <!--------------------------------------------------- Facebook ---------------------------------------------------------------->
+</script>
+
+<script>
+// Smooth scroll for "Afficher plus de détails"
+document.querySelectorAll('a[href="#details-complets"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+});
+</script>
+
+<!--------------------------------------------------- Facebook ---------------------------------------------------------------->
                 
                 <script>
                     fbq('track','ViewContent',{
