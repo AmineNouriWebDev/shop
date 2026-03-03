@@ -4,63 +4,7 @@
 /*---------------------------------------------------------------------------------*/
 	session_start();
 	include("include.php");
-    //require_once "config_google_facebook.php";
     require_once "User.class.php";
-
-/*--------------------------------------- Google ------------------------------------------*/
-
-
-
-/*
-if(isset($_GET['code'])){ 
-    $accessToken = $gClient->authenticate($_GET['code']); 
-    $_SESSION['token'] = $gClient->getAccessToken(); 
-    
-    if(isset($accessToken) ){
-    header('Location: '.lienCompte()); 
-    }else{
-    header('Location: ' . filter_var(GOOGLE_REDIRECT_URL, FILTER_SANITIZE_URL));
-    }
-    
-} 
- 
-if(isset($_SESSION['token'])){ 
-    $gClient->setAccessToken($_SESSION['token']); 
-}
-  
-if($gClient->getAccessToken()){ 
-    
-    //print_r($_GET['token']);
-    // Get user profile data from google 
-    $gpUserProfile = $google_oauthV2->userinfo->get(); 
-     
-    // Initialize User class 
-    $user = new User(); 
-     
-    // Getting user profile info 
-    $gpUserData = array(); 
-    $gpUserData['oauth_uid']    = !empty($gpUserProfile['id'])?$gpUserProfile['id']:''; 
-    $gpUserData['prenom']       = !empty($gpUserProfile['given_name'])?$gpUserProfile['given_name']:''; 
-    $gpUserData['nom']          = !empty($gpUserProfile['family_name'])?$gpUserProfile['family_name']:''; 
-    $gpUserData['email']        = !empty($gpUserProfile['email'])?$gpUserProfile['email']:''; 
-     
-    // Insert or update user data to the database 
-    $gpUserData['oauth_provider'] = 'google'; 
-    $userData = $user->checkUser($gpUserData); 
-    
-    // Storing user data in the session 
-    $_SESSION['userData'] = $userData; 
-}
-*/
-
-
-// Get login url 
-//$authUrl = $gClient->createAuthUrl(); //filter_var($authUrl, FILTER_SANITIZE_URL)
-     
-// Render google login button 
-//$output = '<a href="'.filter_var($authUrl, FILTER_SANITIZE_URL).'" class="btn btn-light d-flex align-items-center mb-2" role="button"><img src="media/icones/8-icones-social_10091605.png" width="40px"><span class="w-100"> S\'identifier avec Google </span></a>'; 
-$output = ''; 
-
 
 /*-----------------------------------------------------------------------------------------*/
 		

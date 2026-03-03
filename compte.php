@@ -4,52 +4,7 @@
 /*---------------------------------------------------------------------------------*/
 	session_start();
 	include("include.php");
-    //require_once "config_google_facebook.php";
     require_once "User.class.php";
-
-/*--------------------------------------- Google ------------------------------------------*/
-/*
-if(isset($_SESSION['token'])){ 
-    $gClient->setAccessToken($_SESSION['token']); 
-}
-  
-if($gClient->getAccessToken()){ 
-    // Get user profile data from google 
-    $gpUserProfile = $google_oauthV2->userinfo->get(); 
-     
-    // Initialize User class 
-    $user = new User(); 
-     
-    // Getting user profile info 
-	$sess_id = md5(microtime());
-	$etat = 1;
-	
-    $gpUserData = array(); 
-    $gpUserData['oauth_uid']  = !empty($gpUserProfile['id'])?$gpUserProfile['id']:''; 
-    $gpUserData['nom'] = !empty($gpUserProfile['given_name'])?$gpUserProfile['given_name']:''; 
-    $gpUserData['prenom']  = !empty($gpUserProfile['family_name'])?$gpUserProfile['family_name']:''; 
-    $gpUserData['email']       = !empty($gpUserProfile['email'])?$gpUserProfile['email']:''; 
-    $gpUserData['sess_id']       = !empty($sess_id)?$sess_id:''; 
-    $gpUserData['etat']       = !empty($etat)?$etat:''; 
-     
-    // Insert or update user data to the database 
-    $gpUserData['oauth_provider'] = 'google'; 
-    $userData = $user->checkUser($gpUserData); 
-    
-    // Storing user data in the session 
-    $_SESSION['userData'] = $userData; 
-    //print_r($_SESSION['userData']);
-    //print_r($_SESSION['userData']['id']);
-			  $_SESSION['client_id']=$_SESSION['userData']['id']; 
-			  $_SESSION['client_login']=$_SESSION['userData']['email'];
-			  $_SESSION['client_nom']=$_SESSION['userData']['nom'];
-			  $_SESSION['sess_id'] = $sess_id;
-    if($gClient->isAccessTokenExpired()){
-      header('Location: /deconnexion.php');
-      exit;
-    }
-}
-*/
 
 /*-----------------------------------------------------------------------------------------*/
 
