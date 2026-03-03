@@ -67,17 +67,25 @@
                                 <?php echo courtContenuProduits($id); ?>
                             </div>
                             <?php if(rqProduits($id)){ ?>
-                                <div class="remarque bg-light p-2 rounded-3" style="font-size:14px;font-weight:500">
-                                    <?php echo rqProduits($id); ?>
+                                <div class="remarque bg-warning-subtle text-amber-800 p-3 rounded-2xl mb-4 border border-amber-200" style="font-size:0.9rem;font-weight:600">
+                                    <i class="fa fa-info-circle me-2"></i> <?php echo rqProduits($id); ?>
                                 </div>
                             <?php } ?>
+                            
                             <?php if ($etatStock == '1'){  ?>
                                 <div class="cart-table-area mt-4">
                                     <div class="cart-summary m-0 p-4 border rounded-3xl shadow-sm bg-white">
-                                        <a href="applications.php" class="btn-primary-tw w-100 d-block text-center text-uppercase mb-4">Vers Télécharger applications</a>
-                                        <h5 class="fw-bold fs-5 text-dark mb-3">Commande Express</h5>
-                                        <hr class="mb-4">
-                                        <form class="cart" id="commandeExpressForm" method="post" enctype="multipart/form-data">
+                                        <a href="applications.php" class="btn-secondary-tw w-100 d-block text-center text-uppercase mb-4">Télécharger nos applications</a>
+                                        
+                                        <!-- Commande Express Toggle -->
+                                        <button class="btn-primary-tw w-100 d-flex justify-content-between align-items-center fw-bold btn-express-toggle" type="button" data-toggle="collapse" data-target="#collapseExpress" aria-expanded="false" aria-controls="collapseExpress">
+                                            <span><i class="fa fa-bolt text-warning me-2"></i> Commande Express Rapide</span>
+                                            <i class="fa fa-chevron-down toggle-icon"></i>
+                                        </button>
+
+                                        <div class="collapse mt-3" id="collapseExpress">
+                                            <hr class="mb-4">
+                                            <form class="cart" id="commandeExpressForm" method="post" enctype="multipart/form-data">
                                             <div class="row">
                                                 <div class="col-md-6 form-group mb-3">
                                                     <label class="fw-semibold text-secondary small">Nom <span class="text-danger">*</span></label>
@@ -197,9 +205,28 @@ while($datapay = mysqli_fetch_array($respay)){
                                                 <input type="hidden" name="prod_cmd" id="prod_cmd" value="<?php echo $id; ?>" />
                                             </div>
                                         </form>
+                                        </div>
                                     </div>
                                 </div> 
                             <?php } ?>
+                            
+                            <!-- LONG CONTENT INJECTION -->
+                            <div class="mt-5">
+                                <?php if($contenu != "") { ?>
+                                    <h4 class="fw-bold mb-4 border-bottom pb-2">Détails du produit</h4>
+                                    <div class="product-long-content text-secondary lh-lg" style="font-size: 0.95rem;">
+                                        <?php echo $contenu; ?>
+                                    </div>
+                                <?php } ?>
+                                
+                                <?php if($video != "") { ?>
+                                    <h4 class="fw-bold mb-4 mt-5 border-bottom pb-2">Vidéo de présentation</h4>
+                                    <div class="ratio ratio-16x9 rounded-2xl overflow-hidden shadow-sm border">
+                                        <?php echo $video; ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>...
@@ -433,17 +460,25 @@ document.getElementById('commandeExpressForm').addEventListener('submit', functi
 .btn-primary-tw {
 	display: inline-block; text-align: center; background: var(--shop-primary, #5A31F4); color: white;
 	font-weight: 600; padding: 0.875rem 1.25rem; border-radius: 0.875rem; text-decoration: none;
-	transition: background 200ms ease, transform 150ms ease, box-shadow 200ms ease;
+	transition: background 200ms ease, transform 150ms ease, box-shadow 200ms ease; cursor: pointer;
 }
 .btn-primary-tw:hover {
 	background: var(--shop-primary-hover, #421bb6); color: white; text-decoration: none;
 	transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--shop-primary, #5A31F4) 35%, transparent);
 }
 .btn-secondary-tw {
-	display: inline-block; text-align: center; background: var(--shop-bg-alt, #e5e7eb); color: var(--shop-text-disabled, #9ca3af);
+	display: inline-block; text-align: center; background: var(--shop-bg-alt, #e5e7eb); color: var(--shop-text-primary, #1a1a2e);
+	font-weight: 600; padding: 0.875rem 1.25rem; border-radius: 0.875rem; text-decoration: none; transition: background 200ms ease;
+}
+.btn-secondary-tw:hover {
+    background: #d1d5db; color: #1a1a2e; text-decoration: none;
+}
+.btn-disabled-tw {
+	display: inline-block; text-align: center; background: #f3f4f6; color: #9ca3af;
 	font-weight: 600; padding: 0.875rem 1.25rem; border-radius: 0.875rem; text-decoration: none; cursor: not-allowed;
 }
 .rounded-3xl { border-radius: 1.5rem !important; }
+.rounded-2xl { border-radius: 1rem !important; }
 .form-control-tw {
     border-radius: 0.75rem; border: 1.5px solid var(--shop-border, #e5e7eb); padding: 0.6rem 1rem;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
@@ -453,4 +488,10 @@ document.getElementById('commandeExpressForm').addEventListener('submit', functi
 .avaibility i { color: #10b981; }
 .avaibility i.rupture { color: #ef4444; }
 .product-price { font-weight: 700; color: var(--shop-primary, #5A31F4); }
+.product-long-content img { max-width: 100%; height: auto; border-radius: 0.75rem; margin-top: 1rem; margin-bottom: 1rem; }
+.product-long-content h1, .product-long-content h2, .product-long-content h3 { color: var(--shop-text-primary); font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem;}
+
+/* Commande Express accordion state */
+.btn-express-toggle[aria-expanded="true"] .toggle-icon { transform: rotate(180deg); }
+.toggle-icon { transition: transform 0.3s ease; }
 </style>
