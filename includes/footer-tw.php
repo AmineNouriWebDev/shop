@@ -141,9 +141,7 @@
   background: var(--shop-primary);
   color: white;
   border-radius: 0.875rem;
-  display: none;
-  align-items: center;
-  justify-content: center;
+  display: none; /* jQuery handles fadeIn display: block */
   box-shadow: 0 4px 20px color-mix(in srgb, var(--shop-primary) 40%, transparent);
   text-decoration: none;
   z-index: 8000;
@@ -156,7 +154,12 @@
   transform: translateY(-3px);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--shop-primary) 45%, transparent);
 }
-#scrollUP svg { flex-shrink: 0; }
+#scrollUP svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
 
 <footer class="ft-root">

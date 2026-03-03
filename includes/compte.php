@@ -90,15 +90,16 @@
 			<div class=" section-padding-20">			
 				<div class="row">
 					<div class="col-md-3 col-sm-12">
-						<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-						  <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"> <i class="fa fa-home"></i> Tableau de bord </a>
-						  <a class="nav-link" id="v-pills-infos-tab" data-toggle="pill" href="#v-pills-infos" role="tab" aria-controls="v-pills-infos" aria-selected="false"> <i class="fa fa-user"></i> Informations personnelles </a>
-						  <a class="nav-link" id="v-pills-history-tab" data-toggle="pill" href="#v-pills-history" role="tab" aria-controls="v-pills-history" aria-selected="false"> <i class="fa fa-shopping-basket"></i> Historiques des commandes</a>
-						  <a class="nav-link" id="deconnect" href="<?php echo lienDeconnexion(); ?>" ><i class="fa fa-sign-out"></i> Déconnexion</a>
+						<div class="nav flex-column nav-pills-tw bg-white p-3 rounded-3xl shadow-sm border mb-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+						  <a class="nav-link-tw active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"> <i class="fa fa-home"></i> Tableau de bord </a>
+						  <a class="nav-link-tw" id="v-pills-infos-tab" data-toggle="pill" href="#v-pills-infos" role="tab" aria-controls="v-pills-infos" aria-selected="false"> <i class="fa fa-user"></i> Informations personnelles </a>
+						  <a class="nav-link-tw" id="v-pills-history-tab" data-toggle="pill" href="#v-pills-history" role="tab" aria-controls="v-pills-history" aria-selected="false"> <i class="fa fa-shopping-basket"></i> Historiques des commandes</a>
+						  <div class="border-top my-2"></div>
+						  <a class="nav-link-tw text-danger" id="deconnect" href="<?php echo lienDeconnexion(); ?>" ><i class="fa fa-sign-out"></i> Déconnexion</a>
 						</div>
 					</div>
 					<div class="col-md-9 col-sm-12">
-						<div class="tab-content" id="v-pills-tabContent">
+						<div class="tab-content bg-white p-4 rounded-3xl shadow-sm border" id="v-pills-tabContent">
 							<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
 							    
 								<span>Bienvenue <?php echo ucwords(nomClient($id_client).' '.prenomClient($id_client)); ?> ,</span>
@@ -123,6 +124,30 @@
 
 			</div>
 		</div>
+		</div>
 	</div>
 	
-	    
+<style>
+/* ── Account Nav Overrides ───────────────────────────── */
+.rounded-3xl { border-radius: 1.5rem !important; }
+.nav-link-tw {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.875rem 1rem; color: var(--shop-text-secondary, #4b5563);
+    font-weight: 600; border-radius: 0.75rem; text-decoration: none;
+    transition: all 200ms ease; margin-bottom: 0.25rem;
+}
+.nav-link-tw:hover {
+    background: var(--shop-bg-alt, #f3f4f6); color: var(--shop-primary, #5A31F4);
+    text-decoration: none; margin-left: 4px; border-radius: 0.75rem;
+}
+.nav-link-tw.active {
+    background: color-mix(in srgb, var(--shop-primary, #5A31F4) 12%, transparent) !important;
+    color: var(--shop-primary, #5A31F4) !important;
+}
+.nav-link-tw i {
+    width: 20px; text-align: center; opacity: 0.8;
+}
+.tab-content {
+	min-height: 400px;
+}
+</style>

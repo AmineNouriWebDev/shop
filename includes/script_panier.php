@@ -1,4 +1,6 @@
-    <script language = "Javascript" type="text/javascript">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script language="Javascript" type="text/javascript">
 
 	// Global tracking to prevent double clicks
 	var cartProcessing = {};
@@ -58,16 +60,34 @@
 			data: 'id_produit=' + product_id + '&quantity=' + quantity + '&action=add',
 		    dataType: "json",
 			success: function(data) {
-				// Show success alert
-				$("#myAlert").fadeIn(1000);		
-				setTimeout(function() { 
-				   $("#myAlert").fadeOut(1000);						   
-				}, 5000);
+				// Use Toastify for success
+				Toastify({
+				  text: "✅ Produit ajouté au panier. Voir mon panier",
+				  duration: 4000,
+                  destination: url,
+				  newWindow: false,
+				  close: true,
+				  gravity: "bottom",
+				  position: "right",
+                  className: "toast-tw",
+				  style: {
+					background: "var(--shop-primary, #5A31F4)",
+					color: "#fff",
+					borderRadius: "0.75rem",
+					boxShadow: "0 10px 30px rgba(90,49,244,0.3)",
+					fontFamily: "Inter, sans-serif",
+					fontSize: "0.875rem",
+                    fontWeight: "500",
+                    padding: "1rem 1.25rem",
+					cursor: "pointer"
+				  },
+				  onClick: function(){}
+				}).showToast();
 				
-				// Update cart count in header
+				// Update all cart counters
 			    if(document.getElementById("blocDepartementsPanier")) document.getElementById("blocDepartementsPanier").innerHTML = data[0];
 			    if(document.getElementById("lblCartCount")) document.getElementById("lblCartCount").innerHTML = '('+data[0]+')';
-        		if(document.getElementById('feedbackContent')) document.getElementById('feedbackContent').innerHTML= '<i class="fa fa-shopping-cart"></i> <p> Il y a '+data['0']+' produit(s) dans votre panier. <a href="'+url+'" class="pl-2">voir panier</a> </p>';
+        		if(document.getElementById("floatingCartCount")) document.getElementById("floatingCartCount").innerHTML = data[0];
 				
 				// Re-enable buttons after a short delay
 				setTimeout(function() {
@@ -148,15 +168,29 @@
 		    dataType: "json",
 			success: function(data) { 	
 			  document.getElementById("blocDepartementsPanier").innerHTML = data[0];
-			  document.getElementById("lblCartCount").innerHTML = '('+data[0]+')';
+			  if(document.getElementById("floatingCartCount")) document.getElementById("floatingCartCount").innerHTML = data[0];
 			  
 			  document.getElementById("shopping__cart").innerHTML = data[1];
-			  //var popup = 'Félicitations, votre produit à été ajouté au panier\n <a href=""> Continuer votre achat</a><a href="">Voir votre panier</a>';
-			  //alert(popup);				
-				$("#myAlert").fadeIn(1000);		
-				setTimeout(function() { 
-				   $("#myAlert").fadeOut(1000);							   
-				}, 5000);
+
+			  // Use Toastify for removal
+              Toastify({
+				  text: "🗑️ Produit supprimé du panier.",
+				  duration: 3000,
+				  newWindow: false,
+				  close: true,
+				  gravity: "bottom",
+				  position: "right",
+				  style: {
+					background: "#1e293b",
+					color: "#fff",
+					borderRadius: "0.75rem",
+					boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+					fontFamily: "Inter, sans-serif",
+					fontSize: "0.875rem",
+					padding: "1rem 1.25rem"
+				  }
+			  }).showToast();
+
 			  $('html, body').animate({ scrollTop: 0 }, 'slow');
 			}
 		});
@@ -184,9 +218,9 @@
 		});
 	}
 	</script>
-		<div class="alert alert-success alert-dismissible mt-2" role="alert" id="myAlert" style="position: fixed; top: 0; right: 10px;z-index: 999999;display:none;">
-        <strong class="mr-auto"> Panier</strong>
-		<hr>
-		<p class="mb-0"> Succès ! votre produit à été ajouté au panier. <a href="<?php echo lienPanier(); ?>" class="alert-link" style="font-size: 0.9rem;float: right;text-decoration: underline;">Voir votre panier</a></p>
-		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	</div>
+	<!-- Toastify CSS overrides -->
+	<style>
+		.toastify.toast-tw:hover { box-shadow: 0 12px 40px rgba(90,49,244,0.4) !important; transform: translateY(-3px); }
+        .toast-close { opacity: 0.8; transition: opacity 200ms ease; }
+        .toast-close:hover { opacity: 1; }
+	</style>

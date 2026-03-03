@@ -34,63 +34,22 @@
 
 
 <!DOCTYPE html>
-
-<html lang="en">
-
+<html lang="fr">
 <head>
-
-	<?php include('includes/script-header.php');?>
-    <?php include('includes/script_panier.php');?>
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-	
-	<link rel="stylesheet" href="dist/scss/style.css" />
-	
-	<style>
-    	.marque-logo .card {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            justify-content: center;
-        }
-        .marque-logo .card img {
-            width: 100%;
-            object-fit: contain;
-            height: -webkit-fill-available;
-            background: #e4e4e4;
-        }
-        .select2-container{ width:100%!important;}
-        .select2-container--default .select2-selection--single {
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            height: 38px;
-        }
-    	.select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #444;
-            line-height: 38px;
-        }
-	    .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 38px;
-        }
-	</style>
-    
+  <?php include('includes/script-header.php'); ?>
+  <?php include('includes/script_panier.php'); ?>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <style>*, *::before, *::after{box-sizing:border-box;} body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--shop-bg-base);color:var(--shop-text-primary);}</style>
 </head>
-
 <body>
-	<?php include('includes/feedback.php');?>
-	
-	<?php include('includes/top-bar.php');?>
-	
-	<?php include('includes/banniere.php');?>
+  <?php include('includes/feedback.php'); ?>
+  <?php include('includes/header-tw.php'); ?>
 	
 	<?php include('includes/recherche.php');?>
 
 
-      <!-- ======= Footer ======= -->
-      <?php include('includes/footer.php');?>
-
-
- 	 <?php include('includes/script-footer.php');?>
+  <?php include('includes/footer-tw.php'); ?>
+  <?php include('includes/script-footer.php'); ?>
 	 
 	 
 	 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>

@@ -72,29 +72,28 @@
                                 </div>
                             <?php } ?>
                             <?php if ($etatStock == '1'){  ?>
-                                <div class="cart-table-area mt-2">
-                                    <div class="cart-summary m-0">
-                                        <a href="applications.php"><button type="button" name="addtocart" value="5" class="btn amado-btn text-uppercase">Vers Télécharger applications</button></a>
-                                        <br><br>
-                                        <h5>COMMANDE EXPRESS</h5>
-                                        <hr>
+                                <div class="cart-table-area mt-4">
+                                    <div class="cart-summary m-0 p-4 border rounded-3xl shadow-sm bg-white">
+                                        <a href="applications.php" class="btn-primary-tw w-100 d-block text-center text-uppercase mb-4">Vers Télécharger applications</a>
+                                        <h5 class="fw-bold fs-5 text-dark mb-3">Commande Express</h5>
+                                        <hr class="mb-4">
                                         <form class="cart" id="commandeExpressForm" method="post" enctype="multipart/form-data">
                                             <div class="row">
-                                                <div class="col-md-6 form-group mb-2">
-                                                    <label>Nom <span class="text-danger">*</span></label>
-                                                    <input type="text" name="nom" class="form-control" required>
+                                                <div class="col-md-6 form-group mb-3">
+                                                    <label class="fw-semibold text-secondary small">Nom <span class="text-danger">*</span></label>
+                                                    <input type="text" name="nom" class="form-control form-control-tw" required>
                                                 </div>
-                                                <div class="col-md-6 form-group mb-2">
-                                                    <label>Prénom <span class="text-danger">*</span></label>
-                                                    <input type="text" name="prenom" class="form-control" required>
+                                                <div class="col-md-6 form-group mb-3">
+                                                    <label class="fw-semibold text-secondary small">Prénom <span class="text-danger">*</span></label>
+                                                    <input type="text" name="prenom" class="form-control form-control-tw" required>
                                                 </div>
-                                                <div class="col-md-6 form-group mb-2">
-                                                    <label>Téléphone <span class="text-danger">*</span></label>
-                                                    <input type="text" name="tel" class="form-control" required>
+                                                <div class="col-md-6 form-group mb-3">
+                                                    <label class="fw-semibold text-secondary small">Téléphone <span class="text-danger">*</span></label>
+                                                    <input type="text" name="tel" class="form-control form-control-tw" required>
                                                 </div>
-                                                <div class="col-md-6 form-group mb-2">
-                                                    <label>Email <span class="text-danger">*</span></label>
-                                                    <input type="email" name="email" class="form-control" required>
+                                                <div class="col-md-6 form-group mb-3">
+                                                    <label class="fw-semibold text-secondary small">Email <span class="text-danger">*</span></label>
+                                                    <input type="email" name="email" class="form-control form-control-tw" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -187,9 +186,9 @@ while($datapay = mysqli_fetch_array($respay)){
 <?php } ?>
 </div>
 
-                                            <hr>
-                                            <div class="form-group mb-2">
-                                                <button type="submit" name="" class="btn amado-btn">Confirmer</button>
+                                            <hr class="my-4">
+                                            <div class="form-group mb-0 mt-2">
+                                                <button type="submit" name="" class="btn-primary-tw w-100 border-0">Confirmer la commande</button>
                                                 <input type="hidden" name="action" id="" value="cmd_express" />
                                                 <input type="hidden" name="soustotal" id="stotal_commande" value="<?php echo $sous_total; ?>" />
                                                 <input type="hidden" name="total" id="total_commande" value="<?php echo $total; ?>" />
@@ -212,26 +211,26 @@ while($datapay = mysqli_fetch_array($respay)){
                     
                     <div class="col-12 col-lg-3 mb-4">
                         <div class="sticky-top pt-2 full-sc ">
-                            <div class="single_product_desc bg-light px-2 py-4 rounded">
+                            <div class="single_product_desc bg-white shadow-sm border px-3 py-4 rounded-3xl text-center">
     	                        
-                                <div class="product-meta-data mb-3">
-    	                            <p class="product-price mt-3"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <br/><span style="text-decoration:line-through;color:#aaa;font-size: 22px;">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
+                                <div class="product-meta-data mb-4">
+    	                            <p class="fs-4 fw-bold text-dark mt-2"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <br/><span class="text-muted text-decoration-line-through fs-6 fw-normal">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
                                 </div>
                                     
                                 <!-- Add to Cart Form -->
-                                <form class="cart clearfix d-flex flex-wrap flex-column justify-content-center align-items-center" method="post">
-                                    <div class="cart-btn d-flex mx-auto mb-3">
-                                        <p>Qté</p>
-                                        <div class="quantity">
-                                            <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                                            <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                            <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
+                                <form class="cart clearfix d-flex flex-column align-items-center" method="post">
+                                    <div class="cart-btn d-flex mx-auto mb-4 align-items-center bg-light rounded-pill px-3 py-1">
+                                        <p class="m-0 me-3 fw-semibold text-secondary">Qté</p>
+                                        <div class="quantity d-flex align-items-center">
+                                            <span class="qty-minus text-primary fw-bold" style="cursor:pointer;font-size:1.2rem;padding:0 10px;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;"><i class="fa fa-minus"></i></span>
+                                            <input type="number" class="qty-text border-0 bg-transparent text-center fw-bold" style="width:40px;outline:none" id="qty" step="1" min="1" max="300" name="quantity" value="1">
+                                            <span class="qty-plus text-primary fw-bold" style="cursor:pointer;font-size:1.2rem;padding:0 10px;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus"></i></span>
                                         </div>
                                     </div>
     								<?php if ($etatStock == '1'){  ?>
-                                    <button type="button" name="addtocart" value="5" class="btn amado-btn text-uppercase"  onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);"><i class="fa fa-shopping-bag mr-2 border-right pr-2"></i>Ajouter au panier</button>
+                                    <button type="button" name="addtocart" value="5" class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3" onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);"><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
                                     <?php }else{?>
-    								<button type="button" name="addtocart" value="5" class="btn amado-btn text-uppercase"  onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);" disabled><i class="fa fa-shopping-bag mr-2 border-right pr-2"></i>Ajouter au panier</button>
+    								<button type="button" name="addtocart" value="5" class="btn-secondary-tw w-100 border-0 text-uppercase py-3" onclick="addToCart(<?php echo $id; ?>, document.getElementById('qty').value);" disabled><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
     								<?php } ?>
     							</form>
                             </div>
@@ -425,8 +424,33 @@ document.getElementById('commandeExpressForm').addEventListener('submit', functi
             </button>
               </div>
           <div class="modal-body">
-            <?php echo contenuPage(26); ?>
           </div>
         </div>
       </div>
     </div>
+<style>
+/* ── Product Details Overrides ───────────────────────── */
+.btn-primary-tw {
+	display: inline-block; text-align: center; background: var(--shop-primary, #5A31F4); color: white;
+	font-weight: 600; padding: 0.875rem 1.25rem; border-radius: 0.875rem; text-decoration: none;
+	transition: background 200ms ease, transform 150ms ease, box-shadow 200ms ease;
+}
+.btn-primary-tw:hover {
+	background: var(--shop-primary-hover, #421bb6); color: white; text-decoration: none;
+	transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--shop-primary, #5A31F4) 35%, transparent);
+}
+.btn-secondary-tw {
+	display: inline-block; text-align: center; background: var(--shop-bg-alt, #e5e7eb); color: var(--shop-text-disabled, #9ca3af);
+	font-weight: 600; padding: 0.875rem 1.25rem; border-radius: 0.875rem; text-decoration: none; cursor: not-allowed;
+}
+.rounded-3xl { border-radius: 1.5rem !important; }
+.form-control-tw {
+    border-radius: 0.75rem; border: 1.5px solid var(--shop-border, #e5e7eb); padding: 0.6rem 1rem;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.form-control-tw:focus { border-color: var(--shop-primary, #5A31F4); box-shadow: 0 0 0 3px color-mix(in srgb, var(--shop-primary) 15%, transparent); }
+.single_product_desc h2 { font-weight: 800; color: var(--shop-text-primary); letter-spacing: -0.02em; }
+.avaibility i { color: #10b981; }
+.avaibility i.rupture { color: #ef4444; }
+.product-price { font-weight: 700; color: var(--shop-primary, #5A31F4); }
+</style>
