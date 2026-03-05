@@ -68,9 +68,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 			                               while ($data = mysqli_fetch_array($resultat))  {
 								         ?>
                                             <tr>
-                                                <td><span class="apercup"><img src="<?php echo imagesProduitSite($data['id']); ?>" /></span> </td>
+                                                <td><span class="apercup"><img src="<?php echo imagesproduitSite($data['id']); ?>" /></span> </td>
                                                 <td class="text-nowrap">
-                                                  <a href="index.php?r=addproduit&ids=<?php echo $data['id']; ?>&idpr=<?php echo $_GET['id']; ?>&start=<?php echo $_GET['start']; ?>&action=supp" data-toggle="tooltip" data-original-title="Supprimer"> <i class="fa fa-close text-danger"></i></a>
+                                                  <a href="index.php?r=addproduit&ids=<?php echo $data['id']; ?>&idpr=<?php echo $_GET['id']; ?>&start=<?php echo isset($_GET['start']) ? $_GET['start'] : ''; ?>&action=supp" data-toggle="tooltip" data-original-title="Supprimer"> <i class="fa fa-close text-danger"></i></a>
                                                 </td>
                                             </tr>
                                          <?php } ?>
@@ -107,7 +107,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                     <div class="text-xs-right">
                                        <button type="submit" class="btn btn-info">Enregistrer</button>
                                        <input name="action" type="hidden" id="action" value="ajt">
-                                       <button type="reset" class="btn btn-inverse" onclick="location.href='index.php?r=produits&start=<?php echo $_GET['start']; ?>'">Annuler</button>
+                                       <button type="reset" class="btn btn-inverse" onclick="location.href='index.php?r=produits&start=<?php echo isset($_GET['start']) ? $_GET['start'] : ''; ?>'">Annuler</button>
                                         <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>" />
                                     </div>
                                 </form>

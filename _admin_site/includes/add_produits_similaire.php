@@ -110,7 +110,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                     <div class="text-xs-right">
                                        <button type="submit" class="btn btn-info">Enregistrer</button>
                                        <input name="action" type="hidden" id="action" value="ajt">
-                                       <button type="reset" class="btn btn-inverse" onclick="location.href='index.php?r=produits&start=<?php echo $_GET['start']; ?>'">Annuler</button>
+                                       <button type="reset" class="btn btn-inverse" onclick="location.href='index.php?r=produits&start=<?php echo isset($_GET['start']) ? $_GET['start'] : ''; ?>'">Annuler</button>
                                         <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>" />
                                     </div>
                                 </form>

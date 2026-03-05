@@ -323,4 +323,24 @@ function supprimeretatcommande($id)
 	executeRequete("DELETE FROM `etat_commandes` WHERE `id` = '". $id ."'");
     return true;
 }
+
+function supprimerCommande($id)
+{
+    $id = intval($id);
+    if ($id <= 0) return false;
+    executeRequete("DELETE FROM `ligne_commande` WHERE `idcommande` = '".$id."'");
+    executeRequete("DELETE FROM `commandes` WHERE `id` = '".$id."'");
+    return true;
+}
+
+function supprimerCommandesMultiples($ids_string)
+{
+    // SÃ©curisation : on conserve uniquement les entiers
+    $ids = array_filter(array_map('intval', explode(',', $ids_string)));
+    if (empty($ids)) return false;
+    $ids_safe = implode(',', $ids);
+    executeRequete("DELETE FROM `ligne_commande` WHERE `idcommande` IN (".$ids_safe.")");
+    executeRequete("DELETE FROM `commandes` WHERE `id` IN (".$ids_safe.")");
+    return true;
+}
 ?>

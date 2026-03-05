@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+include_once(__DIR__ . "/session_config.php");
 if(!isset($_SESSION['sess_id'])){
       header("location:login.php");
       die();

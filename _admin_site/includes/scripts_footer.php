@@ -92,982 +92,177 @@
                 ExportWord
             } from 'ckeditor5-premium-features';
 
-            ClassicEditor.create( document.querySelector( '#editor1' ), {
-                plugins: [
-                    Autoformat,
-                    BlockQuote,
-                    Bold,
-                    CloudServices,
-                    CKBox,
-                    Essentials,
-                    FindAndReplace,
-                    Font,
-                    Heading,
-                    Image,
-                    ImageCaption,
-                    ImageResize,
-                    ImageStyle,
-                    ImageToolbar,
-                    ImageUpload,
-                    Base64UploadAdapter,
-                    Indent,
-                    IndentBlock,
-                    Italic,
-                    Link,
-                    List,
-                    MediaEmbed,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    PictureEditing,
-                    SourceEditing,
-                    Table,
-                    TableColumnResize,
-                    TableToolbar,
-                    TextTransformation,
-                    Underline,
-                    HtmlEmbed,
-                    CodeBlock,
-                    RemoveFormat,
-                    Code,
-                    SpecialCharacters,
-                    HorizontalLine,
-                    PageBreak,
-                    TodoList,
-                    Strikethrough,
-                    Subscript,
-                    Superscript,
-                    Highlight,
-                    Alignment,
-                    CKBoxImageEdit,
-                    ExportPdf,
-                    ExportWord
-                ],
-                toolbar: {
-                    items: [
-                        'undo', 'redo',
-                        '|',
-                        'sourceEditing',
-                        '|',
-                        'exportPDF','exportWord',
-                        '|',
-                        'findAndReplace', 'selectAll',
-                        '|',
-                        'heading',
-                        '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                        '-',
-                        'bold', 'italic', 'underline',
-                        {
-                            label: 'Formatting',
-                            icon: 'text',
-                            items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
-                        },
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak',
-                        '|',
-                        'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
-                        {
-                            label: 'Insert',
-                            icon: 'plus',
-                            items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
-                        },
-                        'alignment',
-                        '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        {
-                            label: 'Indents',
-                            icon: 'plus',
-                            items: [ 'outdent', 'indent' ]
-                        }
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                placeholder: '',
-                image: {
-                    resizeOptions: [
-                        {
-                            name: 'resizeImage:original',
-                            label: 'Default image width',
-                            value: null
-                        },
-                        {
-                            name: 'resizeImage:50',
-                            label: '50% page width',
-                            value: '50'
-                        },
-                        {
-                            name: 'resizeImage:75',
-                            label: '75% page width',
-                            value: '75'
-                        }
-                    ],
-                    toolbar: [
-                        'imageTextAlternative',
-                        'toggleImageCaption',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ],
-                },
-                link: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://'
-                },
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
-                },
-                ckbox: {
-                    // You need to provide your own token endpoint here
-                    // Sign up to CKBox to get one: https://ckeditor.com/ckbox/
-                    tokenUrl: 'https://api.ckbox.io/token/demo',
-                    theme: 'lark'
+            const createEditor = ( selector ) => {
+                const element = document.querySelector( selector );
+                if ( !element ) {
+                    return;
                 }
-            } )
-            .then( ( editor ) => {
-                window.editor = editor;
-            } )
-            .catch( ( error ) => {
-                console.error( error.stack );
-            } );
-            
-            /*-----------------------------------------------------------------*/
-            
-            ClassicEditor.create( document.querySelector( '#editor2' ), {
-                plugins: [
-                    Autoformat,
-                    BlockQuote,
-                    Bold,
-                    CloudServices,
-                    CKBox,
-                    Essentials,
-                    FindAndReplace,
-                    Font,
-                    Heading,
-                    Image,
-                    ImageCaption,
-                    ImageResize,
-                    ImageStyle,
-                    ImageToolbar,
-                    ImageUpload,
-                    Base64UploadAdapter,
-                    Indent,
-                    IndentBlock,
-                    Italic,
-                    Link,
-                    List,
-                    MediaEmbed,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    PictureEditing,
-                    SourceEditing,
-                    Table,
-                    TableColumnResize,
-                    TableToolbar,
-                    TextTransformation,
-                    Underline,
-                    HtmlEmbed,
-                    CodeBlock,
-                    RemoveFormat,
-                    Code,
-                    SpecialCharacters,
-                    HorizontalLine,
-                    PageBreak,
-                    TodoList,
-                    Strikethrough,
-                    Subscript,
-                    Superscript,
-                    Highlight,
-                    Alignment,
-                    CKBoxImageEdit,
-                    ExportPdf,
-                    ExportWord
-                ],
-                toolbar: {
-                    items: [
-                        'undo', 'redo',
-                        '|',
-                        'sourceEditing',
-                        '|',
-                        'exportPDF','exportWord',
-                        '|',
-                        'findAndReplace', 'selectAll',
-                        '|',
-                        'heading',
-                        '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                        '-',
-                        'bold', 'italic', 'underline',
-                        {
-                            label: 'Formatting',
-                            icon: 'text',
-                            items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
-                        },
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak',
-                        '|',
-                        'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
-                        {
-                            label: 'Insert',
-                            icon: 'plus',
-                            items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
-                        },
-                        'alignment',
-                        '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        {
-                            label: 'Indents',
-                            icon: 'plus',
-                            items: [ 'outdent', 'indent' ]
-                        }
+
+                ClassicEditor.create( element, {
+                    plugins: [
+                        Autoformat,
+                        BlockQuote,
+                        Bold,
+                        CloudServices,
+                        CKBox,
+                        Essentials,
+                        FindAndReplace,
+                        Font,
+                        Heading,
+                        Image,
+                        ImageCaption,
+                        ImageResize,
+                        ImageStyle,
+                        ImageToolbar,
+                        ImageUpload,
+                        Base64UploadAdapter,
+                        Indent,
+                        IndentBlock,
+                        Italic,
+                        Link,
+                        List,
+                        MediaEmbed,
+                        Mention,
+                        Paragraph,
+                        PasteFromOffice,
+                        PictureEditing,
+                        SourceEditing,
+                        Table,
+                        TableColumnResize,
+                        TableToolbar,
+                        TextTransformation,
+                        Underline,
+                        HtmlEmbed,
+                        CodeBlock,
+                        RemoveFormat,
+                        Code,
+                        SpecialCharacters,
+                        HorizontalLine,
+                        PageBreak,
+                        TodoList,
+                        Strikethrough,
+                        Subscript,
+                        Superscript,
+                        Highlight,
+                        Alignment,
+                        CKBoxImageEdit,
+                        ExportPdf,
+                        ExportWord
                     ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
+                    toolbar: {
+                        items: [
+                            'undo', 'redo',
+                            '|',
+                            'sourceEditing',
+                            '|',
+                            'exportPDF','exportWord',
+                            '|',
+                            'findAndReplace', 'selectAll',
+                            '|',
+                            'heading',
+                            '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
+                            '-',
+                            'bold', 'italic', 'underline',
+                            {
+                                label: 'Formatting',
+                                icon: 'text',
+                                items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
+                            },
+                            '|',
+                            'specialCharacters', 'horizontalLine', 'pageBreak',
+                            '|',
+                            'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
+                            {
+                                label: 'Insert',
+                                icon: 'plus',
+                                items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
+                            },
+                            'alignment',
+                            '|',
+                            'bulletedList', 'numberedList', 'todoList',
+                            {
+                                label: 'Indents',
+                                icon: 'plus',
+                                items: [ 'outdent', 'indent' ]
+                            }
+                        ],
+                        shouldNotGroupWhenFull: true
+                    },
+                    list: {
+                        properties: {
+                            styles: true,
+                            startIndex: true,
+                            reversed: true
+                        }
+                    },
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                            { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                            { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                            { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                            { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+                        ]
+                    },
+                    placeholder: '',
+                    image: {
+                        resizeOptions: [
+                            {
+                                name: 'resizeImage:original',
+                                label: 'Default image width',
+                                value: null
+                            },
+                            {
+                                name: 'resizeImage:50',
+                                label: '50% page width',
+                                value: '50'
+                            },
+                            {
+                                name: 'resizeImage:75',
+                                label: '75% page width',
+                                value: '75'
+                            }
+                        ],
+                        toolbar: [
+                            'imageTextAlternative',
+                            'toggleImageCaption',
+                            '|',
+                            'imageStyle:inline',
+                            'imageStyle:wrapText',
+                            'imageStyle:breakText',
+                            '|',
+                            'resizeImage'
+                        ],
+                    },
+                    link: {
+                        addTargetToExternalLinks: true,
+                        defaultProtocol: 'https://'
+                    },
+                    table: {
+                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
+                    },
+                    ckbox: {
+                        tokenUrl: 'https://api.ckbox.io/token/demo',
+                        theme: 'lark'
                     }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                placeholder: '',
-                image: {
-                    resizeOptions: [
-                        {
-                            name: 'resizeImage:original',
-                            label: 'Default image width',
-                            value: null
-                        },
-                        {
-                            name: 'resizeImage:50',
-                            label: '50% page width',
-                            value: '50'
-                        },
-                        {
-                            name: 'resizeImage:75',
-                            label: '75% page width',
-                            value: '75'
-                        }
-                    ],
-                    toolbar: [
-                        'imageTextAlternative',
-                        'toggleImageCaption',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ],
-                },
-                link: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://'
-                },
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
-                },
-                ckbox: {
-                    // You need to provide your own token endpoint here
-                    // Sign up to CKBox to get one: https://ckeditor.com/ckbox/
-                    tokenUrl: 'https://api.ckbox.io/token/demo',
-                    theme: 'lark'
-                }
-            } )
-            .then( ( editor ) => {
-                window.editor = editor;
-            } )
-            .catch( ( error ) => {
-                console.error( error.stack );
-            } );
-            
-            /*----------------------------------------------------------------*/
-            
-            ClassicEditor.create( document.querySelector( '#editor3' ), {
-                plugins: [
-                    Autoformat,
-                    BlockQuote,
-                    Bold,
-                    CloudServices,
-                    CKBox,
-                    Essentials,
-                    FindAndReplace,
-                    Font,
-                    Heading,
-                    Image,
-                    ImageCaption,
-                    ImageResize,
-                    ImageStyle,
-                    ImageToolbar,
-                    ImageUpload,
-                    Base64UploadAdapter,
-                    Indent,
-                    IndentBlock,
-                    Italic,
-                    Link,
-                    List,
-                    MediaEmbed,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    PictureEditing,
-                    SourceEditing,
-                    Table,
-                    TableColumnResize,
-                    TableToolbar,
-                    TextTransformation,
-                    Underline,
-                    HtmlEmbed,
-                    CodeBlock,
-                    RemoveFormat,
-                    Code,
-                    SpecialCharacters,
-                    HorizontalLine,
-                    PageBreak,
-                    TodoList,
-                    Strikethrough,
-                    Subscript,
-                    Superscript,
-                    Highlight,
-                    Alignment,
-                    CKBoxImageEdit,
-                    ExportPdf,
-                    ExportWord
-                ],
-                toolbar: {
-                    items: [
-                        'undo', 'redo',
-                        '|',
-                        'sourceEditing',
-                        '|',
-                        'exportPDF','exportWord',
-                        '|',
-                        'findAndReplace', 'selectAll',
-                        '|',
-                        'heading',
-                        '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                        '-',
-                        'bold', 'italic', 'underline',
-                        {
-                            label: 'Formatting',
-                            icon: 'text',
-                            items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
-                        },
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak',
-                        '|',
-                        'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
-                        {
-                            label: 'Insert',
-                            icon: 'plus',
-                            items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
-                        },
-                        'alignment',
-                        '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        {
-                            label: 'Indents',
-                            icon: 'plus',
-                            items: [ 'outdent', 'indent' ]
-                        }
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                placeholder: '',
-                image: {
-                    resizeOptions: [
-                        {
-                            name: 'resizeImage:original',
-                            label: 'Default image width',
-                            value: null
-                        },
-                        {
-                            name: 'resizeImage:50',
-                            label: '50% page width',
-                            value: '50'
-                        },
-                        {
-                            name: 'resizeImage:75',
-                            label: '75% page width',
-                            value: '75'
-                        }
-                    ],
-                    toolbar: [
-                        'imageTextAlternative',
-                        'toggleImageCaption',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ],
-                },
-                link: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://'
-                },
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
-                },
-                ckbox: {
-                    // You need to provide your own token endpoint here
-                    // Sign up to CKBox to get one: https://ckeditor.com/ckbox/
-                    tokenUrl: 'https://api.ckbox.io/token/demo',
-                    theme: 'lark'
-                }
-            } )
-            .then( ( editor ) => {
-                window.editor = editor;
-            } )
-            .catch( ( error ) => {
-                console.error( error.stack );
-            } );
-            
-            /*-----------------------------------------------------------------*/
-            
-            ClassicEditor.create( document.querySelector( '#editor4' ), {
-                plugins: [
-                    Autoformat,
-                    BlockQuote,
-                    Bold,
-                    CloudServices,
-                    CKBox,
-                    Essentials,
-                    FindAndReplace,
-                    Font,
-                    Heading,
-                    Image,
-                    ImageCaption,
-                    ImageResize,
-                    ImageStyle,
-                    ImageToolbar,
-                    ImageUpload,
-                    Base64UploadAdapter,
-                    Indent,
-                    IndentBlock,
-                    Italic,
-                    Link,
-                    List,
-                    MediaEmbed,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    PictureEditing,
-                    SourceEditing,
-                    Table,
-                    TableColumnResize,
-                    TableToolbar,
-                    TextTransformation,
-                    Underline,
-                    HtmlEmbed,
-                    CodeBlock,
-                    RemoveFormat,
-                    Code,
-                    SpecialCharacters,
-                    HorizontalLine,
-                    PageBreak,
-                    TodoList,
-                    Strikethrough,
-                    Subscript,
-                    Superscript,
-                    Highlight,
-                    Alignment,
-                    CKBoxImageEdit,
-                    ExportPdf,
-                    ExportWord
-                ],
-                toolbar: {
-                    items: [
-                        'undo', 'redo',
-                        '|',
-                        'sourceEditing',
-                        '|',
-                        'exportPDF','exportWord',
-                        '|',
-                        'findAndReplace', 'selectAll',
-                        '|',
-                        'heading',
-                        '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                        '-',
-                        'bold', 'italic', 'underline',
-                        {
-                            label: 'Formatting',
-                            icon: 'text',
-                            items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
-                        },
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak',
-                        '|',
-                        'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
-                        {
-                            label: 'Insert',
-                            icon: 'plus',
-                            items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
-                        },
-                        'alignment',
-                        '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        {
-                            label: 'Indents',
-                            icon: 'plus',
-                            items: [ 'outdent', 'indent' ]
-                        }
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                placeholder: '',
-                image: {
-                    resizeOptions: [
-                        {
-                            name: 'resizeImage:original',
-                            label: 'Default image width',
-                            value: null
-                        },
-                        {
-                            name: 'resizeImage:50',
-                            label: '50% page width',
-                            value: '50'
-                        },
-                        {
-                            name: 'resizeImage:75',
-                            label: '75% page width',
-                            value: '75'
-                        }
-                    ],
-                    toolbar: [
-                        'imageTextAlternative',
-                        'toggleImageCaption',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ],
-                },
-                link: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://'
-                },
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
-                },
-                ckbox: {
-                    // You need to provide your own token endpoint here
-                    // Sign up to CKBox to get one: https://ckeditor.com/ckbox/
-                    tokenUrl: 'https://api.ckbox.io/token/demo',
-                    theme: 'lark'
-                }
-            } )
-            .then( ( editor ) => {
-                window.editor = editor;
-            } )
-            .catch( ( error ) => {
-                console.error( error.stack );
-            } );
-            
-            
-            /*----------------------------------------------------------------*/
-            
-            ClassicEditor.create( document.querySelector( '#editor5' ), {
-                plugins: [
-                    Autoformat,
-                    BlockQuote,
-                    Bold,
-                    CloudServices,
-                    CKBox,
-                    Essentials,
-                    FindAndReplace,
-                    Font,
-                    Heading,
-                    Image,
-                    ImageCaption,
-                    ImageResize,
-                    ImageStyle,
-                    ImageToolbar,
-                    ImageUpload,
-                    Base64UploadAdapter,
-                    Indent,
-                    IndentBlock,
-                    Italic,
-                    Link,
-                    List,
-                    MediaEmbed,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    PictureEditing,
-                    SourceEditing,
-                    Table,
-                    TableColumnResize,
-                    TableToolbar,
-                    TextTransformation,
-                    Underline,
-                    HtmlEmbed,
-                    CodeBlock,
-                    RemoveFormat,
-                    Code,
-                    SpecialCharacters,
-                    HorizontalLine,
-                    PageBreak,
-                    TodoList,
-                    Strikethrough,
-                    Subscript,
-                    Superscript,
-                    Highlight,
-                    Alignment,
-                    CKBoxImageEdit,
-                    ExportPdf,
-                    ExportWord
-                ],
-                toolbar: {
-                    items: [
-                        'undo', 'redo',
-                        '|',
-                        'sourceEditing',
-                        '|',
-                        'exportPDF','exportWord',
-                        '|',
-                        'findAndReplace', 'selectAll',
-                        '|',
-                        'heading',
-                        '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                        '-',
-                        'bold', 'italic', 'underline',
-                        {
-                            label: 'Formatting',
-                            icon: 'text',
-                            items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
-                        },
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak',
-                        '|',
-                        'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
-                        {
-                            label: 'Insert',
-                            icon: 'plus',
-                            items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
-                        },
-                        'alignment',
-                        '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        {
-                            label: 'Indents',
-                            icon: 'plus',
-                            items: [ 'outdent', 'indent' ]
-                        }
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                placeholder: '',
-                image: {
-                    resizeOptions: [
-                        {
-                            name: 'resizeImage:original',
-                            label: 'Default image width',
-                            value: null
-                        },
-                        {
-                            name: 'resizeImage:50',
-                            label: '50% page width',
-                            value: '50'
-                        },
-                        {
-                            name: 'resizeImage:75',
-                            label: '75% page width',
-                            value: '75'
-                        }
-                    ],
-                    toolbar: [
-                        'imageTextAlternative',
-                        'toggleImageCaption',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ],
-                },
-                link: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://'
-                },
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
-                },
-                ckbox: {
-                    // You need to provide your own token endpoint here
-                    // Sign up to CKBox to get one: https://ckeditor.com/ckbox/
-                    tokenUrl: 'https://api.ckbox.io/token/demo',
-                    theme: 'lark'
-                }
-            } )
-            .then( ( editor ) => {
-                window.editor = editor;
-            } )
-            .catch( ( error ) => {
-                console.error( error.stack );
-            } );
-            
-            /*----------------------------------------------------------------*/
-            
-            ClassicEditor.create( document.querySelector( '#editor6' ), {
-                plugins: [
-                    Autoformat,
-                    BlockQuote,
-                    Bold,
-                    CloudServices,
-                    CKBox,
-                    Essentials,
-                    FindAndReplace,
-                    Font,
-                    Heading,
-                    Image,
-                    ImageCaption,
-                    ImageResize,
-                    ImageStyle,
-                    ImageToolbar,
-                    ImageUpload,
-                    Base64UploadAdapter,
-                    Indent,
-                    IndentBlock,
-                    Italic,
-                    Link,
-                    List,
-                    MediaEmbed,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    PictureEditing,
-                    SourceEditing,
-                    Table,
-                    TableColumnResize,
-                    TableToolbar,
-                    TextTransformation,
-                    Underline,
-                    HtmlEmbed,
-                    CodeBlock,
-                    RemoveFormat,
-                    Code,
-                    SpecialCharacters,
-                    HorizontalLine,
-                    PageBreak,
-                    TodoList,
-                    Strikethrough,
-                    Subscript,
-                    Superscript,
-                    Highlight,
-                    Alignment,
-                    CKBoxImageEdit,
-                    ExportPdf,
-                    ExportWord
-                ],
-                toolbar: {
-                    items: [
-                        'undo', 'redo',
-                        '|',
-                        'sourceEditing',
-                        '|',
-                        'exportPDF','exportWord',
-                        '|',
-                        'findAndReplace', 'selectAll',
-                        '|',
-                        'heading',
-                        '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-                        '-',
-                        'bold', 'italic', 'underline',
-                        {
-                            label: 'Formatting',
-                            icon: 'text',
-                            items: [ 'strikethrough', 'subscript', 'superscript', 'code', '|', 'removeFormat' ]
-                        },
-                        '|',
-                        'specialCharacters', 'horizontalLine', 'pageBreak',
-                        '|',
-                        'link', 'insertImage', 'ckbox', 'ckboxImageEdit', 'insertTable',
-                        {
-                            label: 'Insert',
-                            icon: 'plus',
-                            items: [ 'highlight', 'blockQuote', 'mediaEmbed', 'codeBlock', 'htmlEmbed' ]
-                        },
-                        'alignment',
-                        '|',
-                        'bulletedList', 'numberedList', 'todoList',
-                        {
-                            label: 'Indents',
-                            icon: 'plus',
-                            items: [ 'outdent', 'indent' ]
-                        }
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                list: {
-                    properties: {
-                        styles: true,
-                        startIndex: true,
-                        reversed: true
-                    }
-                },
-                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                    ]
-                },
-                placeholder: '',
-                image: {
-                    resizeOptions: [
-                        {
-                            name: 'resizeImage:original',
-                            label: 'Default image width',
-                            value: null
-                        },
-                        {
-                            name: 'resizeImage:50',
-                            label: '50% page width',
-                            value: '50'
-                        },
-                        {
-                            name: 'resizeImage:75',
-                            label: '75% page width',
-                            value: '75'
-                        }
-                    ],
-                    toolbar: [
-                        'imageTextAlternative',
-                        'toggleImageCaption',
-                        '|',
-                        'imageStyle:inline',
-                        'imageStyle:wrapText',
-                        'imageStyle:breakText',
-                        '|',
-                        'resizeImage'
-                    ],
-                },
-                link: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://'
-                },
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ],
-                },
-                ckbox: {
-                    // You need to provide your own token endpoint here
-                    // Sign up to CKBox to get one: https://ckeditor.com/ckbox/
-                    tokenUrl: 'https://api.ckbox.io/token/demo',
-                    theme: 'lark'
-                }
-            } )
-            .then( ( editor ) => {
-                window.editor = editor;
-            } )
-            .catch( ( error ) => {
-                console.error( error.stack );
-            } );
+                } )
+                .then( ( editor ) => {
+                    window.editor = editor;
+                } )
+                .catch( ( error ) => {
+                    console.error( error.stack );
+                } );
+            };
+
+            createEditor( '#editor1' );
+            createEditor( '#editor2' );
+            createEditor( '#editor3' );
+            createEditor( '#editor4' );
+            createEditor( '#editor5' );
+            createEditor( '#editor6' );
             
 
         </script>
@@ -1104,7 +299,7 @@
         
                   type: "POST",
         
-                  url: "includes/get_caracteristique.php?id=<?php echo $_GET['id'];?>",
+                  url: "includes/get_caracteristique.php?id=<?php echo isset($_GET['id']) ? intval($_GET['id']) : 0; ?>",
         
                   data:'id_carac='+opt,
         
@@ -1127,7 +322,7 @@
         
                   type: "POST",
         
-                  url: "includes/get_caracteristique.php?id=<?php echo $_GET['id'];?>",
+                  url: "includes/get_caracteristique.php?id=<?php echo isset($_GET['id']) ? intval($_GET['id']) : 0; ?>",
         
                   data:'id_carac='+opt,
         
@@ -1173,17 +368,88 @@
 				$(document).ready(function() {
 				    $('#tableG').DataTable();
 					$('#tableCmd').DataTable({
-					    "order":[0,'desc'],
+					    "lengthChange": true,
+                    	"processing": true,
+                    	"serverSide": true,
+                        "searching": true,
+                    	"serverMethod": 'post',
+                        "order": [1, 'desc'],
+                    	'ajax': {
+                    	    url: 'arrays_commandes.php',
+                            type: 'POST',
+                            data: function(data) {
+                                data.idclient = $('#idclient_filter').val();
+                            }
+                    	},
+                        "columns": [
+                            { "data": "" },
+                            { "data": "id" },
+                            { "data": "num" },
+                            { "data": "client" },
+                            { "data": "montant" },
+                            { "data": "etat" },
+                            { "data": "action" }
+                        ],
 					    "columnDefs": [
 					        {
-					        targets:0,
-					        visible:false
+					            "targets": 0,
+					            "orderable": false
+					        },
+					        {
+					            "targets": 1,
+					            "visible": false
 					        }
 					    ]
 					});
+
+					$('#checkAllCmd').on('change', function () {
+					    $('.sub_chk_cmd').prop('checked', $(this).is(':checked'));
+					});
+
+					$('.delete_all_cmd').on('click', function () {
+					    var allVals = [];
+					    $('.sub_chk_cmd:checked').each(function () {
+					        allVals.push($(this).attr('data-id'));
+					    });
+					    if (allVals.length === 0) {
+					        alert('Veuillez s\u00e9lectionner au moins une commande.');
+					        return;
+					    }
+					    if (!confirm('\u00cates-vous s\u00fbr de vouloir supprimer les ' + allVals.length + ' commande(s) s\u00e9lectionn\u00e9e(s) ?\nCette action est irr\u00e9versible.')) {
+					        return;
+					    }
+					    $.ajax({
+					        type: 'POST',
+					        url: 'index.php?r=commandes',
+					        data: { action_cmd: 'supp_multiple', ids: allVals.join(',') },
+					        success: function () {
+					            window.location.reload();
+					        },
+					        error: function () {
+					            alert('Erreur lors de la suppression.');
+					        }
+					    });
+					});
+
+					window.confirmDeleteCmd = function(id) {
+					    if (!confirm('\u00cates-vous s\u00fbr de vouloir supprimer cette commande ?\nCette action est irr\u00e9versible.')) {
+					        return;
+					    }
+					    $.ajax({
+					        type: 'POST',
+					        url: 'index.php?r=commandes',
+					        data: { action_cmd: 'supp_multiple', ids: id },
+					        success: function () {
+					            window.location.reload();
+					        },
+					        error: function () {
+					            alert('Erreur lors de la suppression.');
+					        }
+					    });
+					};
 					$(document).ready(function() {
                 
-                        var strt = '<?php if(isset($_GET['start']) && $_GET['start'] != '') echo $_GET['start']; else echo '0';  ?>';
+                        var strt = '<?php if(isset($_GET['start']) && $_GET['start'] != '') echo intval($_GET['start']); else echo '0';  ?>';
 						
 						var table = $('#tableProduit').DataTable({
                     		"lengthChange": true,
@@ -1295,8 +561,11 @@
 					$(document).ready(function(){
 						selected();
 						function selected(){
-						var x = document.getElementsByClassName("select-parent")[0].id;
-						$('.select-parent > option[value= '+x+'] ').attr('selected',true);
+						var parents = document.getElementsByClassName("select-parent");
+                        if (parents.length > 0) {
+                            var x = parents[0].id;
+                            $('.select-parent > option[value= '+x+'] ').attr('selected',true);
+                        }
 						}
 					});
 			</script>

@@ -32,26 +32,38 @@
                                         </thead>
                                         <tbody>
                                         <?php
-                                        
-                                        $req = 'SELECT * FROM `clients` ORDER BY `date_creation` DESC';
+                                        include("includes/pagination_ui.php");
+
+                                        $itemsPerPage = 20;
+                                        $currentPage = isset($_GET['p']) ? (int)$_GET['p'] : 1;
+                                        if ($currentPage < 1) $currentPage = 1;
+                                        $offset = ($currentPage - 1) * $itemsPerPage;
+
+                                        $countReq = 'SELECT COUNT(*) as total FROM `clients`';
+                                        $countRes = executeRequete($countReq);
+                                        $countData = mysqli_fetch_array($countRes);
+                                        $totalItems = $countData['total'];
+                                        $totalPages = ceil($totalItems / $itemsPerPage);
+
+                                        $req = 'SELECT c.*, (SELECT code FROM `commandes` WHERE `idclient` = c.id ORDER BY id DESC LIMIT 1) as last_cmd FROM `clients` c ORDER BY `date_creation` DESC LIMIT ' . $itemsPerPage . ' OFFSET ' . $offset;
                                         $res = executeRequete($req);
                                         $numres = mysqli_num_rows($res); 
 										
-		                                if ($numres > 0 ) {    
+                                        if ($numres > 0 ) {    
                                         while ($data = mysqli_fetch_array($res))
                                         {
                                         ?>
                                             <tr>
-                                                <td><strong><?php echo prenomClient($data['id']).' '.nomClient($data['id']); ?></strong></td>
+                                                <td><strong><?php echo afficheChamp($data['prenom']).' '.afficheChamp($data['nom']); ?></strong></td>
                                                 <td>
                                                  <?php 
-                                                   if(adresseClient($data['id'])!=""){ echo adresseClient($data['id'])."<br />"; }
-                                                   if(telClient($data['id'])!="") { echo telClient($data['id'])."<br />"; }
-                                                   if(emailClient($data['id'])!="") { echo emailClient($data['id'])."<br />"; }
+                                                   if(afficheChamp($data['adresse'])!=""){ echo afficheChamp($data['adresse'])."<br />"; }
+                                                   if(afficheChamp($data['tel'])!="") { echo afficheChamp($data['tel'])."<br />"; }
+                                                   if(afficheChamp($data['email'])!="") { echo afficheChamp($data['email'])."<br />"; }
                                                  ?>
                                                 </td>
-                                                <td><?php echo timestamptoDate($data['id']); ?></td>
-                                                <td class="text-nowrap"><?php echo derniereCommandeclient($data['id']); ?></td>
+                                                <td><?php echo timestampTDtodate($data['date_creation']); ?></td>
+                                                <td class="text-nowrap"><?php echo afficheChamp($data['last_cmd']); ?></td>
                                                 <td class="text-nowrap">
 
                                                     <a href="index.php?r=mclient&id=<?php echo afficheChamp($data['id']); ?>" data-toggle="tooltip" data-original-title="Modifier"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
@@ -62,6 +74,13 @@
 										  <?php } } ?>
 
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <?php renderPagination($currentPage, $totalPages, 'index.php?r=clients'); ?>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                             </div>
                         </div>

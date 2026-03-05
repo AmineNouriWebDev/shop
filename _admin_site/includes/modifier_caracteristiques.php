@@ -35,7 +35,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                     <div class="form-group">
                                         <h5>Titre <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="titre" value="<?php echo titreCaracteristiques($_GET[id]);?>" class="form-control" required data-validation-required-message="Ce champ est obligatoire"> </div>
+                                            <input type="text" name="titre" value="<?php echo titreCaracteristiques($_GET['id']);?>" class="form-control" required data-validation-required-message="Ce champ est obligatoire"> </div>
                                     </div>         
 									
                                     <div class="row">
@@ -43,7 +43,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                       <div class="form-group">
                                         <h5>Ordre</h5>
                                         <div class="controls">
-                                            <input type="text" name="ordre" value="<?php echo ordreCaracteristiques($_GET[id]);?>" class="form-control"> 
+                                            <input type="text" name="ordre" value="<?php echo ordreCaracteristiques($_GET['id']);?>" class="form-control"> 
                                         </div>
                                     </div>
                                      </div>

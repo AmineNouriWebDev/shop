@@ -1,90 +1,87 @@
-<!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                <!-- Row -->
 <?php 
 if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 {
-	$id  	             = formReception($_POST['id']);
-	$titre  	         = FormChampSpeciaux(formReception($_POST['titre']));
-	$court_contenu       = formReception($_POST['court_contenu']);
-	$contenu  	         = formReception($_POST['contenu']);
-	$categorie 	         = formReception($_POST['categorie']);
-	$prix_vente	         = formReception($_POST['prix_vente']);
-	$prix_promo	         = formReception($_POST['prix_promo']);
-	$quantite	         = formReception($_POST['quantite']);
-	$etat_stock	         = formReception($_POST['etat_stock']);
-	$marque 	         = formReception($_POST['marque']);
-	$duree  	         = formReception($_POST['duree']);
-	$afficher_accueil  	 = formReception($_POST['afficher_accueil']);
-	$remarque  	         = formReception($_POST['remarque']);
-	$video	             = formReception($_POST['video']);
-	$nbr_vod	         = formReception($_POST['nbr_vod']);
-	$nbr_chaine_hd 	     = formReception($_POST['nbr_chaine_hd']);
-	$type        	     = formReception($_POST['type']);
-	$ordre 		         = formReception($_POST['ordre']);
-	$etat 		         = formReception($_POST['etat']);
-	$titre_page          = FormChampSpeciaux(formReception($_POST['titre_page']));
-	$keywords 	         = formReception($_POST['keywords']);
-	$description         = formReception($_POST['description']);
-	
-	$link    		     = nett(formReception($_POST['titre']));
-	
-	if(isset($_POST['ancre'])){ $ancre = formReception($_POST['ancre']); } else { $ancre = 'Commander';}
-
-	$datec        = timestampTD(date("d/m/Y H:i:s"));
-	$auteur       = auteur_id();
-	
-	$requete = "UPDATE `produits` set `titre`='".$titre."',`court_contenu`='".$court_contenu."', `categorie`='".$categorie."', `prix_vente`='".$prix_vente."',`prix_promo`='".$prix_promo."', `nbr_vod`='".$nbr_vod."',
-	`nbr_chaine_hd`='".$nbr_chaine_hd."', `delai`='".$duree."',  `afficher_accueil`='".$afficher_accueil."',`quantite`='".$quantite."', `marque`='".$marque."', `etat_stock`='".$etat_stock."',
-	`type`='".$type."',`caracteristique`='".$contenu."', `ordre`='".$ordre."', `ancre`='".$ancre."', `etat`='".$etat."', `categorie`='".$categorie."', `link`='".$link."',
-	`titre_page`='".$titre_page."',`keywords`='".$keywords."', `description`='".$description."',`remarque`='".$remarque."', `video`='".$video."' WHERE `id`='".$id."'";
-    //echo $requete;exit;
-    $result  = executeRequete($requete);
-	
-		
-	if (isset($_FILES['photo']) && $_FILES['photo']['type'] != '') {
-		if ($_FILES['photo']['type']=="image/jpeg" || $_FILES['photo']['type']=="image/png" || $_FILES['photo']['type']=="image/gif" ){
-	
-			$destination = str_replace(' ', '-', $id."-produits-".$_FILES['photo']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-
-			copy ($_FILES['photo']['tmp_name'], "../media/products/".$destination);
-			$photo = $destination;
-			$requete = 'UPDATE `produits` set `photo`="'. $photo .'"  WHERE `id`="'.$id.'"';
-			$result = executeRequete($requete);	
-		}
-	}
-	
-    // caracteristiques produit
-	$ver1=executeRequete("DELETE from `caracteristique_prod` WHERE `idproduit`='".$id."'");
-	//var_dump($carac);
-	// caracteristiques produit
-	$carac = $_POST['caracteristiques'];
-	$valeurs = $_POST['valeurs'];
-	foreach ($carac as $key => $idcarac){
-		$requete1 = 'INSERT INTO `caracteristique_prod` (`idproduit`,`idcarac`) VALUES ("'. $id .'","'. $idcarac .'")';
-		$connexion=ouvrirCnx() or die("erreur cnx");
-		$result1  = mysqli_query($connexion, $requete1);	
-		$idcp     = mysqli_insert_id($connexion);
-		
-		executeRequete('UPDATE `caracteristique_prod` set `valeur`="'. $valeurs[$key] .'"  WHERE `id`="'.$idcp.'"');
-	}	
-
-	?>
-	<script language="javascript">
-	<!--
-		window.location = 'index.php?r=produits&start=<?php echo $_GET['start']; ?>';
-	-->
-	</script>
-	<?php 
-	//echo $strSQL
+    $id                  = intval($_POST['id']);
+    $titre               = FormChampSpeciaux(formReception($_POST['titre']));
+    $court_contenu       = formReception($_POST['court_contenu']);
+    $contenu             = formReception($_POST['contenu']);
+    $categorie           = intval($_POST['categorie']);
+    $prix_vente          = (float)str_replace(',', '.', formReception($_POST['prix_vente']));
+    $prix_promo          = (float)str_replace(',', '.', formReception($_POST['prix_promo']));
+    $quantite            = intval($_POST['quantite']);
+    $etat_stock          = intval($_POST['etat_stock']);
+    $marque              = intval($_POST['marque']);
+    $duree               = formReception($_POST['duree']);
+    $afficher_accueil    = intval($_POST['afficher_accueil']);
+    $remarque            = formReception($_POST['remarque']);
+    $video               = formReception($_POST['video']);
+    $nbr_vod             = formReception($_POST['nbr_vod']);
+    $nbr_chaine_hd       = formReception($_POST['nbr_chaine_hd']);
+    $type                = formReception($_POST['type']);
+    $ordre               = intval($_POST['ordre']);
+    $etat                = intval($_POST['etat']);
+    $titre_page          = FormChampSpeciaux(formReception($_POST['titre_page']));
+    $keywords            = formReception($_POST['keywords']);
+    $description         = formReception($_POST['description']);
+    $ancre               = isset($_POST['ancre']) ? formReception($_POST['ancre']) : 'Commander';
+    
+    $link                = nett($titre);
+    
+    // Single optimized update query
+    $query = "UPDATE `produits` SET 
+                `titre` = '$titre', 
+                `court_contenu` = '$court_contenu', 
+                `categorie` = '$categorie', 
+                `prix_vente` = '$prix_vente', 
+                `prix_promo` = '$prix_promo', 
+                `nbr_vod` = '$nbr_vod', 
+                `nbr_chaine_hd` = '$nbr_chaine_hd', 
+                `delai` = '$duree', 
+                `afficher_accueil` = '$afficher_accueil', 
+                `quantite` = '$quantite', 
+                `marque` = '$marque', 
+                `etat_stock` = '$etat_stock', 
+                `type` = '$type', 
+                `caracteristique` = '$contenu', 
+                `ordre` = '$ordre', 
+                `ancre` = '$ancre', 
+                `etat` = '$etat', 
+                `link` = '$link', 
+                `titre_page` = '$titre_page', 
+                `keywords` = '$keywords', 
+                `description` = '$description', 
+                `remarque` = '$remarque', 
+                `video` = '$video' 
+              WHERE `id` = '$id'";
+    
+    executeRequete($query);
+    
+    // Photo handling
+    if (!empty($_FILES['photo']['name'])) {
+        $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+            $destination = $id . "-produits-" . nett($titre) . "." . $ext;
+            if (move_uploaded_file($_FILES['photo']['tmp_name'], "../media/products/" . $destination)) {
+                executeRequete("UPDATE `produits` SET `photo` = '$destination' WHERE `id` = '$id'");
+            }
+        }
+    }
+    
+    // Characteristics
+    executeRequete("DELETE FROM `caracteristique_prod` WHERE `idproduit` = '$id'");
+    if (!empty($_POST['caracteristiques'])) {
+        foreach ($_POST['caracteristiques'] as $key => $idcarac) {
+            $valeur = isset($_POST['valeurs'][$key]) ? $_POST['valeurs'][$key] : '';
+            executeRequete("INSERT INTO `caracteristique_prod` (`idproduit`, `idcarac`, `valeur`) VALUES ('$id', '$idcarac', '$valeur')");
+        }
+    }
+    
+    // Success notification and redirect
+    echo '<script>alert("Produit modifié avec succès !"); window.location.href="index.php?r=produits&start=' . ($_GET['start'] ?? 0) . '";</script>';
+    exit();
 }
 ?>
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">

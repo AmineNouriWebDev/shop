@@ -27,7 +27,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 		$result  = executeRequete($requete);
 		
 		if (isset($_FILES['photo']) && $_FILES['photo']['type'] != '') {
-		if ($_FILES['photo']['type']=="image/jpeg" || $_FILES['photo']['type']=="image/png" || $_FILES['photo']['type']=="image/gif" ) {
+		if ($_FILES['photo']['type']=="image/jpeg" || $_FILES['photo']['type']=="image/png" || $_FILES['photo']['type']=="image/gif" || $_FILES['photo']['type']=="image/webp" ) {
 	
 			$destination = str_replace(' ', '-', $id."-sliders-".$_FILES['photo']['name']);
 			$destination = str_replace('é', 'e', $destination);
@@ -97,7 +97,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                     <div class="form-group">
                                         <h5>Lien slider </h5>
                                         <div class="controls">
-                                            <input type="text" name="lien" value="" class="form-control"> </div>
+                                            <input type="text" name="lien" value="<?php echo lienSlider($_GET['id']); ?>" class="form-control"> </div>
                                     </div>
                                     <div class="row">
                                      <div class="col-md-6">
@@ -130,8 +130,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                         <h5>Etat</h5>
                                         <div class="controls">
                                             <select name="etat" id="select" class="form-control">
-                                                <option value="1" <?php if(etatSlider($_GET['id'])=="1") echo "selected"; ?>>Actif</option>
-                                                <option value="0" <?php if(etatSlider($_GET['id'])=="0") echo "selected"; ?>>Inactif</option>
+                                                <option value="1" <?php if(StatutSlider($_GET['id'])=="1") echo "selected"; ?>>Actif</option>
+                                                <option value="0" <?php if(StatutSlider($_GET['id'])=="0") echo "selected"; ?>>Inactif</option>
                                             </select>
                                         </div>
                                     </div>

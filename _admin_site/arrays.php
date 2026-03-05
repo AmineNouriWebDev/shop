@@ -1,133 +1,132 @@
 <?php 
 
 include('../include.php');
-                                        
-// Reading value
-$draw = $_POST['draw'];
-$rowstr = $_POST['start'];
-$rowperpage = $_POST['length']; // Rows display per page
-$columnIndex = $_POST['order'][0]['column']; // Column index
-$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
-$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
-//$searchValue = mysqli_real_escape_string(ouvrirCnx(),$_POST['search']['value']); // Search value 
 
+// Reading value
+$draw = isset($_POST['draw']) ? intval($_POST['draw']) : 0;
+$rowstr = isset($_POST['start']) ? intval($_POST['start']) : 0;
+$rowperpage = isset($_POST['length']) ? intval($_POST['length']) : 10;
+$columnIndex = isset($_POST['order'][0]['column']) ? intval($_POST['order'][0]['column']) : 0;
+$columnSortOrder = isset($_POST['order'][0]['dir']) ? $_POST['order'][0]['dir'] : 'desc';
+
+// Map DataTables column index to DB field
+$columns_map = array(
+    0 => 'id',
+    1 => 'titre',
+    2 => 'prix_vente',
+    3 => 'categorie',
+    4 => 'marque',
+    5 => 'type',
+    6 => 'datecreation',
+    7 => 'id'
+);
+$columnName = isset($columns_map[$columnIndex]) ? $columns_map[$columnIndex] : 'id';
 
 ## Custom Field value
-$searchByTitle = mysqli_real_escape_string(ouvrirCnx(),url_rewrite($_POST['searchByTitle']));
-$searchByCateg = mysqli_real_escape_string(ouvrirCnx(),url_rewrite($_POST['searchByCateg']));
-$searchByMarque = mysqli_real_escape_string(ouvrirCnx(),url_rewrite($_POST['searchByMarque']));
+$searchByTitle = isset($_POST['searchByTitle']) ? mysqli_real_escape_string(ouvrirCnx(), url_rewrite($_POST['searchByTitle'])) : '';
+$searchByCateg = isset($_POST['searchByCateg']) ? mysqli_real_escape_string(ouvrirCnx(), url_rewrite($_POST['searchByCateg'])) : '';
+$searchByMarque = isset($_POST['searchByMarque']) ? mysqli_real_escape_string(ouvrirCnx(), url_rewrite($_POST['searchByMarque'])) : '';
 
-## Search 
-$searchQuery = " ";
-
+## Search Query Construction
+$searchQuery = "";
 if($searchByTitle != ''){
-   $searchQuery .= " and ( pr.link LIKE '%".nett($searchByTitle)."%' or pr.titre LIKE '%".$searchByTitle."%' ) ";
+   $searchQuery .= " AND ( pr.link LIKE '%".nett($searchByTitle)."%' OR pr.titre LIKE '%".$searchByTitle."%' ) ";
 }
 if($searchByCateg != ''){
-   $searchQuery .= " and ( ( ctg.titre LIKE '%".$searchByCateg."%'  &&  pr.categorie = ctg.id ) or ( ctg.link LIKE '%".nett($searchByCateg)."%'  && pr.categorie = ctg.id ) OR ( ctg.titre LIKE '%".$searchByCateg."%'  &&  ctg.id = pr.idparent_categ ) OR ( ctg.link LIKE '%".$searchByCateg."%'  &&  ctg.id = pr.idparent_categ ) ) ";
+   $searchQuery .= " AND ( ctg.titre LIKE '%".$searchByCateg."%' OR ctg.link LIKE '%".nett($searchByCateg)."%' ) ";
 }
 if($searchByMarque != ''){
-   $searchQuery .= " and ( mr.raison LIKE '%".$searchByMarque."%'  && pr.marque = mr.id ) ";
+   $searchQuery .= " AND ( mr.raison LIKE '%".$searchByMarque."%' OR mr.link LIKE '%".nett($searchByMarque)."%' ) ";
 }
 
-// Total number of records without filtering
-$sel = executeRequete("SELECT COUNT(*) AS allcount FROM produits ");
-$records = mysqli_fetch_array($sel);
-$totalRecords = $records['allcount'];
+// Total records without filtering
+$totalSel = executeRequete("SELECT COUNT(*) AS allcount FROM produits");
+$totalRecords = mysqli_fetch_assoc($totalSel)['allcount'];
 
-// Total number of records with filtering
+// Total records with filtering
+$filterQuery = "SELECT COUNT(DISTINCT pr.id) AS allcount 
+                FROM produits pr 
+                LEFT JOIN marques mr ON pr.marque = mr.id 
+                LEFT JOIN categories_blog ctg ON (pr.categorie = ctg.id OR pr.idparent_categ = ctg.id)
+                WHERE 1 ".$searchQuery;
+$filterRes = executeRequete($filterQuery);
+$totalRecordwithFilter = mysqli_fetch_assoc($filterRes)['allcount'];
 
-$selwithFilter   = "SELECT COUNT(DISTINCT(pr.id)) AS allcount FROM `produits` pr, `marques` mr , `categories_blog` ctg WHERE 1 ".$searchQuery;
-//echo $selwithFilter;
-$reswithFilter   = executeRequete($selwithFilter);
-$recordwithFilter = mysqli_fetch_array($reswithFilter);
-$totalRecordwithFilter = $recordwithFilter['allcount']; 
-//echo $totalRecordwithFilter;
+// Main Data Query
+$empQuery = "SELECT pr.*, 
+                    mr.raison as marque_nom, 
+                    ctg.titre as categ_nom,
+                    p_ctg.titre as parent_categ_nom
+             FROM produits pr 
+             LEFT JOIN marques mr ON pr.marque = mr.id 
+             LEFT JOIN categories_blog ctg ON pr.categorie = ctg.id
+             LEFT JOIN categories_blog p_ctg ON pr.idparent_categ = p_ctg.id
+             WHERE 1 ".$searchQuery;
 
-$empQuery = "SELECT DISTINCT(pr.id) FROM `produits` pr, `marques` mr , `categories_blog` ctg WHERE 1 ".$searchQuery;
+// Sorting
+$empQuery .= " ORDER BY pr.$columnName $columnSortOrder ";
 
-if(!empty($_POST["order"])){
-	$empQuery .= ' ORDER BY pr.'.$columnName.' '.$columnSortOrder.' ';
-} else {
-	$empQuery .= ' ORDER BY pr.id DESC ';
+// Pagination
+if($rowperpage != -1){
+    $empQuery .= " LIMIT $rowstr, $rowperpage";
 }
 
-	
-	if($rowperpage != -1 && $rowperpage != ''){
-		$empQuery .= ' LIMIT ' . $rowstr . ', ' . $rowperpage;
-	}
-	
-	//echo $empQuery;
-	
 $empRecords = executeRequete($empQuery);
-$data = array();   
-while ($row = mysqli_fetch_array($empRecords)) {
-    
-    //$idprt = idparentCategBlog(categorieProduits($row['id']));
-    
-    //$idp = $row['id'];
-    
-    //$req = executeRequete("UPDATE `produits` SEt idparent_categ = '$idprt' WHERE id = '$idp'  ");
-        
-    if(prixPromoProduits($row['id']) != '0.000') { $price = prixPromoProduits($row['id']).' DT <span style="text-decoration:line-through">'.prixVenteProduits($row['id']).' DT </span>'; }else{ $price = prixVenteProduits($row['id']).' DT'; } 
-    
-    if( typeProduits($row['id']) == "E") $type = "Equipement" ; else $type = "Abonnement";
+$data = array();
 
-    if(idparentCategBlog(categorieProduits($row['id'])) != 0 ){
-        
-            $data[] = array( 
-            "" => '<input type="checkbox" class="sub_chk" data-id="'.afficheChamp($row['id']).'" style="position:relative;left:0;opacity:1">',
-            "produit" => photoProduits($row['id']).' '.titreProduits($row['id']),
-            "prix_vente" => $price ,
-            "categorie" => titreCategBlog(idparentCategBlog(categorieProduits($row['id']))). '<br/> |--> '.titreCategBlog(categorieProduits($row['id'])),
-            "marque" => raisonMarque(marquesProduits($row['id'])),
-            "type" => $type,
-            "datecreation" => auteur_name(auteurProduits($row['id'])).' <br/> '.datecreationProduits($row['id']),
-            "action" => '<a href="index.php?r=mproduits&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Modifier"> <i class="fa fa-pencil text-inverse mr-2"></i> </a>
-                <a href="index.php?r=addproduitssimilaire&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Ajouter produits similaire"> <i class="fa fa-list text-inverse mr-2"></i> </a>
-                <a href="index.php?r=addproduit&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Ajouter images suplimentaires"> <i class="fa fa-image text-inverse mr-2"></i> </a>
-                <a href="index.php?r=fichesTechniques&id='.afficheChamp($row['id']).'&start='.$rowstr.'&action=addFiche" data-toggle="tooltip" data-original-title="Ajouter fiche technique"> <i class="fa fa-file-pdf-o text-inverse mr-2"></i></a>
-                <a href="index.php?r=facilitePaiement&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Ajouter detail paiement"> <i class="fa fa-dollar text-inverse mr-2"></i></a>
-                <a href="index.php?r=produits&id='.afficheChamp($row['id']).'&start='.$rowstr.'&action=supp" data-toggle="tooltip" data-original-title="Supprimer"> <i class="fa fa-close text-danger mr-2"></i></a>'
-            );
-        
-    }else{
-        
-            $data[] = array( 
-            "" => '<input type="checkbox" class="sub_chk" data-id="'.afficheChamp($row['id']).'" style="position:relative;left:0;opacity:1">',
-            "produit" => photoProduits($row['id']).' '.titreProduits($row['id']),
-            "prix_vente" => $price,
-            "categorie" => titreCategBlog(categorieProduits($row['id'])),
-            "marque" => raisonMarque(marquesProduits($row['id'])),
-            "type" => $type,
-            "datecreation" => auteur_name(auteurProduits($row['id'])).' <br/> '.datecreationProduits($row['id']),
-            "action" => '<a href="index.php?r=mproduits&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Modifier"> <i class="fa fa-pencil text-inverse mr-2"></i> </a>
-                <a href="index.php?r=addproduitssimilaire&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Ajouter produits similaire"> <i class="fa fa-list text-inverse mr-2"></i> </a>
-                <a href="index.php?r=addproduit&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Ajouter images suplimentaires"> <i class="fa fa-image text-inverse mr-2"></i> </a>
-                <a href="index.php?r=fichesTechniques&id='.afficheChamp($row['id']).'&start='.$rowstr.'&action=addFiche" data-toggle="tooltip" data-original-title="Ajouter fiche technique"> <i class="fa fa-file-pdf-o text-inverse mr-2"></i></a>
-                <a href="index.php?r=facilitePaiement&id='.afficheChamp($row['id']).'&start='.$rowstr.'" data-toggle="tooltip" data-original-title="Ajouter detail paiement"> <i class="fa fa-dollar text-inverse mr-2"></i></a>
-                <a href="index.php?r=produits&id='.afficheChamp($row['id']).'&start='.$rowstr.'&action=supp" data-toggle="tooltip" data-original-title="Supprimer"> <i class="fa fa-close text-danger mr-2"></i></a>'
-            );
-        
-        
+while ($row = mysqli_fetch_assoc($empRecords)) {
+    // Price formatting
+    $price_display = "";
+    if($row['prix_promo'] != '0.000' && $row['prix_promo'] != '') {
+        $price_display = $row['prix_promo'].' DT <span style="text-decoration:line-through">'.$row['prix_vente'].' DT </span>';
+    } else {
+        $price_display = $row['prix_vente'].' DT';
     }
+
+    // Type label
+    $type_label = ($row['type'] == "E") ? "Equipement" : "Abonnement";
+
+    // Category display
+    $categ_display = "";
+    if($row['parent_categ_nom']) {
+        $categ_display = $row['parent_categ_nom'] . '<br/> |--> ' . $row['categ_nom'];
+    } else {
+        $categ_display = $row['categ_nom'];
+    }
+
+    // Photo
+    $photo_html = "";
+    if($row['photo'] != "") {
+        $photo_html = '<img src="../media/products/'.$row['photo'].'" border="0" width="60" class="mr-2" />';
+    } else {
+        $photo_html = '<img src="../media/products/image_non_dispo.jpg" border="0" width="60" height="60" />';
+    }
+
+    $data[] = array(
+        "" => '<input type="checkbox" class="sub_chk" data-id="'.$row['id'].'" style="position:relative;left:0;opacity:1">',
+        "produit" => $photo_html . ' ' . afficheChamp1($row['titre']),
+        "prix_vente" => $price_display,
+        "categorie" => $categ_display,
+        "marque" => $row['marque_nom'],
+        "type" => $type_label,
+        "datecreation" => auteur_name($row['auteur']).' <br/> '.timestampTDtodate($row['datecreation']),
+        "action" => '<a href="index.php?r=mproduits&id='.$row['id'].'&start='.$rowstr.'" data-toggle="tooltip" title="Modifier"> <i class="fa fa-pencil text-inverse mr-2"></i> </a>
+            <a href="index.php?r=addproduitssimilaire&id='.$row['id'].'&start='.$rowstr.'" data-toggle="tooltip" title="Produits similaires"> <i class="fa fa-list text-inverse mr-2"></i> </a>
+            <a href="index.php?r=addproduit&id='.$row['id'].'&start='.$rowstr.'" data-toggle="tooltip" title="Images"> <i class="fa fa-image text-inverse mr-2"></i> </a>
+            <a href="index.php?r=fichesTechniques&id='.$row['id'].'&start='.$rowstr.'&action=addFiche" data-toggle="tooltip" title="Fiche technique"> <i class="fa fa-file-pdf-o text-inverse mr-2"></i></a>
+            <a href="index.php?r=facilitePaiement&id='.$row['id'].'&start='.$rowstr.'" data-toggle="tooltip" title="Paiement"> <i class="fa fa-dollar text-inverse mr-2"></i></a>
+            <a href="index.php?r=produits&id='.$row['id'].'&start='.$rowstr.'&action=supp" data-toggle="tooltip" title="Supprimer"> <i class="fa fa-close text-danger mr-2"></i></a>'
+    );
 }
 
-//print_r($data);
-
-
-## Response
+// Final Response
 $response = array(
-  "draw" => intval($draw),
-  "iTotalRecords" => $totalRecords,
-  "iTotalDisplayRecords" => $totalRecordwithFilter,
-  "data" => $data,
-  "start"=> $rowstr
+    "draw" => $draw,
+    "iTotalRecords" => intval($totalRecords),
+    "iTotalDisplayRecords" => intval($totalRecordwithFilter),
+    "data" => $data
 );
 
-//print_r($response);
-
+header('Content-Type: application/json');
 echo json_encode($response);
-
-   
-  ?>
+?>

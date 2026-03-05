@@ -150,7 +150,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                       <div class="form-group">
                                         <h5>Détail Fiche technique</h5>
                                         <div class="controls">
-                                            <textarea id="editor1" name="detail" class="form-control"><?php echo detailfichesTechniques($_GET['ids']); ?></textarea>
+                                            <textarea id="editor1" name="detail" class="form-control"><?php echo isset($_GET['ids']) ? detailfichesTechniques($_GET['ids']) : ''; ?></textarea>
                                         </div>
                                     </div>
                                      </div>
@@ -158,7 +158,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                     
                                     <div class="text-xs-right">
                                        <button type="submit" class="btn btn-info">Enregistrer</button>
-                                       <button type="reset" class="btn btn-inverse" onclick="location.href='index.php?r=produits&start=<?php echo $_GET['start']; ?>'">Annuler</button>
+                                       <button type="reset" class="btn btn-inverse" onclick="location.href='index.php?r=produits&start=<?php echo isset($_GET['start']) ? $_GET['start'] : ''; ?>'">Annuler</button>
                                        <?php if(isset($_GET['action']) && $_GET['action'] == 'mod'){ ?>
                                         <input type="hidden" name="id" value="<?php echo $_GET['ids']; ?>" />
                                         <input type="hidden" name="idpr" value="<?php echo $_GET['idpr']; ?>" />

@@ -26,9 +26,9 @@
 								         ?>
                                             <tr>
                                                 <td><?php echo afficheChamp($data['sujet']); ?></td>
-                                                <td><?php echo auteur_name($data['message']); ?><</td>
+                                                <td><?php echo substr(strip_tags(afficheChamp($data['message'])), 0, 100) . '...'; ?></td>
                                                 <td class="text-nowrap">
-                                                    <a href="index.php?r=mtemplateemail&id=<?php echo afficheChamp($data['id']); ?>" data-toggle="tooltip" data-original-title="Modifier"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                                    <a href="index.php?r=mtemplatesemail&id=<?php echo afficheChamp($data['id']); ?>" data-toggle="tooltip" data-original-title="Modifier"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                                                 </td>
                                             </tr>
                                          <?php } ?>
