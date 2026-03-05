@@ -199,9 +199,9 @@
 
         $('#price_range').slider({
             range:true,
-            min:<?php echo $dataprice['min']; ?>,
-            max:<?php echo $dataprice['max']; ?>,
-            values:[<?php echo $dataprice['min']; ?>, <?php echo $dataprice['max']; ?>],
+            min:<?php echo $dataprice['min'] ?? 0; ?>,
+            max:<?php echo $dataprice['max'] ?? 1000; ?>,
+            values:[<?php echo $dataprice['min'] ?? 0; ?>, <?php echo $dataprice['max'] ?? 1000; ?>],
             format:"DT",
             step:0.001,
             unit:'DT',

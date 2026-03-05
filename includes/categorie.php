@@ -87,7 +87,7 @@
                         <?php
     					if(isset($_GET['link']) && $_GET['link'] != '' ){
     						$idCategProd = idCategBlog($_GET['link']);
-                    	    $req1 = "SELECT id,raison FROM `marques` WHERE id IN (SELECT marque FROM `produits` WHERE `categorie` = '".$idCategProd."') AND `etat`= '1' ORDER BY `ordre` ASC";
+                    	    $req1 = "SELECT id,raison FROM `marques` WHERE id IN (SELECT marque FROM `produits` WHERE `categorie` = '".$idCategProd."' OR `idparent_categ` = '".$idCategProd."') AND `etat`= '1' ORDER BY `ordre` ASC";
                     	    $res1 = executeRequete($req1);
                     	        while ($data2 = mysqli_fetch_array($res1)) 
                     	        { 
@@ -125,7 +125,7 @@
     				
     				if(isset($_GET['link']) && $_GET['link'] != '' ){
     					 $idCategProd = idCategBlog($_GET['link']);
-                    	 $req3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' AND  `idproduit` IN (SELECT id FROM `produits` WHERE `categorie` = '".$idCategProd."') GROUP BY idcarac ORDER BY `id` ASC";
+                    	 $req3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' AND  `idproduit` IN (SELECT id FROM `produits` WHERE `categorie` = '".$idCategProd."' OR `idparent_categ` = '".$idCategProd."') GROUP BY idcarac ORDER BY `id` ASC";
                     	 $res3 = executeRequete($req3);
     				}else{
     					 $idCategProd = idCategBlog($_GET['link']);
@@ -250,7 +250,7 @@
                                 <?php
     			if(isset($_GET['link']) && $_GET['link'] != '' ){
     				$idCategProd = idCategBlog($_GET['link']);
-                    	    $reqM2 = "SELECT id,raison FROM `marques` WHERE id IN (SELECT marque FROM `produits` WHERE `categorie` = '".$idCategProd."') AND `etat`= '1' ORDER BY `ordre` ASC";
+                    	    $reqM2 = "SELECT id,raison FROM `marques` WHERE id IN (SELECT marque FROM `produits` WHERE `categorie` = '".$idCategProd."' OR `idparent_categ` = '".$idCategProd."') AND `etat`= '1' ORDER BY `ordre` ASC";
     			}else{ 
     				$reqM2 = "SELECT DISTINCT id,raison FROM `marques` WHERE `etat`= '1' ORDER BY `ordre` ASC";
     			}
@@ -266,7 +266,7 @@
                         <?php
     					if(isset($_GET['link']) && $_GET['link'] != '' ){
     					 $idCategProd = idCategBlog($_GET['link']);
-                        	 $reqM3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' AND  `idproduit` IN (SELECT id FROM `produits` WHERE `categorie` = '".$idCategProd."') GROUP BY idcarac ORDER BY `id` ASC";
+                        	 $reqM3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' AND  `idproduit` IN (SELECT id FROM `produits` WHERE `categorie` = '".$idCategProd."' OR `idparent_categ` = '".$idCategProd."') GROUP BY idcarac ORDER BY `id` ASC";
     					}else{
                         	 $reqM3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' GROUP BY idcarac ORDER BY `id` ASC";
     					}
@@ -306,22 +306,23 @@
 			?>
 			
 			
-			<div class="container-fluid">
-			    <div class="border-bottom mb-3">
-			        <h3 style="font-size:20px">Selectionnez votre marque préférée :</h3>
+			<div class="container-fluid mb-5">
+			    <div class="mb-4" style="border-bottom: 2px solid var(--shop-primary); display: inline-block; padding-bottom: 5px;">
+			        <h3 style="font-size:1.25rem; font-weight:700; color:var(--shop-text-primary); margin:0;">Sélectionnez votre marque préférée :</h3>
 			    </div>
-			    <div class="row">
+			    <div class="row g-3">
     		        <?php 
 				            $categ     =  sanitize($_GET['link']);
 				            $idc       = idCategBlog($categ);
-				            $req = "SELECT DISTINCT pr.marque FROM categories_blog ctg, produits pr WHERE pr.idparent_categ = '$idc' && ctg.link = '$categ' ";
+				            $req = "SELECT DISTINCT pr.marque FROM categories_blog ctg, produits pr WHERE (pr.idparent_categ = '$idc' OR pr.categorie = '$idc') && ctg.link = '$categ' ";
                             $res = executeRequete($req);
     		            while ($datactg = mysqli_fetch_array($res))  {
+                            if($datactg['marque'] == '0') continue;
     		        ?>
-				        <div class="col-sm-2 mb-3 marque-logo">
+				        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 marque-logo">
     		            <a href="<?php echo lienRechercheByCM(linkMarque($datactg['marque']),$categ); ?>">
-    		                <div class="card d-flex align-items-center justify-content-center" style="min-height:100px; border: 1px solid var(--shop-border,#E0DEFF); border-radius: 0.75rem; transition: 0.2s; cursor:pointer;">
-    		                    <img src="<?php echo photoMarqueSite($datactg['marque']); ?>" class="img-fluid p-lg-3 p-md-2" style="object-fit:contain; max-height:70px;">
+    		                <div class="card cx-surface cx-border d-flex align-items-center justify-content-center" style="min-height:110px; border-radius: 1rem; cursor:pointer;">
+    		                    <img src="<?php echo photoMarqueSite($datactg['marque']); ?>" class="p-3" style="object-fit:contain; max-height:80px; width:100%;">
     		                </div>
     		            </a>
 				            </div>

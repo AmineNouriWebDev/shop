@@ -29,7 +29,7 @@
         $img_entete = photoPageSite($id);
     	
     	
-	$variable2='<li class="breadcrumb-item active" aria-current="page">'.$titre.'</li>';
+	$variable2='<li class="breadcrumb-item text-secondary" aria-current="page">'.$titre.'</li>';
 ?>
 
 
@@ -39,7 +39,16 @@
   <?php include('includes/script-header.php'); ?>
   <?php include('includes/script_panier.php'); ?>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-  <style>*, *::before, *::after{box-sizing:border-box;} body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--shop-bg-base);color:var(--shop-text-primary);}</style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--shop-bg-base); color: var(--shop-text-primary); }
+    /* jQuery UI slider: brand purple */
+    #price_range.ui-slider { height:5px !important; background:var(--shop-border,#E0DEFF) !important; border:none !important; border-radius:3px !important; width: 85% !important; margin: 1.5rem auto 1rem auto !important; }
+    #price_range .ui-slider-range { background:var(--shop-primary,#5A31F4) !important; }
+    #price_range .ui-slider-handle { width:16px !important;height:16px !important;top:-6px !important;border-radius:50% !important;background:var(--shop-primary,#5A31F4) !important;border:2px solid #fff !important;box-shadow:0 2px 6px rgba(90,49,244,.4) !important;cursor:pointer !important; }
+    #price_range .ui-slider-handle:focus { outline:none !important; box-shadow:0 0 0 3px rgba(90,49,244,.25) !important; }
+    .shop_sidebar_area { overflow-x: hidden; }
+  </style>
 </head>
 <body>
   <?php include('includes/feedback.php'); ?>
@@ -114,9 +123,9 @@
 
         $('#price_range').slider({
             range:true,
-            min:<?php echo $dataprice['min']; ?>,
-            max:<?php echo $dataprice['max']; ?>,
-            values:[<?php echo $dataprice['min']; ?>, <?php echo $dataprice['max']; ?>],
+            min:<?php echo $dataprice['min'] ?? 0; ?>,
+            max:<?php echo $dataprice['max'] ?? 1000; ?>,
+            values:[<?php echo $dataprice['min'] ?? 0; ?>, <?php echo $dataprice['max'] ?? 1000; ?>],
             step:0.001,
             format:'DT',
             stop:function(event, ui)

@@ -1,7 +1,6 @@
 <base href="<?php echo $chemin_absolu; ?>">
     <?php include('meta.php');?>
-    <link rel="icon" type="image/png" href="media/site/favicon-cooon.png" />
-    <link rel="shortcut icon" type="image/png" href="media/site/favicon-cooon.png" />
+
 
     <!-- Dark mode : PREMIER script chargé (anti-FOUC) -->
     <script src="dist/js/dark-mode.js"></script>

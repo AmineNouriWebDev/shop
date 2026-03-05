@@ -56,6 +56,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
     $adresse_contact    = formReception($_POST['adresse_contact']);
     $GOOGLE_CLIENT_ID   = formReception($_POST['gcid']);
     $GOOGLE_CLIENT_SECRET    = formReception($_POST['gcs']);
+    $cloudflare_site_key    = formReception($_POST['cloudflare_site_key'] ?? '');
+    $cloudflare_secret_key  = formReception($_POST['cloudflare_secret_key'] ?? '');
     
 	$cmd_num_sms 		= formReception($_POST['cmd_num_sms']);
 	$cmd_num_whatsapp 	= formReception($_POST['cmd_num_whatsapp']);
@@ -81,7 +83,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 	`adresse` = "'. $adresse .'", `longitude` = "'. $longitude .'", `latitude` = "'. $latitude .'",`num_appel_vocale`="'. $stickyfooter_number .'",`texte_footer`="'. $texte_footer .'",
 	`texte_footeren`="'. $texte_footeren .'", `copyright` = "'. $copyright .'",  `copyright_bo` = "'. $copyright_bo .'",`version` = "'. $version .'", `cle` = "'. $cle .'",
 	`message_cmd_messenger` = "'. $message_cmd_messenger .'",`cmd_num_whatsapp` = "'. $cmd_num_whatsapp .'",`cmd_num_sms` = "'. $cmd_num_sms .'",`message_cmd_sms` = "'. $message_cmd_sms .'",
-	`message_cmd_whatsapp` = "'. $message_cmd_whatsapp .'",`lien_cmd_messenger` = "'. $lien_cmd_messenger .'",	`secret` = "'. $secret .'",`GOOGLE_CLIENT_SECRET` = "'. $GOOGLE_CLIENT_SECRET .'",`GOOGLE_CLIENT_ID` = "'. $GOOGLE_CLIENT_ID .'"';
+	`message_cmd_whatsapp` = "'. $message_cmd_whatsapp .'",`lien_cmd_messenger` = "'. $lien_cmd_messenger .'",	`secret` = "'. $secret .'",`GOOGLE_CLIENT_SECRET` = "'. $GOOGLE_CLIENT_SECRET .'",`GOOGLE_CLIENT_ID` = "'. $GOOGLE_CLIENT_ID .'",
+	`cloudflare_site_key` = "'. $cloudflare_site_key .'", `cloudflare_secret_key` = "'. $cloudflare_secret_key .'"';
 
 	$resultat = executeRequete($requete);
 	
@@ -374,6 +377,28 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                     </div>
                                      </div>
                                     </div>
+
+                                    <hr class="border-primary">
+                                    <h4>Cloudflare Turnstile (Anti-Spam)</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Site Key</h5>
+                                                <div class="controls">
+                                                    <input type="text" name="cloudflare_site_key" value="<?php echo $cloudflare_site_key ?? ''; ?>" class="form-control" placeholder="1x000... (Clé de site)"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Secret Key</h5>
+                                                <div class="controls">
+                                                    <input type="text" name="cloudflare_secret_key" value="<?php echo $cloudflare_secret_key ?? ''; ?>" class="form-control" placeholder="1x000... (Clé secrète)"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="border-primary">
                                     
                                     <div class="row">
                                      <div class="col-md-12">

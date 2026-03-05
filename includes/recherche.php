@@ -1,9 +1,9 @@
 
 	<div class="main main-content-wrapper d-flex clearfix" >
     
-        <div class="shop_sidebar_area">
-		
-    			<h4 class="mb-4"> <i class="fa fa-filter"></i> Filter par</h4>
+        <div class="shop_sidebar_area d-none d-lg-block bg-white p-4 rounded-3xl shadow-sm border mt-4 ms-3 mb-4">
+    		
+    			<h4 class="mb-4" style="color:var(--shop-primary);"> <i class="fa fa-filter"></i> Filter par</h4>
             
             <div class="shop_sidebar_area_section">
                 
@@ -100,7 +100,7 @@
     					if(isset($_GET['link']) && $_GET['link'] != '' ){
     						$idCategProd = idCategBlog($_GET['link']);
     						//echo $idCategProd;
-                    	    $req1 = "SELECT id,raison FROM `marques` WHERE id IN (SELECT marque FROM `produits` WHERE `categorie` = '".$idCategProd."') AND `etat`= '1' ORDER BY `ordre` ASC";
+                    	    $req1 = "SELECT id,raison FROM `marques` WHERE id IN (SELECT marque FROM `produits` WHERE `categorie` = '".$idCategProd."' OR `idparent_categ` = '".$idCategProd."') AND `etat`= '1' ORDER BY `ordre` ASC";
                     	    $res1 = executeRequete($req1);
                     	    
                     	}elseif(isset($_GET['marque']) && $_GET['marque'] != '' ){
@@ -134,7 +134,7 @@
     					
     					if(isset($_GET['link']) && $_GET['link'] != '' ){
     						 $idCategProd = idCategBlog($_GET['link']);
-                        	 $req3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' AND  `idproduit` IN (SELECT id FROM `produits` WHERE `categorie` = '".$idCategProd."') GROUP BY idcarac ORDER BY `id` ASC";
+                        	 $req3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' AND  `idproduit` IN (SELECT id FROM `produits` WHERE `categorie` = '".$idCategProd."' OR `idparent_categ` = '".$idCategProd."') GROUP BY idcarac ORDER BY `id` ASC";
                         	 //echo $req3; 
                         	 $res3 = executeRequete($req3);
     					}else{
@@ -186,48 +186,43 @@
 
         <div class="amado_product_area section-padding-40">
 			<?php
-			$variable2='<li class="breadcrumb-item " aria-current="page"><a href="'.lienRecherche().'">Recherche</a></li>';
+			$variable2='<li class="breadcrumb-item text-secondary" aria-current="page"><a href="'.lienRecherche().'" class="text-decoration-none text-secondary">Recherche</a></li>';
 			$variable3 = '';
 			$variable4 = '';
 			if(isset($_GET['link']) && $_GET['link'] != '' ){	
 			$link=  sanitize($_GET['link']); 	
-			$variable3='<li class="breadcrumb-item active" aria-current="page">'.titreCategories($link).'</li>';
+			$variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.titreCategories($link).'</li>';
 			}
 			if((isset($_POST['action']) && $_POST['action'] == 'search') ){	
 			    $recherche=  sanitize($_POST['recherche']);
 			    if($recherche !=''){ 	
-			    $variable3='<li class="breadcrumb-item active" aria-current="page">'.$recherche.'</li>';
+			    $variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.$recherche.'</li>';
 			    }
 			}
 			if((isset($_POST['action']) && $_POST['action'] == 'search1') ){	
 			    $recherche=  sanitize($_POST['recherche']);
 			    if($recherche !=''){ 	
-			    $variable3='<li class="breadcrumb-item active" aria-current="page">'.$recherche.'</li>';
+			    $variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.$recherche.'</li>';
 			    }
 			}
 			if(((isset($_GET['marque']) && $_GET['marque'] != '') && (isset($_GET['categorie']) && $_GET['categorie'] != ''))){
-			    
-			    $variable3='<li class="breadcrumb-item" aria-current="page"><a href="'.lienSearch($_GET['categorie']).'">'.$_GET['categorie'].'</a></li>';
-			    
-			    $variable4='<li class="breadcrumb-item active" aria-current="page">'.$_GET['marque'].'</li>';
-			    
+			    $variable3='<li class="breadcrumb-item text-secondary" aria-current="page"><a href="'.lienSearch($_GET['categorie']).'" class="text-decoration-none text-secondary">'.titreCategories($_GET['categorie']).'</a></li>';
+			    $variable4='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.$_GET['marque'].'</li>';
 			}
 			if(isset($_GET['search']) && $_GET['search'] != ''){
-			    
-			    $variable3='<li class="breadcrumb-item active" aria-current="page">'.$_GET['search'].'</li>';
-			    
+			    $variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.$_GET['search'].'</li>';
 			}
 			
 			?>
 			
 			<!-----------------------Breadcrumb------------------->
-			<div class="single-product-area">
+			<div class="single-product-area mt-4 mb-3">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-12">
 							<nav aria-label="breadcrumb">
-								<ol class="breadcrumb pl-0">
-									 <li class="breadcrumb-item"><a href="<?php echo lienAccueil();?>">Accueil</a></li>
+								<ol class="breadcrumb bg-light d-inline-flex px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.85rem; font-weight: 500;">
+									 <li class="breadcrumb-item"><a href="<?php echo lienAccueil();?>" class="text-secondary text-decoration-none"><i class="fa fa-home"></i> Accueil</a></li>
 										<?php echo $variable2;?>
 										<?php echo $variable3;?>
 										<?php echo $variable4;?>
@@ -237,121 +232,45 @@
 					</div>
 				</div>
 			</div>
-			<?php
-			
-			if((isset($_POST['action']) && $_POST['action'] == 'search') || (isset($_GET['search']) && $_GET['search'] != '') || (isset($_POST['recherche']) && $_POST['recherche'] != '') || ((isset($_GET['marque']) && $_GET['marque'] != '') && (isset($_GET['categorie']) && $_GET['categorie'] != '')) ){	
-			    $recherche=  isset($_POST['recherche']) ? sanitize($_POST['recherche']) : '';	
-			?>
-			<!--------------------------------------------------->
-			<div class="container-fluid">
-			    
-			    <div class="row">
-			        <div class="col-lg-7 mb-4">
-    			        <form action="<?php echo lienRecherche(); ?>" method="POST" class="p-4 border border-light bg-light">
-    					    <div class="form-group">
-        		                <input type="text" class="form-control mb-3" name="recherche" placeholder="Rechercher..." value="<?php if((isset($_POST['action']) && $_POST['action'] == 'search1')){ echo $_POST['recherche']; } elseif((isset($_POST['action']) && $_POST['action'] == 'search')){ echo $_POST['recherche']; } else { echo  ''; }  ?>" aria-label="Text input with dropdown button">
-        		                <select name="categorie" class="form-control slect2">
-        		                    <option>--Sélectionnez catégorie--</option>
-        		                    <?php 
-        		                    $categ = '';
-        		                    if(isset($_GET['search']) && $_GET['search'] != ''){
-    			                            $categ     =  idCategBlog($_GET['search']);
-            		                }elseif(isset($_GET['categorie']) && $_GET['categorie'] != ''){
-    			                            $categ     =  idCategBlog($_GET['categorie']);
-            		                }elseif(isset($_POST['categorie']) && $_POST['categorie'] != ''){
-    			                            $categ     =  $_POST['categorie'];
-            		                }
-    					            $requete = 'SELECT * FROM `categories_blog` WHERE `idparent` = "0" ';
-                                    $resultat = executeRequete($requete);
-    	                            $num = mysqli_num_rows($resultat);
-    		                            if ($num > 0 ) { 
-    			                            while ($data = mysqli_fetch_array($resultat))  {
-    							    ?>
-    							        <option value="<?php echo afficheChamp($data['id']); ?>" <?php if($categ == $data['id']) echo 'selected'; ?>> <?php echo afficheChamp1($data['titre']); ?></option>
-    							        <?php
-    							            $idpctg    = afficheChamp($data['id']);
-    							            $requete1  = 'SELECT * FROM `categories_blog` WHERE `idparent` = "'.$idpctg.'" ';
-                                            $resultat1 = executeRequete($requete1);
-    			                            while ($datasc = mysqli_fetch_array($resultat1))  {
-    							        ?>
-    							        <option value="<?php echo afficheChamp($datasc['id']); ?>" <?php if($categ == $datasc['id']) echo 'selected'; ?>> -- <?php echo afficheChamp1($datasc['titre']); ?></option>
-    							        <?php } ?>
-    							    <?php } }  ?>
-        		                </select>
-        		                <button type="submit" class="btn btn-acces mt-3"><i class="fa fa-search border-right pr-2 mr-2"></i> Recherche</button>
-    		                </div>
-                            <input type="hidden" name="action" value="search1">
-    		            </form>
-		            </div>
+
+            <!-- MOBILE FILTERS -->
+            <div class="d-block d-lg-none container-fluid mb-4">
+                <button class="btn w-100 d-flex justify-content-between align-items-center fw-bold px-4 py-3 shadow-sm border" id="mobileFiltersToggle" type="button"
+                    style="background:#fff; border-color: var(--shop-primary,#5A31F4); border-radius: 0.75rem; color: var(--shop-primary,#5A31F4);">
+                    <span><i class="fa fa-filter me-2"></i> Filtres</span>
+                    <i class="fa fa-chevron-down" id="mobileFiltersChevron"></i>
+                </button>
+                <div id="mobileFilters" style="display:none;">
+                    <div class="bg-white p-4 shadow-sm border mt-2" style="border-radius: 0.75rem; border-color: var(--shop-border, #E0DEFF)!important;">
+                        <!-- Price Range Informative for mobile -->
+                        <div class="mb-3 border-bottom pb-2">
+                            <label class="fw-semibold small" style="color:var(--shop-text-secondary,#6B6589)">Budget</label>
+                            <p class="small mb-2" id="price_show_mobile">Ajustez le curseur en haut</p>
+                        </div>
+                    </div>
                 </div>
-			</div>
-            <div class="container-fluid filter_data">
+            </div>
+
+            <div class="container-fluid filter_data" style="min-height:200px">
                 
             </div>
-            <?php 
-			}else{ ?>
-			
-			<div class="container-fluid">
-			    
-			    <div class="row">
-			        <div class="col-lg-7 mb-4">
-    			        <form action="<?php echo lienRecherche(); ?>" method="POST" class="p-4 border border-light bg-light">
-    					    <div class="form-group">
-        		                <input type="text" class="form-control mb-3" name="recherche" placeholder="Rechercher..." value="<?php if((isset($_POST['action']) && $_POST['action'] == 'search1')){ echo addslashes($_POST['recherche']); } else { echo  ''; }  ?>" aria-label="Text input with dropdown button">
-        		                <select name="categorie" class="form-control slect2">
-        		                    <option>--Sélectionnez catégorie--</option>
-        		                    <?php 
-        		                    $categ = '';
-        		                    if((isset($_POST['action']) && $_POST['action'] == 'search1')){
-			                            $categ     =  sanitize($_POST['categorie']);
-        		                    }
-        		                    
-    					            $requete = 'SELECT * FROM `categories_blog` WHERE `idparent` = "0" ';
-                                    $resultat = executeRequete($requete);
-    	                            $num = mysqli_num_rows($resultat);
-    		                            if ($num > 0 ) { 
-    			                            while ($data = mysqli_fetch_array($resultat))  {
-    							    ?>
-    							        <option value="<?php echo afficheChamp($data['id']); ?>" <?php if($categ == $data['id']) echo 'selected'; ?> > <?php echo afficheChamp1($data['titre']); ?></option>
-    							        <?php
-    							            $idpctg    = afficheChamp($data['id']);
-    							            $requete1  = 'SELECT * FROM `categories_blog` WHERE `idparent` = "'.$idpctg.'" ';
-                                            $resultat1 = executeRequete($requete1);
-    			                            while ($datasc = mysqli_fetch_array($resultat1))  {
-    							        ?>
-    							        <option value="<?php echo afficheChamp($datasc['id']); ?>" <?php if($categ == $datasc['id']) echo 'selected'; ?> > -- <?php echo afficheChamp1($datasc['titre']); ?></option>
-    							        <?php } ?>
-    							    <?php } }  ?>
-        		                </select>
-        		                <button type="submit" class="btn btn-acces mt-3"><i class="fa fa-search border-right pr-2 mr-2"></i> Recherche</button>
-    		                </div>
-                            <input type="hidden" name="action" value="search1">
-    		            </form>
-		            </div>
-                </div>
-			    <div class="row">
-    		        <?php if((isset($_POST['action']) && $_POST['action'] == 'search1') ){
-    		                
-			                $recherche =  sanitize($_POST['recherche']);
-			                $categ     =  sanitize($_POST['categorie']);
-			                $req = "SELECT * FROM categories_blog ctg, categories_marques cm WHERE cm.idcategorie = '$categ' && ctg.id = '$categ' ";
-                            $res = executeRequete($req);
-    		                while ($datactg = mysqli_fetch_array($res))  {
-    		        ?>
-			        <div class="col-sm-2 mb-3 marque-logo">
-    		            <a href="<?php echo lienRechercheByCM(linkMarque($datactg['idmarque']),linkParentCategBlog($categ)); ?>">
-    		                <div class="card">
-    		                    <img src="<?php echo photoMarqueSite($datactg['idmarque']); ?>" class="img-fluid p-lg-3 p-md-2">
-    		                </div>
-    		            </a>
-		            </div>
-    		        <?php } ?>
-    		        <?php } ?>
-                </div>
-            </div>
-			    
-			<?php }
-			?>
+
+<script>
+/* Mobile filters toggle */
+(function(){
+    var btn = document.getElementById('mobileFiltersToggle');
+    var panel = document.getElementById('mobileFilters');
+    var chevron = document.getElementById('mobileFiltersChevron');
+    if(!btn || !panel) return;
+    btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var isOpen = panel.style.display !== 'none';
+        panel.style.display = isOpen ? 'none' : 'block';
+        chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+})();
+</script>
         </div>
     
     

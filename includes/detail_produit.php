@@ -80,7 +80,7 @@
                             
                             <?php if ($etatStock == '1'){  ?>
                                 <div class="cart-table-area mt-4">
-                                    <div class="cart-summary m-0 p-4 border rounded-3xl shadow-sm bg-white">
+                                    <div class="cart-summary m-0 p-4 border rounded-3xl shadow-sm" style="background: var(--shop-surface);">
                                         <a href="applications.php" class="btn-secondary-tw w-100 d-block text-center text-uppercase mb-4">Télécharger nos applications</a>
                                         
                                         <!-- Commande Express Toggle -->
@@ -212,7 +212,7 @@ while($datapay = mysqli_fetch_array($respay)){
                     
                     <div class="col-12 col-lg-3 mb-4">
                         <div class="sticky-top pt-2 full-sc ">
-                            <div class="single_product_desc bg-white shadow-sm border px-3 py-4 rounded-3xl text-center">
+                            <div class="single_product_desc shadow-sm border px-3 py-4 rounded-3xl text-center" style="background: var(--shop-surface);">
     	                        
                                 <div class="product-meta-data mb-4">
     	                            <p class="fs-1 fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important;"><?php if($PrixPromo != '0.000') { echo $PrixPromo.' DT <br/><span class="text-muted text-decoration-line-through fs-5 fw-normal" style="color:#9ca3af !important;">'.$PrixVente.' DT</span>'; }else{ echo $PrixVente.' DT'; } ?></p>
@@ -220,11 +220,11 @@ while($datapay = mysqli_fetch_array($respay)){
                                     
                                 <!-- Add to Cart Form -->
                                 <form class="cart clearfix d-flex flex-column align-items-center" method="post">
-                                    <div class="cart-btn d-flex mx-auto mb-4 align-items-center bg-white border border-2 border-primary rounded-pill px-2 py-1 shadow-sm" style="border-color: var(--shop-primary) !important;">
+                                    <div class="cart-btn d-flex mx-auto mb-4 align-items-center border border-2 border-primary rounded-pill px-2 py-1 shadow-sm" style="border-color: var(--shop-primary) !important; background: var(--shop-surface);">
                                         <div class="quantity d-flex align-items-center">
-                                            <span class="qty-minus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6; font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;">−</span>
-                                            <input type="number" class="qty-text border-0 bg-transparent text-center fw-bold fs-5 mx-2" style="width:50px; outline:none;" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                            <span class="qty-plus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:#f3f4f6; font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;">+</span>
+                                            <span class="qty-minus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:var(--shop-bg-alt); font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;">−</span>
+                                            <input type="number" class="qty-text border-0 bg-transparent text-center fw-bold fs-5 mx-2" style="width:50px; outline:none; color:var(--shop-text-primary);" id="qty" step="1" min="1" max="300" name="quantity" value="1">
+                                            <span class="qty-plus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:var(--shop-bg-alt); font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;">+</span>
                                         </div>
                                     </div>
     								<?php if ($etatStock == '1'){  ?>
@@ -241,7 +241,7 @@ while($datapay = mysqli_fetch_array($respay)){
                                 $ress =executeRequete($reqs);
                                 while($datas = mysqli_fetch_array($ress)){
                             ?>
-                            <div class="bg-white p-3 mt-3 rounded-2xl shadow-sm border d-flex align-items-center" style="font-size:0.85rem; font-weight:600; color:#374151;">
+                            <div class="p-3 mt-3 rounded-2xl shadow-sm border d-flex align-items-center" style="font-size:0.85rem; font-weight:600; color:var(--shop-text-primary); background:var(--shop-surface);">
                                 <div class="rounded-circle d-flex justify-content-center align-items-center me-3" style="width:45px; height:45px; background:var(--shop-bg-alt);">
                                     <img src="<?php echo photoServiceSite($datas['id']); ?>" width="24px" alt="Service" /> 
                                 </div>

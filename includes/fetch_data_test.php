@@ -11,26 +11,27 @@ if(isset($_POST["action"])){
     $per_page     = 12;
     $current_page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
 
-    $inreq = isset($_POST["caracteristique"]) ? ' , `caracteristique_prod` cp ' : '';
+    $inreq = (!empty($_POST["caracteristique"])) ? ' , `caracteristique_prod` cp ' : '';
 
     /* ── Base query ── */
-    $query = "SELECT DISTINCT pr.id, pr.link, pr.categorie FROM produits pr, categories_blog ctg ".$inreq." WHERE pr.etat = '1'";
+    $query = "SELECT DISTINCT pr.id, pr.link, pr.categorie FROM produits pr ".$inreq." WHERE pr.etat = '1'";
 
     if(isset($_POST["link"]) && $_POST["link"] != ''){
-        $query .= " AND pr.categorie ='".$_POST["link"]."'";
+        $query .= " AND (pr.categorie ='".$_POST["link"]."' OR pr.idparent_categ ='".$_POST["link"]."')";
     }
-    if(isset($_POST["brand"])){
+    if(!empty($_POST["brand"])){
         $query .= " AND pr.marque IN('".implode("','", $_POST["brand"])."')";
     }
-    if(isset($_POST["category"])){
-        $query .= " AND pr.categorie IN('".implode("','", $_POST["category"])."')";
+    if(!empty($_POST["category"])){
+        $category_ids = implode("','", $_POST["category"]);
+        $query .= " AND (pr.categorie IN('".$category_ids."') OR pr.idparent_categ IN('".$category_ids."'))";
     }
-    if(isset($_POST["caracteristique"])){
-        $query .= " AND ";
+    if(!empty($_POST["caracteristique"])){
+        $query .= " AND (";
         foreach($_POST["caracteristique"] as $c){
-            $query .= " ( cp.idproduit = pr.id AND cp.valeur='".idvaleurCaracteristiques($c)."' AND cp.idcarac = '".idcaracCaracteristiques($c)."') OR";
+            $query .= " (cp.idproduit = pr.id AND cp.valeur='".idvaleurCaracteristiques($c)."' AND cp.idcarac = '".idcaracCaracteristiques($c)."') OR";
         }
-        $query = rtrim($query,'OR');
+        $query = rtrim($query,'OR') . ")";
     }
     if(isset($_POST["search"]) && $_POST["search"] != ''){
         $s = str_replace(" "," ",$_POST["search"]);
@@ -46,12 +47,12 @@ if(isset($_POST["action"])){
     }
     if(isset($_POST["promo"]) && $_POST["promo"] != ''){
         $query .= " AND pr.prix_promo !='0.000'";
-        if(isset($_POST["minimum_price"],$_POST["maximum_price"]) && !empty($_POST["minimum_price"]) && !empty($_POST["maximum_price"])){
+        if(isset($_POST["minimum_price"],$_POST["maximum_price"]) && $_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
             $query .= " AND pr.prix_promo BETWEEN '".$_POST["minimum_price"]."' AND '".$_POST["maximum_price"]."'";
         }
         $query .= " GROUP BY pr.categorie ORDER BY pr.prix_promo ASC";
     }else{
-        if(isset($_POST["minimum_price"],$_POST["maximum_price"]) && !empty($_POST["minimum_price"]) && !empty($_POST["maximum_price"])){
+        if(isset($_POST["minimum_price"],$_POST["maximum_price"]) && $_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
             $query .= " AND pr.prix_vente BETWEEN '".$_POST["minimum_price"]."' AND '".$_POST["maximum_price"]."'";
         }
         $query .= " GROUP BY pr.id ORDER BY pr.prix_vente ASC";
@@ -259,6 +260,13 @@ if(isset($_POST["action"])){
 .filter_data { min-height: 200px; }
 
 /* ── GRID card ── */
+/* Force consistent card size even with 1-3 products */
+.grid-group-item {
+    min-width: 220px !important;
+    max-width: 25% !important;
+    flex: 1 1 220px !important;
+}
+
 .prod-card {
     background: var(--shop-surface,#fff);
     border: 1.5px solid var(--shop-border,#E0DEFF);
