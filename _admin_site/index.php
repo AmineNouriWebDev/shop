@@ -45,7 +45,7 @@ include("includes/security.php");
 
 
 
-<body class="fix-header fix-sidebar card-no-border">
+<body class="fix-header fix-sidebar card-no-border admin-layout" id="adminBody">
 
     <!-- ============================================================== -->
 
@@ -53,12 +53,11 @@ include("includes/security.php");
 
     <!-- ============================================================== -->
 
-    <div class="preloader">
-
+    <!-- Preloader admin -->
+    <div class="preloader" id="adminPreloader">
         <svg class="circular" viewBox="25 25 50 50">
-
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
-
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
     </div>
 
     <!-- ============================================================== -->
@@ -97,47 +96,10 @@ include("includes/security.php");
 
         <!-- ============================================================== -->
 
-        <!-- ============================================================== -->
+        <!-- CONTENU PRINCIPAL -->
+        <main class="admin-content" id="adminContent">
 
-        <!-- Page wrapper  -->
-
-        <!-- ============================================================== -->
-
-        <div class="page-wrapper">
-
-            <!-- ============================================================== -->
-
-            <!-- Bread crumb and right sidebar toggle -->
-
-            <!-- ============================================================== -->
-
-            <div class="row page-titles">
-
-                <div class="col-md-5 align-self-center">
-
-                    <h3 class="text-themecolor"><?php echo $nom_site; ?></h3>
-
-                </div>
-
-                <?php include("includes/fils_ariane.php"); ?>
-
-                
-
-            </div>
-
-            <!-- ============================================================== -->
-
-            <!-- End Bread crumb and right sidebar toggle -->
-
-            <!-- ============================================================== -->
-
-            <!-- ============================================================== -->
-
-            <!-- Container fluid  -->
-
-            <!-- ============================================================== -->
-
-            <div class="container-fluid">
+            <div class="container-fluid" style="padding:0;">
 
               <?php
 
@@ -928,31 +890,13 @@ include("includes/security.php");
 
             <!-- End Container fluid  -->
 
-            <!-- ============================================================== -->
-
-            <!-- ============================================================== -->
-
-            <!-- footer -->
-
-            <!-- ============================================================== -->
+            </div><!-- end container-fluid -->
 
             <?php include("includes/footer.php"); ?>
 
-            <!-- ============================================================== -->
+        </main><!-- end admin-content -->
 
-            <!-- End footer -->
-
-            <!-- ============================================================== -->
-
-        </div>
-
-        <!-- ============================================================== -->
-
-        <!-- End Page wrapper  -->
-
-        <!-- ============================================================== -->
-
-    </div>
+    </div><!-- end main-wrapper -->
 
     <!-- ============================================================== -->
 

@@ -6,7 +6,9 @@
     "tw:dev": "npx @tailwindcss/cli -i dist/css/tailwind.css -o dist/css/tailwind.output.css --watch",
     "tw:build": "npx @tailwindcss/cli -i dist/css/tailwind.css -o dist/css/tailwind.output.css --minify",
     "dev": "npm run tw:dev",
-    "build": "npm run tw:build"
+    "build": "npm run tw:build",
+    "watch:admin": "npx @tailwindcss/cli -i _admin_site/assets/css/admin.css -o _admin_site/assets/css/admin.output.css --watch",
+    "build:admin": "npx @tailwindcss/cli -i _admin_site/assets/css/admin.css -o _admin_site/assets/css/admin.output.css --minify"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +17,8 @@
   "devDependencies": {
     "@tailwindcss/cli": "^4.2.1",
     "tailwindcss": "^4.2.1"
+  },
+  "dependencies": {
+    "toastify-js": "^1.12.0"
   }
 }

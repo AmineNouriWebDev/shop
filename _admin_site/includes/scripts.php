@@ -1,6 +1,12 @@
-     <!-- Favicon icon -->
+    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../media/site/<?php echo $favicon; ?>">
-   <!-- Bootstrap Core CSS --> 
+    <!-- Google Fonts — Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind Admin CSS (compilé) -->
+    <link href="assets/css/admin.output.css" rel="stylesheet">
+    <!-- Bootstrap Core CSS (conservé pour les composants DataTables, CKEditor, Select2) -->
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
     <!-- Date picker plugins css -->
@@ -51,6 +57,12 @@
 </script>
 
 <style>
-    
 .ck-editor__editable {min-height: 300px;}
 </style>
+
+<!-- Anti-FOUC script for Dark Mode -->
+<script>
+    if (localStorage.getItem('admin_dark_mode') === '1') {
+        document.documentElement.classList.add('dark');
+    }
+</script>

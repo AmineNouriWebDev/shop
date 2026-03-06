@@ -564,8 +564,187 @@
 						var parents = document.getElementsByClassName("select-parent");
                         if (parents.length > 0) {
                             var x = parents[0].id;
-                            $('.select-parent > option[value= '+x+'] ').attr('selected',true);
+			$('.select-parent > option[value= '+x+'] ').attr('selected',true);
                         }
-						}
-					});
+					}
+				});
 			</script>
+
+<!-- ============================================================
+     ADMIN JS — Sidebar, Dropdowns, Dark Mode
+     ============================================================ -->
+<script>
+(function() {
+    'use strict';
+
+    /* ─── DARK MODE ─────────────────────────────────────────── */
+    var DARK_KEY = 'admin_dark_mode';
+
+    function applyDark(dark) {
+        if (dark) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem(DARK_KEY, '1');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem(DARK_KEY, '0');
+        }
+    }
+
+    // Appliquer le thème sauvegardé dès le chargement
+    var savedDark = localStorage.getItem(DARK_KEY);
+    if (savedDark === '1') {
+        document.documentElement.classList.add('dark');
+    }
+
+    window.toggleAdminDark = function() {
+        document.documentElement.classList.add('admin-theme-transitioning');
+        var isDark = document.documentElement.classList.contains('dark');
+        applyDark(!isDark);
+        setTimeout(function() {
+            document.documentElement.classList.remove('admin-theme-transitioning');
+        }, 300);
+    };
+
+    /* ─── SIDEBAR ────────────────────────────────────────────── */
+    var sidebar   = document.getElementById('adminSidebar');
+    var topbar    = document.getElementById('adminTopbar');
+    var content   = document.getElementById('adminContent');
+    var overlay   = document.getElementById('sidebarOverlay');
+    var SIDEBAR_KEY = 'admin_sidebar_collapsed';
+
+    // Desktop : état persisté
+    var isCollapsed = localStorage.getItem(SIDEBAR_KEY) === '1';
+    if (isCollapsed && window.innerWidth >= 1024) {
+        sidebar  && sidebar.classList.add('collapsed');
+        topbar   && topbar.classList.add('sidebar-collapsed');
+        content  && content.classList.add('sidebar-collapsed');
+    }
+
+    window.toggleSidebar = function() {
+        if (window.innerWidth < 1024) {
+            // Mobile : off-canvas
+            var isOpen = sidebar && sidebar.classList.contains('mobile-open');
+            if (isOpen) {
+                closeSidebar();
+            } else {
+                sidebar  && sidebar.classList.add('mobile-open');
+                overlay  && overlay.classList.add('open');
+            }
+        } else {
+            // Desktop : collapse
+            var willCollapse = sidebar && !sidebar.classList.contains('collapsed');
+            sidebar  && sidebar.classList.toggle('collapsed');
+            topbar   && topbar.classList.toggle('sidebar-collapsed');
+            content  && content.classList.toggle('sidebar-collapsed');
+            localStorage.setItem(SIDEBAR_KEY, willCollapse ? '1' : '0');
+        }
+    };
+
+    window.closeSidebar = function() {
+        sidebar && sidebar.classList.remove('mobile-open');
+        overlay && overlay.classList.remove('open');
+    };
+
+    // Resize : réajuster état sidebar
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024) {
+            sidebar && sidebar.classList.remove('mobile-open');
+            overlay && overlay.classList.remove('open');
+        }
+    });
+
+    /* ─── SOUS-MENUS SIDEBAR ─────────────────────────────────── */
+    window.toggleSubmenu = function(submenuId, btn) {
+        var submenu = document.getElementById(submenuId);
+        if (!submenu) return;
+        var isOpen = submenu.classList.contains('open');
+
+        // Fermer tous les autres sous-menus
+        document.querySelectorAll('.admin-nav-submenu.open').forEach(function(el) {
+            if (el.id !== submenuId) {
+                el.classList.remove('open');
+                var prevBtn = el.previousElementSibling;
+                if (prevBtn) prevBtn.classList.remove('open');
+            }
+        });
+
+        submenu.classList.toggle('open', !isOpen);
+        if (btn) btn.classList.toggle('open', !isOpen);
+    };
+
+    /* ─── DROPDOWNS TOPBAR ───────────────────────────────────── */
+    window.toggleDropdown = function(id) {
+        var target = document.getElementById(id);
+        if (!target) return;
+        var isOpen = target.classList.contains('open');
+
+        // Fermer tous les dropdowns
+        document.querySelectorAll('.admin-dropdown.open').forEach(function(el) {
+            el.classList.remove('open');
+        });
+
+        if (!isOpen) target.classList.add('open');
+    };
+
+    // Fermer les dropdowns au clic en dehors
+    document.addEventListener('click', function(e) {
+        var openDropdowns = document.querySelectorAll('.admin-dropdown.open');
+        openDropdowns.forEach(function(dd) {
+            if (!dd.parentElement.contains(e.target)) {
+                dd.classList.remove('open');
+            }
+        });
+    });
+
+    /* ─── BADGES DYNAMIQUES (commandes + messages) ───────────── */
+    function loadBadges() {
+        // Charger les badges via un endpoint léger
+        fetch('api/badges.php')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                // Badge commandes
+                var bcmd = document.getElementById('badge-commandes');
+                if (bcmd && data.commandes > 0) {
+                    bcmd.textContent = data.commandes;
+                    bcmd.style.display = 'flex';
+                }
+                // Badge messages
+                var bmsg = document.getElementById('badge-messages');
+                if (bmsg && data.messages > 0) {
+                    bmsg.textContent = data.messages;
+                    bmsg.style.display = 'flex';
+                }
+                // Point de notification topbar
+                var ndot = document.getElementById('notifDot');
+                if (ndot && (data.commandes > 0 || data.messages > 0)) {
+                    ndot.style.display = 'block';
+                }
+                // Aperçu notifications dropdown
+                if (data.recent_commandes && data.recent_commandes.length > 0) {
+                    var html = '';
+                    data.recent_commandes.forEach(function(cmd) {
+                        html += '<a href="index.php?r=dcommande&id=' + cmd.id + '" class="admin-dropdown-item" style="text-decoration:none;">'
+                            + '<div style="width:32px;height:32px;border-radius:8px;background:rgba(90,49,244,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+                            + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;color:#5A31F4;"><path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25Z"/></svg>'
+                            + '</div>'
+                            + '<div style="flex:1;min-width:0;">'
+                            + '<div style="font-size:0.8rem;font-weight:600;color:var(--color-text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">#' + cmd.id + ' — ' + (cmd.client || 'Client') + '</div>'
+                            + '<div style="font-size:0.75rem;color:var(--color-text-muted);">' + cmd.total + ' TND · ' + cmd.date + '</div>'
+                            + '</div></a>';
+                    });
+                    var notifList = document.getElementById('notifList');
+                    if (notifList) notifList.innerHTML = html;
+                }
+            })
+            .catch(function() { /* silencieux si l'API n'existe pas encore */ });
+    }
+
+    // Charger les badges au démarrage (si l'API existe)
+    document.addEventListener('DOMContentLoaded', function() {
+        loadBadges();
+        // Actualiser toutes les 60 secondes
+        setInterval(loadBadges, 60000);
+    });
+
+})();
+</script>
