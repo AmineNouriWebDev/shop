@@ -1,0 +1,94 @@
+/**
+ * ============================================================
+ * SHOP — CSS Design Tokens
+ * ============================================================
+ * Variables CSS globaux pour le design system.
+ * Ces variables sont utilisées à la fois pour les composants
+ * Tailwind et pour les éventuels composants Bootstrap pendant
+ * la période de coexistence.
+ *
+ * Chargé dans : includes/script-header.php via <link>
+ * ============================================================
+ */
+
+:root {
+    /* ── Couleurs primaires ── */
+    --shop-primary: #5A31F4;
+    --shop-primary-glow: #7B5EF8;
+    --shop-primary-hover: #4A24E8;
+    --shop-primary-active: #3A18CC;
+
+    /* ── Couleurs secondaires & accent ── */
+    --shop-secondary: #0EA5E9;
+    --shop-accent: #F43F5E;
+
+    /* ── Backgrounds ── */
+    --shop-bg-base: #F8F7FF;
+    --shop-bg-alt: #EEF0F8;
+
+    /* ── Surfaces ── */
+    --shop-surface: #FFFFFF;
+    --shop-surface-raised: #F0EFFE;
+
+    /* ── Borders ── */
+    --shop-border: #E0DEFF;
+
+    /* ── Textes ── */
+    --shop-text-primary: #120B2E;
+    --shop-text-secondary: #6B6589;
+    --shop-text-disabled: #B0AABB;
+
+    /* ── États ── */
+    --shop-success: #10B981;
+    --shop-warning: #F59E0B;
+    --shop-error: #EF4444;
+    --shop-info: #0EA5E9;
+
+    /* ── Shadows ── */
+    --shop-shadow-card: 0 2px 12px rgba(90, 49, 244, 0.08), 0 1px 3px rgba(18, 11, 46, 0.05);
+    --shop-shadow-glow: 0 0 24px rgba(90, 49, 244, 0.35);
+    --shop-shadow-soft: 0 4px 24px rgba(18, 11, 46, 0.08);
+
+    /* ── Transitions ── */
+    --shop-transition-fast: 150ms ease;
+    --shop-transition-base: 250ms ease;
+    --shop-transition-slow: 400ms ease;
+
+    /* ── Border radius ── */
+    --shop-radius-sm: 0.5rem;
+    --shop-radius: 0.75rem;
+    --shop-radius-lg: 1rem;
+    --shop-radius-xl: 1.5rem;
+
+    /* ── Font ── */
+    --shop-font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+}
+
+/* ── Dark mode overrides ── */
+html.dark,
+[data-theme="dark"] {
+    --shop-primary: #7B5EF8;
+    --shop-secondary: #38BDF8;
+    --shop-accent: #FB7185;
+
+    --shop-bg-base: #0D0B1A;
+    --shop-bg-alt: #13111F;
+
+    --shop-surface: #1C1930;
+    --shop-surface-raised: #231E3A;
+
+    --shop-border: #2E2752;
+
+    --shop-text-primary: #EDE9FF;
+    --shop-text-secondary: #9B96BB;
+    --shop-text-disabled: #4A4566;
+
+    --shop-success: #34D399;
+    --shop-warning: #FCD34D;
+    --shop-error: #F87171;
+    --shop-info: #38BDF8;
+
+    --shop-shadow-card: 0 2px 16px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3);
+    --shop-shadow-glow: 0 0 28px rgba(123, 94, 248, 0.4);
+    --shop-shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.25);
+}

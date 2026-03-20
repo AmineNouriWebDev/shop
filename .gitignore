@@ -1,0 +1,23 @@
+# media/ (Included for deployment)
+# _admin_site/media/ (Included for deployment)
+
+# Node/Composer dependencies
+node_modules/
+vendor/
+
+# env.php (Included for deployment as per user request)
+# env.php
+media/products/products.zip
+# Tailwind compiled output (generated — not to version)
+dist/css/tailwind.output.css
+*.zip
+*.rar
+*.log
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Any other temp files
+*.tmp
+*.bak
+error_log

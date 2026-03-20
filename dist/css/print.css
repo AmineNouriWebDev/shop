@@ -1,0 +1,9 @@
+
+h1, h2, h3, h4, h5, h6 {
+    color: #29215a;
+    line-height: 1.3;
+}
+p>strong, p>b {
+    color: #e82069;
+}
+#paiement.ecran,#print.ecran,.top-bar,.navbar,.header,footer,.breadcrumb,#feedback,.hrPrint,.search-section {display: none!important;}
