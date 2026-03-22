@@ -1,8 +1,7 @@
 <?php
 
 include("include.php");
-var_dump($chemin_absolu);
-exit;
+
 if (lienAccueil()) {
     $requete = "SELECT * FROM `site_menu` WHERE `link` = 'accueil' ";
     $resultat = executeRequete($requete);
