@@ -1,14 +1,16 @@
 <?php
-include("include.php");
 
+include("include.php");
+var_dump($chemin_absolu);
+exit;
 if (lienAccueil()) {
-    $requete  = "SELECT * FROM `site_menu` WHERE `link` = 'accueil' ";
+    $requete = "SELECT * FROM `site_menu` WHERE `link` = 'accueil' ";
     $resultat = executeRequete($requete);
     $data = mysqli_fetch_array($resultat);
     if ($data['id'] != "") {
-        $id                = afficheChamp($data['id']);
-        $titre             = afficheChamp($data['titre']);
-        $contenu           = afficheChamp($data['contenu']);
+        $id = afficheChamp($data['id']);
+        $titre = afficheChamp($data['titre']);
+        $contenu = afficheChamp($data['contenu']);
     }
 
     // Load specific Homepage SEO from optimisation_seo
@@ -16,14 +18,15 @@ if (lienAccueil()) {
     $res_seo = executeRequete($req_seo);
     if ($res_seo && mysqli_num_rows($res_seo) > 0) {
         $seo_row = mysqli_fetch_assoc($res_seo);
-        $title_page       = afficheChamp($seo_row['title_home']);
+        $title_page = afficheChamp($seo_row['title_home']);
         $description_page = afficheChamp($seo_row['description_home']);
-        $keywords_page    = afficheChamp($seo_row['keywords_home']);
-    } else {
+        $keywords_page = afficheChamp($seo_row['keywords_home']);
+    }
+    else {
         // Fallback to menu if SEO table is empty
-        $title_page       = afficheChamp($data['titre_page']);
+        $title_page = afficheChamp($data['titre_page']);
         $description_page = afficheChamp($data['description']);
-        $keywords_page    = afficheChamp($data['keywords']);
+        $keywords_page = afficheChamp($data['keywords']);
     }
 }
 ?>
