@@ -126,3 +126,5 @@ if ($is_local) {
 $chemin_admin = '_admin_site/';
 $chemin_functions = 'fonctions';
 $chemin_media = 'media/';
+// offipro
+
