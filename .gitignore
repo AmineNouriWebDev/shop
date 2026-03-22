@@ -5,8 +5,8 @@
 node_modules/
 vendor/
 
-# env.php (Included for deployment as per user request)
-# env.php
+# env.php (Environment-specific, ignored to protect production settings)
+env.php
 media/products/products.zip
 # Tailwind compiled output (generated — not to version)
 dist/css/tailwind.output.css

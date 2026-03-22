@@ -1,36 +1,36 @@
 <?php
 // Clean connec.php - No display_errors override, no trailing spaces
 function connexionBDD() {
-	$conn = array();
+        $conn = array();
 
-	require_once 'env.php';
-	
-	$conn['serveur']   = $conn_env['serveur'];
-	$conn['user_bdd']  = $conn_env['user_bdd'];
-	$conn['user_pass'] = $conn_env['user_pass'];
-	$conn['name_bdd']  = $conn_env['name_bdd'];
+        require_once 'env.php';
 
-	return $conn;
+        $conn['serveur']   = $conn_env['serveur'];
+        $conn['user_bdd']  = $conn_env['user_bdd'];
+        $conn['user_pass'] = $conn_env['user_pass'];
+        $conn['name_bdd']  = $conn_env['name_bdd'];
+
+        return $conn;
 }
 
 $conn = connexionBDD();
 $connexion = mysqli_connect($conn['serveur'], $conn['user_bdd'], $conn['user_pass'], $conn['name_bdd']);
 if (!$connexion) {
-	die("Erreur connexion DB : " . mysqli_connect_error());
+        die("Erreur connexion DB : " . mysqli_connect_error());
 }
 mysqli_set_charset($connexion, "utf8");
 
 function sanitize($data) {
-	global $connexion;
-	if (!$connexion || !($connexion instanceof mysqli)) {
-		$conn = connexionBDD();
-		$connexion = mysqli_connect($conn['serveur'], $conn['user_bdd'], $conn['user_pass'], $conn['name_bdd']);
-		if (!$connexion) { die("Connection failed: " . mysqli_connect_error()); }
-		mysqli_set_charset($connexion, "utf8");
-	}
-	$data = trim($data ?? '');
-	$data = mysqli_real_escape_string($connexion, $data);
-	return $data;
+        global $connexion;
+        if (!$connexion || !($connexion instanceof mysqli)) {
+                $conn = connexionBDD();
+                $connexion = mysqli_connect($conn['serveur'], $conn['user_bdd'], $conn['user_pass'], $conn['name_bdd']);
+                if (!$connexion) { die("Connection failed: " . mysqli_connect_error()); }
+                mysqli_set_charset($connexion, "utf8");
+        }
+        $data = trim($data ?? '');
+        $data = mysqli_real_escape_string($connexion, $data);
+        return $data;
 }
 
 function afficher($texte) { return $texte; }
@@ -87,24 +87,39 @@ if ($data1) {
 }
 
 function cheminAbsolu() {
-	$chemin = array();
-	if ($_SERVER['SERVER_ADDR'] == "127.0.0.1") {
-		$chemin['chemin_absolu'] = "https://clients.onlytech.tn/motaawebsite/";
-		$chemin['chemin_admin'] = "_admin_site/";
-		$chemin['chemin_media'] = "media";
-		$chemin['chemin_functions'] = "fonctions";
-	} else {
-		$chemin['chemin_absolu'] = "localhost";
-		$chemin['chemin_admin'] = "root";
-		$chemin['chemin_media'] = "media";
-		$chemin['chemin_functions'] = "fonctions";
-	}
-	return $chemin;
+        $chemin = array();
+        if ($_SERVER['SERVER_ADDR'] == "127.0.0.1") {
+                $chemin['chemin_absolu'] = "https://clients.onlytech.tn/motaawebsite/";
+                $chemin['chemin_admin'] = "_admin_site/";
+                $chemin['chemin_media'] = "media";
+                $chemin['chemin_functions'] = "fonctions";
+        } else {
+                $chemin['chemin_absolu'] = "localhost";
+                $chemin['chemin_admin'] = "root";
+                $chemin['chemin_media'] = "media";
+                $chemin['chemin_functions'] = "fonctions";
+        }
+        return $chemin;
 }
 
-$is_local = ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $_SERVER['REMOTE_ADDR'] == '::1');
-if ($is_local) { $chemin_absolu = "http://localhost/shop/"; }
-else { $chemin_absolu = !empty($chemin_absolu) ? $chemin_absolu : 'http://localhost/shop/'; }
+// Détection de l'environnement : on force la production si le nom d'hôte est offipro.net
+$is_local = (
+    (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'offipro.net')
+    || (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] === 'offipro.net')
+) ? false : (
+    (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] == 'localhost')
+    || (isset($_SERVER['REMOTE_ADDR']) && (
+        $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ||
+        $_SERVER['REMOTE_ADDR'] == '::1'
+    ))
+);
+
+if ($is_local) {
+    $chemin_absolu = "http://localhost/shop/";
+} else {
+    // PRODUCTION – utiliser la valeur de la base de données déjà chargée dans $data
+    $chemin_absolu = !empty($data['chemin_absolu']) ? $data['chemin_absolu'] : '/';
+}
 $chemin_admin = '_admin_site/';
 $chemin_functions = 'fonctions';
 $chemin_media = 'media/';
