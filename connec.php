@@ -117,8 +117,11 @@ $is_local = (
 if ($is_local) {
     $chemin_absolu = "http://localhost/shop/";
 } else {
-    // PRODUCTION – utiliser la valeur de la base de données déjà chargée dans $data
-    $chemin_absolu = !empty($data['chemin_absolu']) ? $data['chemin_absolu'] : '/';
+    // PRODUCTION : on utilise la valeur déjà récupérée depuis site_configuration
+    // La variable $chemin_absolu a été définie plus haut par le SELECT
+    if (empty($chemin_absolu)) {
+        $chemin_absolu = '/';
+    }
 }
 $chemin_admin = '_admin_site/';
 $chemin_functions = 'fonctions';
