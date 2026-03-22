@@ -33,102 +33,102 @@ RewriteCond %{THE_REQUEST} \s/(?:shop/)?([^/.]+)\.php\s [NC]
 RewriteRule ^([^/]+)\.php$ %{ENV:BASE}%1/ [R=301,L]
 
 # New Clean URLs (Priority)
-RewriteRule ^produit/([^/]+)/?$ produit.php?link=$1 [L,QSA]
-RewriteRule ^boutique/([^/]+)/?$ categorie.php?link=$1 [L,QSA]
-RewriteRule ^boutique/?$ categorie.php [L,QSA]
-RewriteRule ^panier/?$ cart.php [L,QSA]
-RewriteRule ^applications/?$ applications.php [L,QSA]
-RewriteRule ^contact/?$ contact.php [L,QSA]
-RewriteRule ^inscription/?$ inscription.php [L,QSA]
-RewriteRule ^connexion/?$ connexion.php [L,QSA]
-RewriteRule ^mdp-oublie/?$ mdp-oublie.php [L,QSA]
-RewriteRule ^compte/?$ compte.php [L,QSA]
-RewriteRule ^deconnexion/?$ deconnexion.php [L,QSA]
-RewriteRule ^commande/([0-9]+)/?$ detail_commande.php?cmdId=$1 [L,QSA]
-RewriteRule ^checkout/([0-9]+)/?$ checkout.php?cmdId=$1 [L,QSA]
-RewriteRule ^checkout/?$ checkout.php [L,QSA]
-RewriteRule ^confirm/([^/]+)/?$ confirm.php?cmd=$1 [L,QSA]
-RewriteRule ^recherche/([^/]+)/?$ recherche.php?search=$1 [L,QSA]
-RewriteRule ^recherche/?$ recherche.php [L,QSA]
+RewriteRule ^produit/([^/]+)/?$ %{ENV:BASE}produit.php?link=$1 [L,QSA]
+RewriteRule ^boutique/([^/]+)/?$ %{ENV:BASE}categorie.php?link=$1 [L,QSA]
+RewriteRule ^boutique/?$ %{ENV:BASE}categorie.php [L,QSA]
+RewriteRule ^panier/?$ %{ENV:BASE}cart.php [L,QSA]
+RewriteRule ^applications/?$ %{ENV:BASE}applications.php [L,QSA]
+RewriteRule ^contact/?$ %{ENV:BASE}contact.php [L,QSA]
+RewriteRule ^inscription/?$ %{ENV:BASE}inscription.php [L,QSA]
+RewriteRule ^connexion/?$ %{ENV:BASE}connexion.php [L,QSA]
+RewriteRule ^mdp-oublie/?$ %{ENV:BASE}mdp-oublie.php [L,QSA]
+RewriteRule ^compte/?$ %{ENV:BASE}compte.php [L,QSA]
+RewriteRule ^deconnexion/?$ %{ENV:BASE}deconnexion.php [L,QSA]
+RewriteRule ^commande/([0-9]+)/?$ %{ENV:BASE}detail_commande.php?cmdId=$1 [L,QSA]
+RewriteRule ^checkout/([0-9]+)/?$ %{ENV:BASE}checkout.php?cmdId=$1 [L,QSA]
+RewriteRule ^checkout/?$ %{ENV:BASE}checkout.php [L,QSA]
+RewriteRule ^confirm/([^/]+)/?$ %{ENV:BASE}confirm.php?cmd=$1 [L,QSA]
+RewriteRule ^recherche/([^/]+)/?$ %{ENV:BASE}recherche.php?search=$1 [L,QSA]
+RewriteRule ^recherche/?$ %{ENV:BASE}recherche.php [L,QSA]
 
 
 
 # Boutique/Shop - Category with subcategory and product
 # Example: /boutique/category/subcategory/product/
-RewriteRule ^boutique/([^/]+)/([^/]+)/([^/]+)/?$ produit.php?link=$3 [L,QSA]
+RewriteRule ^boutique/([^/]+)/([^/]+)/([^/]+)/?$ %{ENV:BASE}produit.php?link=$3 [L,QSA]
 
 # Boutique/Shop - Category with subcategory
 # Example: /boutique/category/subcategory/
-RewriteRule ^boutique/([^/]+)/([^/]+)/?$ categorie.php?link=$2 [L,QSA]
+RewriteRule ^boutique/([^/]+)/([^/]+)/?$ %{ENV:BASE}categorie.php?link=$2 [L,QSA]
 
 # Boutique/Shop - Main category
 # Example: /boutique/category/
-RewriteRule ^boutique/([^/]+)/?$ categorie.php?link=$1 [L,QSA]
+RewriteRule ^boutique/([^/]+)/?$ %{ENV:BASE}categorie.php?link=$1 [L,QSA]
 
 # Boutique/Shop - Main page
 # Example: /boutique/
-RewriteRule ^boutique/?$ categorie.php [L,QSA]
+RewriteRule ^boutique/?$ %{ENV:BASE}categorie.php [L,QSA]
 
 # Applications page
 # Example: /applications/
-RewriteRule ^applications/?$ applications.php [L,QSA]
+RewriteRule ^applications/?$ %{ENV:BASE}applications.php [L,QSA]
 
 # Contact page
 # Example: /contact/
-RewriteRule ^contact/?$ contact.php [L,QSA]
+RewriteRule ^contact/?$ %{ENV:BASE}contact.php [L,QSA]
 
 # Inscription/Registration page
 # Example: /inscription/
-RewriteRule ^inscription/?$ inscription.php [L,QSA]
+RewriteRule ^inscription/?$ %{ENV:BASE}inscription.php [L,QSA]
 
 # Connexion/Login page
 # Example: /connexion/
-RewriteRule ^connexion/?$ connexion.php [L,QSA]
+RewriteRule ^connexion/?$ %{ENV:BASE}connexion.php [L,QSA]
 
 # Password forgotten page
 # Example: /mdp-oublie/
-RewriteRule ^mdp-oublie/?$ mdp-oublie.php [L,QSA]
+RewriteRule ^mdp-oublie/?$ %{ENV:BASE}mdp-oublie.php [L,QSA]
 
 # User account page
 # Example: /compte/
-RewriteRule ^compte/?$ compte.php [L,QSA]
+RewriteRule ^compte/?$ %{ENV:BASE}compte.php [L,QSA]
 
 # Logout page
 # Example: /deconnexion/
-RewriteRule ^deconnexion/?$ deconnexion.php [L,QSA]
+RewriteRule ^deconnexion/?$ %{ENV:BASE}deconnexion.php [L,QSA]
 
 # Order detail page
 # Example: /commande/123/
-RewriteRule ^commande/([0-9]+)/?$ detail_commande.php?cmdId=$1 [L,QSA]
+RewriteRule ^commande/([0-9]+)/?$ %{ENV:BASE}detail_commande.php?cmdId=$1 [L,QSA]
 
 # Express order page
 # Example: /commande-express/
-RewriteRule ^commande-express/?$ commande-express.php [L,QSA]
+RewriteRule ^commande-express/?$ %{ENV:BASE}commande-express.php [L,QSA]
 
 # Shopping cart page
 # Example: /panier/
-RewriteRule ^panier/?$ cart.php [L,QSA]
+RewriteRule ^panier/?$ %{ENV:BASE}cart.php [L,QSA]
 
 # Checkout page with optional order ID
 # Example: /checkout/ or /checkout/123/
-RewriteRule ^checkout/([0-9]+)/?$ checkout.php?cmdId=$1 [L,QSA]
-RewriteRule ^checkout/?$ checkout.php [L,QSA]
+RewriteRule ^checkout/([0-9]+)/?$ %{ENV:BASE}checkout.php?cmdId=$1 [L,QSA]
+RewriteRule ^checkout/?$ %{ENV:BASE}checkout.php [L,QSA]
 
 # Order confirmation page
 # Example: /confirm/ABC123/
-RewriteRule ^confirm/([^/]+)/?$ confirm.php?cmd=$1 [L,QSA]
+RewriteRule ^confirm/([^/]+)/?$ %{ENV:BASE}confirm.php?cmd=$1 [L,QSA]
 
 # Search page with optional search term
 # Example: /recherche/ or /recherche/keyword/
-RewriteRule ^recherche/([^/]+)/([^/]+)/?$ recherche.php?categorie=$1&marque=$2 [L,QSA]
-RewriteRule ^recherche/([^/]+)/?$ recherche.php?search=$1 [L,QSA]
-RewriteRule ^recherche/?$ recherche.php [L,QSA]
+RewriteRule ^recherche/([^/]+)/([^/]+)/?$ %{ENV:BASE}recherche.php?categorie=$1&marque=$2 [L,QSA]
+RewriteRule ^recherche/([^/]+)/?$ %{ENV:BASE}recherche.php?search=$1 [L,QSA]
+RewriteRule ^recherche/?$ %{ENV:BASE}recherche.php [L,QSA]
 
 # Generic content pages
 # Example: /about-us/ or any other page slug
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([^/]+)/?$ contenu.php?link=$1 [L,QSA]
+RewriteRule ^([^/]+)/?$ %{ENV:BASE}contenu.php?link=$1 [L,QSA]
 
 # ============================================
 # Performance & Security Settings
@@ -158,7 +158,3 @@ Options -Indexes
 
 # Set default charset
 AddDefaultCharset UTF-8
-
-# Custom error pages (optional)
-# ErrorDocument 404 /shop/404.php
-# ErrorDocument 500 /shop/500.php
