@@ -40,19 +40,27 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 		}
 	}
 	if (isset($_FILES['photo_mobile']) && $_FILES['photo_mobile']['type'] != '') {
-		if ($_FILES['photo_mobile']['type']=="image/jpeg" || $_FILES['photo_mobile']['type']=="image/png" || $_FILES['photo_mobile']['type']=="image/gif" || $_FILES['photo_mobile']['type']=="image/webp" ){
+		if ($_FILES['photo_mobile']['type']=="image/jpeg" || $_FILES['photo_mobile']['type']=="image/png" || $_FILES['photo_mobile']['type']=="image/gif" || $_FILES['photo_mobile']['type']=="image/webp"){
 			$destination = str_replace(' ', '-', $idc."-section-content-mobile-".$_FILES['photo_mobile']['name']);
-			$destination = str_replace(['é','è','à','ù','ç'], ['e','e','a','u','c'], $destination);
-			copy ($_FILES['photo_mobile']['tmp_name'], "../media/site/".$destination);
+			$destination = str_replace('é', 'e', $destination);
+			$destination = str_replace('è', 'e', $destination);
+			$destination = str_replace('à', 'a', $destination);
+			$destination = str_replace('ù', 'u', $destination);
+			$destination = str_replace('ç', 'c', $destination);
+			move_uploaded_file($_FILES['photo_mobile']['tmp_name'], "../media/site/".$destination);
 			$photo_mobile = $destination;
 			executeRequete('UPDATE `liste_section_content` set `photo_mobile`="'. $photo_mobile .'"  WHERE `id`="'.$idc.'"');
 		}
 	}
 	if (isset($_FILES['photo_tablet']) && $_FILES['photo_tablet']['type'] != '') {
-		if ($_FILES['photo_tablet']['type']=="image/jpeg" || $_FILES['photo_tablet']['type']=="image/png" || $_FILES['photo_tablet']['type']=="image/gif" || $_FILES['photo_tablet']['type']=="image/webp" ){
+		if ($_FILES['photo_tablet']['type']=="image/jpeg" || $_FILES['photo_tablet']['type']=="image/png" || $_FILES['photo_tablet']['type']=="image/gif" || $_FILES['photo_tablet']['type']=="image/webp"){
 			$destination = str_replace(' ', '-', $idc."-section-content-tablet-".$_FILES['photo_tablet']['name']);
-			$destination = str_replace(['é','è','à','ù','ç'], ['e','e','a','u','c'], $destination);
-			copy ($_FILES['photo_tablet']['tmp_name'], "../media/site/".$destination);
+			$destination = str_replace('é', 'e', $destination);
+			$destination = str_replace('è', 'e', $destination);
+			$destination = str_replace('à', 'a', $destination);
+			$destination = str_replace('ù', 'u', $destination);
+			$destination = str_replace('ç', 'c', $destination);
+			move_uploaded_file($_FILES['photo_tablet']['tmp_name'], "../media/site/".$destination);
 			$photo_tablet = $destination;
 			executeRequete('UPDATE `liste_section_content` set `photo_tablet`="'. $photo_tablet .'"  WHERE `id`="'.$idc.'"');
 		}

@@ -1125,11 +1125,25 @@
             $sci_titre = !empty($sci['titre']) ? $sci['titre'] : '';
           ?>
             <a href="<?php echo htmlspecialchars($sci_lien); ?>" style="min-width:100%; display:block; flex-shrink:0; position:relative;">
-              <?php if($sci_img): ?>
-              <img src="<?php echo htmlspecialchars($sci_img); ?>" alt="<?php echo htmlspecialchars($sci_titre); ?>" loading="lazy" style="width:100%; max-height:420px; object-fit:cover; border-radius:1.5rem;">
-              <?php else: ?>
-              <div style="width:100%; height:260px; background:var(--shop-bg-alt); border-radius:1.5rem;"></div>
-              <?php endif; ?>
+              <picture>
+                <?php 
+                  $photo_m = '';
+                  if (!empty($sci['photo_mobile'])) { $photo_m = 'media/site/' . $sci['photo_mobile']; }
+                  $photo_t = '';
+                  if (!empty($sci['photo_tablet'])) { $photo_t = 'media/site/' . $sci['photo_tablet']; }
+                ?>
+                <?php if ($photo_m): ?>
+                <source srcset="<?php echo htmlspecialchars($photo_m); ?>" media="(max-width: 640px)">
+                <?php endif; ?>
+                <?php if ($photo_t): ?>
+                <source srcset="<?php echo htmlspecialchars($photo_t); ?>" media="(max-width: 1024px)">
+                <?php endif; ?>
+                <?php if ($sci_img): ?>
+                <img src="<?php echo htmlspecialchars($sci_img); ?>" alt="<?php echo htmlspecialchars($sci_titre); ?>" loading="lazy" style="width:100%; max-height:420px; object-fit:cover; border-radius:1.5rem;">
+                <?php else: ?>
+                <div style="width:100%; height:260px; background:var(--shop-bg-alt); border-radius:1.5rem;"></div>
+                <?php endif; ?>
+              </picture>
               <?php if($sci_titre): ?>
               <div style="position:absolute; bottom:1.5rem; left:2rem; right:2rem; color:white; text-shadow:0 1px 4px rgba(0,0,0,0.5);">
                 <div class="hp-promo-title" style="font-size:clamp(1rem,2vw,1.5rem);"><?php echo htmlspecialchars($sci_titre); ?></div>
