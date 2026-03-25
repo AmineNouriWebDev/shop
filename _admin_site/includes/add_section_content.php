@@ -39,6 +39,24 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 			$result = executeRequete($requete);	
 		}
 	}
+	if (isset($_FILES['photo_mobile']) && $_FILES['photo_mobile']['type'] != '') {
+		if ($_FILES['photo_mobile']['type']=="image/jpeg" || $_FILES['photo_mobile']['type']=="image/png" || $_FILES['photo_mobile']['type']=="image/gif" || $_FILES['photo_mobile']['type']=="image/webp" ){
+			$destination = str_replace(' ', '-', $idc."-section-content-mobile-".$_FILES['photo_mobile']['name']);
+			$destination = str_replace(['é','è','à','ù','ç'], ['e','e','a','u','c'], $destination);
+			copy ($_FILES['photo_mobile']['tmp_name'], "../media/site/".$destination);
+			$photo_mobile = $destination;
+			executeRequete('UPDATE `liste_section_content` set `photo_mobile`="'. $photo_mobile .'"  WHERE `id`="'.$idc.'"');
+		}
+	}
+	if (isset($_FILES['photo_tablet']) && $_FILES['photo_tablet']['type'] != '') {
+		if ($_FILES['photo_tablet']['type']=="image/jpeg" || $_FILES['photo_tablet']['type']=="image/png" || $_FILES['photo_tablet']['type']=="image/gif" || $_FILES['photo_tablet']['type']=="image/webp" ){
+			$destination = str_replace(' ', '-', $idc."-section-content-tablet-".$_FILES['photo_tablet']['name']);
+			$destination = str_replace(['é','è','à','ù','ç'], ['e','e','a','u','c'], $destination);
+			copy ($_FILES['photo_tablet']['tmp_name'], "../media/site/".$destination);
+			$photo_tablet = $destination;
+			executeRequete('UPDATE `liste_section_content` set `photo_tablet`="'. $photo_tablet .'"  WHERE `id`="'.$idc.'"');
+		}
+	}
 	?>
 	<script language="javascript">
 	<!--
@@ -164,7 +182,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Option 1 : Télécharger depuis votre PC
                             </label>
-                            <input type="file" name="image" accept="image/*" class="admin-input" style="padding:0.4rem;">
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:0.75rem; font-weight:600;">Image Desktop <span style="color:var(--color-text-muted)">(Défaut)</span></label>
+                                <input type="file" name="image" accept="image/*" class="admin-input" style="padding:0.4rem;">
+                            </div>
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:0.75rem; font-weight:600;">Image Tablette <span style="color:var(--color-text-muted)">(Optionnel)</span></label>
+                                <input type="file" name="photo_tablet" accept="image/*" class="admin-input" style="padding:0.4rem;">
+                            </div>
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:0.75rem; font-weight:600;">Image Mobile <span style="color:var(--color-text-muted)">(Optionnel)</span></label>
+                                <input type="file" name="photo_mobile" accept="image/*" class="admin-input" style="padding:0.4rem;">
+                            </div>
                             <small style="color:var(--color-text-muted); font-size:0.75rem;">JPG, PNG, GIF, WEBP</small>
                         </div>
                     </div>

@@ -13,6 +13,23 @@ if (isset($_GET['action']) && $_GET['action'] == 'del_photo') {
     <script>window.location = 'index.php?r=editSectionContent&idsc=<?php echo $idsc_del; ?>&idb=<?php echo $idb_del; ?>';</script>
     <?php exit;
 }
+if (isset($_GET['action']) && $_GET['action'] == 'del_photo_m') {
+    $idsc_del = intval($_GET['idsc']);
+    $idb_del  = intval($_GET['idb']);
+    supprimerImageMobileSectionContent($idsc_del);
+    ?>
+    <script>window.location = 'index.php?r=editSectionContent&idsc=<?php echo $idsc_del; ?>&idb=<?php echo $idb_del; ?>';</script>
+    <?php exit;
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'del_photo_t') {
+    $idsc_del = intval($_GET['idsc']);
+    $idb_del  = intval($_GET['idb']);
+    supprimerImageTabletSectionContent($idsc_del);
+    ?>
+    <script>window.location = 'index.php?r=editSectionContent&idsc=<?php echo $idsc_del; ?>&idb=<?php echo $idb_del; ?>';</script>
+    <?php exit;
+}
 
 if (isset($_POST['action']) && $_POST['action'] == 'mod' ){
 	$idbloc = formReception($_POST['id']);
@@ -40,6 +57,24 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ){
 			$photo = $destination;
 			$requete = 'UPDATE `liste_section_content` set `photo`="'. $photo .'"  WHERE `id`="'.$idsc.'"';
 			$result = executeRequete($requete);	
+		}
+	}
+	if (isset($_FILES['photo_mobile']) && $_FILES['photo_mobile']['type'] != '') {
+		if ($_FILES['photo_mobile']['type']=="image/jpeg" || $_FILES['photo_mobile']['type']=="image/png" || $_FILES['photo_mobile']['type']=="image/gif" || $_FILES['photo_mobile']['type']=="image/webp"){
+			$destination = str_replace(' ', '-', $idsc."-section-content-mobile-".$_FILES['photo_mobile']['name']);
+			$destination = str_replace(['é','è','à','ù','ç'], ['e','e','a','u','c'], $destination);
+			copy ($_FILES['photo_mobile']['tmp_name'], "../media/site/".$destination);
+			$photo_mobile = $destination;
+			executeRequete('UPDATE `liste_section_content` set `photo_mobile`="'. $photo_mobile .'"  WHERE `id`="'.$idsc.'"');
+		}
+	}
+	if (isset($_FILES['photo_tablet']) && $_FILES['photo_tablet']['type'] != '') {
+		if ($_FILES['photo_tablet']['type']=="image/jpeg" || $_FILES['photo_tablet']['type']=="image/png" || $_FILES['photo_tablet']['type']=="image/gif" || $_FILES['photo_tablet']['type']=="image/webp"){
+			$destination = str_replace(' ', '-', $idsc."-section-content-tablet-".$_FILES['photo_tablet']['name']);
+			$destination = str_replace(['é','è','à','ù','ç'], ['e','e','a','u','c'], $destination);
+			copy ($_FILES['photo_tablet']['tmp_name'], "../media/site/".$destination);
+			$photo_tablet = $destination;
+			executeRequete('UPDATE `liste_section_content` set `photo_tablet`="'. $photo_tablet .'"  WHERE `id`="'.$idsc.'"');
 		}
 	}
 	?>
@@ -92,41 +127,82 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ){
                             Image / Visuel
                         </label>
 
-                        <?php if ($current_img): ?>
-                        <div style="margin-bottom:1rem; text-align:center; position:relative; display:inline-block;">
-                            <img id="img-preview" src="../<?php echo htmlspecialchars($current_img); ?>" 
-                                 style="max-height:140px; max-width:280px; object-fit:contain; border-radius:0.5rem; border:1px solid var(--color-border); display:block;"
-                                 onerror="this.style.display='none'">
-                            <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">Aperçu image actuelle</div>
-                            <?php if (!empty($data_sc['photo'])): ?>
-                            <a href="index.php?r=editSectionContent&action=del_photo&idsc=<?php echo intval($_GET['idsc']); ?>&idb=<?php echo intval($_GET['idb']); ?>"
-                               onclick="return confirm('Supprimer cette image ?')"
-                               style="position:absolute; top:-8px; right:-8px; width:22px; height:22px; background:#ef4444; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; text-decoration:none; line-height:1; box-shadow:0 1px 4px rgba(0,0,0,0.3);" title="Supprimer l'image">×</a>
-                            <?php endif; ?>
-                        </div>
-                        <?php else: ?>
-                        <div style="margin-bottom:1rem; text-align:center;">
-                            <img id="img-preview" src="" style="max-height:140px; max-width:280px; object-fit:contain; border-radius:0.5rem; border:1px solid var(--color-border); display:none;" onerror="this.style.display='none'">
-                            <div id="img-preview-label" style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem; display:none;">Aperçu</div>
-                        </div>
-                        <?php endif; ?>
-
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <?php if ($current_img): ?>
+                                <div style="margin-bottom:1rem; text-align:center; position:relative; display:inline-block;">
+                                    <img id="img-preview" src="../<?php echo htmlspecialchars($current_img); ?>" 
+                                         style="max-height:100px; max-width:180px; object-fit:contain; border-radius:0.5rem; border:1px solid var(--color-border); display:block;"
+                                         onerror="this.style.display='none'">
+                                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">Image Desktop <br>(Défaut)</div>
+                                    <?php if (!empty($data_sc['photo'])): ?>
+                                    <a href="index.php?r=editSectionContent&action=del_photo&idsc=<?php echo intval($_GET['idsc']); ?>&idb=<?php echo intval($_GET['idb']); ?>"
+                                       onclick="return confirm('Supprimer cette image ?')"
+                                       style="position:absolute; top:-8px; right:-8px; width:22px; height:22px; background:#ef4444; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; text-decoration:none; line-height:1; box-shadow:0 1px 4px rgba(0,0,0,0.3);" title="Supprimer l'image">×</a>
+                                    <?php endif; ?>
+                                </div>
+                                <?php else: ?>
+                                <div style="margin-bottom:1rem; text-align:center;">
+                                    <img id="img-preview" src="" style="max-height:100px; max-width:180px; object-fit:contain; border-radius:0.5rem; border:1px solid var(--color-border); display:none;" onerror="this.style.display='none'">
+                                    <div id="img-preview-label" style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem; display:none;">Image Desktop <br>(Défaut)</div>
+                                </div>
+                                <?php endif; ?>
                                 <div class="form-group">
-                                    <label style="font-size:0.8125rem; font-weight:600; display:flex; align-items:center; gap:6px; margin-bottom:0.5rem;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                        Télécharger une image
-                                    </label>
+                                    <label style="font-size:0.75rem; font-weight:600;">Modifier Image Desktop</label>
                                     <input type="file" name="image" accept="image/*" class="admin-input" style="padding:0.4rem;">
-                                    <small style="color:var(--color-text-muted); font-size:0.75rem;">JPG, PNG, GIF, WEBP</small>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-4">
+                                <?php if (!empty($data_sc['photo_tablet']) && file_exists("../media/site/".$data_sc['photo_tablet'])): ?>
+                                <div style="margin-bottom:1rem; text-align:center; position:relative; display:inline-block;">
+                                    <img src="../media/site/<?php echo htmlspecialchars($data_sc['photo_tablet']); ?>" 
+                                         style="max-height:100px; max-width:180px; object-fit:contain; border-radius:0.5rem; border:1px solid var(--color-border); display:block;">
+                                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">Image Tablette<br>(Optionnel)</div>
+                                    <a href="index.php?r=editSectionContent&action=del_photo_t&idsc=<?php echo intval($_GET['idsc']); ?>&idb=<?php echo intval($_GET['idb']); ?>"
+                                       onclick="return confirm('Supprimer cette image ?')"
+                                       style="position:absolute; top:-8px; right:-8px; width:22px; height:22px; background:#ef4444; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; text-decoration:none; line-height:1; box-shadow:0 1px 4px rgba(0,0,0,0.3);" title="Supprimer l'image">×</a>
+                                </div>
+                                <?php else: ?>
+                                <div style="margin-bottom:1rem; text-align:center;">
+                                    <div style="font-size:0.75rem; color:var(--color-text-muted); padding:30px; border:1px dashed var(--color-border); border-radius:0.5rem;">Aucune image<br>tablette</div>
+                                </div>
+                                <?php endif; ?>
+                                <div class="form-group">
+                                    <label style="font-size:0.75rem; font-weight:600;">Modifier Image Tablette</label>
+                                    <input type="file" name="photo_tablet" accept="image/*" class="admin-input" style="padding:0.4rem;">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <?php if (!empty($data_sc['photo_mobile']) && file_exists("../media/site/".$data_sc['photo_mobile'])): ?>
+                                <div style="margin-bottom:1rem; text-align:center; position:relative; display:inline-block;">
+                                    <img src="../media/site/<?php echo htmlspecialchars($data_sc['photo_mobile']); ?>" 
+                                         style="max-height:100px; max-width:180px; object-fit:contain; border-radius:0.5rem; border:1px solid var(--color-border); display:block;">
+                                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">Image Mobile<br>(Optionnel)</div>
+                                    <a href="index.php?r=editSectionContent&action=del_photo_m&idsc=<?php echo intval($_GET['idsc']); ?>&idb=<?php echo intval($_GET['idb']); ?>"
+                                       onclick="return confirm('Supprimer cette image ?')"
+                                       style="position:absolute; top:-8px; right:-8px; width:22px; height:22px; background:#ef4444; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; text-decoration:none; line-height:1; box-shadow:0 1px 4px rgba(0,0,0,0.3);" title="Supprimer l'image">×</a>
+                                </div>
+                                <?php else: ?>
+                                <div style="margin-bottom:1rem; text-align:center;">
+                                    <div style="font-size:0.75rem; color:var(--color-text-muted); padding:30px; border:1px dashed var(--color-border); border-radius:0.5rem;">Aucune image<br>mobile</div>
+                                </div>
+                                <?php endif; ?>
+                                <div class="form-group">
+                                    <label style="font-size:0.75rem; font-weight:600;">Modifier Image Mobile</label>
+                                    <input type="file" name="photo_mobile" accept="image/*" class="admin-input" style="padding:0.4rem;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label style="font-size:0.8125rem; font-weight:600; display:flex; align-items:center; gap:6px; margin-bottom:0.5rem;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                                        OU : Chemin relatif de l'image
+                                        OU : Chemin relatif de l'image (Desktop)
                                     </label>
                                     <input type="text" name="lien_url" id="lien_url_input" class="admin-input" 
                                            value="<?php echo htmlspecialchars($data_sc['lien_url'] ?? ''); ?>"

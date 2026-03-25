@@ -153,7 +153,20 @@
                             			<?php while($data = mysqli_fetch_array($res)) { ?>
                             			
                                             <a href="<?php echo lienSectionContent($data['id']); ?>" class="carousel-item <?php echo ( $counter == 0 ? ' active' : '' ) ?>" <?php echo ( $counter == 0 ? ' data-interval="3000"' : 'data-interval="2000"' ) ?>>
-                                                  <img class="d-block w-100 img-fluid" src="<?php echo photoSectionContent($data['id']); ?>" alt="First slide" style="max-height:660px;margin:auto">
+                                                <picture>
+                                                  <?php 
+                                                    $photo_mobile = photoMobileSectionContentSite($data['id']);
+                                                    $photo_tablet = photoTabletSectionContentSite($data['id']);
+                                                    $photo_desktop = photoSectionContent($data['id']);
+                                                  ?>
+                                                  <?php if (!empty($photo_mobile)): ?>
+                                                    <source srcset="<?php echo $photo_mobile; ?>" media="(max-width: 640px)">
+                                                  <?php endif; ?>
+                                                  <?php if (!empty($photo_tablet)): ?>
+                                                    <source srcset="<?php echo $photo_tablet; ?>" media="(max-width: 1024px)">
+                                                  <?php endif; ?>
+                                                  <img class="d-block w-100 img-fluid" src="<?php echo $photo_desktop; ?>" alt="Slide" style="max-height:660px;margin:auto;">
+                                                </picture>
                                             </a>
                                             
                             			<?php $counter++;  } ?>

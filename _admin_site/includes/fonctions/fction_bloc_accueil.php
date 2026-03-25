@@ -243,6 +243,69 @@ function photoSectionContent($id)
 	return '';
 }
 
+function photoMobileSectionContentSite($id)
+{
+	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'"; 
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	if(isset($data['photo_mobile']) && $data['photo_mobile']!=""){
+	    return 'media/site/'.afficheChamp($data['photo_mobile']);
+	}else {
+	    return '';
+	}
+}
+
+function ApercuMobileSectionContent($id)
+{
+	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	if(isset($data['photo_mobile'])) return afficheChamp($data['photo_mobile']);
+    return '';
+}
+
+function supprimerImageMobileSectionContent($id){
+	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	$image 	= afficheChamp($data['photo_mobile']);
+	if($image!="") @unlink("../media/site/".$image);
+    executeRequete("UPDATE `liste_section_content` SET `photo_mobile`='' WHERE `id` = '".$id."'");
+    return true;
+}
+
+function photoTabletSectionContentSite($id)
+{
+	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'"; 
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	if(isset($data['photo_tablet']) && $data['photo_tablet']!=""){
+	    return 'media/site/'.afficheChamp($data['photo_tablet']);
+	}else {
+	    return '';
+	}
+}
+
+function ApercuTabletSectionContent($id)
+{
+	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	if(isset($data['photo_tablet'])) return afficheChamp($data['photo_tablet']);
+    return '';
+}
+
+function supprimerImageTabletSectionContent($id){
+	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	$image 	= afficheChamp($data['photo_tablet']);
+	if($image!="") @unlink("../media/site/".$image);
+    executeRequete("UPDATE `liste_section_content` SET `photo_tablet`='' WHERE `id` = '".$id."'");
+    return true;
+}
+
+
 function lienSectionContent($id)
 {
 	$requete = "SELECT * FROM `liste_section_content` WHERE `id` = '".$id."'";
