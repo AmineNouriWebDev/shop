@@ -5,6 +5,10 @@
 <?php 
 if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 {
+    // Prevent VPS silent crashes on large image conversions
+    ini_set('memory_limit', '512M');
+    set_time_limit(300);
+
 	$titre  	         = FormChampSpeciaux(formReception($_POST['titre']));
 	$court_contenu       = formReception($_POST['court_contenu']);
 	$contenu  	         = formReception($_POST['contenu']);

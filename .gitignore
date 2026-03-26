@@ -7,12 +7,24 @@ vendor/
 
 # env.php (Environment-specific, ignored to protect production settings)
 env.php
+
+# Secrets and text files
+*secret*
+.env
+.env.example
+*.txt
+!robots.txt
+rootdeployment_plan.txt
+
+# Media zips
 media/products/products.zip
+
 # Tailwind compiled output (generated — not to version)
 dist/css/tailwind.output.css
 *.zip
 *.rar
 *.log
+
 # OS generated files
 .DS_Store
 Thumbs.db

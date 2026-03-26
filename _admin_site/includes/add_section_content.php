@@ -10,6 +10,9 @@
 	<?php } ?>
 <?php 
 if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
+	// Prevent VPS silent crashes on large image conversions
+	ini_set('memory_limit', '512M');
+	set_time_limit(300);
 	$idbloc   = formReception($_POST['id']);
 	$titre    = isset($_POST['titre']) ? formReception($_POST['titre']) : '';
 	$contenu  = isset($_POST['contenu']) ? formReception($_POST['contenu']) : '';

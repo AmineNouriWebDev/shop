@@ -16,13 +16,14 @@ function phpToastRedirect($message, $redirectUrl, $type = 'success') {
     $safeMessage = json_encode($message, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
     $safeType = json_encode($type);
     
-    echo "<script>
+    echo "<script data-cfasync=\"false\">
         sessionStorage.setItem('pendingToast', JSON.stringify({
             msg: {$safeMessage},
             type: {$safeType}
         }));
         window.location.href = '{$redirectUrl}';
-    </script>";
+    </script>
+    </body></html>";
     exit;
 }
 ?>

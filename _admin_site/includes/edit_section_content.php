@@ -32,6 +32,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'del_photo_t') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] == 'mod' ){
+	// Prevent VPS silent crashes on large image conversions
+	ini_set('memory_limit', '512M');
+	set_time_limit(300);
 	$idbloc = formReception($_POST['id']);
 	$idsc   = formReception($_POST['idsc']);
 	$lien   = formReception($_POST['lien']);
