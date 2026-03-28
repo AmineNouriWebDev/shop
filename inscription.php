@@ -134,7 +134,7 @@
 			  //$messagemail=str_replace("%%LINKCONFIRM%%",$linkconfirm,$messagemail);
             
               if ($_SERVER['SERVER_NAME'] != 'localhost') {
-			      @mail($email, $sujetmail, $messagemail, $headers, "-f ".$emc."");
+			      // @mail($email, $sujetmail, $messagemail, $headers, "-f ".$emc."");
               }
             
 
@@ -152,7 +152,7 @@
 		    
 
               if ($_SERVER['SERVER_NAME'] != 'localhost') {
-			      @mail($emc, $sujetmailadmin, $messagemailadmin, $headers, "-f ".$emc."");
+			      // @mail($emc, $sujetmailadmin, $messagemailadmin, $headers, "-f ".$emc."");
               }
 
 		    }
