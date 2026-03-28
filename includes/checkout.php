@@ -177,6 +177,27 @@
 			@curl_exec($ch2);
 			@curl_close($ch2);
 		}
+
+		// ─── 3. Email Client (Commande enregistrée - Template 2) ───
+		$clientName = $nom.' '.$prenom;
+		$sujetClient = sujetEmail(2);
+		$sujetClient = str_replace('%%CODECMD%%', $code_cmd, $sujetClient);
+		
+		$contenuClient = messageEmail(2);
+		$contenuClient = str_replace('%%NOMCLT%%', $clientName, $contenuClient);
+		$contenuClient = str_replace('%%CODECMD%%', $code_cmd, $contenuClient);
+		$contenuClient = str_replace('%%DETAILSCMD%%', detailsCommande($id_cmd), $contenuClient);
+		// Le lien de paiement sera injecté ultérieurement si applicable (Konnect)
+		
+		$payload_client = [
+			'event_type'    => 'order_confirmation',
+			'email_to'      => $email,
+			'email_subject' => $sujetClient,
+			'email_html'    => $contenuClient,
+			'order_id'      => $id_cmd
+		];
+		// On sauvegarde le payload initial. S'il n'y a pas de lien de paiement, on l'envoie tout de suite.
+		$send_initial_email = true;
 		// ─────────────────────────────────────────────────────────
 		
 		if($moyen_paiement == 10){
@@ -231,18 +252,10 @@
     		
                 executeRequete("UPDATE `commandes` set `lien_paiement`='".$payment_link."',`ref_paiement`='".$payment_ref."' WHERE `id`='".$cmd."'");
                 
-    		    // Alerte client 
-		        $client = $nom.' '.$prenom;
-    		    $sujet1    = sujetEmail(2);
-    		    $sujet1    = str_replace('%%CODECMD%%',$code_cmd,$sujet1);
-    		    $contenumsg1 =  messageEmail(2);
-    		    $contenumsg1 =  str_replace('%%NOMCLT%%',$client,$contenumsg1);
-    		    $contenumsg1 =  str_replace('%%CODECMD%%',$code_cmd,$contenumsg1);
-    		    $contenumsg1 =  str_replace('%%DETAILSCMD%%',detailsCommande($cmd),$contenumsg1);
-    		    $contenumsg1 =  str_replace('%%PLATEFORM%%',$payment_link,$contenumsg1);
-    		    
-    		    $sender_email = envoiEmail(2);
-    		    mail($email, $sujet1, $contenumsg1, $headersMail, "-f ".$sender_email."");
+    		    // Injection du lien dans le payload initial
+    		    $payload_client['email_html'] = str_replace('%%PLATEFORM%%', $payment_link, $payload_client['email_html']);
+    		    envoiEmail_n8n($payload_client);
+    		    $send_initial_email = false; // Le mail est déjà envoyé avec le lien
     		    
             }
             else{
@@ -250,6 +263,11 @@
             }
         } 
         */
+
+		if ($send_initial_email) {
+			$payload_client['email_html'] = str_replace('%%PLATEFORM%%', '', $payload_client['email_html']);
+			envoiEmail_n8n($payload_client);
+		}
         /*---------------------------------------------------------------------------------------------------------------------------------------------------*/
         
         }

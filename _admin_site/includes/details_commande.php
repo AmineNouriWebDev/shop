@@ -217,26 +217,26 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
     if(isset($_POST['notify'])) { 
         if($notify  ='1') {
             
-        		$headers  = 'MIME-Version: 1.0' . "\r\n";
-                $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        // Remplacement de la fonction mail native par le webhook n8n
+        $template_id = ($etat == 9) ? 11 : 10; // 11: Paiement, 10: Mise à jour classique
+
+        $to = emailCommande($id_commande);
         
-                // En-ttes additionnels
-                $sender_email = envoiEmail(10);
-                $headers .= 'From: '.$nom_site.' <'.$sender_email.'>'. "\r\n";
-                $to = emailCommande($id_commande);
-        	    $sujet = str_replace('%%NCMD%%',$id_commande,sujetEmail(10));
-        	    
-    		    $message_envoi = str_replace('%%NCMD%%',$id_commande,messageEmail(10));
-    		    $message_envoi = str_replace('%%ETATCMD%%',etat_commandes($etat),$message_envoi);
-    		    $message_envoi = str_replace('%%CMNT%%',$commentaire,$message_envoi);
-        		
-        		
-                // Envoi
-                // Envoi
-                //mail($to, $sujet, $message_envoi, $headers, "-f ".$sender_email);
-                if($_SERVER['SERVER_NAME'] != 'localhost') {
-                    @mail($to, $sujet, $message_envoi, $headers, "-f ".$sender_email);
-                }
+        $sujet = str_replace('%%NCMD%%', numcommande($id_commande), sujetEmail($template_id));
+        
+        $message_envoi = str_replace('%%NCMD%%', numcommande($id_commande), messageEmail($template_id));
+        $message_envoi = str_replace('%%ETATCMD%%', etat_commandes($etat), $message_envoi);
+        $message_envoi = str_replace('%%CMNT%%', $commentaire, $message_envoi);
+        
+        // Envoi asynchrone sécurisé Cloud-to-Cloud via Webhook
+        $payload_n8n = [
+            'event_type'    => 'order_status_update',
+            'order_id'      => $id_commande,
+            'email_to'      => $to,
+            'email_subject' => $sujet,
+            'email_html'    => $message_envoi
+        ];
+        envoiEmail_n8n($payload_n8n);
             
 	    }
         
