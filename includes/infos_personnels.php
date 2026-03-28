@@ -81,6 +81,19 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
+                    <label>Numéro WhatsApp (Optionnel)</label>
+                    <div style="display:flex;">
+                      <select name="whatsapp_code" class="form-control" style="width: 130px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                          <option value="+216" <?php if($whatsapp_code == '+216') echo 'selected'; ?>>🇹🇳 +216</option>
+                          <option value="+33" <?php if($whatsapp_code == '+33') echo 'selected'; ?>>🇫🇷 +33</option>
+                          <option value="+39" <?php if($whatsapp_code == '+39') echo 'selected'; ?>>🇮🇹 +39</option>
+                      </select>
+                      <input type="text" name="whatsapp_num" value="<?php echo htmlspecialchars($whatsapp_num);?>" class="form-control" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" placeholder="Ex: 22 123 456">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
                     <label for="form_adr">Adresse </label>
                     <input id="form_adr" type="text" name="adresse" value="<?php echo $adresse;?>" class="form-control" placeholder="Saisir votre adresse " data-error="Saisir une adresse.">
                     <div class="help-block with-errors"></div>

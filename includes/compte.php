@@ -9,6 +9,18 @@
         $ville		    = villeClient($_SESSION['client_id']);
         $cp		        = cpClient($_SESSION['client_id']);
         $passwordClient	= passwordClient($_SESSION['client_id']);
+
+        $whatsappRaw    = whatsappClient($_SESSION['client_id']);
+        $whatsapp_code = '+216';
+        $whatsapp_num = $whatsappRaw;
+        $supported_codes = ['+216', '+33', '+39'];
+        foreach($supported_codes as $code) {
+            if (strpos($whatsappRaw, $code) === 0) {
+                $whatsapp_code = $code;
+                $whatsapp_num = substr($whatsappRaw, strlen($code));
+                break;
+            }
+        }
         
 	    $variable2='<li class="breadcrumb-item active" aria-current="page"><a href="'.lienCompte().'">'.titrePage(9).'</a></li>';
 	    include("breadcrumb.php");
@@ -24,6 +36,10 @@
 		$adresse=sanitize($_POST['adresse'] ?? '');
 		$ville=sanitize($_POST['ville'] ?? '');
 		$cp=sanitize($_POST['cp'] ?? '');
+
+		$whatsapp_code_post=sanitize($_POST['whatsapp_code'] ?? '');
+		$whatsapp_num_post=sanitize($_POST['whatsapp_num'] ?? '');
+		$whatsapp_post = ($whatsapp_num_post != '') ? $whatsapp_code_post . $whatsapp_num_post : '';
         
 		$req="SELECT * FROM `clients` where `email` ='".$email."' AND id<>'".$_SESSION['client_id']."'";   
 		$res=executeRequete($req);
@@ -31,7 +47,7 @@
 		if($data1 && isset($data1['id']) && $data1['id']!=""){ // compte existe avec l'adresse email 
 		  $erreur="Un compte existe déjà avec cette adresse e-mail!";
 		}else{ // enregistrer les modifications
-		  $req="UPDATE `clients` set `nom`='".$nom."',`prenom`='".$prenom."',`tel`='".$tel."',`adresse`='".$adresse."',`ville`='".$ville."',`code_postale`='".$cp."' where `id` ='".$_SESSION['client_id']."'";
+		  $req="UPDATE `clients` set `nom`='".$nom."',`prenom`='".$prenom."',`tel`='".$tel."',`whatsapp`='".$whatsapp_post."',`adresse`='".$adresse."',`ville`='".$ville."',`code_postale`='".$cp."' where `id` ='".$_SESSION['client_id']."'";
 		  executeRequete($req);
 		  $succes="Informations mises à jour avec succès.";   
 		}

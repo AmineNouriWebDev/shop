@@ -18,6 +18,11 @@
         $ville             = sanitize($_POST['ville']);
         $cp                = sanitize($_POST['cp']);
         $phone             = sanitize($_POST['phone']);
+
+		$whatsapp_code = sanitize($_POST['whatsapp_code'] ?? '');
+		$whatsapp_num = sanitize($_POST['whatsapp_num'] ?? '');
+		$whatsapp_post = ($whatsapp_num != '') ? $whatsapp_code . $whatsapp_num : '';
+
         $commentaire       = sanitize($_POST['commentaire']);
         $frais_livraison   = sanitize($_POST['frais_livraison']);
         $etat              = '1';
@@ -27,9 +32,9 @@
      
         
         $requete = 'INSERT INTO `commandes` 
-        (`idclient`, `date`, `sous_total`, `total`, `moyen_paiement`, `moyen_livraison`, `frais_livraison`, `nom`, `prenom`, `email`, `adresse`, `ville`, `cp`, `tel`, `commentaire`, `remise`, `date_paiement`, `lien_paiement`, `ref_paiement`, `code_envoi`, `code`, `cmd_express`, `etat`) 
+        (`idclient`, `date`, `sous_total`, `total`, `moyen_paiement`, `moyen_livraison`, `frais_livraison`, `nom`, `prenom`, `email`, `adresse`, `ville`, `cp`, `tel`, `whatsapp`, `commentaire`, `remise`, `date_paiement`, `lien_paiement`, `ref_paiement`, `code_envoi`, `code`, `cmd_express`, `etat`) 
         VALUES
-        ("'.$id_client .'", "'. $datec .'", "'. $montant_globale .'", "'. $globale .'", "'. $moyen_paiement .'", "0", "'.$frais_livraison.'", "'. $nom .'","'. $prenom .'","'. $email .'","'. $adresse .'", "'. $ville .'", "'. $cp .'","'. $phone .'", "'. $commentaire .'", "0.000", "", "", "", "", "", "", "'.$etat.'")';
+        ("'.$id_client .'", "'. $datec .'", "'. $montant_globale .'", "'. $globale .'", "'. $moyen_paiement .'", "0", "'.$frais_livraison.'", "'. $nom .'","'. $prenom .'","'. $email .'","'. $adresse .'", "'. $ville .'", "'. $cp .'","'. $phone .'", "'. $whatsapp_post .'", "'. $commentaire .'", "0.000", "", "", "", "", "", "", "'.$etat.'")';
 		$connexion = ouvrirCnx() or die("erreur cnx");
 	    $resultat  = mysqli_query($connexion, $requete);	
 	    $id_cmd    = mysqli_insert_id($connexion);
@@ -284,6 +289,19 @@
         
 } ?>    
     
+<?php
+$whatsappRaw = whatsappClient($id_client);
+$whatsapp_code = '+216';
+$whatsapp_num = $whatsappRaw;
+$supported_codes = ['+216', '+33', '+39'];
+foreach($supported_codes as $code) {
+    if (strpos($whatsappRaw, $code) === 0) {
+        $whatsapp_code = $code;
+        $whatsapp_num = substr($whatsappRaw, strlen($code));
+        break;
+    }
+}
+?>
     <div class="container py-5">
         <form action="<?php echo lienCommande(); ?>" method="post">
             <div class="row">
@@ -309,8 +327,19 @@
                                 <input type="email" name="email" class="cx-input" id="email" placeholder="Email" value="<?php echo emailClient($id_client); ?>" required>
                             </div> 
                             <div class="col-md-6 mb-3">
-                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">N° téléphone</label>
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">N° téléphone <span class="text-danger">*</span></label>
                                 <input type="text" name="phone" class="cx-input" id="phone_number" placeholder="N° téléphone" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Numéro WhatsApp (Optionnel)</label>
+                                <div style="display:flex;">
+                                  <select name="whatsapp_code" class="cx-input" style="width: 110px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; padding: 0 0.5rem; cursor: pointer;">
+                                      <option value="+216" <?php if($whatsapp_code == '+216') echo 'selected'; ?>>🇹🇳 +216</option>
+                                      <option value="+33" <?php if($whatsapp_code == '+33') echo 'selected'; ?>>🇫🇷 +33</option>
+                                      <option value="+39" <?php if($whatsapp_code == '+39') echo 'selected'; ?>>🇮🇹 +39</option>
+                                  </select>
+                                  <input type="text" name="whatsapp_num" value="<?php echo htmlspecialchars($whatsapp_num); ?>" class="cx-input" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" placeholder="Ex: 22 123 456">
+                                </div>
                             </div>
                             <div class="col-12 mb-3">
                                 <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Adresse</label>

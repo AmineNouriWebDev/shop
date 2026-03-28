@@ -68,6 +68,10 @@
 
 		$tel=sanitize($_POST['phone']);
 
+		$whatsapp_code = sanitize($_POST['whatsapp_code'] ?? '');
+		$whatsapp_num = sanitize($_POST['whatsapp_num'] ?? '');
+		$whatsapp = ($whatsapp_num != '') ? $whatsapp_code . $whatsapp_num : '';
+
 		$password=sanitize($_POST['password']);
 
 		$confirm_password=sanitize($_POST['confirm_password']);
@@ -99,7 +103,7 @@
 
 			  $confirm_key=random(40);
 
-			  $req="INSERT INTO `clients`(`nom`,`prenom`,`email`,`tel`,`password`,`date_creation`,`etat`) VALUES('".$nom."','".$prenom."','".$email."','".$tel."','".$password."','".$date_creation."','1')";
+			  $req="INSERT INTO `clients`(`nom`,`prenom`,`email`,`tel`,`whatsapp`,`password`,`date_creation`,`etat`) VALUES('".$nom."','".$prenom."','".$email."','".$tel."','".$whatsapp."','".$password."','".$date_creation."','1')";
 
       //echo $req; exit;
 
@@ -419,6 +423,20 @@
               <div>
                   <label class="cx-label" for="cx-tel">Téléphone</label>
                   <input class="cx-input" type="text" name="phone" id="cx-tel" placeholder="Tél" required>
+              </div>
+          </div>
+          
+          <div class="cx-input-row">
+              <div style="grid-column: 1 / -1;">
+                  <label class="cx-label" for="cx-whatsapp">Numéro WhatsApp (Optionnel)</label>
+                  <div style="display:flex;">
+                      <select name="whatsapp_code" class="cx-input" style="width: 110px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; padding: 0 0.5rem; margin-bottom: 1rem; cursor: pointer;">
+                          <option value="+216">🇹🇳 +216</option>
+                          <option value="+33">🇫🇷 +33</option>
+                          <option value="+39">🇮🇹 +39</option>
+                      </select>
+                      <input type="text" name="whatsapp_num" class="cx-input" id="cx-whatsapp" style="border-top-left-radius: 0; border-bottom-left-radius: 0; margin-bottom: 1rem;" placeholder="Ex: 22 123 456">
+                  </div>
               </div>
           </div>
 

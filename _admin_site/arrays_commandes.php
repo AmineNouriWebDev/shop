@@ -72,6 +72,14 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
         $client_display = afficheChamp($row['client_nom']) . ' ' . afficheChamp($row['client_prenom']) . '<br/>' . afficheChamp($row['client_email']);
     }
 
+    $whatsapp_num = trim($row['whatsapp'] ?? '');
+    if (!empty($whatsapp_num)) {
+        $clean_wa = preg_replace('/[^0-9+]/', '', $whatsapp_num);
+        if ($clean_wa != '') {
+            $client_display .= '<br/><a href="https://wa.me/' . ltrim($clean_wa, '+') . '" target="_blank" style="display:inline-flex; align-items:center; gap:4px; margin-top:4px; padding:2px 6px; background:color-mix(in srgb, #25D366 10%, transparent); border-radius:4px; color:#1ea952; font-weight:600; font-size:0.85rem; text-decoration:none;"><i class="fa fa-whatsapp" style="font-size:1.1em;"></i> ' . htmlspecialchars($whatsapp_num) . '</a>';
+        }
+    }
+
     // Status label with badge
     $status_html = "";
     $badge_class = "badge-info";

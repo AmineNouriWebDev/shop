@@ -37,6 +37,17 @@ function telClient($id)
 	return '';
 }
 
+function whatsappClient($id)
+{
+	$requete = "SELECT * FROM `clients` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	if ($data && isset($data['whatsapp'])) {
+		return afficheChamp($data['whatsapp']);
+	}
+	return '';
+}
+
 function emailClient($id)
 {
 	$requete = "SELECT * FROM `clients` WHERE `id` = '".$id."'";
