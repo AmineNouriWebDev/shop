@@ -49,27 +49,22 @@
                             $requete1 = 'INSERT INTO `messages` (`nom`, `email`, `sujet`,`contenu`, `date`) VALUES ("'.$nom.'", "'.$email.'", "'.$sujet.'", "'.$message.'","'. $date_creation .'")';
                             executeRequete($requete1);
 
-                            // Email logic
-                            $headers  = 'MIME-Version: 1.0' . "\r\n";
-                            $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-                            $sender_email = explode(';', $email_contact)[0];
-                            $headers .= 'From:'.$nom_site.' <'.$sender_email.'>' . "\r\n";
+                            // Génération de l'email pour le client (Template ID 1)
+                            $sujetmail = sujetEmail(1);
+                            $messagemail = str_replace("%%NOMCLT%%", $nom, messageEmail(1));
+
+                            // Payload n8n
+                            $n8n_payload = array(
+                                'event' => 'contact_form',
+                                'customer_name' => $nom,
+                                'customer_email' => $email,
+                                'email_subject' => $sujetmail,
+                                'email_html' => $messagemail,
+                                'contact_subject' => $sujet,
+                                'contact_message' => $message
+                            );
                             
-                            $template_mail='<div style="font-family:sans-serif; padding:20px; background:#f4f4f4;">
-                                <div style="max-width:600px; margin:0 auto; background:#fff; padding:30px; border-radius:10px;">
-                                    <h2 style="color:#5A31F4;">Nouveau Contact</h2>
-                                    <p><strong>Nom:</strong> '.$nom.'</p>
-                                    <p><strong>Email:</strong> '.$email.'</p>
-                                    <p><strong>Sujet:</strong> '.$sujet.'</p>
-                                    <p><strong>Message:</strong><br>'.nl2br($message).'</p>
-                                </div>
-                            </div>';
-                            
-                            $emails = explode(";",$email_contact);
-                            foreach($emails as $admin_email) { 
-                                // On utilise @ pour ignorer l'erreur d'envoi en local (SMTP non configuré)
-                                @mail(trim($admin_email), $sujet, $template_mail, $headers);
-                            }
+                            envoiEmail_n8n($n8n_payload);
                             
                             $succes="Votre message a été bien envoyé.";
                         }
