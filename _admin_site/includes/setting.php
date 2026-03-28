@@ -64,6 +64,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
     $telegram_bot_token  = formReception($_POST['telegram_bot_token'] ?? '');
     $telegram_chat_id    = formReception($_POST['telegram_chat_id'] ?? '');
     $n8n_webhook_url     = formReception($_POST['n8n_webhook_url'] ?? '');
+    $n8n_webhook_mailing = formReception($_POST['n8n_webhook_mailing'] ?? '');
     $google_search_console = formReception($_POST['google_search_console'] ?? '');
     $facebook_pixel      = formReception($_POST['facebook_pixel'] ?? '');
     $theme_color         = formReception($_POST['theme_color'] ?? '#ffffff');
@@ -93,7 +94,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 	`FACEBOOK_APP_ID` = "'. $FACEBOOK_APP_ID .'", `FACEBOOK_APP_SECRET` = "'. $FACEBOOK_APP_SECRET .'",
 	`google_login_enabled` = "'. $google_login_enabled .'", `facebook_login_enabled` = "'. $facebook_login_enabled .'",
 	`cloudflare_site_key` = "'. $cloudflare_site_key .'", `cloudflare_secret_key` = "'. $cloudflare_secret_key .'",
-	`telegram_bot_token` = "'. $telegram_bot_token .'", `telegram_chat_id` = "'. $telegram_chat_id .'", `n8n_webhook_url` = "'. $n8n_webhook_url .'",
+	`telegram_bot_token` = "'. $telegram_bot_token .'", `telegram_chat_id` = "'. $telegram_chat_id .'", `n8n_webhook_url` = "'. $n8n_webhook_url .'", `n8n_webhook_mailing` = "'. $n8n_webhook_mailing .'",
 	`matricule_fiscale` = "'.$matricule_fiscale.'", `rne` = "'.$rne.'", `registre_commerce` = "'.$registre_commerce.'", `banque` = "'.$banque.'",
 	`rib` = "'.$rib.'", `swift` = "'.$swift.'", `code_douane` = "'.$code_douane.'",
 	`google_search_console` = "'.$google_search_console.'", `facebook_pixel` = "'.$facebook_pixel.'", `theme_color` = "'.$theme_color.'", `developer_comment` = "'. mysqli_real_escape_string(ouvrirCnx(), $developer_comment) .'"';
@@ -809,9 +810,19 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 									<div class="row">
 									 <div class="col-md-12">
 									  <div class="form-group">
-										<label>URL Webhook n8n <small style="color:var(--color-text-muted)">(optionnel – si vous utilisez n8n)</small></label>
+										<label>URL Webhook n8n <small style="color:var(--color-text-muted)">(Commandes)</small></label>
 										<div class="controls">
 											<input type="text" name="n8n_webhook_url" value="<?php echo htmlspecialchars($n8n_webhook_url ?? ''); ?>" class="admin-input" placeholder="https://votre-n8n.com/webhook/offipro-new-order">
+										</div>
+									  </div>
+									 </div>
+									</div>
+									<div class="row">
+									 <div class="col-md-12">
+									  <div class="form-group">
+										<label>URL Webhook n8n Mailing <small style="color:var(--color-text-muted)">(Gestion des emails client)</small></label>
+										<div class="controls">
+											<input type="text" name="n8n_webhook_mailing" value="<?php echo htmlspecialchars($n8n_webhook_mailing ?? ''); ?>" class="admin-input" placeholder="https://votre-n8n.com/webhook/facb5... (vide = désactivé)">
 										</div>
 									  </div>
 									 </div>

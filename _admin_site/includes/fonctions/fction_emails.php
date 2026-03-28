@@ -37,9 +37,11 @@ function envoiEmail($id)
  * via le webhook n8n configuré par l'administrateur.
  */
 function envoiEmail_n8n($payload) {
-    if ($_SERVER['SERVER_NAME'] != 'localhost') {
-        $url = 'https://n8n.deposark.com/webhook/facb505f-b203-4a83-bd01-d7f988c83562';
-        $ch = curl_init($url);
+    global $n8n_webhook_mailing;
+    
+    // Vérifier si le webhook est configuré et que nous ne sommes pas en local
+    if ($_SERVER['SERVER_NAME'] != 'localhost' && !empty($n8n_webhook_mailing)) {
+        $ch = curl_init($n8n_webhook_mailing);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
