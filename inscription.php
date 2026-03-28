@@ -114,44 +114,23 @@
 			  // envoi email
             $email_contacts = explode(';',$email_contact);
             
-		    foreach($email_contacts as $emc){
-		        
-			  $headers  = 'MIME-Version: 1.0' . "\r\n";
-
-			  $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-
-			  $headers .= 'From: '.$nom_site.' <'.$emc.'>'. "\r\n";
-
-
 			  $clientmail=$prenom." ".$nom;
 			  $sujetmail=sujetEmail(4);
 			  $messagemail=str_replace("%%NOMCLT%%",$clientmail,messageEmail(4));
 
-			  //$messagemail=str_replace("%%LINKCONFIRM%%",$linkconfirm,$messagemail);
-            
-              if ($_SERVER['SERVER_NAME'] != 'localhost') {
-			      @mail($email, $sujetmail, $messagemail, $headers, "-f ".$emc."");
-              }
-            
-
-			  $sujetmailadmin=sujetEmail(7);
-
-			  $detailsclt="Nom :".$prenom." ".$nom."<br />";
-
-			  $detailsclt.="Tél :".$tel."<br />";
-
-			  $detailsclt.="E-mail :".$email."<br />";
-
-			  $messagemailadmin=str_replace("%%DETAILSCLT%%",$detailsclt,messageEmail(7));
-		        
-		        // Alerte client 
-		    
-
-              if ($_SERVER['SERVER_NAME'] != 'localhost') {
-			      @mail($emc, $sujetmailadmin, $messagemailadmin, $headers, "-f ".$emc."");
-              }
-
-		    }
+              // Préparation du Payload JSON pour n8n
+              $n8n_payload = array(
+                  'event' => 'new_registration',
+                  'customer_name' => $clientmail,
+                  'customer_email' => $email,
+                  'customer_phone' => $tel,
+                  'customer_whatsapp' => $whatsapp,
+                  'email_subject' => $sujetmail,
+                  'email_html' => $messagemail
+              );
+              
+              // Envoi silencieux au webhook n8n sans bloquer l'inscription
+              envoiEmail_n8n($n8n_payload);
 
 
 

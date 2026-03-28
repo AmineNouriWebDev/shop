@@ -32,5 +32,24 @@ function envoiEmail($id)
 	return $email;
 }
 
+/**
+ * Fonction asynchrone pour envoyer des e-mails ou des notifications (Telegram, etc.)
+ * via le webhook n8n configuré par l'administrateur.
+ */
+function envoiEmail_n8n($payload) {
+    if ($_SERVER['SERVER_NAME'] != 'localhost') {
+        $url = 'https://n8n.deposark.com/webhook/facb505f-b203-4a83-bd01-d7f988c83562';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3); // Timeout court pour ne pas ralentir le client
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return $response;
+    }
+    return false;
+}
 
 ?>
