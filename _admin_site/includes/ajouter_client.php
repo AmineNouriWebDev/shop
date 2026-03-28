@@ -5,6 +5,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
         $nom                 = formReception($_POST['nom']);
         $email               = formReception($_POST['email']);
         $tel                 = formReception($_POST['tel']);
+        $whatsapp            = formReception($_POST['whatsapp'] ?? '');
         $adresse             = formReception($_POST['adresse']);
         $ville               = formReception($_POST['ville']);
         $password            = formReception($_POST['password']);
@@ -22,9 +23,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
         if ($data[0] == 0) { 
              
         $requete = "INSERT INTO `clients` 
-        (`nom`, `prenom`, `tel`, `email`, `adresse`, `ville`, `password`,`mpc`, `etat`, `confirm_key`, `date_creation`)
+        (`nom`, `prenom`, `tel`, `whatsapp`, `email`, `adresse`, `ville`, `password`,`mpc`, `etat`, `confirm_key`, `date_creation`)
         VALUES
-        ('". $nom ."', '". $prenom ."','". $tel ."','". $email ."', '". $adresse ."', '". $ville ."','". $password ."','".md5($password)."','". $etat ."','". $confirm_key ."','".$date."')";
+        ('". $nom ."', '". $prenom ."','". $tel ."','". $whatsapp ."','". $email ."', '". $adresse ."', '". $ville ."','". $password ."','".md5($password)."','". $etat ."','". $confirm_key ."','".$date."')";
         //echo $requete; exit();
         $result  = executeRequete($requete);  
   
@@ -87,6 +88,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                     </div>
                                   </div>
                                     </div>
+                                    
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                     <div class="admin-form-group">
+                                        <label>WhatsApp</label>
+                                        <div class="controls">
+                                            <input type="text" name="whatsapp" value="" class="admin-input"> </div>
+                                     </div>
+                                    </div>
+                                  </div>
+                                  
                                   <div class="row">
                                     <div class="col-md-12">
                                     <div class="admin-form-group">

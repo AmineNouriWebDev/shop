@@ -12,6 +12,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ) {
         $tel                 = formReception($_POST['tel']);
         $adresse             = formReception($_POST['adresse']);
         $ville               = formReception($_POST['ville']);
+        $whatsapp            = formReception($_POST['whatsapp'] ?? '');
         $password            = formReception($_POST['password']);
         $etat                = formReception($_POST['etat']);
 
@@ -20,7 +21,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ) {
         $res  = executeRequete($sql);
         $data = mysqli_fetch_array($res);
         if ($data[0] == 0) {       
-          $verif = executeRequete("UPDATE `clients` set `nom`='".$nom."', `prenom`='".$prenom."',`mpc`='".md5($password)."',`password`='".$password."', `tel`='".$tel."', `email`='".$email."', `adresse`='".$adresse."', `ville`='".$ville."', `etat`='".$etat."' WHERE `id`='".$id."'");
+          $verif = executeRequete("UPDATE `clients` set `nom`='".$nom."', `prenom`='".$prenom."', `whatsapp`='".$whatsapp."', `mpc`='".md5($password)."',`password`='".$password."', `tel`='".$tel."', `email`='".$email."', `adresse`='".$adresse."', `ville`='".$ville."', `etat`='".$etat."' WHERE `id`='".$id."'");
           $msg="Client modifié avec succès.";
           phpToastRedirect($msg, 'index.php?r=clients', 'success');
         } else {
@@ -76,6 +77,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ) {
                                             <input type="text" name="tel" value="<?php echo telClient($_GET['id']); ?>" class="admin-input"> </div>
                                     </div>
                                   </div></div>
+
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                     <div class="admin-form-group">
+                                        <label>WhatsApp</label>
+                                        <div class="controls">
+                                            <input type="text" name="whatsapp" value="<?php echo whatsappClient($_GET['id']); ?>" class="admin-input"> </div>
+                                     </div>
+                                    </div>
+                                  </div>
+
                                   <div class="row">
                                     <div class="col-md-12">
                                     <div class="admin-form-group">
