@@ -430,10 +430,8 @@
               <div style="grid-column: 1 / -1;">
                   <label class="cx-label" for="cx-whatsapp">Numéro WhatsApp (Optionnel)</label>
                   <div style="display:flex;">
-                      <select name="whatsapp_code" class="cx-input" style="width: 110px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; padding: 0 0.5rem; margin-bottom: 1rem; cursor: pointer;">
-                          <option value="+216">🇹🇳 +216</option>
-                          <option value="+33">🇫🇷 +33</option>
-                          <option value="+39">🇮🇹 +39</option>
+                      <select name="whatsapp_code" class="cx-input" style="width: 140px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; padding: 0 0.5rem; margin-bottom: 1rem; cursor: pointer;">
+                          <?php include('includes/whatsapp_country_codes.php'); ?>
                       </select>
                       <input type="text" name="whatsapp_num" class="cx-input" id="cx-whatsapp" style="border-top-left-radius: 0; border-bottom-left-radius: 0; margin-bottom: 1rem;" placeholder="Ex: 22 123 456">
                   </div>

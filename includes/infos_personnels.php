@@ -83,10 +83,8 @@
                 <div class="form-group">
                     <label>Numéro WhatsApp (Optionnel)</label>
                     <div style="display:flex;">
-                      <select name="whatsapp_code" class="form-control" style="width: 130px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                          <option value="+216" <?php if($whatsapp_code == '+216') echo 'selected'; ?>>🇹🇳 +216</option>
-                          <option value="+33" <?php if($whatsapp_code == '+33') echo 'selected'; ?>>🇫🇷 +33</option>
-                          <option value="+39" <?php if($whatsapp_code == '+39') echo 'selected'; ?>>🇮🇹 +39</option>
+                      <select name="whatsapp_code" class="form-control" style="width: 140px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                          <?php include('includes/whatsapp_country_codes.php'); ?>
                       </select>
                       <input type="text" name="whatsapp_num" value="<?php echo htmlspecialchars($whatsapp_num);?>" class="form-control" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" placeholder="Ex: 22 123 456">
                     </div>
