@@ -1,7 +1,7 @@
 <?php
 include("include.php");
 $erreur = "";
-if(isset($_POST['action']) && $_POST['action']=="forget" ){
+if(isset($_POST['action']) && $_POST['action']=="reset" ){
   
   $turnstile_valid = true;
   if (!empty($cloudflare_secret_key)) {
@@ -28,56 +28,53 @@ if(isset($_POST['action']) && $_POST['action']=="forget" ){
 
   if (!$turnstile_valid) {
       $erreur = "La vérification anti-spam a échoué. Veuillez réessayer.";
-  } elseif($_POST['login']=="" ){
-    $erreur ="Le champs Adresse e-mail est obligatoire.";
-  }else{
-    $login=sanitize($_POST['login']);
-    
-    $req="SELECT * FROM `clients` where `email` ='".$login."'";
-    //echo $req; exit;
-    $res=executeRequete($req);
-    $data1 = mysqli_fetch_array($res);
-    if($data1 && $data1['id']!=""){ // compte existe
-    
-        // Secure Token Generation
-        $reset_token = random(40);
-        $update_req = "UPDATE `clients` SET `confirm_key`='". $reset_token ."' WHERE `id`='".$data1['id']."'";
-        executeRequete($update_req);
-        
-        $reset_link = "https://offipro.net/reset-password.php?email=" . urlencode($login) . "&token=" . $reset_token;
-        $link_html = '<a href="'.$reset_link.'" style="display:inline-block; padding:10px 20px; background:#5A31F4; color:#fff; text-decoration:none; border-radius:5px;">Réinitialiser mon mot de passe</a>';
-    
-        $clientmail=$data1['prenom']." ".$data1['nom'];
-        $sujetmail=sujetEmail(5);
-        $messagemail=str_replace("%%NOMCLT%%",$clientmail,messageEmail(5));
-        $messagemail=str_replace("%%PASS%%",$link_html,$messagemail);
-        $messagemail=str_replace("%%LOGIN%%",$login,$messagemail);
-    
-        $n8n_payload = array(
-            'event' => 'password_reset',
-            'customer_name' => $clientmail,
-            'customer_email' => $login,
-            'email_subject' => $sujetmail,
-            'email_html' => $messagemail
-        );
-        
-        envoiEmail_n8n($n8n_payload);
-        
-        $msg = "Un lien de réinitialisation a été envoyé à votre adresse e-mail.";
-      ?>
-  <script language="javascript">
-  <!--
-    alert('<?php echo addslashes($msg);?>');
-    window.location = '<?php echo lienAccueil();?>';
-  -->
-  </script>
-  <?php
+  } elseif($_POST['password'] == "" || $_POST['confirm_password'] == "") {
+      $erreur ="Tous les champs sont obligatoires.";
+  } elseif($_POST['password'] !== $_POST['confirm_password']) {
+      $erreur = "Les mots de passe ne correspondent pas.";
+  } else {
+      $token_post = sanitize($_POST['token']);
+      $email_post = sanitize($_POST['email']);
+      $password = sanitize($_POST['password']);
+      $mpc = md5($password);
       
-      }else{ // compte n'existe pas 
-      
-      $erreur ="Il n'existe aucun compte avec cette adresse e-mail!";
+      $req = "SELECT * FROM `clients` WHERE `email` = '".$email_post."' AND `confirm_key` = '".$token_post."'";
+      $res = executeRequete($req);
+      $data1 = mysqli_fetch_array($res);
+      if($data1 && $data1['id'] != "" && $token_post != ""){
+          $update_req = "UPDATE `clients` SET `password`='".$password."', `mpc`='".$mpc."', `confirm_key`='' WHERE `id`='".$data1['id']."'";
+          executeRequete($update_req);
+          
+          $msg = "Votre mot de passe a été réinitialisé avec succès.";
+          ?>
+          <script language="javascript">
+            alert('<?php echo addslashes($msg);?>');
+            window.location = '<?php echo lienConnexion();?>';
+          </script>
+          <?php
+          exit;
+      } else {
+          $erreur = "Le lien de réinitialisation est invalide ou a expiré.";
       }
   }
+}
+
+// Verification GET before displaying form
+$valid_token = false;
+$token = sanitize($_GET['token'] ?? $_POST['token'] ?? '');
+$email_q = sanitize($_GET['email'] ?? $_POST['email'] ?? '');
+
+if($token != "" && $email_q != "") {
+    $req = "SELECT * FROM `clients` WHERE `email` = '".$email_q."' AND `confirm_key` = '".$token."'";
+    $res = executeRequete($req);
+    $data1 = mysqli_fetch_array($res);
+    if($data1 && $data1['id'] != "") {
+        $valid_token = true;
+    } else {
+        $erreur = "Ce lien de réinitialisation est invalide ou a déjà été utilisé.";
+    }
+} else {
+    $erreur = "Lien de réinitialisation invalide ou introuvable.";
 }
 $requete = "SELECT * FROM `site_menu` WHERE `id` = '15'";
 //echo $requete;
@@ -251,8 +248,7 @@ $requete = "SELECT * FROM `site_menu` WHERE `id` = '15'";
   <?php include('includes/feedback.php'); ?>
   <?php include('includes/header-tw.php'); ?>
 
-  <main class="cx-wrap">
-    <?php include('includes/mdp-oublie.php'); ?>
+    <?php include('includes/reset-password.php'); ?>
   </main>
 
   <?php include('includes/footer-tw.php'); ?>
