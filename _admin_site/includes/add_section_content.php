@@ -29,42 +29,52 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 		
 	if (isset($_FILES['image']) && $_FILES['image']['type'] != '') {
 		if ($_FILES['image']['type']=="image/jpeg" || $_FILES['image']['type']=="image/png" || $_FILES['image']['type']=="image/gif" || $_FILES['image']['type']=="image/webp" ){
-			$destination = str_replace(' ', '-', $idc."-section-content-".$_FILES['image']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-
-			copy ($_FILES['image']['tmp_name'], "../media/site/".$destination);
-			$photo = $destination;
-			$requete = 'UPDATE `liste_section_content` set `photo`="'. $photo .'"  WHERE `id`="'.$idc.'"';
-			$result = executeRequete($requete);	
+            $orig_name = pathinfo($_FILES['image']['name'], PATHINFO_FILENAME);
+            $base_name = preg_replace('/[^A-Za-z0-9\-]/', '', $idc."-sc-".time()."-".$orig_name);
+            $dest_base = "../media/site/" . $base_name;
+            $webp_name = convertAndSaveWebP($_FILES['image']['tmp_name'], $dest_base);
+            
+            if($webp_name) {
+                $photo = $webp_name;
+            } else {
+                $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                copy($_FILES['image']['tmp_name'], $dest_base . "." . $ext);
+                $photo = $base_name . "." . $ext;
+            }
+			executeRequete('UPDATE `liste_section_content` set `photo`="'. $photo .'"  WHERE `id`="'.$idc.'"');	
 		}
 	}
 	if (isset($_FILES['photo_mobile']) && $_FILES['photo_mobile']['type'] != '') {
 		if ($_FILES['photo_mobile']['type']=="image/jpeg" || $_FILES['photo_mobile']['type']=="image/png" || $_FILES['photo_mobile']['type']=="image/gif" || $_FILES['photo_mobile']['type']=="image/webp"){
-			$destination = str_replace(' ', '-', $idc."-section-content-mobile-".$_FILES['photo_mobile']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-			move_uploaded_file($_FILES['photo_mobile']['tmp_name'], "../media/site/".$destination);
-			$photo_mobile = $destination;
+            $orig_name = pathinfo($_FILES['photo_mobile']['name'], PATHINFO_FILENAME);
+            $base_name = preg_replace('/[^A-Za-z0-9\-]/', '', $idc."-scm-".time()."-".$orig_name);
+            $dest_base = "../media/site/" . $base_name;
+            $webp_name = convertAndSaveWebP($_FILES['photo_mobile']['tmp_name'], $dest_base);
+            
+            if($webp_name) {
+                $photo_mobile = $webp_name;
+            } else {
+                $ext = pathinfo($_FILES['photo_mobile']['name'], PATHINFO_EXTENSION);
+                move_uploaded_file($_FILES['photo_mobile']['tmp_name'], $dest_base . "." . $ext);
+                $photo_mobile = $base_name . "." . $ext;
+            }
 			executeRequete('UPDATE `liste_section_content` set `photo_mobile`="'. $photo_mobile .'"  WHERE `id`="'.$idc.'"');
 		}
 	}
 	if (isset($_FILES['photo_tablet']) && $_FILES['photo_tablet']['type'] != '') {
 		if ($_FILES['photo_tablet']['type']=="image/jpeg" || $_FILES['photo_tablet']['type']=="image/png" || $_FILES['photo_tablet']['type']=="image/gif" || $_FILES['photo_tablet']['type']=="image/webp"){
-			$destination = str_replace(' ', '-', $idc."-section-content-tablet-".$_FILES['photo_tablet']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-			move_uploaded_file($_FILES['photo_tablet']['tmp_name'], "../media/site/".$destination);
-			$photo_tablet = $destination;
+            $orig_name = pathinfo($_FILES['photo_tablet']['name'], PATHINFO_FILENAME);
+            $base_name = preg_replace('/[^A-Za-z0-9\-]/', '', $idc."-sct-".time()."-".$orig_name);
+            $dest_base = "../media/site/" . $base_name;
+            $webp_name = convertAndSaveWebP($_FILES['photo_tablet']['tmp_name'], $dest_base);
+            
+            if($webp_name) {
+                $photo_tablet = $webp_name;
+            } else {
+                $ext = pathinfo($_FILES['photo_tablet']['name'], PATHINFO_EXTENSION);
+                move_uploaded_file($_FILES['photo_tablet']['tmp_name'], $dest_base . "." . $ext);
+                $photo_tablet = $base_name . "." . $ext;
+            }
 			executeRequete('UPDATE `liste_section_content` set `photo_tablet`="'. $photo_tablet .'"  WHERE `id`="'.$idc.'"');
 		}
 	}

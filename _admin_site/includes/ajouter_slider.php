@@ -5,6 +5,10 @@
 <?php 
 if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 {
+	// Prevent VPS silent crashes on large image conversions
+	ini_set('memory_limit', '512M');
+	set_time_limit(300);
+
 	$titre  	 = formReception($_POST['titre']);
 	$titreen  	 = formReception($_POST['titreen']);
 	$titre1  	 = formReception($_POST['titre1']);
@@ -29,15 +33,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 		
 	if (isset($_FILES['photo']) && $_FILES['photo']['type'] != '') {
 		if ($_FILES['photo']['type']=="image/jpeg" || $_FILES['photo']['type']=="image/png" || $_FILES['photo']['type']=="image/gif" || $_FILES['photo']['type']=="image/webp" ) {
-			$destination = str_replace(' ', '-', $ids."-sliders-".$_FILES['photo']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-
-			copy ($_FILES['photo']['tmp_name'], "../media/sliders/".$destination);
-			$photo = $destination;
+            $orig_name = pathinfo($_FILES['photo']['name'], PATHINFO_FILENAME);
+			$base_name = preg_replace('/[^A-Za-z0-9\-]/', '', $ids."-sliders-".time()."-".$orig_name);
+            $dest_base = "../media/sliders/" . $base_name;
+            $webp_name = convertAndSaveWebP($_FILES['photo']['tmp_name'], $dest_base);
+            
+            if($webp_name) {
+                $photo = $webp_name;
+            } else {
+                $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                copy($_FILES['photo']['tmp_name'], $dest_base . "." . $ext);
+                $photo = $base_name . "." . $ext;
+            }
 			$requete = 'UPDATE `sliders` set `photo`="'. $photo .'" WHERE `id`="'.$ids.'"';
 			$result = executeRequete($requete);	
 		}
@@ -45,16 +52,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 
 		if (isset($_FILES['photo_mobile']) && $_FILES['photo_mobile']['type'] != '') {
 		if ($_FILES['photo_mobile']['type']=="image/jpeg" || $_FILES['photo_mobile']['type']=="image/png" || $_FILES['photo_mobile']['type']=="image/gif" || $_FILES['photo_mobile']['type']=="image/webp" ) {
-	
-			$destination = str_replace(' ', '-', $ids."-sliders-mobile-".$_FILES['photo_mobile']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-
-			copy ($_FILES['photo_mobile']['tmp_name'], "../media/sliders/".$destination);
-			$photo_mobile = $destination;
+            $orig_name = pathinfo($_FILES['photo_mobile']['name'], PATHINFO_FILENAME);
+			$base_name = preg_replace('/[^A-Za-z0-9\-]/', '', $ids."-sliders-mobile-".time()."-".$orig_name);
+            $dest_base = "../media/sliders/" . $base_name;
+            $webp_name = convertAndSaveWebP($_FILES['photo_mobile']['tmp_name'], $dest_base);
+            
+            if($webp_name) {
+                $photo_mobile = $webp_name;
+            } else {
+                $ext = pathinfo($_FILES['photo_mobile']['name'], PATHINFO_EXTENSION);
+                copy($_FILES['photo_mobile']['tmp_name'], $dest_base . "." . $ext);
+                $photo_mobile = $base_name . "." . $ext;
+            }
 			$requete_m = 'UPDATE `sliders` set `photo_mobile`="'. $photo_mobile .'" WHERE `id`="'.$ids.'"';
 			$result_m = executeRequete($requete_m);	
 		}
@@ -62,16 +71,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 
 		if (isset($_FILES['photo_tablet']) && $_FILES['photo_tablet']['type'] != '') {
 		if ($_FILES['photo_tablet']['type']=="image/jpeg" || $_FILES['photo_tablet']['type']=="image/png" || $_FILES['photo_tablet']['type']=="image/gif" || $_FILES['photo_tablet']['type']=="image/webp" ) {
-	
-			$destination = str_replace(' ', '-', $ids."-sliders-tablet-".$_FILES['photo_tablet']['name']);
-			$destination = str_replace('é', 'e', $destination);
-			$destination = str_replace('è', 'e', $destination);
-			$destination = str_replace('à', 'a', $destination);
-			$destination = str_replace('ù', 'u', $destination);
-			$destination = str_replace('ç', 'c', $destination);
-
-			copy ($_FILES['photo_tablet']['tmp_name'], "../media/sliders/".$destination);
-			$photo_tablet = $destination;
+            $orig_name = pathinfo($_FILES['photo_tablet']['name'], PATHINFO_FILENAME);
+			$base_name = preg_replace('/[^A-Za-z0-9\-]/', '', $ids."-sliders-tablet-".time()."-".$orig_name);
+            $dest_base = "../media/sliders/" . $base_name;
+            $webp_name = convertAndSaveWebP($_FILES['photo_tablet']['tmp_name'], $dest_base);
+            
+            if($webp_name) {
+                $photo_tablet = $webp_name;
+            } else {
+                $ext = pathinfo($_FILES['photo_tablet']['name'], PATHINFO_EXTENSION);
+                copy($_FILES['photo_tablet']['tmp_name'], $dest_base . "." . $ext);
+                $photo_tablet = $base_name . "." . $ext;
+            }
 			$requete_t = 'UPDATE `sliders` set `photo_tablet`="'. $photo_tablet .'" WHERE `id`="'.$ids.'"';
 			$result_t = executeRequete($requete_t);	
 		}

@@ -41,33 +41,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	
 	$connexion=ouvrirCnx() or die("erreur cnx");
 
-    // Convert Image to WebP Helper
-    if (!function_exists('convertAndSaveWebP')) {
-        function convertAndSaveWebP($source, $destination_base) {
-            $info = @getimagesize($source);
-            if ($info === false) return false;
-            $mime = $info['mime'];
-            $image = false;
-            if ($mime == 'image/jpeg' && function_exists('imagecreatefromjpeg')) $image = @imagecreatefromjpeg($source);
-            elseif ($mime == 'image/png' && function_exists('imagecreatefrompng')) {
-                $image = @imagecreatefrompng($source);
-                if($image) {
-                    imagepalettetotruecolor($image);
-                    imagealphablending($image, true);
-                    imagesavealpha($image, true);
-                }
-            } elseif ($mime == 'image/webp' && function_exists('imagecreatefromwebp')) $image = @imagecreatefromwebp($source);
-            elseif ($mime == 'image/gif' && function_exists('imagecreatefromgif')) $image = @imagecreatefromgif($source);
-            
-            if ($image !== false && function_exists('imagewebp')) {
-                $final_dest = $destination_base . '.webp';
-                imagewebp($image, $final_dest, 80);
-                imagedestroy($image);
-                return basename($final_dest);
-            }
-            return false;
-        }
-    }
+    // Convert Image to WebP Helper has been moved to fction_db.php
 
 	$requete = 'INSERT INTO `produits`
 	(`titre`,`court_contenu`, `caracteristique`,`remarque`, `link`, `categorie`,`idparent_categ`, `prix_vente`, `prix_promo`, `etat_stock`, `quantite`, `marque`, `type`, `afficher_accueil`,
