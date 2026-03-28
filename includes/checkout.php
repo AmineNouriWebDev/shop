@@ -331,7 +331,7 @@ foreach($supported_codes as $code) {
                                 <input type="text" name="phone" class="cx-input" id="phone_number" placeholder="N° téléphone" value="" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Numéro WhatsApp (Optionnel)</label>
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Numéro WhatsApp (Optionnel, mais recommandé)</label>
                                 <div style="display:flex;">
                                   <select name="whatsapp_code" class="cx-input" style="width: 130px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; padding: 0 0.5rem; cursor: pointer;">
                                       <?php include('includes/whatsapp_country_codes.php'); ?>

@@ -81,7 +81,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>Numéro WhatsApp (Optionnel)</label>
+                    <label>Numéro WhatsApp (Optionnel, mais recommandé)</label>
                     <div style="display:flex;">
                       <select name="whatsapp_code" class="form-control" style="width: 140px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                           <?php include('includes/whatsapp_country_codes.php'); ?>
