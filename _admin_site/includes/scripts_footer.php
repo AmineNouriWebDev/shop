@@ -444,6 +444,55 @@
 					window.confirmDeleteCmd = function(id) {
 					    confirmGlobalDelete('javascript:executeDeleteCmd(' + id + ')');
 					};
+
+					// Stock Toggle AJAX Function
+					window.toggleStock = function(id, btnElement) {
+					    var currentStatus = $(btnElement).data('status');
+					    // If status is 1 (En stock), we change to 0. If 0 (En rupture), we change to 1.
+					    var newStatus = (currentStatus == 1) ? 0 : 1;
+					    
+					    // Quick visual update for instant feedback
+					    if(newStatus == 1) {
+					        $(btnElement).text('En stock').css('background-color', '#10B981').data('status', 1);
+					    } else {
+					        $(btnElement).text('En rupture').css('background-color', '#EF4444').data('status', 0);
+					    }
+
+					    // Disable temporarily
+					    $(btnElement).prop('disabled', true);
+
+					    $.ajax({
+					        url: 'ajax_toggle_stock.php',
+					        type: 'POST',
+					        data: { id: id, status: newStatus },
+					        dataType: 'json',
+					        success: function(response) {
+					            $(btnElement).prop('disabled', false);
+					            if(response.success) {
+					                showToast('Stock mis à jour avec succès.', 'success');
+					            } else {
+					                // Revert on error
+					                showToast('Erreur : ' + response.message, 'error');
+					                if(currentStatus == 1) {
+					                    $(btnElement).text('En stock').css('background-color', '#10B981').data('status', 1);
+					                } else {
+					                    $(btnElement).text('En rupture').css('background-color', '#EF4444').data('status', 0);
+					                }
+					            }
+					        },
+					        error: function() {
+					            $(btnElement).prop('disabled', false);
+					            showToast('Erreur serveur lors de la mise à jour.', 'error');
+					            // Revert on absolute error
+					            if(currentStatus == 1) {
+					                $(btnElement).text('En stock').css('background-color', '#10B981').data('status', 1);
+					            } else {
+					                $(btnElement).text('En rupture').css('background-color', '#EF4444').data('status', 0);
+					            }
+					        }
+					    });
+					};
+
 					$(document).ready(function() {
                 
                         var strt = '<?php if(isset($_GET['start']) && $_GET['start'] != '') echo intval($_GET['start']); else echo '0';  ?>';

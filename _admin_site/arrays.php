@@ -114,6 +114,12 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
         $photo_html = '<img src="../media/products/image_non_dispo.jpg" border="0" width="60" height="60" />';
     }
 
+    // Stock Toggle Button Logic
+    $stock_status = intval($row['etat_stock']);
+    $stock_btn_color = ($stock_status === 1) ? '#10B981' : '#EF4444';
+    $stock_btn_text = ($stock_status === 1) ? 'En stock' : 'En rupture';
+    $stock_btn = '<button onclick="toggleStock('.$row['id'].', this)" data-status="'.$stock_status.'" type="button" class="admin-btn btn-sm" style="padding:0.4rem 0.6rem; width: 85px; font-weight:600; font-size:0.75rem; color:#fff; background-color:'.$stock_btn_color.'; border:none; border-radius:0.375rem; transition:background-color 0.2s;" data-tippy-content="Modifier l\'état du stock">'.$stock_btn_text.'</button>';
+
     $data[] = array(
         "" => '<input type="checkbox" class="sub_chk" data-id="'.$row['id'].'" style="position:relative;left:0;opacity:1">',
         "produit" => $photo_html . ' ' . afficheChamp1($row['titre']),
@@ -123,21 +129,16 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
         "type" => $type_label,
         "datecreation" => auteur_name($row['auteur']).' <br/> '.timestampTDtodate($row['datecreation']),
         "action" => '
-            <div style="display:flex; justify-content:flex-end; gap:0.4rem; flex-wrap:nowrap;">
+            <div style="display:flex; justify-content:flex-end; align-items:center; gap:0.4rem; flex-wrap:nowrap;">
+                ' . $stock_btn . '
                 <a href="index.php?r=mproduits&id='.$row['id'].'&start='.$rowstr.'" class="admin-btn admin-btn-ghost btn-sm" style="padding:0.4rem 0.6rem; color:var(--shop-primary);" data-tippy-content="Modifier">
                     <i class="fa fa-pencil"></i>
                 </a>
                 <a href="index.php?r=addproduitssimilaire&id='.$row['id'].'&start='.$rowstr.'" class="admin-btn admin-btn-ghost btn-sm" style="padding:0.4rem 0.6rem; color:var(--shop-primary);" data-tippy-content="Produits similaires">
                     <i class="fa fa-list"></i>
                 </a>
-                <a href="index.php?r=addproduit&id='.$row['id'].'&start='.$rowstr.'" class="admin-btn admin-btn-ghost btn-sm" style="padding:0.4rem 0.6rem; color:var(--shop-primary);" data-tippy-content="Images">
-                    <i class="fa fa-image"></i>
-                </a>
                 <a href="index.php?r=fichesTechniques&id='.$row['id'].'&start='.$rowstr.'&action=addFiche" class="admin-btn admin-btn-ghost btn-sm" style="padding:0.4rem 0.6rem; color:var(--shop-primary);" data-tippy-content="Fiche technique">
                     <i class="fa fa-file-pdf-o"></i>
-                </a>
-                <a href="index.php?r=facilitePaiement&id='.$row['id'].'&start='.$rowstr.'" class="admin-btn admin-btn-ghost btn-sm" style="padding:0.4rem 0.6rem; color:var(--shop-primary);" data-tippy-content="Paiement">
-                    <i class="fa fa-dollar"></i>
                 </a>
                 <a href="javascript:void(0);" onclick="confirmGlobalDelete(\'index.php?r=produits&id='.$row['id'].'&start='.$rowstr.'&action=supp\')" class="admin-btn admin-btn-ghost btn-sm" style="padding:0.4rem 0.6rem; color:#EF4444;" data-tippy-content="Supprimer">
                     <i class="fa fa-trash"></i>
