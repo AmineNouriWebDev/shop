@@ -190,8 +190,8 @@
 		// Le lien de paiement sera injecté ultérieurement si applicable (Konnect)
 		
 		$payload_client = [
-			'event_type'    => 'order_confirmation',
-			'email_to'      => $email,
+			'event'         => 'order_confirmation',
+			'customer_email'=> $email,
 			'email_subject' => $sujetClient,
 			'email_html'    => $contenuClient,
 			'order_id'      => $id_cmd

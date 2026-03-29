@@ -230,11 +230,11 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
         
         // Envoi asynchrone sécurisé Cloud-to-Cloud via Webhook
         $payload_n8n = [
-            'event_type'    => 'order_status_update',
-            'order_id'      => $id_commande,
-            'email_to'      => $to,
-            'email_subject' => $sujet,
-            'email_html'    => $message_envoi
+            'event'          => 'order_status_update',
+            'order_id'       => $id_commande,
+            'customer_email' => $to,
+            'email_subject'  => $sujet,
+            'email_html'     => $message_envoi
         ];
         envoiEmail_n8n($payload_n8n);
             

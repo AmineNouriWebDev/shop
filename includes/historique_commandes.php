@@ -237,8 +237,8 @@ html.dark .trk-comment, body.dark-mode .trk-comment {
 
 <script>
 (function () {
-    // Endpoint AJAX — chemin absolu depuis la racine du site
-    var endpoint = '/shop/includes/get_tracking.php';
+    // Endpoint AJAX — URL absolue générée dynamiquement par PHP (fonctionne en local et en production)
+    var endpoint = '<?php echo rtrim(htmlspecialchars($chemin_absolu ?? ''), '/'); ?>/includes/get_tracking.php';
 
     // Cache : ne pas refetcher deux fois la même commande
     var fetched = {};
