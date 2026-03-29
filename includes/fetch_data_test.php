@@ -45,17 +45,27 @@ if(isset($_POST["action"])){
         $id  = idBySearchCategBlog($ctg);
         $query .= " AND ( pr.categorie IN (SELECT id FROM categories_blog WHERE idparent='$id' || id='$id') OR pr.idparent_categ IN (SELECT id FROM categories_blog WHERE idparent='$id' || id='$id') )";
     }
+    /* ── Price filter logic (must account for variations) ── */
+    $min_p = isset($_POST["minimum_price"]) ? floatval($_POST["minimum_price"]) : 0;
+    $max_p = isset($_POST["maximum_price"]) ? floatval($_POST["maximum_price"]) : 999999;
+    
+    // Subquery to get the lowest effective price for a product (min of variations or main price)
+    $eff_price_sql = "LEAST(
+        IF(pr.prix_promo > 0, pr.prix_promo, pr.prix_vente),
+        IFNULL((SELECT MIN(IF(v.prix_promo > 0, v.prix_promo, v.prix_vente)) FROM produit_variations v WHERE v.idproduit = pr.id AND v.prix_vente > 0), 999999)
+    )";
+
     if(isset($_POST["promo"]) && $_POST["promo"] != ''){
-        $query .= " AND pr.prix_promo !='0.000'";
-        if(isset($_POST["minimum_price"],$_POST["maximum_price"]) && $_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
-            $query .= " AND pr.prix_promo BETWEEN '".$_POST["minimum_price"]."' AND '".$_POST["maximum_price"]."'";
+        $query .= " AND (pr.prix_promo > 0 OR EXISTS (SELECT 1 FROM produit_variations v WHERE v.idproduit = pr.id AND v.prix_promo > 0))";
+        if($_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
+            $query .= " AND $eff_price_sql BETWEEN '$min_p' AND '$max_p'";
         }
-        $query .= " GROUP BY pr.categorie ORDER BY pr.prix_promo ASC";
+        $query .= " GROUP BY pr.id ORDER BY $eff_price_sql ASC";
     }else{
-        if(isset($_POST["minimum_price"],$_POST["maximum_price"]) && $_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
-            $query .= " AND pr.prix_vente BETWEEN '".$_POST["minimum_price"]."' AND '".$_POST["maximum_price"]."'";
+        if($_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
+            $query .= " AND $eff_price_sql BETWEEN '$min_p' AND '$max_p'";
         }
-        $query .= " GROUP BY pr.id ORDER BY pr.prix_vente ASC";
+        $query .= " GROUP BY pr.id ORDER BY $eff_price_sql ASC";
     }
 
     /* ── Count without LIMIT ── */
@@ -64,7 +74,7 @@ if(isset($_POST["action"])){
     if($current_page > $total_pages) $current_page = $total_pages;
     $offset      = ($current_page - 1) * $per_page;
 
-    /* ── Paginated queries (need two separate result sets) ── */
+    /* ── Paginated queries ── */
     $q_paged   = $query . " LIMIT ".$per_page." OFFSET ".$offset;
     $res_grid  = executeRequete($q_paged);
     $res_list  = executeRequete($q_paged);
@@ -74,19 +84,23 @@ if(isset($_POST["action"])){
     ======================================================== */
     function renderGridCard($id_p, $link_p, $qty){
         $stock = (etatStockProduits($id_p) == '1');
-        /* Calculate promo discount % */
+        
         $g_pv  = prixVenteProduits($id_p);
         $g_pp  = prixPromoProduits($id_p);
         $g_pv_n = floatval(preg_replace('/[^0-9.]/', '', $g_pv));
         $g_pp_n = floatval(preg_replace('/[^0-9.]/', '', $g_pp));
         $g_disc = ($g_pp_n > 0 && $g_pv_n > 0 && $g_pp_n < $g_pv_n) ? round((($g_pv_n - $g_pp_n) / $g_pv_n) * 100) : 0;
+        
+        // Variation check for UI
+        $resVar = executeRequete("SELECT COUNT(*) as cnt FROM produit_variations WHERE idproduit='$id_p' AND prix_vente > 0");
+        $hasVars = ($resVar && mysqli_fetch_assoc($resVar)['cnt'] > 0);
+        $fromLbl = $hasVars ? '<span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; margin-bottom:-2px;">À partir de</span>' : '';
+
         $o = '';
         $o .= '<div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 grid-group-item">';
         $o .= '<div class="prod-card h-100">';
 
         /* Image + Compare overlay */
-        $prodTitle = json_encode(titreProduits($id_p));
-        $prodImg   = json_encode(photoProduitsSite($id_p));
         $o .= '<div class="prod-img-wrap" style="position:relative;">';
         $o .= '<a href="'.lienProduits($link_p).'" tabindex="-1"><img src="'.photoProduitsSite($id_p).'" alt="" loading="lazy"></a>';
         if($g_disc > 0){
@@ -100,30 +114,25 @@ if(isset($_POST["action"])){
             . '</div>';
         $o .= '</div>';
 
-
-
         /* Body */
         $o .= '<div class="prod-body">';
-
-        /* Brand logo */
         if(marquesProduits($id_p) != '0' && ApercuMarque(marquesProduits($id_p)) != ''){
             $o .= '<div class="prod-brand"><img src="'.photoMarqueSite(marquesProduits($id_p)).'" alt=""></div>';
         }
-
-        /* Title */
         $o .= '<a href="'.lienProduits($link_p).'" class="prod-title">'.titreProduits($id_p).'</a>';
-
-        /* Stock */
         $o .= $stock
             ? '<p class="prod-stock in-stock"><i class="fa fa-circle"></i> En Stock</p>'
             : '<p class="prod-stock out-stock"><i class="fa fa-circle"></i> En Rupture</p>';
 
         /* Price */
-        if(prixPromoProduits($id_p) != '0.000'){
-            $o .= '<div class="prod-price"><span class="price-main">'.prixPromoProduits($id_p).' DT</span><span class="price-old">'.prixVenteProduits($id_p).' DT</span></div>';
+        $o .= '<div class="prod-price">';
+        $o .= $fromLbl;
+        if($g_pp_n > 0){
+            $o .= '<span class="price-main">'.$g_pp.' <small>DT TTC</small></span><span class="price-old">'.$g_pv.' DT</span>';
         }else{
-            $o .= '<div class="prod-price"><span class="price-main">'.prixVenteProduits($id_p).' DT</span></div>';
+            $o .= '<span class="price-main">'.$g_pv.' <small>DT TTC</small></span>';
         }
+        $o .= '</div>';
 
         /* Buttons */
         $o .= '<div class="prod-btns">';
@@ -134,21 +143,23 @@ if(isset($_POST["action"])){
             $o .= '<button disabled class="btn-cart btn-cart-disabled">Rupture</button>';
         }
         $o .= '</div>';
-
-        $o .= '</div>'; // prod-body
-        $o .= '</div>'; // prod-card
-        $o .= '</div>'; // col
+        $o .= '</div></div></div>';
         return $o;
     }
 
     function renderListCard($id_p, $link_p, $qty){
         $stock = (etatStockProduits($id_p) == '1');
-        /* Calculate promo discount % */
+        
         $l_pv  = prixVenteProduits($id_p);
         $l_pp  = prixPromoProduits($id_p);
         $l_pv_n = floatval(preg_replace('/[^0-9.]/', '', $l_pv));
         $l_pp_n = floatval(preg_replace('/[^0-9.]/', '', $l_pp));
         $l_disc = ($l_pp_n > 0 && $l_pv_n > 0 && $l_pp_n < $l_pv_n) ? round((($l_pv_n - $l_pp_n) / $l_pv_n) * 100) : 0;
+        
+        $resVar = executeRequete("SELECT COUNT(*) as cnt FROM produit_variations WHERE idproduit='$id_p' AND prix_vente > 0");
+        $hasVars = ($resVar && mysqli_fetch_assoc($resVar)['cnt'] > 0);
+        $fromLbl = $hasVars ? '<span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400;">À partir de </span>' : '';
+
         $o  = '';
         $o .= '<div class="col-12 mb-3 list-item-wrap">';
         $o .= '<div class="prod-list-card">';
@@ -172,11 +183,15 @@ if(isset($_POST["action"])){
         if(marquesProduits($id_p) != '0' && ApercuMarque(marquesProduits($id_p)) != ''){
             $o .= '<div class="list-brand"><img src="'.photoMarqueSite(marquesProduits($id_p)).'" alt=""></div>';
         }
-        if(prixPromoProduits($id_p) != '0.000'){
-            $o .= '<div class="prod-price"><span class="price-main">'.prixPromoProduits($id_p).' DT</span><span class="price-old">'.prixVenteProduits($id_p).' DT</span></div>';
+        
+        $o .= '<div class="prod-price">';
+        $o .= $fromLbl;
+        if($l_pp_n > 0){
+            $o .= '<span class="price-main">'.$l_pp.' <small>DT TTC</small></span><span class="price-old">'.$l_pv.' DT</span>';
         }else{
-            $o .= '<div class="prod-price"><span class="price-main">'.prixVenteProduits($id_p).' DT</span></div>';
+            $o .= '<span class="price-main">'.$l_pv.' <small>DT TTC</small></span>';
         }
+        $o .= '</div>';
         $o .= '<a href="'.lienProduits($link_p).'" class="btn-view w-block"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/></svg> Voir détail</a>';
         if($stock){
             $o .= '<button type="button" onclick="addToCart('.afficheChamp($id_p).','.$qty.')" class="btn-cart w-block"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Ajouter</button>';

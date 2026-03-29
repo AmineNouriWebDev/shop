@@ -116,19 +116,25 @@
 	 
 	 
 	<?php
-    if ((isset($_GET['link']) && $_GET['link'] != '')){ 
-    $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits` WHERE categorie="'.idCategBlog($_GET['link']).'" || idparent_categ="'.idCategBlog($_GET['link']).'"';
+    $categ_cond = (isset($_GET['link']) && $_GET['link'] != '') ? ' (pv.categorie="'.idCategBlog($_GET['link']).'" || pv.idparent_categ="'.idCategBlog($_GET['link']).'") ' : ' 1 ';
+    $p_categ_cond = (isset($_GET['link']) && $_GET['link'] != '') ? ' (p.categorie="'.idCategBlog($_GET['link']).'" || p.idparent_categ="'.idCategBlog($_GET['link']).'") ' : ' 1 ';
+    $promo_cond = (isset($_GET['promo'])) ? ' AND (pv.prix_promo > 0) ' : '';
+    $p_promo_cond = (isset($_GET['promo'])) ? ' AND (v.prix_promo > 0) ' : '';
+
+    $reqprice = "SELECT MIN(val) as min, MAX(val) as max FROM (
+        SELECT prix_vente as val FROM produits pv WHERE $categ_cond $promo_cond AND prix_vente > 0
+        UNION ALL
+        SELECT prix_promo as val FROM produits pv WHERE $categ_cond $promo_cond AND prix_promo > 0
+        UNION ALL
+        SELECT v.prix_vente as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond $p_promo_cond AND v.prix_vente > 0
+        UNION ALL
+        SELECT v.prix_promo as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond $p_promo_cond AND v.prix_promo > 0
+    ) as all_prices";
+    
     $resprice = executeRequete($reqprice);
     $dataprice = mysqli_fetch_array($resprice);
-	}elseif ((isset($_GET['promo']) )){ 
-    $reqprice = 'SELECT MIN(prix_promo) as min, MAX(prix_promo) as max FROM `produits` WHERE prix_promo !="0.000"';
-    $resprice = executeRequete($reqprice);
-    $dataprice = mysqli_fetch_array($resprice);
-	}else{
-    $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits`';
-    $resprice = executeRequete($reqprice);
-    $dataprice = mysqli_fetch_array($resprice);
-	}
+    if (!$dataprice['min']) $dataprice['min'] = 0;
+    if (!$dataprice['max']) $dataprice['max'] = 1000;
     ?>	
 	
  	<script type="text/javascript">

@@ -65,15 +65,24 @@
 	 
 	 
 	<?php
-    if ((isset($_GET['categorie']) && $_GET['categorie'] != '')){ 
-    $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits` WHERE categorie="'.idCategBlog($_GET['categorie']).'" || idparent_categ="'.idCategBlog($_GET['categorie']).'"';
+    $categ_cond = (isset($_GET['categorie']) && $_GET['categorie'] != '') ? ' (pv.categorie="'.idCategBlog($_GET['categorie']).'" || pv.idparent_categ="'.idCategBlog($_GET['categorie']).'") ' : ' 1 ';
+    $p_categ_cond = (isset($_GET['categorie']) && $_GET['categorie'] != '') ? ' (p.categorie="'.idCategBlog($_GET['categorie']).'" || p.idparent_categ="'.idCategBlog($_GET['categorie']).'") ' : ' 1 ';
+
+    $reqprice = "SELECT MIN(val) as min, MAX(val) as max FROM (
+        SELECT prix_vente as val FROM produits pv WHERE $categ_cond AND prix_vente > 0
+        UNION ALL
+        SELECT prix_promo as val FROM produits pv WHERE $categ_cond AND prix_promo > 0
+        UNION ALL
+        SELECT v.prix_vente as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond AND v.prix_vente > 0
+        UNION ALL
+        SELECT v.prix_promo as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond AND v.prix_promo > 0
+    ) as all_prices";
+    
     $resprice = executeRequete($reqprice);
     $dataprice = mysqli_fetch_array($resprice);
-	}else{
-    $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits`';
-    $resprice = executeRequete($reqprice);
-    $dataprice = mysqli_fetch_array($resprice);
-	}
+    // Safety defaults
+    if (!$dataprice['min']) $dataprice['min'] = 0;
+    if (!$dataprice['max']) $dataprice['max'] = 1000;
     ?>	
 	
  	<script type="text/javascript">

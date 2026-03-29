@@ -177,7 +177,7 @@
                                 // 2. OTHER CHARACTERISTICS (RAM, Storage, etc)
                                 // Load all combination variations for JS
                                 $variationsMap = [];
-                                $q_vmap = executeRequete("SELECT valeurs_ids, prix_vente, prix_promo FROM produit_variations WHERE idproduit='$id'");
+                                $q_vmap = executeRequete("SELECT valeurs_ids, prix_vente, prix_promo FROM produit_variations WHERE idproduit='$id' AND (prix_vente > 0 OR prix_promo > 0)");
                                 while ($vmap_row = mysqli_fetch_assoc($q_vmap)) {
                                     $variationsMap[$vmap_row['valeurs_ids']] = [
                                         'pv' => floatval($vmap_row['prix_vente']),
@@ -285,6 +285,71 @@
                                     }
                                 }
 
+                                function updateVariationAvailability() {
+                                    // 1. Get currently selected IDs from ALL groups
+                                    var allGroups = document.querySelectorAll('.variation-group[data-group-id]');
+                                    
+                                    allGroups.forEach(function(group) {
+                                        var groupId = group.getAttribute('data-group-id');
+                                        var buttons = group.querySelectorAll('.variation-btn');
+                                        
+                                        // Get selections from OTHER groups
+                                        var otherSelections = [];
+                                        allGroups.forEach(function(otherGroup) {
+                                            if (otherGroup === group) return;
+                                            var active = otherGroup.querySelector('.variation-btn.btn-dark');
+                                            if (active) otherSelections.push(parseInt(active.getAttribute('data-val-id')));
+                                        });
+
+                                        buttons.forEach(function(btn) {
+                                            var valId = parseInt(btn.getAttribute('data-val-id'));
+                                            
+                                            // A button is available if there exists at least one entry in variationsMap 
+                                            // that contains: THIS valId AND ALL otherSelections AND has a price > 0
+                                            var isAvailable = false;
+                                            for (var key in variationsMap) {
+                                                var entry = variationsMap[key];
+                                                if (entry && (entry.pv > 0 || entry.pp > 0)) { // Must have a price
+                                                    var keyIds = key.split(',').map(Number);
+                                                    if (keyIds.indexOf(valId) !== -1) {
+                                                        // Check if it matches all other selections
+                                                        var matchOthers = true;
+                                                        for (var i=0; i<otherSelections.length; i++) {
+                                                            if (keyIds.indexOf(otherSelections[i]) === -1) {
+                                                                matchOthers = false;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (matchOthers) {
+                                                            isAvailable = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (isAvailable) {
+                                                btn.disabled = false;
+                                                btn.style.display = 'inline-block'; // Show if valid
+                                                btn.style.opacity = '1';
+                                                btn.style.pointerEvents = 'auto';
+                                                btn.style.cursor = 'pointer';
+                                            } else {
+                                                btn.disabled = true;
+                                                btn.style.display = 'none'; // Hide if no combination
+                                                btn.style.opacity = '0.3';
+                                                btn.style.pointerEvents = 'none';
+                                                btn.style.cursor = 'not-allowed';
+                                                // Deselect if it was somehow active (shouldn't happen with normal flow)
+                                                if (btn.classList.contains('btn-dark')) {
+                                                    btn.classList.remove('btn-dark', 'text-white');
+                                                    btn.classList.add('btn-outline-secondary');
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+
                                 function selectVariation(element) {
                                     // UI styling — highlight within same group
                                     let group = element.closest('.variation-group');
@@ -294,6 +359,9 @@
                                     });
                                     element.classList.remove('btn-outline-secondary');
                                     element.classList.add('btn-dark', 'text-white');
+
+                                    // Check availability for other groups after this selection
+                                    updateVariationAvailability();
 
                                     // Try to find a combination price
                                     var combo = lookupCombinationPrice();
@@ -332,11 +400,11 @@
                                 function updatePriceDisplay(pVente, pPromo) {
                                     let priceHtml = '';
                                     if (pPromo > 0 && pPromo < pVente) {
-                                        priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2.8rem; line-height:1.1;">' + pPromo.toFixed(3) + ' <span style="font-size:1.1rem; font-weight:700; color:#111; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size: 22px; font-weight:500;">' + pVente.toFixed(3) + ' DT</span></div>';
+                                        priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">' + pPromo.toFixed(3) + ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size: 24px; font-weight:500; margin-left:10px;">' + pVente.toFixed(3) + ' DT</span></div>';
                                         let savings = (pVente - pPromo).toFixed(3);
                                         priceHtml += '<div style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: inline-block;"><i class="fa fa-tag me-1"></i> Économisez ' + savings + ' DT !</div>';
                                     } else {
-                                        priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2.8rem; line-height:1.1;">' + pVente.toFixed(3) + ' <span style="font-size:1.1rem; font-weight:700; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span></div>';
+                                        priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">' + pVente.toFixed(3) + ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span></div>';
                                     }
                                     
                                     document.querySelectorAll('.price-display').forEach(el => el.innerHTML = priceHtml);
@@ -350,11 +418,14 @@
                                         if (firstColor) firstColor.click();
 
                                         // Auto-select first option in each variation group
-                                        document.querySelectorAll('.variation-group').forEach(function(group) {
+                                        document.querySelectorAll('.variation-group[data-group-id]').forEach(function(group) {
                                             let firstBtn = group.querySelector('.variation-btn');
                                             if (firstBtn) firstBtn.click();
                                         });
-                                    }, 100);
+                                        
+                                        // Run initial availability check
+                                        updateVariationAvailability();
+                                    }, 150);
                                 });
 
                                 </script>
@@ -384,13 +455,13 @@
     	                        
                                 <div class="product-meta-data mb-4">
                                     <div class="price-display">
-                                        <div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2.8rem; line-height:1.1;">
+                                        <div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">
                                             <?php if($PrixPromo != '0.000') { 
-                                                echo $PrixPromo.' <span style="font-size:1.1rem; font-weight:700; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size:22px;font-weight:500;">'.$PrixVente.' DT</span>';
+                                                echo $PrixPromo.' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size:24px;font-weight:500; margin-left:10px;">'.$PrixVente.' DT</span>';
                                                 $economie = number_format($PrixVente - $PrixPromo, 3, '.', '');
                                                 echo '<div class="economisez-tag shadow-sm d-block mt-2"><i class="fa fa-tag me-1"></i> Économisez '.$economie.' DT !</div>';
                                             } else { 
-                                                echo $PrixVente.' <span style="font-size:1.1rem; font-weight:700; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span>'; 
+                                                echo $PrixVente.' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span>'; 
                                             } ?>
                                         </div>
                                     </div>

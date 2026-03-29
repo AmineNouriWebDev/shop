@@ -200,15 +200,39 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
     executeRequete("DELETE FROM `produit_variations` WHERE `idproduit` = '$id'");
     if (isset($_POST['variations']) && is_array($_POST['variations'])) {
         foreach ($_POST['variations'] as $var) {
-            $vids = isset($var['valeurs_ids']) ? trim($var['valeurs_ids']) : '';
+            $vids_raw = isset($var['valeurs_ids']) ? trim($var['valeurs_ids']) : '';
+            if ($vids_raw === '') continue;
+            
+            // Strictly sort IDs numerically to ensure key consistency
+            $vids_arr = explode(',', $vids_raw);
+            $vids_arr = array_map('intval', $vids_arr);
+            sort($vids_arr, SORT_NUMERIC);
+            $vids = implode(',', $vids_arr);
+
             $vlabel = isset($var['label']) ? mysqli_real_escape_string($connexion, $var['label']) : '';
-            if ($vids === '') continue;
-            $pv = isset($var['prix_vente']) && $var['prix_vente'] !== '' ? floatval($var['prix_vente']) : null;
-            $pp = isset($var['prix_promo']) && $var['prix_promo'] !== '' ? floatval($var['prix_promo']) : null;
-            $pv_val = ($pv !== null) ? "'$pv'" : 'NULL';
-            $pp_val = ($pp !== null) ? "'$pp'" : 'NULL';
+            
+            $pv = isset($var['prix_vente']) && $var['prix_vente'] !== '' ? floatval($var['prix_vente']) : 0;
+            $pp = isset($var['prix_promo']) && $var['prix_promo'] !== '' ? floatval($var['prix_promo']) : 0;
+            
+            // Skip variations with no price defined
+            if ($pv <= 0 && $pp <= 0) continue;
+
+            $pv_val = ($pv > 0) ? "'$pv'" : 'NULL';
+            $pp_val = ($pp > 0) ? "'$pp'" : 'NULL';
+            
             $vids_esc = mysqli_real_escape_string($connexion, $vids);
-            mysqli_query($connexion, "INSERT INTO `produit_variations` (`idproduit`,`valeurs_ids`,`label`,`prix_vente`,`prix_promo`) VALUES ('$id','$vids_esc','$vlabel',$pv_val,$pp_val)");
+            $q_var = "INSERT INTO `produit_variations` (`idproduit`,`valeurs_ids`,`label`,`prix_vente`,`prix_promo`) VALUES ('$id','$vids_esc','$vlabel',$pv_val,$pp_val)";
+            mysqli_query($connexion, $q_var) or die(mysqli_error($connexion) . " in " . $q_var);
+        }
+
+        // Sync main product price with the lowest variation (as observed by user)
+        $resMin = mysqli_query($connexion, "SELECT MIN(NULLIF(prix_vente, 0)) as min_v, MIN(NULLIF(prix_promo, 0)) as min_p FROM produit_variations WHERE idproduit = '$id'");
+        if ($rowMin = mysqli_fetch_assoc($resMin)) {
+            if ($rowMin['min_v'] > 0) {
+                $min_v = floatval($rowMin['min_v']);
+                $min_p = floatval($rowMin['min_p'] ?: 0);
+                executeRequete("UPDATE `produits` SET `prix_vente` = '$min_v', `prix_promo` = '$min_p' WHERE `id` = '$id'");
+            }
         }
     }
 
@@ -632,10 +656,21 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                         return combo.map(function(item) { return item.titre + ': ' + item.text; }).join(' / ');
                                     }
 
+                                    var hasLoaded = false;
                                     function updateCaracPrices() {
-                                        var selectedOptions = $('#list-carac').find('option:selected');
+                                        if (hasLoaded) return; // Prevent double trigger on initial load
+                                        
+                                        var $select = $('#list-carac');
+                                        var selectedOptions = $select.find('option:selected');
                                         var container = $('#carac-prices-container');
 
+                                        // If no options selected, or list not yet populated
+                                        if (selectedOptions.length === 0) { 
+                                            container.hide().empty(); 
+                                            return; 
+                                        }
+
+                                        // Preserve current user input before rebuilding
                                         var currentValues = {};
                                         container.find('input[data-combo-key]').each(function() {
                                             var key = $(this).data('combo-key');
@@ -645,9 +680,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                         });
 
                                         container.empty();
-
-                                        if (selectedOptions.length === 0) { container.hide(); return; }
-
                                         buildCaracGroups(selectedOptions);
                                         var combinations = cartesianProduct(caracGroups);
 
@@ -668,8 +700,11 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             var key = makeCombinationKey(combo);
                                             var label = makeCombinationLabel(combo);
                                             var saved = savedVariations[key] || {};
+                                            
+                                            // Priority: 1. Current user input (if any) > 2. Saved DB value > 3. Empty
                                             var pv = (currentValues[key] && currentValues[key].pv !== undefined) ? currentValues[key].pv : (saved.pv != null ? saved.pv : '');
                                             var pp = (currentValues[key] && currentValues[key].pp !== undefined) ? currentValues[key].pp : (saved.pp != null ? saved.pp : '');
+                                            
                                             html += '<tr style="border-bottom: 1px solid #e2e8f0;">';
                                             html += '<td style="padding: 8px; font-weight: 500; font-size:0.85rem;">' + label + '</td>';
                                             html += '<td style="padding: 8px;"><input type="number" step="0.001" min="0" name="variations[' + key + '][prix_vente]" data-combo-key="' + key + '" data-field="pv" class="admin-input" value="' + (pv || '') + '" placeholder="Prix global" style="padding: 6px 10px; height: auto; min-width:100px;"></td>';
@@ -685,24 +720,27 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                         container.html(html);
                                     }
 
-                                    document.addEventListener("DOMContentLoaded", function() {
-                                        var checkJquery = setInterval(function() {
-                                            if (window.jQuery) {
-                                                clearInterval(checkJquery);
-                                                $('#list-carac').on('change', updateCaracPrices);
-                                                const observer = new MutationObserver(function() { updateCaracPrices(); });
-                                                if (document.getElementById('list-carac')) {
-                                                    observer.observe(document.getElementById('list-carac'), { childList: true });
-                                                }
-                                                // Listen to the custom event dispatched by scripts_footer.php after AJAX fills #list-carac
-                                                document.addEventListener('carac-list-ready', function() {
-                                                    updateCaracPrices();
-                                                });
-                                                // Fallback: also try after 1500ms in case the event was already fired
-                                                setTimeout(updateCaracPrices, 1500);
-                                            }
-                                        }, 100);
-                                    });
+                                    // Robust initialization
+                                    function initVariationLogic() {
+                                        if (!window.jQuery) return setTimeout(initVariationLogic, 50);
+                                        
+                                        // Handle manual change
+                                        $('#list-carac').on('change', function() {
+                                            hasLoaded = false; // Allow re-runs on user interaction
+                                            updateCaracPrices();
+                                        });
+
+                                        // Listener for custom event from scripts_footer.php
+                                        document.addEventListener('carac-list-ready', function() {
+                                            updateCaracPrices();
+                                        });
+
+                                        // Fallback: check if already loaded or wait a bit
+                                        setTimeout(updateCaracPrices, 1000);
+                                        setTimeout(updateCaracPrices, 3000); // Safety check
+                                    }
+                                    
+                                    initVariationLogic();
                                     </script>
 									
 									<div class="row">
