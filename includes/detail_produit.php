@@ -898,10 +898,17 @@ function rateProduct(prodId, note) {
                                         <span style="font-size:1rem; font-weight:800; color:var(--shop-primary,#5a31f4);"><?php echo $sp_pv; ?> DT</span>
                                     <?php endif; ?>
                                 </div>
-                                <div style="display:flex; gap:0.375rem; margin-top:0.5rem;">
+                                <div style="display:flex; gap:0.375rem; margin-top:0.5rem; align-items:center;">
                                     <button onclick="addToCart(<?php echo intval($sp_id); ?>,'1')" <?php echo (!$sp_stock ? 'disabled' : ''); ?> style="flex:1; padding:0.45rem 0.5rem; border:none; border-radius:0.625rem; background:var(--shop-primary,#5a31f4); color:#fff; font-size:0.72rem; font-weight:600; cursor:pointer; transition:background 200ms; <?php echo (!$sp_stock ? 'opacity:0.45;cursor:not-allowed;' : ''); ?>">
                                         <i class="fa fa-shopping-cart me-2"></i><?php echo ($sp_stock ? 'Panier' : 'Rupture'); ?>
                                     </button>
+                                    <button class="prod-cmp-btn" data-compare-id="<?php echo intval($sp_id); ?>"
+                                        onclick='compareToggle(<?php echo intval($sp_id); ?>, <?php echo htmlspecialchars(json_encode(titreProduits($sp_id)), ENT_QUOTES); ?>, <?php echo htmlspecialchars(json_encode(photoProduitsSite($sp_id)), ENT_QUOTES); ?>)'
+                                        title="Comparer"
+                                        style="flex-shrink:0; width:38px; height:38px; padding:0; border-radius:0.75rem; justify-content:center; display: flex; align-items: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
+                                    </button>
+
                                     <a href="<?php echo lienProduits($sp_link); ?>" class="sim-card-eye">
                                         <i class="fa fa-eye" style="font-size:0.85rem; color: currentColor;"></i>
                                     </a>

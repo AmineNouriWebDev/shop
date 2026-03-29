@@ -170,6 +170,7 @@
                 },
 				success:function(data){
 					$('.filter_data').html(data);
+                    if(window.compareSyncButtons) window.compareSyncButtons();
 				}
 			});
 		}

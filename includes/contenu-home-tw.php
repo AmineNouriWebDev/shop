@@ -959,16 +959,13 @@
               <img src="<?php echo photoProduitsSite($pid); ?>" alt="<?php echo htmlspecialchars(titreProduits($pid)); ?>" loading="lazy">
             </a>
             <div class="hp-card-overlay">
-              <?php if ($in_stock): ?>
-                <button class="hp-card-overlay-btn primary" onclick="addToCart(<?php echo intval($pid); ?>, '1')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                  Panier
-                </button>
-              <?php endif; ?>
-              <a href="<?php echo lienProduits($plink); ?>" class="hp-card-overlay-btn ghost">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                Voir
-              </a>
+              <button class="hp-card-overlay-btn compare-ol"
+                data-compare-id="<?php echo intval($pid); ?>"
+                onclick='compareToggle(<?php echo intval($pid); ?>, <?php echo htmlspecialchars(json_encode(titreProduits($pid)), ENT_QUOTES); ?>, <?php echo htmlspecialchars(json_encode(photoProduitsSite($pid)), ENT_QUOTES); ?>)'
+                title="Comparer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
+                <span class="cmp-btn-txt">Comparer</span>
+              </button>
             </div>
           </div>
 
@@ -1089,6 +1086,12 @@
                   </span>
                 <?php endif; ?>
             </div>
+            <!-- Bouton comparer sur hp-promo-card (overlay) -->
+            <?php 
+              // Si le lien est un produit (contient /produit/), on peut extraire le lien et essayer de l'associer.
+              // Mais ici on n'a pas forcément l'ID produit. On va l'ignorer si non produit.
+              // En fait, mieux vaut ne pas mettre comparer sur les bannières promo s'il n'y a pas d'ID clair.
+            ?>
           </a>
         <?php endforeach; ?>
       </div>

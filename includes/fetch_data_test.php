@@ -84,13 +84,23 @@ if(isset($_POST["action"])){
         $o .= '<div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 grid-group-item">';
         $o .= '<div class="prod-card h-100">';
 
-        /* Image */
-        $o .= '<a href="'.lienProduits($link_p).'" class="prod-img-wrap" style="position:relative;">';
-        $o .= '<img src="'.photoProduitsSite($id_p).'" alt="" loading="lazy">';
+        /* Image + Compare overlay */
+        $prodTitle = json_encode(titreProduits($id_p));
+        $prodImg   = json_encode(photoProduitsSite($id_p));
+        $o .= '<div class="prod-img-wrap" style="position:relative;">';
+        $o .= '<a href="'.lienProduits($link_p).'" tabindex="-1"><img src="'.photoProduitsSite($id_p).'" alt="" loading="lazy"></a>';
         if($g_disc > 0){
             $o .= '<span style="position:absolute;top:0.6rem;left:0.6rem;background:var(--shop-accent,#ef4444);color:#fff;font-size:0.65rem;font-weight:800;padding:3px 8px;border-radius:99px;z-index:10;">-'.$g_disc.'%</span>';
         }
-        $o .= '</a>';
+        $o .= '<div class="prod-cmp-overlay">'
+            . '<button class="prod-cmp-btn" data-compare-id="'.intval($id_p).'" onclick=\'compareToggle('.intval($id_p).','.htmlspecialchars(json_encode(titreProduits($id_p)), ENT_QUOTES).','.htmlspecialchars(json_encode(photoProduitsSite($id_p)), ENT_QUOTES).')\' title="Comparer">'
+            . '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>'
+            . '<span class="cmp-btn-txt"> Comparer</span>'
+            . '</button>'
+            . '</div>';
+        $o .= '</div>';
+
+
 
         /* Body */
         $o .= '<div class="prod-body">';
@@ -124,6 +134,7 @@ if(isset($_POST["action"])){
             $o .= '<button disabled class="btn-cart btn-cart-disabled">Rupture</button>';
         }
         $o .= '</div>';
+
         $o .= '</div>'; // prod-body
         $o .= '</div>'; // prod-card
         $o .= '</div>'; // col
@@ -307,8 +318,36 @@ if(isset($_POST["action"])){
     height: 170px;
     overflow: hidden;
     flex-shrink: 0;
+    position: relative;
 }
 .prod-img-wrap img { max-height: 140px; max-width: 100%; object-fit: contain; width: auto; }
+
+/* ── Compare overlay on boutique cards ── */
+.prod-cmp-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(18,11,46,0.42);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    z-index: 5;
+}
+.prod-card:hover .prod-cmp-overlay { opacity: 1; }
+.prod-cmp-btn {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.45rem 0.9rem;
+    background: rgba(255,255,255,0.95);
+    color: var(--shop-primary,#5A31F4);
+    border: 1.5px solid var(--shop-primary,#5A31F4);
+    border-radius: 2rem;
+    font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.prod-cmp-btn:hover, .prod-cmp-btn.active {
+    background: var(--shop-primary,#5A31F4);
+    color: #fff;
+}
 
 .prod-body {
     padding: 0.75rem;

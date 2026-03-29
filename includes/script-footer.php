@@ -1,4 +1,6 @@
-<?php echo $tagmanager_body; ?>   
+<?php echo $tagmanager_body; ?>
+
+<?php include(__DIR__ . '/compare-bar.php'); ?>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
