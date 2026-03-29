@@ -332,11 +332,11 @@
                                 function updatePriceDisplay(pVente, pPromo) {
                                     let priceHtml = '';
                                     if (pPromo > 0 && pPromo < pVente) {
-                                        priceHtml = '<div class="fs-1 fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important;">' + pPromo.toFixed(3) + ' DT <span style="text-decoration:line-through;color:#aaa;font-size: 22px;">' + pVente.toFixed(3) + ' DT</span></div>';
+                                        priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2.8rem; line-height:1.1;">' + pPromo.toFixed(3) + ' <span style="font-size:1.1rem; font-weight:700; color:#111; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size: 22px; font-weight:500;">' + pVente.toFixed(3) + ' DT</span></div>';
                                         let savings = (pVente - pPromo).toFixed(3);
                                         priceHtml += '<div style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: inline-block;"><i class="fa fa-tag me-1"></i> Économisez ' + savings + ' DT !</div>';
                                     } else {
-                                        priceHtml = '<div class="fs-1 fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important;">' + pVente.toFixed(3) + ' DT</div>';
+                                        priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2.8rem; line-height:1.1;">' + pVente.toFixed(3) + ' <span style="font-size:1.1rem; font-weight:700; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span></div>';
                                     }
                                     
                                     document.querySelectorAll('.price-display').forEach(el => el.innerHTML = priceHtml);
@@ -384,13 +384,13 @@
     	                        
                                 <div class="product-meta-data mb-4">
                                     <div class="price-display">
-                                        <div class="fs-1 fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2rem;">
+                                        <div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 2.8rem; line-height:1.1;">
                                             <?php if($PrixPromo != '0.000') { 
-                                                echo $PrixPromo.' DT <span style="text-decoration:line-through;color:#aaa;font-size: 22px;">'.$PrixVente.' DT</span>';
+                                                echo $PrixPromo.' <span style="font-size:1.1rem; font-weight:700; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size:22px;font-weight:500;">'.$PrixVente.' DT</span>';
                                                 $economie = number_format($PrixVente - $PrixPromo, 3, '.', '');
-                                                echo '<div class="economisez-tag shadow-sm"><i class="fa fa-tag me-1"></i> Économisez '.$economie.' DT !</div>';
+                                                echo '<div class="economisez-tag shadow-sm d-block mt-2"><i class="fa fa-tag me-1"></i> Économisez '.$economie.' DT !</div>';
                                             } else { 
-                                                echo $PrixVente.' DT'; 
+                                                echo $PrixVente.' <span style="font-size:1.1rem; font-weight:700; color:var(--shop-text-primary);">DT</span>&nbsp;<span style="font-size:1.1rem; font-weight:600; color:var(--shop-text-primary); opacity:0.65;">TTC</span>'; 
                                             } ?>
                                         </div>
                                     </div>
@@ -405,7 +405,6 @@
                                             <span class="qty-plus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer; width:35px; height:35px; background:var(--shop-bg-alt); font-size:1.5rem; line-height:1;" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;">+</span>
                                         </div>
                                     </div>
-                                    
                                     <script>
                                     function handleAddCart(id) {
                                         let qty = document.getElementById('qty') ? document.getElementById('qty').value : 1;
@@ -414,12 +413,116 @@
                                     </script>
 
     								<?php if ($etatStock == '1'){  ?>
-                                    <button type="button" name="addtocart" value="5" class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3 fs-6" style="border-radius:1rem" onclick="handleAddCart(<?php echo $id; ?>);"><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
+                                    <button type="button" name="addtocart" value="5" class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3 fs-6" style="border-radius:1rem" onclick="handleAddCart(<?php echo $id; ?>);"><i class="fa fa-shopping-bag me-2"></i> ACHETER</button>
                                     <?php }else{?>
-    								<button type="button" name="addtocart" value="5" class="btn-secondary-tw w-100 border-0 text-uppercase py-3 fs-6" style="border-radius:1rem" onclick="handleAddCart(<?php echo $id; ?>);" disabled><i class="fa fa-shopping-bag me-2"></i> Ajouter au panier</button>
+    								<button type="button" name="addtocart" value="5" class="btn-secondary-tw w-100 border-0 text-uppercase py-3 fs-6" style="border-radius:1rem" onclick="handleAddCart(<?php echo $id; ?>);" disabled><i class="fa fa-shopping-bag me-2"></i> ACHETER</button>
     								<?php } ?>
-    							</form>
-                            </div>
+    								</form>
+                                <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; width:100%; min-height:40px;">
+                                    <div style="position:relative; display:inline-flex; align-items:center;">
+                                        <?php
+                                        $shareUrl   = urlencode(lienAccueil().''.lienProduits($link));
+                                        $shareTitle  = urlencode($titre);
+                                        $shareDesc   = urlencode(strip_tags(courtContenuProduits($id ?? '')));
+                                        $shareImg    = urlencode($chemin_absolu.'media/products/'.$photo);
+
+                                        /* Facebook */
+                                        $fbLink = 'https://www.facebook.com/dialog/feed?app_id=966242223397117&display=popup&link='.$shareUrl.'&name='.$shareTitle.'&description='.$shareDesc.'&picture='.$shareImg.'&redirect_uri='.$shareUrl;
+                                        /* WhatsApp */
+                                        $waLink = 'https://api.whatsapp.com/send?text='.$shareTitle.'%0A'.$shareImg.'%0A'.$shareUrl;
+                                        /* Instagram */
+                                        $igLink = 'https://www.instagram.com/';
+                                        ?>
+                                        <!-- Popup icons -->
+                                        <div id="shareNetworksList" style="
+                                            display:flex; align-items:center; gap:8px;
+                                            position:absolute; right:100%; top:50%; transform:translate(10px,-50%);
+                                            margin-right:8px; opacity:0; pointer-events:none;
+                                            transition: opacity 0.3s ease, transform 0.3s ease;
+                                            background:var(--shop-surface); padding:7px 12px;
+                                            border-radius:30px; box-shadow:0 4px 20px rgba(0,0,0,0.15);
+                                            border:1px solid var(--shop-border); white-space:nowrap; z-index:200;">
+
+                                            <a href="<?php echo $fbLink; ?>" target="_blank" title="Facebook" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#1877F2;flex-shrink:0;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                            </a>
+                                            <a href="<?php echo $waLink; ?>" target="_blank" title="WhatsApp" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#25D366;flex-shrink:0;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                            </a>
+                                            <a href="<?php echo $igLink; ?>" target="_blank" title="Instagram" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);flex-shrink:0;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                            </a>
+
+                                            <?php
+                                            /* Réseaux BDD */
+                                            $reqShare = executeRequete("SELECT * FROM `social_network` WHERE `etat`='1' ORDER BY `ordre` ASC");
+                                            while ($sn = mysqli_fetch_array($reqShare)) {
+                                                $tt = strtolower(trim(afficheChamp($sn['titre'])));
+                                                if (in_array($tt, ['facebook', 'whatsapp', 'instagram', 'youtube'])) continue;
+
+                                                $sLink = '#';
+                                                if (stripos($tt, 'telegram') !== false) {
+                                                    $sLink = 'https://t.me/share/url?url='.$shareUrl.'&text='.$shareTitle;
+                                                } elseif (stripos($tt, 'twitter') !== false || stripos($tt, 'x.com') !== false) {
+                                                    $sLink = 'https://twitter.com/intent/tweet?url='.$shareUrl.'&text='.$shareTitle;
+                                                } elseif (stripos($tt, 'linkedin') !== false) {
+                                                    $sLink = 'https://www.linkedin.com/sharing/share-offsite/?url='.$shareUrl;
+                                                } else {
+                                                    $sLink = afficheChamp($sn['lien']);
+                                                }
+
+                                                $icStyle = 'display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--shop-bg-alt);border:1px solid var(--shop-border);transition:transform 0.2s;';
+                                                
+                                                if ($sn['type'] == '1') {
+                                                    $iconClass = trim(afficheChamp($sn['icone']));
+                                                    $iconClass = str_replace('fa-brands', 'fa', $iconClass);
+                                                    echo '<a href="'.$sLink.'" target="_blank" title="'.htmlspecialchars(afficheChamp($sn['titre'])).'" style="'.$icStyle.'" onmouseover="this.style.transform=\'scale(1.2)\'" onmouseout="this.style.transform=\'scale(1)\'">'
+                                                       . '<i class="'.$iconClass.' fa-lg" style="color:var(--shop-primary);"></i>'
+                                                       . '</a>';
+                                                } else {
+                                                    $imgNetwork = photoSocialNetworkSite($sn['id']);
+                                                    echo '<a href="'.$sLink.'" target="_blank" title="'.htmlspecialchars(afficheChamp($sn['titre'])).'" style="'.$icStyle.'" onmouseover="this.style.transform=\'scale(1.2)\'" onmouseout="this.style.transform=\'scale(1)\'">'
+                                                       . '<img src="'.$imgNetwork.'" style="width:18px;height:18px;object-fit:contain;" alt="">'
+                                                       . '</a>';
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+
+                                        <!-- Bouton Share -->
+                                        <button type="button" id="shareBtn"
+                                            style="border-radius:30px; padding:7px 18px; background:var(--shop-bg-alt); color:var(--shop-text-primary); border:1px solid var(--shop-border); font-weight:600; box-shadow:0 2px 6px rgba(0,0,0,0.08); cursor:pointer; display:inline-flex; align-items:center; gap:7px; font-size:0.85rem; transition:box-shadow 0.2s;"
+                                            onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.14)'" onmouseout="this.style.boxShadow='0 2px 6px rgba(0,0,0,0.08)'"
+                                            onclick="toggleShareList(event)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                                            Share
+                                        </button>
+                                    </div>
+                                </div>
+                                <script>
+                                function toggleShareList(e) {
+                                    e.stopPropagation();
+                                    var list = document.getElementById('shareNetworksList');
+                                    var open = (list.style.opacity === '1');
+                                    if (open) {
+                                        list.style.opacity = '0';
+                                        list.style.transform = 'translate(10px,-50%)';
+                                        list.style.pointerEvents = 'none';
+                                    } else {
+                                        list.style.opacity = '1';
+                                        list.style.transform = 'translate(0,-50%)';
+                                        list.style.pointerEvents = 'auto';
+                                    }
+                                }
+                                document.addEventListener('click', function(){
+                                    var list = document.getElementById('shareNetworksList');
+                                    if (list) {
+                                        list.style.opacity = '0';
+                                        list.style.transform = 'translate(10px,-50%)';
+                                        list.style.pointerEvents = 'none';
+                                    }
+                                });
+                                </script>
                             
                             
                             <?php 

@@ -76,6 +76,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
     $swift               = formReception($_POST['swift'] ?? '');
     $code_douane         = formReception($_POST['code_douane'] ?? '');
     $developer_comment   = $_POST['developer_comment'] ?? ''; // Pas de formReception strict pour garder le formatage HTML
+    $social_share_token  = formReception($_POST['social_share_token'] ?? '');
     
     
 	if($_POST['version'] != '') $version            = formReception($_POST['version']);
@@ -97,7 +98,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 	`telegram_bot_token` = "'. $telegram_bot_token .'", `telegram_chat_id` = "'. $telegram_chat_id .'", `n8n_webhook_url` = "'. $n8n_webhook_url .'", `n8n_webhook_mailing` = "'. $n8n_webhook_mailing .'",
 	`matricule_fiscale` = "'.$matricule_fiscale.'", `rne` = "'.$rne.'", `registre_commerce` = "'.$registre_commerce.'", `banque` = "'.$banque.'",
 	`rib` = "'.$rib.'", `swift` = "'.$swift.'", `code_douane` = "'.$code_douane.'",
-	`google_search_console` = "'.$google_search_console.'", `facebook_pixel` = "'.$facebook_pixel.'", `theme_color` = "'.$theme_color.'", `developer_comment` = "'. mysqli_real_escape_string(ouvrirCnx(), $developer_comment) .'"';
+	`google_search_console` = "'.$google_search_console.'", `facebook_pixel` = "'.$facebook_pixel.'", `theme_color` = "'.$theme_color.'", `developer_comment` = "'. mysqli_real_escape_string(ouvrirCnx(), $developer_comment) .'",
+    `social_share_token` = "'.$social_share_token.'"';
 
 	$resultat = executeRequete($requete);
 	
@@ -827,6 +829,25 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 									  </div>
 									 </div>
 									</div>
+
+                                    <hr class="border-primary">
+                                    <div class="admin-card-title mt-6 mb-4 text-lg flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:1.25rem;height:1.25rem;color:var(--color-primary)">
+                                          <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                                        </svg>
+                                        Configuration Partage Réseaux Sociaux
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Token / Scripts de partage</label>
+                                                <p class="text-xs text-muted mb-1">Si vous avez des tokens ou des configurations de partage pour vos réseaux sociaux, collez-les ici.</p>
+                                                <div class="controls">
+                                                    <textarea name="social_share_token" class="admin-input" rows="4"><?php echo htmlspecialchars($row['social_share_token'] ?? ''); ?></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="text-xs-right">
                                         <button type="submit" class="admin-btn admin-btn-primary">Enregistrer</button>
