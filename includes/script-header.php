@@ -6,10 +6,10 @@
     <script src="dist/js/dark-mode.js"></script>
 
     <!-- Design tokens CSS (variables --shop-*) -->
-    <link rel="stylesheet" href="dist/css/design-tokens.css?v=1.1" />
+    <link rel="stylesheet" href="dist/css/design-tokens.css?v=1.2" />
 
     <!-- Tailwind CSS v4 compiled output -->
-    <link rel="stylesheet" href="dist/css/main-style.css?v=1.1" />
+    <link rel="stylesheet" href="dist/css/main-style.css?v=1.2" />
 
     <!-- Inter Variable font (2026 premium) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
 	<link rel="stylesheet" href="dist/css/style.css" />
-	<link rel="stylesheet" href="dist/css/shop-cards.css?v=1.1" />
+	<link rel="stylesheet" href="dist/css/shop-cards.css?v=1.2" />
 	<link rel="stylesheet" href="assets/css/sidebar.css" />
 	<link rel="stylesheet" href="assets/css/mobile.css" />
 	
