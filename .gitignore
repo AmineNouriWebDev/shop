@@ -19,8 +19,8 @@ rootdeployment_plan.txt
 # Media zips
 media/products/products.zip
 
-# Tailwind compiled output (generated — not to version)
-dist/css/tailwind.output.css
+# Tailwind compiled output (included for deployment)
+!dist/css/tailwind.output.css
 *.zip
 *.rar
 *.log
