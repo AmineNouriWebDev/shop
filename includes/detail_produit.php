@@ -1,3 +1,4 @@
+<?php // v1.1 Force Sync ?>
 <div class="main main-content-wrapper pb-5 mb-5" style="overflow-x: hidden;">
     <!-- Product Details Area Start -->
     <div class="single-product-area section-padding-20 clearfix pb-5">

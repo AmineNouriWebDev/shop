@@ -1,4 +1,4 @@
-<?php
+<?php // v1.1 Force Sync
 /**
  * ============================================================
  * SHOP — Homepage Sections 2026 (Tailwind)
