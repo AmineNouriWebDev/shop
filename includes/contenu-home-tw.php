@@ -768,7 +768,8 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
                 </button>
                 <a href="<?php echo lienProduits($plink); ?>" class="hp-btn-detail" title="Voir le produit">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Détails
                 </a>
               </div>
             </div>
@@ -978,9 +979,15 @@
                     <?php endif; ?>
                   </div>
                   <?php $ancre = ancreProduits($eq['id']) ?: 'Commander'; ?>
-                  <button class="hp-btn-cart" onclick="addToCart1(<?php echo $eq['id']; ?>, '1')" style="width:100%; font-size:0.8rem;">
-                    <?php echo htmlspecialchars($ancre); ?>
-                  </button>
+                  <div class="hp-card-btn-row" style="margin-top:0.5rem;">
+                    <button class="hp-btn-cart" onclick="addToCart1(<?php echo $eq['id']; ?>, '1')" style="width:100%; font-size:0.8rem;">
+                        <?php echo htmlspecialchars($ancre); ?>
+                    </button>
+                    <a href="<?php echo lienProduits($eq['link']); ?>" class="hp-btn-detail" title="Voir le produit" style="width:100%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        Détails
+                    </a>
+                  </div>
                 </div>
               </div>
             </article>

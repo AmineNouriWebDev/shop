@@ -120,9 +120,10 @@
 .hp-price-old  { font-size: 0.8125rem; color: var(--shop-text-disabled); text-decoration: line-through; }
 .hp-price-saving { font-size: 0.7rem; font-weight: 700; background: var(--shop-accent); color: white; padding: 0.125rem 0.5rem; border-radius: 9999px; }
 
-.hp-card-btn-row { display: flex; gap: 0.5rem; }
+.hp-card-btn-row { display: flex; gap: 0.5rem; flex-direction: column; }
 .hp-btn-cart {
-  flex: 1;
+  flex: 0 0 auto;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,10 +144,17 @@
 .hp-btn-cart:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
 .hp-btn-detail {
-    display: none; /* Desktop detail is via card link */
+    display: flex; /* Visible on Desktop now */
     align-items: center; justify-content: center;
-    border-radius: 0.625rem; border: 1.5px solid var(--shop-border);
-    color: var(--shop-text-secondary); text-decoration: none;
+    gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.625rem; 
+    border: 1.5px solid var(--shop-border, #e5e7eb);
+    background: var(--shop-bg-alt, #f3f4f6);
+    color: var(--shop-text-primary, #111827);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
     transition: all 200ms ease;
 }
 .hp-btn-detail:hover { border-color: var(--shop-primary); color: var(--shop-primary); text-decoration: none; }
@@ -170,7 +178,7 @@
 /* ── Mobile Layout Optimization ── */
 @media (max-width: 1023px) {
   .hp-card-overlay { display: none !important; }
-  .hp-card-btn-row { flex-wrap: wrap; gap: 0.5rem; }
+  .hp-card-btn-row { flex-direction: row; flex-wrap: wrap; gap: 0.5rem; } /* Switch to row for mobile 100/50/50 */
   .hp-btn-cart { flex: 0 0 100% !important; order: 1; height: 44px; font-size: 0.875rem; }
   .hp-btn-detail { 
     flex: 1 !important; order: 3; height: 42px; 
