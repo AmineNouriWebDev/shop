@@ -769,7 +769,7 @@
                 </button>
                 <a href="<?php echo lienProduits($plink); ?>" class="hp-btn-detail" title="Voir le produit">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Détails
+                  <span class="hp-btn-text">Détails</span>
                 </a>
               </div>
             </div>
@@ -985,7 +985,7 @@
                     </button>
                     <a href="<?php echo lienProduits($eq['link']); ?>" class="hp-btn-detail" title="Voir le produit" style="width:100%;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        Détails
+                        <span class="hp-btn-text">Détails</span>
                     </a>
                   </div>
                 </div>

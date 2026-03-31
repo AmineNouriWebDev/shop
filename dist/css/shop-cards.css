@@ -195,6 +195,7 @@
     border: 1.5px solid var(--shop-border, #e5e7eb);
     color: var(--shop-text-primary, #111827);
   }
+  .hp-btn-text { display: none; }
 }
 
 /* ── Badges ── */
