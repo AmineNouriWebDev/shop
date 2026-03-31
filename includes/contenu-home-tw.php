@@ -986,6 +986,9 @@
             <!-- Price + actions -->
             <div class="hp-card-footer">
               <div class="hp-price-row">
+                <?php if (hasVariationPrices($pid)): ?>
+                  <span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; margin-bottom:-2px;">À partir de</span>
+                <?php endif; ?>
                 <?php if ($prix_promo && $prix_promo != '0.000'): ?>
                   <span class="hp-price-main"><?php echo $prix_promo; ?> DT</span>
                   <span class="hp-price-old"><?php echo $prix_vente; ?> DT</span>
@@ -1207,6 +1210,9 @@
                 </div>
                 <div class="hp-card-footer">
                   <div class="hp-price-row">
+                    <?php if (hasVariationPrices($eq['id'])): ?>
+                      <span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; margin-bottom:-2px;">À partir de</span>
+                    <?php endif; ?>
                     <?php if (prixPromoProduits($eq['id']) != '0.000'): ?>
                       <span class="hp-price-main"><?php echo prixPromoProduits($eq['id']); ?> DT</span>
                       <span class="hp-price-old"><?php echo prixVenteProduits($eq['id']); ?> DT</span>

@@ -1095,6 +1095,9 @@ function rateProduct(prodId, note) {
                                     <a href="<?php echo lienProduits($sp_link); ?>" style="color:inherit; text-decoration:none;"><?php echo titreProduits($sp_id); ?></a>
                                 </p>
                                 <div style="display:flex; align-items:baseline; gap:0.4rem; flex-wrap:wrap; margin-top:auto; padding-top:0.375rem;">
+                                    <?php if (hasVariationPrices($sp_id)): ?>
+                                        <span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">À partir de</span>
+                                    <?php endif; ?>
                                     <?php if($sp_pp && $sp_pp != '0.000'): ?>
                                         <span style="font-size:1rem; font-weight:800; color:var(--shop-primary,#5a31f4);"><?php echo $sp_pp; ?> DT</span>
                                         <span style="font-size:0.75rem; color:#9ca3af; text-decoration:line-through;"><?php echo $sp_pv; ?> DT</span>
