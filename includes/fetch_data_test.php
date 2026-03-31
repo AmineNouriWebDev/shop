@@ -84,6 +84,8 @@ if(isset($_POST["action"])){
     ======================================================== */
     function renderGridCard($id_p, $link_p, $qty){
         $stock = (etatStockProduits($id_p) == '1');
+        $titre = titreProduits($id_p);
+        $photo = photoProduitsSite($id_p);
         
         $g_pv  = prixVenteProduits($id_p);
         $g_pp  = prixPromoProduits($id_p);
@@ -91,61 +93,67 @@ if(isset($_POST["action"])){
         $g_pp_n = floatval(preg_replace('/[^0-9.]/', '', $g_pp));
         $g_disc = ($g_pp_n > 0 && $g_pv_n > 0 && $g_pp_n < $g_pv_n) ? round((($g_pv_n - $g_pp_n) / $g_pv_n) * 100) : 0;
         
-        // Variation check for UI
-        $resVar = executeRequete("SELECT COUNT(*) as cnt FROM produit_variations WHERE idproduit='$id_p' AND prix_vente > 0");
-        $hasVars = ($resVar && mysqli_fetch_assoc($resVar)['cnt'] > 0);
+        $hasVars = hasVariationPrices($id_p);
         $fromLbl = $hasVars ? '<span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; margin-bottom:-2px;">À partir de</span>' : '';
 
         $o = '';
-        $o .= '<div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 grid-group-item">';
-        $o .= '<div class="prod-card h-100">';
+        $o .= '<article class="hp-card">';
 
-        /* Image + Compare overlay */
-        $o .= '<div class="prod-img-wrap" style="position:relative;">';
-        $o .= '<a href="'.lienProduits($link_p).'" tabindex="-1"><img src="'.photoProduitsSite($id_p).'" alt="" loading="lazy"></a>';
+        /* Badges */
         if($g_disc > 0){
-            $o .= '<span style="position:absolute;top:0.6rem;left:0.6rem;background:var(--shop-accent,#ef4444);color:#fff;font-size:0.65rem;font-weight:800;padding:3px 8px;border-radius:99px;z-index:10;">-'.$g_disc.'%</span>';
+            $o .= '<div class="hp-badge-abs left"><span class="hp-badge hp-badge-promo">-'.$g_disc.'%</span></div>';
         }
-        $o .= '<div class="prod-cmp-overlay">'
-            . '<button class="prod-cmp-btn" data-compare-id="'.intval($id_p).'" onclick=\'compareToggle('.intval($id_p).','.htmlspecialchars(json_encode(titreProduits($id_p)), ENT_QUOTES).','.htmlspecialchars(json_encode(photoProduitsSite($id_p)), ENT_QUOTES).')\' title="Comparer">'
+
+        /* Image + Overlay */
+        $o .= '<div class="hp-card-img-wrap">';
+        $o .= '<a href="'.lienProduits($link_p).'" tabindex="-1"><img src="'.$photo.'" alt="'.htmlspecialchars($titre).'" loading="lazy"></a>';
+        $o .= '<div class="hp-card-overlay">';
+        $o .= '<button class="hp-card-overlay-btn ghost compare-ol" data-compare-id="'.intval($id_p).'" onclick=\'compareToggle('.intval($id_p).','.htmlspecialchars(json_encode($titre), ENT_QUOTES).','.htmlspecialchars(json_encode($photo), ENT_QUOTES).')\' title="Comparer">'
             . '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>'
             . '<span class="cmp-btn-txt"> Comparer</span>'
-            . '</button>'
-            . '</div>';
+            . '</button>';
+        $o .= '</div>';
         $o .= '</div>';
 
         /* Body */
-        $o .= '<div class="prod-body">';
+        $o .= '<div class="hp-card-body">';
         if(marquesProduits($id_p) != '0' && ApercuMarque(marquesProduits($id_p)) != ''){
-            $o .= '<div class="prod-brand"><img src="'.photoMarqueSite(marquesProduits($id_p)).'" alt=""></div>';
+            $o .= '<div class="hp-card-brand"><img src="'.photoMarqueSite(marquesProduits($id_p)).'" alt="" style="max-height:18px; max-width:70px; object-fit:contain; vertical-align:middle;"></div>';
         }
-        $o .= '<a href="'.lienProduits($link_p).'" class="prod-title">'.titreProduits($id_p).'</a>';
-        $o .= $stock
-            ? '<p class="prod-stock in-stock"><i class="fa fa-circle"></i> En Stock</p>'
-            : '<p class="prod-stock out-stock"><i class="fa fa-circle"></i> En Rupture</p>';
+        $o .= '<div class="hp-card-name"><a href="'.lienProduits($link_p).'">'.$titre.'</a></div>';
 
-        /* Price */
-        $o .= '<div class="prod-price">';
+        /* Footer */
+        $o .= '<div class="hp-card-footer">';
+        $o .= '<div class="hp-price-row">';
         $o .= $fromLbl;
         if($g_pp_n > 0){
-            $o .= '<span class="price-main">'.$g_pp.' <small>DT TTC</small></span><span class="price-old">'.$g_pv.' DT</span>';
+            $o .= '<span class="hp-price-main">'.$g_pp.' DT</span><span class="hp-price-old">'.$g_pv.' DT</span>';
         }else{
-            $o .= '<span class="price-main">'.$g_pv.' <small>DT TTC</small></span>';
+            $o .= '<span class="hp-price-main">'.$g_pv.' DT</span>';
         }
         $o .= '</div>';
 
-        /* Buttons */
-        $o .= '<div class="prod-btns">';
-        $o .= '<a href="'.lienProduits($link_p).'" class="btn-view"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/></svg> Détail</a>';
+        /* Buttons row */
+        $o .= '<div class="hp-card-btn-row">';
         if($stock){
-            $o .= '<button type="button" onclick="addToCart('.afficheChamp($id_p).','.$qty.')" class="btn-cart"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Panier</button>';
+            $o .= '<button type="button" onclick="addToCart('.intval($id_p).',\'1\')" class="hp-btn-cart"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Ajouter</button>';
         }else{
-            $o .= '<button disabled class="btn-cart btn-cart-disabled">Rupture</button>';
+            $o .= '<button disabled class="hp-btn-cart">Rupture</button>';
         }
-        $o .= '</div>';
-        $o .= '</div></div></div>';
+        
+        $o .= '<button class="hp-btn-compare-mobile compare-ol" data-compare-id="'.intval($id_p).'" onclick=\'compareToggle('.intval($id_p).','.htmlspecialchars(json_encode($titre), ENT_QUOTES).','.htmlspecialchars(json_encode($photo), ENT_QUOTES).')\' title="Comparer">'
+            . '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>'
+            . '</button>';
+            
+        $o .= '<a href="'.lienProduits($link_p).'" class="hp-btn-detail" title="Voir le produit"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></a>';
+        
+        $o .= '</div>'; // btn-row
+        $o .= '</div>'; // footer
+        $o .= '</div>'; // body
+        $o .= '</article>';
         return $o;
     }
+
 
     function renderListCard($id_p, $link_p, $qty){
         $stock = (etatStockProduits($id_p) == '1');
@@ -240,11 +248,12 @@ if(isset($_POST["action"])){
     if($total_row > 0){
 
         /* ── GRID view ── */
-        $output .= '<div class="cat-grid-view"><div class="row w-100 m-0">';
+        $output .= '<div class="cat-grid-view"><div class="hp-grid-3">';
         while($row = mysqli_fetch_array($res_grid)){
             $output .= renderGridCard($row['id'], $row['link'], $qty);
         }
         $output .= '</div></div>';
+
 
         /* ── LIST view ── */
         $output .= '<div class="cat-list-view" style="display:none"><div class="row">';
@@ -305,26 +314,25 @@ if(isset($_POST["action"])){
 /* ── Prevent flicker ── */
 .filter_data { min-height: 200px; }
 
-/* ── GRID card ── */
-/* Force consistent card size even with 1-3 products */
-.grid-group-item {
-    min-width: 220px !important;
-    max-width: 25% !important;
-    flex: 1 1 220px !important;
+/* ── GRID view ── */
+.hp-grid-3 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important; /* Spacing requested by user */
+    width: 100% !important;
+    margin: 0 !important;
 }
 
-.prod-card {
-    background: var(--shop-surface,#fff);
-    border: 1.5px solid var(--shop-border,#E0DEFF);
-    border-radius: 1rem;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
+@media (min-width: 640px) {
+    .hp-grid-3 { grid-template-columns: repeat(3, 1fr) !important; gap: 0.75rem !important; }
 }
-.prod-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(90,49,244,.15);
+@media (min-width: 1024px) {
+    .hp-grid-3 { grid-template-columns: repeat(4, 1fr) !important; gap: 1rem !important; }
+}
+
+/* Force cards to take full height for alignment */
+.hp-grid-3 .hp-card {
+    height: 100% !important;
 }
 .prod-img-wrap {
     display: flex; align-items: center; justify-content: center;

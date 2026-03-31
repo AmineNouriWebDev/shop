@@ -1073,50 +1073,72 @@ function rateProduct(prodId, note) {
                         $sp_stock = (etatStockProduits($sp_id) == '1');
                     ?>
                     <div class="px-2 h-100">
-                        <div class="sim-card" style="height:100%; background:var(--shop-surface,#fff); border:1px solid var(--shop-border,#e5e7eb); border-radius:1.25rem; overflow:hidden; display:flex; flex-direction:column; transition:transform 250ms ease, box-shadow 250ms ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                            <!-- Image -->
-                            <a href="<?php echo lienProduits($sp_link); ?>" class="sim-card-img-link" style="display:block; aspect-ratio:1/1; overflow:hidden; background:var(--shop-bg-alt,#f9fafb); position:relative;">
-                                <img src="<?php echo photoProduitsSite($sp_id); ?>" alt="<?php echo htmlspecialchars(titreProduits($sp_id)); ?>" loading="lazy" style="width:100%; height:100%; object-fit:contain; transition:transform 300ms ease;">
-                                
-                                <!-- Floating Compare Button -->
-                                <button type="button" class="prod-cmp-floating-btn" 
-                                    onclick='event.preventDefault(); event.stopPropagation(); compareToggle(<?php echo intval($sp_id); ?>, <?php echo htmlspecialchars(json_encode(titreProduits($sp_id)), ENT_QUOTES); ?>, <?php echo htmlspecialchars(json_encode(photoProduitsSite($sp_id)), ENT_QUOTES); ?>)'
-                                    title="Comparer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
-                                </button>
+                        <article class="hp-card">
+                            <!-- Badges -->
+                            <?php if($sp_disc > 0): ?>
+                                <div class="hp-badge-abs left"><span class="hp-badge hp-badge-promo">-<?php echo $sp_disc; ?>%</span></div>
+                            <?php endif; ?>
 
-                                <?php if($sp_disc > 0): ?>
-                                <span style="position:absolute; top:0.6rem; left:0.6rem; background:var(--shop-accent,#ef4444); color:#fff; font-size:0.65rem; font-weight:800; padding:3px 8px; border-radius:99px;">-<?php echo $sp_disc; ?>%</span>
-                                <?php endif; ?>
-                            </a>
-                            <!-- Body -->
-                            <div style="padding:0.875rem; display:flex; flex-direction:column; gap:0.375rem; flex:1;">
-                                <p style="font-size:0.8rem; font-weight:600; color:var(--shop-text-primary); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0; line-height:1.35;">
-                                    <a href="<?php echo lienProduits($sp_link); ?>" style="color:inherit; text-decoration:none;"><?php echo titreProduits($sp_id); ?></a>
-                                </p>
-                                <div style="display:flex; align-items:baseline; gap:0.4rem; flex-wrap:wrap; margin-top:auto; padding-top:0.375rem;">
-                                    <?php if (hasVariationPrices($sp_id)): ?>
-                                        <span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">À partir de</span>
-                                    <?php endif; ?>
-                                    <?php if($sp_pp && $sp_pp != '0.000'): ?>
-                                        <span style="font-size:1rem; font-weight:800; color:var(--shop-primary,#5a31f4);"><?php echo $sp_pp; ?> DT</span>
-                                        <span style="font-size:0.75rem; color:#9ca3af; text-decoration:line-through;"><?php echo $sp_pv; ?> DT</span>
-                                    <?php else: ?>
-                                        <span style="font-size:1rem; font-weight:800; color:var(--shop-primary,#5a31f4);"><?php echo $sp_pv; ?> DT</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div style="display:flex; gap:0.375rem; margin-top:0.5rem; align-items:center;">
-                                    <button onclick="addToCart(<?php echo intval($sp_id); ?>,'1')" <?php echo (!$sp_stock ? 'disabled' : ''); ?> style="flex:1; padding:0.45rem 0.5rem; border:none; border-radius:0.625rem; background:var(--shop-primary,#5a31f4); color:#fff; font-size:0.72rem; font-weight:600; cursor:pointer; transition:background 200ms; <?php echo (!$sp_stock ? 'opacity:0.45;cursor:not-allowed;' : ''); ?>">
-                                        <i class="fa fa-shopping-cart me-2"></i><?php echo ($sp_stock ? 'Panier' : 'Rupture'); ?>
+                            <!-- Image + Overlay -->
+                            <div class="hp-card-img-wrap">
+                                <a href="<?php echo lienProduits($sp_link); ?>" tabindex="-1">
+                                    <img src="<?php echo photoProduitsSite($sp_id); ?>" alt="<?php echo htmlspecialchars(titreProduits($sp_id)); ?>" loading="lazy">
+                                </a>
+                                <div class="hp-card-overlay">
+                                    <button class="hp-card-overlay-btn ghost compare-ol" 
+                                        data-compare-id="<?php echo intval($sp_id); ?>"
+                                        onclick='compareToggle(<?php echo intval($sp_id); ?>, <?php echo htmlspecialchars(json_encode(titreProduits($sp_id)), ENT_QUOTES); ?>, <?php echo htmlspecialchars(json_encode(photoProduitsSite($sp_id)), ENT_QUOTES); ?>)'
+                                        title="Comparer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
+                                        <span class="cmp-btn-txt"> Comparer</span>
                                     </button>
-                                    
-                                    <a href="<?php echo lienProduits($sp_link); ?>" class="sim-card-eye" title="Voir le produit">
-                                        <i class="fa fa-eye" style="font-size:0.85rem; color: currentColor;"></i>
-                                    </a>
                                 </div>
                             </div>
-                        </div>
+
+                            <!-- Body -->
+                            <div class="hp-card-body">
+                                <?php if(marquesProduits($sp_id) != '0' && ApercuMarque(marquesProduits($sp_id)) != ''): ?>
+                                    <div class="hp-card-brand">
+                                        <img src="<?php echo photoMarqueSite(marquesProduits($sp_id)); ?>" alt="" style="max-height:18px; max-width:70px; object-fit:contain; vertical-align:middle;">
+                                    </div>
+                                <?php endif; ?>
+                                <div class="hp-card-name">
+                                    <a href="<?php echo lienProduits($sp_link); ?>"><?php echo titreProduits($sp_id); ?></a>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="hp-card-footer">
+                                    <div class="hp-price-row">
+                                        <?php if (hasVariationPrices($sp_id)): ?>
+                                            <span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">À partir de</span>
+                                        <?php endif; ?>
+                                        <?php if($sp_pp && $sp_pp != '0.000'): ?>
+                                            <span class="hp-price-main"><?php echo $sp_pp; ?> DT</span>
+                                            <span class="hp-price-old"><?php echo $sp_pv; ?> DT</span>
+                                        <?php else: ?>
+                                            <span class="hp-price-main"><?php echo $sp_pv; ?> DT</span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <div class="hp-card-btn-row">
+                                        <button type="button" onclick="addToCart(<?php echo intval($sp_id); ?>,'1')" <?php echo (!$sp_stock ? 'disabled' : ''); ?> class="hp-btn-cart">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                                            <?php echo ($sp_stock ? 'Ajouter' : 'Rupture'); ?>
+                                        </button>
+                                        
+                                        <button class="hp-btn-compare-mobile compare-ol" data-compare-id="<?php echo intval($sp_id); ?>" onclick='compareToggle(<?php echo intval($sp_id); ?>, <?php echo htmlspecialchars(json_encode(titreProduits($sp_id)), ENT_QUOTES); ?>, <?php echo htmlspecialchars(json_encode(photoProduitsSite($sp_id)), ENT_QUOTES); ?>)' title="Comparer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
+                                        </button>
+
+                                        <a href="<?php echo lienProduits($sp_link); ?>" class="hp-btn-detail" title="Voir le produit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
                     </div>
+
                     <?php endwhile; ?>
                     </div>
                 </div>
