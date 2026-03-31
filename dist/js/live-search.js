@@ -245,13 +245,13 @@
     function init() {
         const basePath = getBasePath();
 
-        // Desktop search form
-        const desktopForm = document.querySelector('.sh-search');
-        if (desktopForm) initSearch(desktopForm, basePath);
-
-        // Mobile search form
-        const mobileForm = document.querySelector('.sh-mobile-search');
-        if (mobileForm) initSearch(mobileForm, basePath);
+        // Find all search forms (Desktop, Mobile bar, or Modal)
+        const searchForms = document.querySelectorAll('.sh-search, .sh-mobile-search, .sh-sm-input-wrap');
+        searchForms.forEach(form => {
+            // Check if already initialized to avoid double wrapping
+            if (form.closest('.ls-wrapper')) return;
+            initSearch(form, basePath);
+        });
     }
 
     if (document.readyState === 'loading') {

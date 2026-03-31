@@ -202,19 +202,43 @@
 .hp-btn-cart:active { transform: scale(0.97); }
 .hp-btn-cart:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-.hp-btn-detail {
+.hp-btn-detail:hover { border-color: var(--shop-primary); color: var(--shop-primary); text-decoration: none; }
+
+.hp-btn-compare-mobile {
+  display: none;
   width: 38px; height: 38px;
   flex-shrink: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0.625rem;
   border: 1.5px solid var(--shop-border);
   color: var(--shop-text-secondary);
-  text-decoration: none;
+  background: none;
+  cursor: pointer;
   transition: all 200ms ease;
 }
-.hp-btn-detail:hover { border-color: var(--shop-primary); color: var(--shop-primary); text-decoration: none; }
+.hp-btn-compare-mobile:hover { border-color: var(--shop-primary); color: var(--shop-primary); }
+.hp-btn-compare-mobile.active { border-color: var(--shop-primary); background: var(--shop-primary); color: white; }
+
+@media (max-width: 1023px) {
+  .hp-card-overlay { display: none !important; }
+  .hp-card-btn-row { flex-wrap: wrap; gap: 0.5rem; }
+  .hp-btn-cart { flex: 0 0 100% !important; order: 1; height: 44px; font-size: 0.875rem; }
+  .hp-btn-detail { 
+    flex: 1 !important; order: 3; height: 42px; 
+    display: flex !important; align-items: center; justify-content: center;
+    background: var(--shop-bg-alt, #f3f4f6) !important;
+    border: 1.5px solid var(--shop-border, #e5e7eb) !important;
+    border-radius: 0.625rem !important;
+    color: var(--shop-text-primary, #111827) !important;
+  }
+  .hp-btn-compare-mobile { 
+    display: flex !important; flex: 1 !important; order: 2; height: 42px; 
+    background: var(--shop-bg-alt, #f3f4f6);
+    border: 1.5px solid var(--shop-border, #e5e7eb);
+    color: var(--shop-text-primary, #111827);
+  }
+}
 
 /* Badge absolute */
 .hp-badge-abs {
@@ -329,12 +353,21 @@
 
 /* ── Category cards ── */
 .hp-categ-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.875rem;
 }
-@media (min-width: 640px)  { .hp-categ-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (min-width: 1024px) { .hp-categ-grid { grid-template-columns: repeat(7, 1fr); } }
+.hp-categ-card {
+    flex: 0 0 calc(33.333% - 0.875rem);
+    min-width: 100px;
+}
+@media (min-width: 640px) {
+    .hp-categ-card { flex: 0 0 calc(25% - 0.875rem); }
+}
+@media (min-width: 1024px) {
+    .hp-categ-card { flex: 0 0 calc(14.28% - 0.875rem); }
+}
 
 .hp-categ-card {
   display: flex;
@@ -1009,6 +1042,12 @@
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                   <?php echo ($in_stock ? 'Ajouter' : 'Rupture'); ?>
+                </button>
+                <button class="hp-btn-compare-mobile compare-ol" 
+                  data-compare-id="<?php echo intval($pid); ?>"
+                  onclick='compareToggle(<?php echo intval($pid); ?>, <?php echo htmlspecialchars(json_encode(titreProduits($pid)), ENT_QUOTES); ?>, <?php echo htmlspecialchars(json_encode(photoProduitsSite($pid)), ENT_QUOTES); ?>)'
+                  title="Comparer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>
                 </button>
                 <a href="<?php echo lienProduits($plink); ?>" class="hp-btn-detail" title="Voir le produit">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>

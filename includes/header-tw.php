@@ -494,7 +494,8 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   @media (max-width: 1023px) {
     .sh-search { display: none; }
     .sh-login  { display: none; }
-    .sh-navbar { display: none; }
+    .sh-navbar { display: none !important; }
+    .sh-header { display: none !important; }
     .sh-mobile-bar { display: flex; }
     .sh-desktop-cart { display: none; }
     /* Hide logo and dark toggle inside the desktop header on mobile — they are shown in .sh-mobile-bar */
@@ -556,7 +557,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     border: 1px solid var(--shop-border);
     border-radius: 1rem;
     box-shadow: 0 8px 40px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.08);
-    z-index: 1200;
+    z-index: 2500;
     overflow: hidden;
     max-height: 480px;
     overflow-y: auto;
@@ -695,6 +696,43 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   @media (max-width: 1023px) {
     .ls-wrapper { max-width: 100%; flex: 1; }
   }
+
+  /* ── SEARCH MODAL ────────────────────────────────── */
+  .sh-search-modal {
+    position: fixed; inset: 0;
+    background: color-mix(in srgb, var(--shop-bg-base) 80%, transparent);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sh-search-modal.active { opacity: 1; visibility: visible; }
+  
+  .sh-search-modal-inner {
+    width: 100%; max-width: 600px; margin: 0 auto;
+    padding: 1.5rem;
+  }
+  .sh-search-modal-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;
+  }
+  .sh-search-modal-close {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--shop-bg-alt); border: none; color: var(--shop-text-primary);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .sh-search-modal-body { position: relative; }
+  .sh-sm-input-wrap {
+    position: relative; background: var(--shop-surface); border: 2px solid var(--shop-primary);
+    border-radius: 1rem; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem;
+    box-shadow: 0 10px 25px color-mix(in srgb, var(--shop-primary) 15%, transparent);
+  }
+  .sh-sm-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-size: 1.125rem; font-weight: 600; color: var(--shop-text-primary); height: 44px;
+    font-family: inherit;
+  }
+  .sh-sm-btn { background: var(--shop-primary); color: white; border: none; width: 44px; height: 44px; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 </style>
 
 <div id="main-header">
@@ -858,14 +896,10 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       <img src="media/site/<?php echo $logo; ?>" alt="Shop" style="max-height:38px; width:auto;">
     </a>
 
-    <!-- Search mobile -->
-    <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-mobile-search">
-      <input type="text" name="recherche" placeholder="Rechercher..." value="<?php echo $search_val; ?>">
-      <input type="hidden" name="action" value="search">
-      <button type="submit" aria-label="Rechercher">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-    </form>
+    <!-- Search mobile trigger -->
+    <button class="sh-search-trigger" onclick="shOpenSearch()" aria-label="Rechercher" style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:var(--shop-primary); color:white; border:none; cursor:pointer; box-shadow:0 4px 10px rgba(90,49,244,0.3);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
 
     <!-- Panier mobile -->
     <a href="<?php echo lienPanier(); ?>" style="position:relative; color:var(--shop-primary); text-decoration:none; padding:0.25rem;">
@@ -971,6 +1005,28 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
 
   </div>
 
+  <!-- ── SEARCH MODAL HTML ── -->
+  <div class="sh-search-modal" id="sh-search-modal">
+    <div class="sh-search-modal-inner">
+      <div class="sh-search-modal-header">
+        <span style="font-weight:800; font-size:1.25rem; color:var(--shop-primary);">Recherche</span>
+        <button class="sh-search-modal-close" onclick="shCloseSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="sh-search-modal-body">
+        <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-sm-input-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-primary);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" name="recherche" class="sh-sm-input" placeholder="Que cherchez-vous ?" autocomplete="off" id="sh-sm-input">
+          <input type="hidden" name="action" value="search">
+          <button type="submit" class="sh-sm-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke="white"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
 </div><!-- #main-header -->
 
 <!-- ── HEADER JAVASCRIPT ── -->
@@ -1005,6 +1061,28 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     if (chevron) chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
   };
 
+  // Search modal Logic
+  var sModal = document.getElementById('sh-search-modal');
+  var sInput = document.getElementById('sh-sm-input');
+  
+  window.shOpenSearch = function() {
+    sModal.classList.add('active');
+    setTimeout(() => sInput.focus(), 300);
+    document.body.style.overflow = 'hidden';
+  };
+  window.shCloseSearch = function() {
+    sModal.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+  // Close on ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && sModal.classList.contains('active')) shCloseSearch();
+  });
+  // Close on Backdrop click
+  sModal.addEventListener('click', function(e) {
+    if (e.target === sModal) shCloseSearch();
+  });
+
   // Close drawer on resize to desktop
   var mq = window.matchMedia('(min-width: 1024px)');
   mq.addEventListener('change', function(e) {
@@ -1015,6 +1093,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       if (drawer)  drawer.classList.remove('open');
       if (overlay) overlay.classList.remove('open');
       if (burger)  burger.classList.remove('open');
+      if (sModal)  shCloseSearch();
       document.body.style.overflow = '';
     }
   });
