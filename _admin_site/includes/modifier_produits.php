@@ -247,8 +247,8 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
         }
         
         // From hidden fallback fields (pre-populated from DB on page load)
-        // New format: var_fallback[N][vids/pv/pp/label] with numeric index N
-        if (isset($_POST['var_fallback']) && is_array($_POST['var_fallback'])) {
+        // Safety: only use fallback if JS UI failed to load and render
+        if ($_POST['variation_data_loaded'] != '1' && isset($_POST['var_fallback']) && is_array($_POST['var_fallback'])) {
             foreach ($_POST['var_fallback'] as $fb) {
                 // Read vids from the dedicated hidden field (not the array key)
                 $vids = isset($fb['vids']) ? trim($fb['vids']) : '';
@@ -260,7 +260,7 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                 sort($vids_arr, SORT_NUMERIC);
                 $vids = implode(',', $vids_arr);
                 
-                // Only use fallback if JS table didn't already provide this variation
+                // Use fallback only to restore existing data if JS failed
                 if (!isset($all_variations[$vids])) {
                     $pv = isset($fb['pv']) && $fb['pv'] !== '' ? floatval($fb['pv']) : 0;
                     $pp = isset($fb['pp']) && $fb['pp'] !== '' ? floatval($fb['pp']) : 0;
@@ -354,13 +354,6 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                             variations[postKey]['prix_promo'] = $(this).val();
                                         });
                                         $('#variations_json').val(JSON.stringify(variations));
-                                        
-                                        // DEBUG INJECTION OVERRIDE TO FORCE TEST PHP LOGIC
-                                        var debugOverride = JSON.parse($('#variations_json').val() || '{}');
-                                        if (debugOverride['3_9']) {
-                                            debugOverride['3_9']['prix_vente'] = '885.000';
-                                        }
-                                        $('#variations_json').val(JSON.stringify(debugOverride));
                                         
                                         return true;
                                     }
