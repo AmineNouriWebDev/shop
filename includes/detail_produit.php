@@ -286,41 +286,37 @@
                                 }
 
                                 function updateVariationAvailability() {
-                                    // 1. Get currently selected IDs from ALL groups
-                                    var allGroups = document.querySelectorAll('.variation-group[data-group-id]');
+                                    // Hierarchical Filtering: Parent groups filter children, not vice versa.
+                                    var allGroups = Array.from(document.querySelectorAll('.variation-group[data-group-id]'));
                                     
-                                    allGroups.forEach(function(group) {
-                                        var groupId = group.getAttribute('data-group-id');
+                                    allGroups.forEach(function(group, groupIndex) {
                                         var buttons = group.querySelectorAll('.variation-btn');
                                         
-                                        // Get selections from OTHER groups
-                                        var otherSelections = [];
-                                        allGroups.forEach(function(otherGroup) {
-                                            if (otherGroup === group) return;
-                                            var active = otherGroup.querySelector('.variation-btn.btn-dark');
-                                            if (active) otherSelections.push(parseInt(active.getAttribute('data-val-id')));
-                                        });
+                                        // Get selections from PREVIOUS groups only (Hierarchical)
+                                        var parentSelections = [];
+                                        for (var i = 0; i < groupIndex; i++) {
+                                            var active = allGroups[i].querySelector('.variation-btn.btn-dark');
+                                            if (active) parentSelections.push(parseInt(active.getAttribute('data-val-id')));
+                                        }
 
                                         buttons.forEach(function(btn) {
                                             var valId = parseInt(btn.getAttribute('data-val-id'));
                                             
-                                            // A button is available if there exists at least one entry in variationsMap 
-                                            // that contains: THIS valId AND ALL otherSelections AND has a price > 0
+                                            // Available if there's a variation with THIS val AND ALL parents
                                             var isAvailable = false;
                                             for (var key in variationsMap) {
                                                 var entry = variationsMap[key];
-                                                if (entry && (entry.pv > 0 || entry.pp > 0)) { // Must have a price
+                                                if (entry && (entry.pv > 0 || entry.pp > 0)) {
                                                     var keyIds = key.split(',').map(Number);
                                                     if (keyIds.indexOf(valId) !== -1) {
-                                                        // Check if it matches all other selections
-                                                        var matchOthers = true;
-                                                        for (var i=0; i<otherSelections.length; i++) {
-                                                            if (keyIds.indexOf(otherSelections[i]) === -1) {
-                                                                matchOthers = false;
+                                                        var matchParents = true;
+                                                        for (var k=0; k<parentSelections.length; k++) {
+                                                            if (keyIds.indexOf(parentSelections[k]) === -1) {
+                                                                matchParents = false;
                                                                 break;
                                                             }
                                                         }
-                                                        if (matchOthers) {
+                                                        if (matchParents) {
                                                             isAvailable = true;
                                                             break;
                                                         }
@@ -330,23 +326,33 @@
 
                                             if (isAvailable) {
                                                 btn.disabled = false;
-                                                btn.style.display = 'inline-block'; // Show if valid
+                                                btn.style.display = 'inline-block';
                                                 btn.style.opacity = '1';
                                                 btn.style.pointerEvents = 'auto';
                                                 btn.style.cursor = 'pointer';
                                             } else {
                                                 btn.disabled = true;
-                                                btn.style.display = 'none'; // Hide if no combination
+                                                btn.style.display = 'none';
                                                 btn.style.opacity = '0.3';
                                                 btn.style.pointerEvents = 'none';
                                                 btn.style.cursor = 'not-allowed';
-                                                // Deselect if it was somehow active (shouldn't happen with normal flow)
                                                 if (btn.classList.contains('btn-dark')) {
                                                     btn.classList.remove('btn-dark', 'text-white');
                                                     btn.classList.add('btn-outline-secondary');
                                                 }
                                             }
                                         });
+
+                                        // AUTO-SELECTION Logic:
+                                        // If no active button in this group, select first available.
+                                        var active = group.querySelector('.variation-btn.btn-dark');
+                                        if (!active) {
+                                            var firstVisible = group.querySelector('.variation-btn:not([style*="display: none"])');
+                                            if (firstVisible) {
+                                                firstVisible.classList.remove('btn-outline-secondary');
+                                                firstVisible.classList.add('btn-dark', 'text-white');
+                                            }
+                                        }
                                     });
                                 }
 
@@ -413,19 +419,31 @@
                                 // Initialize default selections on page load
                                 document.addEventListener('DOMContentLoaded', function() {
                                     setTimeout(function() {
-                                        // Auto-select first color
+                                        // 1. Auto-select first color
                                         let firstColor = document.querySelector('.color-swatch');
-                                        if (firstColor) firstColor.click();
+                                        if (firstColor) {
+                                            firstColor.click();
+                                        }
 
-                                        // Auto-select first option in each variation group
+                                        // 2. Initial Selections for Other Variations
+                                        // We pick the first button in each group without clicking (to avoid multiple clicks)
                                         document.querySelectorAll('.variation-group[data-group-id]').forEach(function(group) {
                                             let firstBtn = group.querySelector('.variation-btn');
-                                            if (firstBtn) firstBtn.click();
+                                            if (firstBtn) {
+                                                firstBtn.classList.remove('btn-outline-secondary');
+                                                firstBtn.classList.add('btn-dark', 'text-white');
+                                            }
                                         });
                                         
-                                        // Run initial availability check
+                                        // 3. Sync everything: Visibility, Pricing, and UI
                                         updateVariationAvailability();
-                                    }, 150);
+                                        
+                                        // Manually trigger a price calculation for the initial state
+                                        let firstAvailableBtn = document.querySelector('.variation-group[data-group-id] .variation-btn.btn-dark');
+                                        if (firstAvailableBtn) {
+                                            selectVariation(firstAvailableBtn);
+                                        }
+                                    }, 200);
                                 });
 
                                 </script>

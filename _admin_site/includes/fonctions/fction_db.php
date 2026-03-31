@@ -6,7 +6,8 @@ function executeRequete($requete)
 	if (!$connexion) {
 		$conn=connexionBDD();
 		$connexion = mysqli_connect($conn['serveur'],$conn['user_bdd'],$conn['user_pass'],$conn['name_bdd']);
-		mysqli_set_charset($connexion, "utf8");
+		mysqli_set_charset($connexion, "utf8mb4");
+		mysqli_query($connexion, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
 	}
 	$resultat = mysqli_query($connexion,$requete) OR die(mysqli_error($connexion).' à la ligne '. __LINE__);
 	return $resultat;
@@ -17,7 +18,8 @@ function ouvrirCnx()
 	if (!$connexion) {
 		$conn=connexionBDD();
 		$connexion = mysqli_connect($conn['serveur'],$conn['user_bdd'],$conn['user_pass'],$conn['name_bdd']);
-		mysqli_set_charset($connexion, "utf8");
+		mysqli_set_charset($connexion, "utf8mb4");
+		mysqli_query($connexion, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
 	}
 	return $connexion;
 }

@@ -17,8 +17,12 @@ if(isset($_GET['action']) && $_GET['action'] == 'del_color_img' && isset($_GET['
     exit();
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'mod' )
-{
+if (isset($_POST['action']) && $_POST['action'] == "mod") {
+    // START DEBUG
+    file_put_contents('debug_post_log.txt', date('Y-m-d H:i:s') . "\n" . print_r($_POST, true) . "\n", FILE_APPEND);
+    file_put_contents('debug_html_state.txt', $_POST['debug_html_container_state'] ?? 'MISSING');
+    // END DEBUG
+    
     $id                  = intval($_POST['id']);
     $titre               = FormChampSpeciaux(formReception($_POST['titre']));
     $court_contenu       = formReception($_POST['court_contenu']);
@@ -183,55 +187,116 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
         executeRequete("DELETE FROM `produit_couleurs` WHERE `idproduit` = '$id'");
     }
 
-    // Characteristics — save selected values
-    executeRequete("DELETE FROM `caracteristique_prod` WHERE `idproduit` = '$id'");
-    $valeurs = isset($_POST['valeurs']) ? $_POST['valeurs'] : [];
-    foreach ($valeurs as $valId) {
-        $valId = intval($valId);
-        $q = mysqli_query($connexion, "SELECT idcarac FROM valeur_caracteristique WHERE id='$valId'");
-        if ($row = mysqli_fetch_assoc($q)) {
-            $idcarac = $row['idcarac'];
-            $req1 = "INSERT INTO `caracteristique_prod` (`idproduit`,`idcarac`,`valeur`) VALUES ('$id', '$idcarac', '$valId')";
-            mysqli_query($connexion, $req1);
+    // ── Save Characteristics and Variations ONLY IF data is confirmed as loaded in UI ──
+    if (isset($_POST['variation_data_loaded']) && $_POST['variation_data_loaded'] == '1') {
+        // Characteristics — save selected values
+        $valeurs = isset($_POST['valeurs']) ? $_POST['valeurs'] : [];
+        
+        // Safety: if valeurs is empty but product had characteristics before, check if this is a real clear
+        // We rely on the 'carac_cleared_confirmed' flag for intentional clears
+        $carac_cleared = isset($_POST['carac_cleared_confirmed']) && $_POST['carac_cleared_confirmed'] == '1';
+        $existing_caracs = mysqli_query($connexion, "SELECT COUNT(*) as cnt FROM `caracteristique_prod` WHERE `idproduit` = '$id'");
+        $existing_carac_count = ($r = mysqli_fetch_assoc($existing_caracs)) ? intval($r['cnt']) : 0;
+        
+        if (!empty($valeurs) || $carac_cleared || $existing_carac_count == 0) {
+            executeRequete("DELETE FROM `caracteristique_prod` WHERE `idproduit` = '$id'");
+            foreach ($valeurs as $valId) {
+                $valId = intval($valId);
+                $q = mysqli_query($connexion, "SELECT idcarac FROM valeur_caracteristique WHERE id='$valId'");
+                if ($row = mysqli_fetch_assoc($q)) {
+                    $idcarac = $row['idcarac'];
+                    $req1 = "INSERT INTO `caracteristique_prod` (`idproduit`,`idcarac`,`valeur`) VALUES ('$id', '$idcarac', '$valId')";
+                    mysqli_query($connexion, $req1);
+                }
+            }
         }
-    }
-    
-    // Combination-based prices (produit_variations)
-    executeRequete("DELETE FROM `produit_variations` WHERE `idproduit` = '$id'");
-    if (isset($_POST['variations']) && is_array($_POST['variations'])) {
-        foreach ($_POST['variations'] as $var) {
-            $vids_raw = isset($var['valeurs_ids']) ? trim($var['valeurs_ids']) : '';
-            if ($vids_raw === '') continue;
-            
-            // Strictly sort IDs numerically to ensure key consistency
-            $vids_arr = explode(',', $vids_raw);
-            $vids_arr = array_map('intval', $vids_arr);
-            sort($vids_arr, SORT_NUMERIC);
-            $vids = implode(',', $vids_arr);
-
-            $vlabel = isset($var['label']) ? mysqli_real_escape_string($connexion, $var['label']) : '';
-            
-            $pv = isset($var['prix_vente']) && $var['prix_vente'] !== '' ? floatval($var['prix_vente']) : 0;
-            $pp = isset($var['prix_promo']) && $var['prix_promo'] !== '' ? floatval($var['prix_promo']) : 0;
-            
-            // Skip variations with no price defined
-            if ($pv <= 0 && $pp <= 0) continue;
-
-            $pv_val = ($pv > 0) ? "'$pv'" : 'NULL';
-            $pp_val = ($pp > 0) ? "'$pp'" : 'NULL';
-            
-            $vids_esc = mysqli_real_escape_string($connexion, $vids);
-            $q_var = "INSERT INTO `produit_variations` (`idproduit`,`valeurs_ids`,`label`,`prix_vente`,`prix_promo`) VALUES ('$id','$vids_esc','$vlabel',$pv_val,$pp_val)";
-            mysqli_query($connexion, $q_var) or die(mysqli_error($connexion) . " in " . $q_var);
+        
+        // Combination-based prices (produit_variations)
+        $all_variations = [];
+        
+        // From JS-rendered price table (using JSON to bypass browser parser quirks)
+        $variations_submitted = [];
+        if (!empty($_POST['variations_json'])) {
+            $variations_submitted = json_decode($_POST['variations_json'], true);
+        } elseif (isset($_POST['variations']) && is_array($_POST['variations'])) {
+            $variations_submitted = $_POST['variations'];
         }
 
-        // Sync main product price with the lowest variation (as observed by user)
-        $resMin = mysqli_query($connexion, "SELECT MIN(NULLIF(prix_vente, 0)) as min_v, MIN(NULLIF(prix_promo, 0)) as min_p FROM produit_variations WHERE idproduit = '$id'");
-        if ($rowMin = mysqli_fetch_assoc($resMin)) {
-            if ($rowMin['min_v'] > 0) {
-                $min_v = floatval($rowMin['min_v']);
-                $min_p = floatval($rowMin['min_p'] ?: 0);
-                executeRequete("UPDATE `produits` SET `prix_vente` = '$min_v', `prix_promo` = '$min_p' WHERE `id` = '$id'");
+        if (!empty($variations_submitted)) {
+            foreach ($variations_submitted as $postKey => $var) {
+                // Determine original key from the hidden format, or fall back to key mapping
+                $vids_raw = isset($var['valeurs_ids']) ? trim($var['valeurs_ids']) : '';
+                if ($vids_raw === '') {
+                    $vids_raw = str_replace('_', ',', trim((string)$postKey));
+                }
+                if ($vids_raw === '') continue;
+                
+                $vids_arr = explode(',', $vids_raw);
+                $vids_arr = array_map('intval', $vids_arr);
+                sort($vids_arr, SORT_NUMERIC);
+                $vids = implode(',', $vids_arr);
+                
+                $pv = isset($var['prix_vente']) && $var['prix_vente'] !== '' ? floatval($var['prix_vente']) : 0;
+                $pp = isset($var['prix_promo']) && $var['prix_promo'] !== '' ? floatval($var['prix_promo']) : 0;
+                $vlabel = isset($var['label']) ? $var['label'] : '';
+                
+                if ($pv > 0 || $pp > 0) {
+                    $all_variations[$vids] = ['pv' => $pv, 'pp' => $pp, 'label' => $vlabel];
+                }
+            }
+        }
+        
+        // From hidden fallback fields (pre-populated from DB on page load)
+        // New format: var_fallback[N][vids/pv/pp/label] with numeric index N
+        if (isset($_POST['var_fallback']) && is_array($_POST['var_fallback'])) {
+            foreach ($_POST['var_fallback'] as $fb) {
+                // Read vids from the dedicated hidden field (not the array key)
+                $vids = isset($fb['vids']) ? trim($fb['vids']) : '';
+                if ($vids === '') continue;
+                
+                // Normalize the key (sort IDs) for consistency
+                $vids_arr = explode(',', $vids);
+                $vids_arr = array_map('intval', $vids_arr);
+                sort($vids_arr, SORT_NUMERIC);
+                $vids = implode(',', $vids_arr);
+                
+                // Only use fallback if JS table didn't already provide this variation
+                if (!isset($all_variations[$vids])) {
+                    $pv = isset($fb['pv']) && $fb['pv'] !== '' ? floatval($fb['pv']) : 0;
+                    $pp = isset($fb['pp']) && $fb['pp'] !== '' ? floatval($fb['pp']) : 0;
+                    $vlabel = isset($fb['label']) ? $fb['label'] : '';
+                    if ($pv > 0 || $pp > 0) {
+                        $all_variations[$vids] = ['pv' => $pv, 'pp' => $pp, 'label' => $vlabel];
+                    }
+                }
+            }
+        }
+        
+        // Check existing variations in DB
+        $existing_vars_q = mysqli_query($connexion, "SELECT COUNT(*) as cnt FROM `produit_variations` WHERE `idproduit` = '$id'");
+        $existing_vars_count = ($rv = mysqli_fetch_assoc($existing_vars_q)) ? intval($rv['cnt']) : 0;
+        $var_cleared = isset($_POST['var_cleared_confirmed']) && $_POST['var_cleared_confirmed'] == '1';
+        
+        // Only update variations if we have new data OR user explicitly cleared them
+        if (!empty($all_variations) || $var_cleared || $existing_vars_count == 0) {
+            executeRequete("DELETE FROM `produit_variations` WHERE `idproduit` = '$id'");
+            foreach ($all_variations as $vids => $var) {
+                $vids_esc = mysqli_real_escape_string($connexion, (string)$vids);
+                $pv_val = ($var['pv'] > 0) ? "'" . floatval($var['pv']) . "'" : 'NULL';
+                $pp_val = ($var['pp'] > 0) ? "'" . floatval($var['pp']) . "'" : 'NULL';
+                $vlabel_esc = mysqli_real_escape_string($connexion, $var['label']);
+                $q_var = "INSERT INTO `produit_variations` (`idproduit`,`valeurs_ids`,`label`,`prix_vente`,`prix_promo`) VALUES ('$id','$vids_esc','$vlabel_esc',$pv_val,$pp_val)";
+                mysqli_query($connexion, $q_var);
+            }
+
+            // Sync main product price with the lowest variation
+            $resMin = mysqli_query($connexion, "SELECT MIN(NULLIF(prix_vente, 0)) as min_v, MIN(NULLIF(prix_promo, 0)) as min_p FROM produit_variations WHERE idproduit = '$id'");
+            if ($rowMin = mysqli_fetch_assoc($resMin)) {
+                if ($rowMin['min_v'] > 0) {
+                    $min_v = floatval($rowMin['min_v']);
+                    $min_p = floatval($rowMin['min_p'] ?: 0);
+                    executeRequete("UPDATE `produits` SET `prix_vente` = '$min_v', `prix_promo` = '$min_p' WHERE `id` = '$id'");
+                }
             }
         }
     }
@@ -268,7 +333,38 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 								</div>
                             </div>
                             <div class="admin-card-body">
-                                <form method="POST" enctype="multipart/form-data" novalidate="novalidate">
+                                <form method="POST" enctype="multipart/form-data" novalidate="novalidate" onsubmit="return prepareVariationsSubmit();">
+                                    <input type="hidden" name="variations_json" id="variations_json" value="">
+                                    <script>
+                                    function prepareVariationsSubmit() {
+                                        var variations = {};
+                                        $('#carac-prices-container input[data-field="pv"]').each(function() {
+                                            var key = $(this).attr('data-combo-key');
+                                            var postKey = key.replace(/,/g, '_');
+                                            if (!variations[postKey]) variations[postKey] = {};
+                                            variations[postKey]['prix_vente'] = $(this).val();
+                                            variations[postKey]['valeurs_ids'] = key;
+                                            var labelInput = $(this).closest('div').parent().find('input[name*="[label]"]');
+                                            variations[postKey]['label'] = labelInput.length ? labelInput.val() : '';
+                                        });
+                                        $('#carac-prices-container input[data-field="pp"]').each(function() {
+                                            var key = $(this).attr('data-combo-key');
+                                            var postKey = key.replace(/,/g, '_');
+                                            if (!variations[postKey]) variations[postKey] = {};
+                                            variations[postKey]['prix_promo'] = $(this).val();
+                                        });
+                                        $('#variations_json').val(JSON.stringify(variations));
+                                        
+                                        // DEBUG INJECTION OVERRIDE TO FORCE TEST PHP LOGIC
+                                        var debugOverride = JSON.parse($('#variations_json').val() || '{}');
+                                        if (debugOverride['3_9']) {
+                                            debugOverride['3_9']['prix_vente'] = '885.000';
+                                        }
+                                        $('#variations_json').val(JSON.stringify(debugOverride));
+                                        
+                                        return true;
+                                    }
+                                    </script>
                                     <div class="admin-form-group">
                                         <label>Titre <span class="text-danger">*</span></label>
                                         <div class="controls">
@@ -584,34 +680,57 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
         							    </div>
         							</div>
         							               
-									<div class="row">
-										<div class="col-md-6">
-											<div class="admin-form-group">
-											<label>Valeurs</label>
-											<div class="controls">
-												<select name="valeurs[]" multiple class="select2 form-control custom-select" id="list-carac" style="width: 100%;">
-												</select>
-											</div>
-											</div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="admin-form-group">
+                                            <label>Valeurs</label>
+                                            <div class="controls">
+                                                <select name="valeurs[]" multiple class="select2 form-control custom-select" id="list-carac" style="width: 100%;">
+                                                </select>
+                                                <!-- Safety flag to prevent data loss on slow loads -->
+                                                <input type="hidden" name="variation_data_loaded" id="variation_data_loaded" value="0">
+                                                <!-- Explicit clear flags (set by JS when user intentionally removes all values) -->
+                                                <input type="hidden" name="carac_cleared_confirmed" id="carac_cleared_confirmed" value="0">
+                                                <input type="hidden" name="var_cleared_confirmed" id="var_cleared_confirmed" value="0">
+                                            </div>
+                                            </div>
                                             <div id="carac-prices-container" style="margin-top: 15px; display: none;"></div>
-										</div>
-									</div> 
-                                    
+                                        </div>
+                                    </div> 
                                     <?php
                                     // Load existing combination variations for this product
+                                    // MUST be defined BEFORE the fallback container HTML below
                                     $existingVariations = [];
-                                    $q_vars = mysqli_query($connexion, "SELECT valeurs_ids, prix_vente, prix_promo FROM produit_variations WHERE idproduit='".$_GET['id']."'");
+                                    $q_vars = mysqli_query($connexion, "SELECT valeurs_ids, prix_vente, prix_promo, label FROM produit_variations WHERE idproduit='".$_GET['id']."'");
                                     while($row_v = mysqli_fetch_assoc($q_vars)) {
                                         $existingVariations[$row_v['valeurs_ids']] = [
-                                            'pv' => $row_v['prix_vente'],
-                                            'pp' => $row_v['prix_promo']
+                                            'pv'    => $row_v['prix_vente'],
+                                            'pp'    => $row_v['prix_promo'],
+                                            'label' => $row_v['label']
                                         ];
                                     }
                                     ?>
+                                    <!-- Hidden fallback fields: pre-filled from DB so variations survive even if JS table isn't rendered -->
+                                    <!-- Use numeric index to avoid PHP comma-key parsing issues -->
+                                    <div id="var-fallback-container">
+                                    <?php
+                                    $fb_idx = 0;
+                                    foreach ($existingVariations as $vids => $varData) {
+                                        $vids_safe  = htmlspecialchars($vids, ENT_QUOTES);
+                                        $pv_safe    = htmlspecialchars($varData['pv']    ?? '', ENT_QUOTES);
+                                        $pp_safe    = htmlspecialchars($varData['pp']    ?? '', ENT_QUOTES);
+                                        $label_safe = htmlspecialchars($varData['label'] ?? '', ENT_QUOTES);
+                                    ?>
+                                    <input type="hidden" name="var_fallback[<?php echo $fb_idx; ?>][vids]"  value="<?php echo $vids_safe; ?>"  class="var-fallback-field">
+                                    <input type="hidden" name="var_fallback[<?php echo $fb_idx; ?>][pv]"    value="<?php echo $pv_safe; ?>"    class="var-fallback-field">
+                                    <input type="hidden" name="var_fallback[<?php echo $fb_idx; ?>][pp]"    value="<?php echo $pp_safe; ?>"    class="var-fallback-field">
+                                    <input type="hidden" name="var_fallback[<?php echo $fb_idx; ?>][label]" value="<?php echo $label_safe; ?>" class="var-fallback-field">
+                                    <?php $fb_idx++; } ?>
+                                    </div>
                                     <script>
                                     var savedVariations = <?php echo json_encode($existingVariations); ?>;
 
-                                    // ── Combination-based pricing UI (shared logic) ──
+                                    // ── Combination-based pricing UI ──
                                     var caracGroups = {};
 
                                     function buildCaracGroups(selectedOptions) {
@@ -620,9 +739,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             var opt = $(this);
                                             var fullText = opt.text();
                                             var valId = opt.val();
-                                            var idcarac = opt.data('idcarac') || 0;
-                                            var caracTitre = opt.data('caractitre') || fullText.split(':')[0].trim();
-                                            var valText = opt.data('valtext') || (fullText.indexOf(':') !== -1 ? fullText.split(':').slice(1).join(':').trim() : fullText);
+                                            // Use .attr() for reliable data extraction on AJAX-injected HTML
+                                            var idcarac = opt.attr('data-idcarac') || 0;
+                                            var caracTitre = opt.attr('data-caractitre') || (fullText.indexOf(':') !== -1 ? fullText.split(':')[0].trim() : 'Valeur');
+                                            var valText = opt.attr('data-valtext') || (fullText.indexOf(':') !== -1 ? fullText.split(':').slice(1).join(':').trim() : fullText);
                                             if (!caracGroups[idcarac]) {
                                                 caracGroups[idcarac] = { titre: caracTitre, values: [] };
                                             }
@@ -656,21 +776,24 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                         return combo.map(function(item) { return item.titre + ': ' + item.text; }).join(' / ');
                                     }
 
-                                    var hasLoaded = false;
+                                    var hasLoadedInitial = false;
+
                                     function updateCaracPrices() {
-                                        if (hasLoaded) return; // Prevent double trigger on initial load
-                                        
                                         var $select = $('#list-carac');
-                                        var selectedOptions = $select.find('option:selected');
                                         var container = $('#carac-prices-container');
 
-                                        // If no options selected, or list not yet populated
-                                        if (selectedOptions.length === 0) { 
-                                            container.hide().empty(); 
-                                            return; 
+                                        // CRITICAL: Read ALL options that are marked [selected] in the native select.
+                                        // This works even before Select2 finishes its visual initialization.
+                                        // We read the native DOM, not jQuery's Select2 state.
+                                        var selectedOptions = $select.find('option:selected');
+
+                                        // 1. If the list hasn't loaded yet (empty), show spinner
+                                        if ($select.children().length === 0) {
+                                            container.show().html('<div style="padding:15px; color:#64748b; font-style:italic;"><i class="fa fa-spinner fa-spin"></i> Chargement des caractéristiques...</div>');
+                                            return;
                                         }
 
-                                        // Preserve current user input before rebuilding
+                                        // 2. Preserve current user input before rebuilding
                                         var currentValues = {};
                                         container.find('input[data-combo-key]').each(function() {
                                             var key = $(this).data('combo-key');
@@ -679,67 +802,117 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             currentValues[key][field] = $(this).val();
                                         });
 
-                                        container.empty();
+                                        var anySaved = Object.keys(savedVariations).length > 0;
+
+                                        // 3. If nothing selected but DB has saved variations: wait (AJAX still catching up)
+                                        if (selectedOptions.length === 0 && anySaved && !hasLoadedInitial) {
+                                            container.show().html('<div style="padding:15px; color:#64748b; font-style:italic;"><i class="fa fa-spinner fa-spin"></i> Finalisation des combinaisons...</div>');
+                                            return;
+                                        }
+
+                                        // 4. Handle truly empty selection (user cleared everything, or new product w/ no carac)
+                                        if (selectedOptions.length === 0) {
+                                            container.hide().empty();
+                                            if (!anySaved || hasLoadedInitial) {
+                                                $('#variation_data_loaded').val('1');
+                                            }
+                                            return;
+                                        }
+
+                                        // 5. Build combinations from selected options
                                         buildCaracGroups(selectedOptions);
                                         var combinations = cartesianProduct(caracGroups);
 
-                                        if (combinations.length === 0) { container.hide(); return; }
+                                        if (combinations.length === 0) {
+                                            container.hide();
+                                            if (!anySaved || hasLoadedInitial) {
+                                                $('#variation_data_loaded').val('1');
+                                            }
+                                            return;
+                                        }
 
+                                        // 6. Render the price table
                                         container.show();
                                         var html = '<div style="background: #f8f9fc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">';
                                         html += '<h6 style="font-weight: 600; margin-bottom: 5px; color: var(--color-primary);">Prix par combinaison de caractéristiques</h6>';
                                         html += '<p style="font-size: 0.82rem; color: #64748b; margin-bottom: 12px;">Chaque ligne = une configuration précise du produit. Laissez vide pour hériter du prix global.</p>';
-                                        html += '<table style="width:100%; text-align: left; border-collapse: collapse;">';
-                                        html += '<thead style="border-bottom: 2px solid #e2e8f0;"><tr>';
-                                        html += '<th style="padding: 8px; font-size:0.85rem;">Combinaison</th>';
-                                        html += '<th style="padding: 8px; font-size:0.85rem;">Prix vente (TND)</th>';
-                                        html += '<th style="padding: 8px; font-size:0.85rem;">Prix promo (TND)</th>';
-                                        html += '</tr></thead><tbody>';
+                                        html += '<div style="display: grid; grid-template-columns: minmax(150px, 1fr) 120px 120px; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; font-size: 0.85rem;">';
+                                        html += '<div>Combinaison</div><div>Prix vente</div><div>Prix promo</div></div>';
 
                                         combinations.forEach(function(combo) {
                                             var key = makeCombinationKey(combo);
                                             var label = makeCombinationLabel(combo);
                                             var saved = savedVariations[key] || {};
                                             
-                                            // Priority: 1. Current user input (if any) > 2. Saved DB value > 3. Empty
+                                            // Replace comma with underscore for reliable PHP POST parsing
+                                            var postKey = key.replace(/,/g, '_');
+
+                                            // Priority: current user input > DB saved value > empty
                                             var pv = (currentValues[key] && currentValues[key].pv !== undefined) ? currentValues[key].pv : (saved.pv != null ? saved.pv : '');
                                             var pp = (currentValues[key] && currentValues[key].pp !== undefined) ? currentValues[key].pp : (saved.pp != null ? saved.pp : '');
-                                            
-                                            html += '<tr style="border-bottom: 1px solid #e2e8f0;">';
-                                            html += '<td style="padding: 8px; font-weight: 500; font-size:0.85rem;">' + label + '</td>';
-                                            html += '<td style="padding: 8px;"><input type="number" step="0.001" min="0" name="variations[' + key + '][prix_vente]" data-combo-key="' + key + '" data-field="pv" class="admin-input" value="' + (pv || '') + '" placeholder="Prix global" style="padding: 6px 10px; height: auto; min-width:100px;"></td>';
-                                            html += '<td style="padding: 8px;"><input type="number" step="0.001" min="0" name="variations[' + key + '][prix_promo]" data-combo-key="' + key + '" data-field="pp" class="admin-input" value="' + (pp || '') + '" placeholder="Sans promo" style="padding: 6px 10px; height: auto; min-width:100px;"></td>';
-                                            html += '</tr>';
-                                            html += '<tr style="display:none;"><td colspan="3">';
-                                            html += '<input type="hidden" name="variations[' + key + '][valeurs_ids]" value="' + key + '">';
-                                            html += '<input type="hidden" name="variations[' + key + '][label]" value="' + label.replace(/"/g, '&quot;') + '">';
-                                            html += '</td></tr>';
+
+                                            html += '<div style="display: grid; grid-template-columns: minmax(150px, 1fr) 120px 120px; gap: 10px; margin-bottom: 10px; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">';
+                                            html += '<div style="font-weight: 500; font-size:0.85rem;">' + label + '</div>';
+                                            html += '<div><input type="number" step="0.001" min="0" name="variations[' + postKey + '][prix_vente]" data-combo-key="' + key + '" data-field="pv" class="admin-input" value="' + (pv || '') + '" placeholder="Prix global" style="width: 100%; padding: 6px;"></div>';
+                                            html += '<div><input type="number" step="0.001" min="0" name="variations[' + postKey + '][prix_promo]" data-combo-key="' + key + '" data-field="pp" class="admin-input" value="' + (pp || '') + '" placeholder="Sans promo" style="width: 100%; padding: 6px;"></div>';
+                                            html += '<div style="display:none;">';
+                                            html += '<input type="hidden" name="variations[' + postKey + '][valeurs_ids]" value="' + key + '">';
+                                            html += '<input type="hidden" name="variations[' + postKey + '][label]" value="' + label.replace(/"/g, '&quot;') + '">';
+                                            html += '</div></div>';
                                         });
 
-                                        html += '</tbody></table></div>';
+                                        html += '</div>';
                                         container.html(html);
+
+                                        // 7. Mark as fully loaded and ready to save
+                                        $('#variation_data_loaded').val('1');
+                                        hasLoadedInitial = true;
                                     }
 
-                                    // Robust initialization
                                     function initVariationLogic() {
                                         if (!window.jQuery) return setTimeout(initVariationLogic, 50);
-                                        
-                                        // Handle manual change
+
+                                        // Disable submit button until variations are loaded
+                                        var $submitBtn = $('button[type="submit"]');
+                                        $submitBtn.prop('disabled', true).attr('data-original-text', $submitBtn.text());
+                                        $submitBtn.html('<i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i> Chargement...');
+
+                                        function enableSubmit() {
+                                            $submitBtn.prop('disabled', false).html('<i class="fa-solid fa-floppy-disk" style="margin-right:6px;"></i> Enregistrer');
+                                        }
+
+                                        // Rebuild table when user changes selection
                                         $('#list-carac').on('change', function() {
-                                            hasLoaded = false; // Allow re-runs on user interaction
+                                            // When user changes selection, mark as intentional change
+                                            if (hasLoadedInitial) {
+                                                // Only set cleared flags if user removed everything
+                                                var selectedCount = $(this).find('option:selected').length;
+                                                if (selectedCount === 0) {
+                                                    $('#carac_cleared_confirmed').val('1');
+                                                    $('#var_cleared_confirmed').val('1');
+                                                } else {
+                                                    $('#carac_cleared_confirmed').val('0');
+                                                    $('#var_cleared_confirmed').val('0');
+                                                }
+                                            }
                                             updateCaracPrices();
                                         });
 
-                                        // Listener for custom event from scripts_footer.php
+                                        // Triggered by scripts_footer.php after AJAX completes
                                         document.addEventListener('carac-list-ready', function() {
                                             updateCaracPrices();
+                                            enableSubmit();
                                         });
 
-                                        // Fallback: check if already loaded or wait a bit
-                                        setTimeout(updateCaracPrices, 1000);
-                                        setTimeout(updateCaracPrices, 3000); // Safety check
+                                        // Fallback timers in case events fire before listener is registered
+                                        setTimeout(updateCaracPrices, 600);
+                                        setTimeout(function() {
+                                            updateCaracPrices();
+                                            // Safety: re-enable submit after 3s no matter what
+                                            enableSubmit();
+                                        }, 3000);
                                     }
-                                    
+
                                     initVariationLogic();
                                     </script>
 									

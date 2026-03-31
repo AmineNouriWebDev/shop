@@ -19,7 +19,8 @@ if (!$connexion) {
         die("Erreur connexion DB : " . mysqli_connect_error());
 }
 mysqli_report(MYSQLI_REPORT_OFF);
-mysqli_set_charset($connexion, "utf8");
+mysqli_set_charset($connexion, "utf8mb4");
+mysqli_query($connexion, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
 mysqli_query($connexion, "SET SESSION sql_mode = ''");
 
 function sanitize($data) {
@@ -29,7 +30,8 @@ function sanitize($data) {
                 $connexion = mysqli_connect($conn['serveur'], $conn['user_bdd'], $conn['user_pass'], $conn['name_bdd']);
                 if (!$connexion) { die("Connection failed: " . mysqli_connect_error()); }
                 mysqli_report(MYSQLI_REPORT_OFF);
-                mysqli_set_charset($connexion, "utf8");
+                mysqli_set_charset($connexion, "utf8mb4");
+                mysqli_query($connexion, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
                 mysqli_query($connexion, "SET SESSION sql_mode = ''");
         }
         $data = trim($data ?? '');

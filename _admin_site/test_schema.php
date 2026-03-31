@@ -1,5 +1,5 @@
 <?php
-include('_admin_site/includes/include.php');
+include('includes/include.php');
 if(!$connexion) echo "No DB";
 
 $q = mysqli_query($connexion, "DESCRIBE produit_variations");
