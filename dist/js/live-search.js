@@ -16,20 +16,6 @@
     const DEBOUNCE_MS = 300;
     const MIN_CHARS = 2;
 
-    /* ─── State ──────────────────────────────────────────── */
-    let debounceTimer = null;
-    let activeIdx = -1;
-    let lastQuery = '';
-    let abortController = null;
-
-    /* ─── Utility: debounce ──────────────────────────────── */
-    function debounce(fn, ms) {
-        return function (...args) {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => fn.apply(this, args), ms);
-        };
-    }
-
     /* ─── Highlight matching text ───────────────────────── */
     function highlight(text, query) {
         if (!query) return text;
@@ -69,29 +55,29 @@
 
         const footer = total > results.length
             ? `<a href="${search_url}" class="ls-footer">
-           Voir les ${total} résultats pour "<strong>${query}</strong>"
-           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-         </a>`
+            Voir les ${total} résultats pour "<strong>${query}</strong>"
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>`
             : `<a href="${search_url}" class="ls-footer">
-           Voir tous les résultats
-           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-         </a>`;
+            Voir tous les résultats
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>`;
 
         return items + footer;
     }
 
     /* ─── Show/hide dropdown ─────────────────────────────── */
-    function showDropdown(dropdown, content) {
+    function showDropdown(dropdown, content, state) {
         dropdown.innerHTML = content;
         dropdown.removeAttribute('hidden');
         dropdown.setAttribute('aria-expanded', 'true');
-        activeIdx = -1;
+        state.activeIdx = -1;
     }
 
-    function hideDropdown(dropdown) {
+    function hideDropdown(dropdown, state) {
         dropdown.setAttribute('hidden', '');
         dropdown.setAttribute('aria-expanded', 'false');
-        activeIdx = -1;
+        state.activeIdx = -1;
     }
 
     /* ─── Loading state ──────────────────────────────────── */
@@ -105,7 +91,7 @@
     }
 
     /* ─── Keyboard navigation ───────────────────────────── */
-    function handleKeydown(e, dropdown, input) {
+    function handleKeydown(e, dropdown, input, state) {
         if (dropdown.hasAttribute('hidden')) return;
 
         const items = Array.from(dropdown.querySelectorAll('.ls-item, .ls-footer'));
@@ -113,50 +99,50 @@
 
         if (e.key === 'ArrowDown') {
             e.preventDefault();
-            activeIdx = Math.min(activeIdx + 1, items.length - 1);
-            items[activeIdx].focus();
+            state.activeIdx = Math.min(state.activeIdx + 1, items.length - 1);
+            items[state.activeIdx].focus();
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            if (activeIdx <= 0) {
-                activeIdx = -1;
+            if (state.activeIdx <= 0) {
+                state.activeIdx = -1;
                 input.focus();
             } else {
-                activeIdx--;
-                items[activeIdx].focus();
+                state.activeIdx--;
+                items[state.activeIdx].focus();
             }
         } else if (e.key === 'Escape') {
-            hideDropdown(dropdown);
+            hideDropdown(dropdown, state);
             input.focus();
-        } else if (e.key === 'Enter' && activeIdx >= 0) {
-            items[activeIdx].click();
+        } else if (e.key === 'Enter' && state.activeIdx >= 0) {
+            items[state.activeIdx].click();
         }
     }
 
     /* ─── Fetch results ──────────────────────────────────── */
-    async function fetchResults(query, dropdown, basePath) {
-        if (abortController) abortController.abort();
-        abortController = new AbortController();
+    async function fetchResults(query, dropdown, basePath, state) {
+        if (state.abortController) state.abortController.abort();
+        state.abortController = new AbortController();
 
         showLoader(dropdown);
 
         try {
             const url = `${basePath}${SEARCH_ENDPOINT}?q=${encodeURIComponent(query)}&limit=8`;
             const response = await fetch(url, {
-                signal: abortController.signal,
+                signal: state.abortController.signal,
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
             });
 
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const data = await response.json();
-            showDropdown(dropdown, buildDropdown(data, query));
+            showDropdown(dropdown, buildDropdown(data, query), state);
 
         } catch (err) {
             if (err.name === 'AbortError') return; // cancelled, ignore
             showDropdown(dropdown, `
         <div class="ls-empty">
           <span>Erreur lors de la recherche. Réessayez.</span>
-        </div>`);
+        </div>`, state);
         }
     }
 
@@ -165,11 +151,22 @@
         const input = form.querySelector('input[name="recherche"]');
         if (!input) return;
 
-        // Create wrapper (for relative positioning of dropdown)
-        const wrapper = document.createElement('div');
-        wrapper.className = 'ls-wrapper';
-        form.parentNode.insertBefore(wrapper, form);
-        wrapper.appendChild(form);
+        // Instance state (Each search bar has its own state)
+        const state = {
+            debounceTimer: null,
+            activeIdx: -1,
+            lastQuery: '',
+            abortController: null
+        };
+
+        // Use existing wrapper or create one
+        let wrapper = form.closest('.ls-wrapper');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'ls-wrapper';
+            form.parentNode.insertBefore(wrapper, form);
+            wrapper.appendChild(form);
+        }
 
         // Create dropdown
         const dropdown = document.createElement('div');
@@ -187,19 +184,22 @@
         input.setAttribute('aria-expanded', 'false');
 
         // Input handler (debounced)
-        const debouncedFetch = debounce(function () {
+        const debouncedFetch = function () {
             const q = input.value.trim();
-            if (q === lastQuery) return;
-            lastQuery = q;
+            if (q === state.lastQuery) return;
+            state.lastQuery = q;
 
             if (q.length < MIN_CHARS) {
-                hideDropdown(dropdown);
+                hideDropdown(dropdown, state);
                 return;
             }
-            fetchResults(q, dropdown, basePath);
-        }, DEBOUNCE_MS);
+            fetchResults(q, dropdown, basePath, state);
+        };
 
-        input.addEventListener('input', debouncedFetch);
+        input.addEventListener('input', function() {
+            clearTimeout(state.debounceTimer);
+            state.debounceTimer = setTimeout(debouncedFetch, DEBOUNCE_MS);
+        });
 
         // Show cached results when re-focusing (if query hasn't changed)
         input.addEventListener('focus', function () {
@@ -212,51 +212,48 @@
 
         // Keyboard nav on input
         input.addEventListener('keydown', function (e) {
-            handleKeydown(e, dropdown, input);
+            handleKeydown(e, dropdown, input, state);
             // Also close on Tab
-            if (e.key === 'Tab') hideDropdown(dropdown);
+            if (e.key === 'Tab') hideDropdown(dropdown, state);
         });
 
         // Keyboard nav on dropdown items
         dropdown.addEventListener('keydown', function (e) {
-            handleKeydown(e, dropdown, input);
+            handleKeydown(e, dropdown, input, state);
         });
 
         // Click outside → close
         document.addEventListener('click', function (e) {
-            if (!wrapper.contains(e.target)) hideDropdown(dropdown);
+            if (!wrapper.contains(e.target)) hideDropdown(dropdown, state);
         });
 
         // Prevent form submit closing dropdown before navigation
         form.addEventListener('submit', function () {
-            hideDropdown(dropdown);
+            hideDropdown(dropdown, state);
         });
     }
 
     /* ─── Detect base path ───────────────────────────────── */
     function getBasePath() {
         if (window.__shopBasePath) return window.__shopBasePath;
-        // Fallback: derive from current URL up to /shop/
         const m = window.location.href.match(/^(https?:\/\/.+?\/shop\/)/i);
         return m ? m[1] : '/shop/';
     }
 
-    /* ─── Init on DOM ready ──────────────────────────────── */
-    function init() {
+    /* ─── Global exposure ───────────────────────────────── */
+    window.initShopSearch = function(selector) {
         const basePath = getBasePath();
-
-        // Find all search forms (Desktop, Mobile bar, or Modal)
-        const searchForms = document.querySelectorAll('.sh-search, .sh-mobile-search, .sh-sm-input-wrap');
-        searchForms.forEach(form => {
-            // Check if already initialized to avoid double wrapping
-            if (form.closest('.ls-wrapper')) return;
+        const forms = document.querySelectorAll(selector || '.sh-search, .sh-mobile-search, .sh-sm-input-wrap');
+        forms.forEach(form => {
+            if (form.hasAttribute('data-ls-init')) return;
+            form.setAttribute('data-ls-init', 'true');
             initSearch(form, basePath);
         });
-    }
+    };
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => window.initShopSearch());
     } else {
-        init();
+        window.initShopSearch();
     }
 })();

@@ -542,8 +542,9 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   .ls-wrapper {
     position: relative;
     flex: 1;
-    max-width: 540px;
+    width: 100%;
   }
+  .ls-wrapper-desktop { max-width: 540px; }
   /* Keep the sh-search inside wrapper flex-fitting */
   .ls-wrapper .sh-search { max-width: 100%; width: 100%; }
   .ls-wrapper .sh-mobile-search { position: relative; }
@@ -721,7 +722,10 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     background: var(--shop-bg-alt); border: none; color: var(--shop-text-primary);
     display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
-  .sh-search-modal-body { position: relative; }
+  .sh-search-modal-body { 
+    position: relative; 
+    z-index: 2050;
+  }
   .sh-sm-input-wrap {
     position: relative; background: var(--shop-surface); border: 2px solid var(--shop-primary);
     border-radius: 1rem; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem;
@@ -779,6 +783,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       </a>
 
       <!-- Search (desktop) -->
+      <div class="ls-wrapper ls-wrapper-desktop">
       <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-search">
         <input
           type="text"
@@ -790,9 +795,10 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
         >
         <input type="hidden" name="action" value="search">
         <button type="submit" class="sh-search-btn" aria-label="Rechercher">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </button>
-      </form>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    </div>
 
       <!-- Actions -->
       <div class="sh-actions">
@@ -1015,14 +1021,16 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
         </button>
       </div>
       <div class="sh-search-modal-body">
-        <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-sm-input-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-primary);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" name="recherche" class="sh-sm-input" placeholder="Que cherchez-vous ?" autocomplete="off" id="sh-sm-input">
-          <input type="hidden" name="action" value="search">
-          <button type="submit" class="sh-sm-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke="white"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-        </form>
+        <div class="ls-wrapper" id="sh-modal-ls-wrapper">
+          <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-sm-input-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-primary);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="recherche" class="sh-sm-input ls-input" placeholder="Que cherchez-vous ?" autocomplete="off" id="sh-sm-input">
+            <input type="hidden" name="action" value="search">
+            <button type="submit" class="sh-sm-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke="white"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -1067,7 +1075,11 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   
   window.shOpenSearch = function() {
     sModal.classList.add('active');
-    setTimeout(() => sInput.focus(), 300);
+    setTimeout(() => {
+      sInput.focus();
+      // Ensure search and dropdown are initialized
+      if (window.initShopSearch) window.initShopSearch('#sh-modal-ls-wrapper .sh-sm-input-wrap');
+    }, 300);
     document.body.style.overflow = 'hidden';
   };
   window.shCloseSearch = function() {
