@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="dist/css/design-tokens.css" />
 
     <!-- Tailwind CSS v4 compiled output -->
-    <link rel="stylesheet" href="dist/css/tailwind.output.css" />
+    <link rel="stylesheet" href="dist/css/main-style.css" />
 
     <!-- Inter Variable font (2026 premium) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

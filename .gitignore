@@ -20,7 +20,7 @@ rootdeployment_plan.txt
 media/products/products.zip
 
 # Tailwind compiled output (included for deployment)
-!dist/css/tailwind.output.css
+!dist/css/main-style.css
 *.zip
 *.rar
 *.log
