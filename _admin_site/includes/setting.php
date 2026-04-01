@@ -21,6 +21,17 @@
 <?php 
 if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 {
+	// --- Auto DB Patch For Specific Missing Columns ---
+	$columns_to_check = [
+		"confiva_api_key" => "VARCHAR(255)"
+	];
+	foreach ($columns_to_check as $col => $sqlType) {
+		$resCol = mysqli_query($connexion, "SHOW COLUMNS FROM `site_configuration` LIKE '$col'");
+		if (mysqli_num_rows($resCol) === 0) {
+			mysqli_query($connexion, "ALTER TABLE `site_configuration` ADD `$col` $sqlType");
+		}
+	}
+	// ----------------------------------------------------
 	$nom_site 			= formReception($_POST['nom_site']);
 	$email_contact 		= formReception($_POST['email_contact']);
 	$protocole          = formReception($_POST['protocole']);
@@ -50,6 +61,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
     $facebook_login_enabled  = isset($_POST['facebook_login_enabled']) ? (int)$_POST['facebook_login_enabled'] : 0;
     $cloudflare_site_key    = formReception($_POST['cloudflare_site_key'] ?? '');
     $cloudflare_secret_key  = formReception($_POST['cloudflare_secret_key'] ?? '');
+    $confiva_api_key        = formReception($_POST['confiva_api_key'] ?? '');
     
 	$cmd_num_sms 		= formReception($_POST['cmd_num_sms']);
 	$cmd_num_whatsapp 	= formReception($_POST['cmd_num_whatsapp']);
@@ -99,7 +111,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 	`matricule_fiscale` = "'.$matricule_fiscale.'", `rne` = "'.$rne.'", `registre_commerce` = "'.$registre_commerce.'", `banque` = "'.$banque.'",
 	`rib` = "'.$rib.'", `swift` = "'.$swift.'", `code_douane` = "'.$code_douane.'",
 	`google_search_console` = "'.$google_search_console.'", `facebook_pixel` = "'.$facebook_pixel.'", `theme_color` = "'.$theme_color.'", `developer_comment` = "'. mysqli_real_escape_string(ouvrirCnx(), $developer_comment) .'",
-    `social_share_token` = "'.$social_share_token.'"';
+    `confiva_api_key` = "'. $confiva_api_key .'", `social_share_token` = "'.$social_share_token.'"';
 
 	$resultat = executeRequete($requete);
 	
@@ -630,6 +642,19 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                                 <label>Secret Key</label>
                                                 <div class="controls">
                                                     <input type="text" name="cloudflare_secret_key" value="<?php echo $cloudflare_secret_key ?? ''; ?>" class="admin-input" placeholder="1x000... (Clé secrète)"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="border-primary">
+                                    <div class="admin-card-title mt-6 mb-4 text-lg">Confiva Logistics (Livraison)</div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Clé API d'accès unique</label>
+                                                <div class="controls">
+                                                    <input type="text" name="confiva_api_key" value="<?php echo $confiva_api_key ?? ''; ?>" class="admin-input" placeholder="Collez votre clé API Confiva ici">
+                                                    <small class="text-muted text-xs mt-1">Nécessaire pour l'envoi automatique des colis de commande.</small>
                                                 </div>
                                             </div>
                                         </div>

@@ -16,6 +16,7 @@
         $email             = sanitize($_POST['email']);
         $adresse           = sanitize($_POST['adresse']);
         $ville             = sanitize($_POST['ville']);
+        $gouvernorat       = sanitize($_POST['gouvernorat']);
         $cp                = sanitize($_POST['cp']);
         $phone             = sanitize($_POST['phone']);
 
@@ -105,6 +106,54 @@
 			$result2  = executeRequete($requete2);
 			
          } 
+
+		// ──────────────────────────────────────────────────────────
+		// Confiva Logistics API - Création du colis
+		// ──────────────────────────────────────────────────────────
+		$confiva_key = !empty($confiva_api_key) ? $confiva_api_key : '';
+		if(!empty($confiva_key)) {
+		    // On nettoie le contenu
+		    $clean_contenu = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
+		    
+		    $confiva_data = [
+		        'nom_client' => $nom . ' ' . $prenom,
+		        'adresse'    => $adresse,
+		        'gouvernorat'=> $gouvernorat, // La liste exacte du select
+		        'city'       => $ville,
+		        'telephone'  => $phone,
+		        'prix'       => $globale,
+		        'contenu'    => substr($clean_contenu, 0, 100), // Limite pour sécurité
+		        'echange'    => "0",
+		        'autoriser_ouverture' => "0"
+		    ];
+		    
+		    $chConf = curl_init('https://expediteur.confiva-logistics.com/api/client/colis/create');
+		    curl_setopt($chConf, CURLOPT_RETURNTRANSFER, true);
+		    curl_setopt($chConf, CURLOPT_POST, true);
+		    curl_setopt($chConf, CURLOPT_HTTPHEADER, [
+		        'Content-Type: application/json',
+		        'x-api-key: ' . $confiva_key
+		    ]);
+		    curl_setopt($chConf, CURLOPT_POSTFIELDS, json_encode($confiva_data));
+		    curl_setopt($chConf, CURLOPT_TIMEOUT, 5); // Timeout pour ne pas bloquer
+		    curl_setopt($chConf, CURLOPT_SSL_VERIFYPEER, false);
+		    curl_setopt($chConf, CURLOPT_SSL_VERIFYHOST, false);
+		    
+		    $confiva_resp = curl_exec($chConf);
+		    $confiva_code = curl_getinfo($chConf, CURLINFO_HTTP_CODE);
+		    $confiva_error = curl_error($chConf);
+		    curl_close($chConf);
+		    
+		    file_put_contents('debug_confiva.txt', "Time: " . date('Y-m-d H:i:s') . "\nEndpoint: https://expediteur.confiva-logistics.com/api/client/colis/create\nPayload: " . json_encode($confiva_data) . "\nKey: " . substr($confiva_key, 0, 5) . "...\nHTTP Code: $confiva_code\nResponse: $confiva_resp\ncURL Error: $confiva_error\n\n", FILE_APPEND);
+		    
+		    if ($confiva_code == 200 || $confiva_code == 201) {
+		        $c_res = json_decode($confiva_resp, true);
+		        if(isset($c_res['code_barres']) && !empty($c_res['code_barres'])) {
+		            $barcode = sanitize($c_res['code_barres']);
+		            executeRequete("UPDATE `commandes` SET `code_envoi`='".$barcode."' WHERE `id`='".$id_cmd."'");
+		        }
+		    }
+		}
 
 		// ──────────────────────────────────────────────────────────
 		// Telegram + n8n notification after successful order insert
@@ -362,7 +411,17 @@ foreach($supported_codes as $code) {
                                 <input type="text" name="adresse" class="cx-input" id="street_address" placeholder="Adresse" value="" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Ville</label>
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Gouvernorat <span class="text-danger">*</span></label>
+                                <select name="gouvernorat" class="cx-input" required>
+                                    <option value="">Choisir un gouvernorat...</option>
+                                    <?php
+                                    $govs = ['Ariana','Ben Arous','Bizerte','Béja','Gabès','Gafsa','Jendouba','Kairouan','Kasserine','Kébili','La Mannouba','Le Kef','Mahdia','Monastir','Médenine','Nabeul','Sfax','Sidi Bouzid','Siliana','Sousse','Tataouine','Tozeur','Tunis','Zaghouan'];
+                                    foreach($govs as $g) { echo "<option value=\"$g\">$g</option>"; }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-weight:500;">Délégation / Ville <span class="text-danger">*</span></label>
                                 <input type="text" name="ville" class="cx-input" id="city" placeholder="Ville" value="" required>
                             </div>
                             <div class="col-md-6 mb-3">

@@ -161,6 +161,51 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
         $payment_link = "https://wa.me/".$cmd_num_whatsapp."?text=".urlencode("Commande Express / Paiement Western Union : ".$urlOg);
     }
 
+    // ──────────────────────────────────────────────────────────
+    // Confiva Logistics API - Création du colis
+    // ──────────────────────────────────────────────────────────
+    $confiva_key = !empty($confiva_api_key) ? $confiva_api_key : '';
+    if(!empty($confiva_key)) {
+        $clean_contenu = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
+        
+        $confiva_data = [
+            'nom_client' => $nom . ' ' . $prenom,
+            'adresse'    => $adresse,
+            'gouvernorat'=> ucfirst(strtolower($ville)),
+            'city'       => $ville,
+            'telephone'  => $phone,
+            'prix'       => $globale,
+            'contenu'    => substr($clean_contenu, 0, 100) . ' (Express)',
+            'echange'    => "0",
+            'autoriser_ouverture' => "0"
+        ];
+        
+        $chConf = curl_init('https://expediteur.confiva-logistics.com/api/client/colis/create');
+        curl_setopt($chConf, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($chConf, CURLOPT_POST, true);
+        curl_setopt($chConf, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'x-api-key: ' . $confiva_key
+        ]);
+        curl_setopt($chConf, CURLOPT_POSTFIELDS, json_encode($confiva_data));
+        curl_setopt($chConf, CURLOPT_TIMEOUT, 5); 
+        curl_setopt($chConf, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($chConf, CURLOPT_SSL_VERIFYHOST, false);
+        
+        $confiva_resp = curl_exec($chConf);
+        $confiva_code = curl_getinfo($chConf, CURLINFO_HTTP_CODE);
+        curl_close($chConf);
+        
+        if ($confiva_code == 200 || $confiva_code == 201) {
+            $c_res = json_decode($confiva_resp, true);
+            if(isset($c_res['code_barres']) && !empty($c_res['code_barres'])) {
+                $barcode = sanitize($c_res['code_barres']);
+                executeRequete("UPDATE `commandes` SET `code_envoi`='".$barcode."' WHERE `id`='".$id_cmd."'");
+            }
+        }
+    }
+    // ──────────────────────────────────────────────────────────
+
     $msg="Votre commande a été bien enregistrée.";
 
     unset($_SESSION['panier']);
@@ -168,4 +213,18 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
     // Ouvrir la fenêtre selon le mode de paiement (10,11,12,13)
     if($moyen_paiement == 10 || $moyen_paiement == 11 || $moyen_paiement == 12 || $moyen_paiement == 13){
     ?>
-        <script language="javascript
+        <script language="javascript">
+          <!--
+          window.open('<?php echo $payment_link;?>');
+          window.location = '<?php echo lienConfirm($cmd); ?>';
+          //-->
+        </script>
+    <?php 
+    } else { ?>
+        <script language="javascript">
+         <!--
+          window.location = '<?php echo lienConfirm($cmd); ?>';
+         //-->
+        </script>
+    <?php }
+} ?>
