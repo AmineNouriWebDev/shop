@@ -64,7 +64,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                            <div class="form-group">
                                             <label>Instructions</label>
                                             <div class="controls">
-                                              <textarea id="textarea" name="texte" class="admin-input" rows='5' ><?php echo texte_paiement($id); ?></textarea>
+                                              <textarea id="editor1" name="texte" class="admin-input" rows='5' ><?php echo texte_paiement($id); ?></textarea>
                                             </div>
                                           </div>
                                         </div>

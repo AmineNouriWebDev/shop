@@ -61,6 +61,19 @@ if(isset($_GET['cmd'])){
             
             $datacmd  = mysqli_fetch_array($result);
             $moyen_paiement = afficheChamp($datacmd['moyen_paiement']);
+            
+            // --- Fetch specific payment instructions
+            $req_pay = "SELECT `texte` FROM `moyens_paiement` WHERE `moyen`='".sanitize($moyen_paiement)."' OR `id`='".sanitize($moyen_paiement)."' LIMIT 1";
+            $res_pay = executeRequete($req_pay);
+            $instructions_paiement = "";
+            if ($pay_data = mysqli_fetch_array($res_pay)) {
+                $instructions_paiement = $pay_data['texte'];
+                // Clean up any <br> tags illegally injected by nl2br() near block elements
+                $instructions_paiement = preg_replace('/(<br\s*\/?>\s*)+(<\/?(ul|li|p|div|h[1-6])[^>]*>)/i', '$2', $instructions_paiement);
+                $instructions_paiement = preg_replace('/(<\/?(ul|li|p|div|h[1-6])[^>]*>)\s*(<br\s*\/?>\s*)+/i', '$1', $instructions_paiement);
+            }
+            // ---
+
             $code_envoi = afficheChamp($datacmd['code_envoi']);
             $req = "SELECT * FROM `commandes` WHERE `code_envoi` = '".$code_envoi."'";
             $res = executeRequete($req);
@@ -159,6 +172,13 @@ if(isset($_GET['cmd'])){
       <p>
         <?php echo strip_tags($contenu); ?>
       </p>
+
+      <?php if (!empty($instructions_paiement)): ?>
+      <div style="margin: 2rem 0; padding: 1.5rem; background: color-mix(in srgb, var(--shop-primary) 4%, transparent); border: 1px solid color-mix(in srgb, var(--shop-primary) 20%, transparent); border-left: 4px solid var(--shop-primary); border-radius: 0.75rem; text-align: left; color: var(--shop-text-primary); font-size: 0.95rem; line-height: 1.5; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+        <?php echo $instructions_paiement; ?>
+      </div>
+      <?php endif; ?>
+
       <a href="<?php echo lienCompte(); ?>" class="cx-btn">Voir mes commandes</a>
     </div>
   </main>

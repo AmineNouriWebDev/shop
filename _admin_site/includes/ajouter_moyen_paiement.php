@@ -49,7 +49,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                             <div class="form-group">
                                                 <label>Instructions</label>
                                                 <div class="controls">
-                                                  <textarea id="textarea" name="texte" class="admin-input" rows='5' ></textarea>
+                                                  <textarea id="editor1" name="texte" class="admin-input" rows='5' ></textarea>
                                                 </div>
                                             </div>
                                         </div>
