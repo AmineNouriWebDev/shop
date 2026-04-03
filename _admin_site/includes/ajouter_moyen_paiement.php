@@ -21,6 +21,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
   }
     
   $requete = 'INSERT INTO `moyens_paiement` (`moyen`,`texte`,`url`, `etat`, `type`) VALUES ("'. $moyen .'", "'. $texte .'", "'. $url .'", "'. $etat .'", "1")';
+  $verif = executeRequete($requete);
   $msg="moyen de paiement ajouté avec succès.";
   phpToastRedirect($msg, 'index.php?r=moyens_paiement', 'success');
 }
