@@ -502,6 +502,12 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     .sh-header .sh-logo { display: none !important; }
     .sh-header .sh-dark-toggle { display: none !important; }
     .sh-header .sh-actions { display: none !important; }
+    
+    /* Topbar mobile adjustments */
+    .sh-topbar-promo-text { font-size: 0.65rem !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%; display: inline-block; vertical-align: middle; }
+    .sh-topbar-phone-number { display: none !important; }
+    .sh-topbar-phone-link { padding: 0.2rem; }
+
     /* Prevent horizontal overflow on mobile */
     html, body { overflow-x: hidden !important; max-width: 100vw; }
     .main.main-content-wrapper { overflow-x: hidden; }
@@ -744,7 +750,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   <!-- ── TOP BAR ── -->
   <div class="sh-topbar">
     <div style="max-width:1400px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between;">
-      <span>
+      <span class="sh-topbar-promo-text">
         <?php 
           $txt_topbar = "🚀 Vente Abonnement IPTV, VOD et Sharing aux meilleurs prix";
           $icone_topbar = "";
@@ -764,9 +770,9 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
           $display_phone = !empty($num_appel_vocale) ? $num_appel_vocale : (!empty($gsm) ? $gsm : $tel);
           if (!empty($display_phone)): 
         ?>
-        <a href="tel:<?php echo $display_phone; ?>" style="display:flex; align-items:center; gap:0.375rem;">
+        <a href="tel:<?php echo $display_phone; ?>" class="sh-topbar-phone-link" style="display:flex; align-items:center; gap:0.375rem;">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          <?php echo $display_phone; ?>
+          <span class="sh-topbar-phone-number"><?php echo $display_phone; ?></span>
         </a>
         <?php endif; ?>
       </div>
@@ -887,8 +893,8 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     </div>
   </nav>
 
-  <!-- ── MOBILE BAR ── -->
-  <div class="sh-mobile-bar">
+  <!-- ── MOBILE BAR (LOGO & ICONS) ── -->
+  <div class="sh-mobile-bar" style="border-bottom: none; padding-bottom: 0.375rem;">
 
     <!-- Hamburger -->
     <button class="sh-hamburger" id="sh-hamburger-btn" onclick="shToggleDrawer()" aria-label="Menu">
@@ -902,27 +908,32 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       <img src="media/site/<?php echo $logo; ?>" alt="Shop" style="max-height:38px; width:auto;">
     </a>
 
-    <!-- Search mobile trigger -->
-    <button class="sh-search-trigger" onclick="shOpenSearch()" aria-label="Rechercher" style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:var(--shop-primary); color:white; border:none; cursor:pointer; box-shadow:0 4px 10px rgba(90,49,244,0.3);">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>
+    <div style="display:flex; align-items:center; gap:0.75rem; margin-left:auto;">
+      <!-- Panier mobile -->
+      <a href="<?php echo lienPanier(); ?>" style="position:relative; color:var(--shop-primary); text-decoration:none; padding:0.25rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <?php if ($nbArticlesHeader > 0): ?>
+          <span style="position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; background:var(--shop-accent); color:white; font-size:0.625rem; font-weight:700; border-radius:9999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">
+            <?php echo $nbArticlesHeader; ?>
+          </span>
+        <?php endif; ?>
+      </a>
 
-    <!-- Panier mobile -->
-    <a href="<?php echo lienPanier(); ?>" style="position:relative; color:var(--shop-primary); text-decoration:none; padding:0.25rem;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <?php if ($nbArticlesHeader > 0): ?>
-        <span style="position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; background:var(--shop-accent); color:white; font-size:0.625rem; font-weight:700; border-radius:9999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">
-          <?php echo $nbArticlesHeader; ?>
-        </span>
-      <?php endif; ?>
-    </a>
+      <!-- Dark toggle mobile -->
+      <button class="sh-dark-toggle" onclick="window.__toggleTheme()" aria-label="Dark mode" style="flex-shrink:0;">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
 
-    <!-- Dark toggle mobile -->
-    <button class="sh-dark-toggle" onclick="window.__toggleTheme()" aria-label="Dark mode" style="flex-shrink:0;">
-      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+  </div>
 
+  <!-- ── MOBILE BAR (SEARCH) ── -->
+  <div class="sh-mobile-bar" style="padding-top: 0.375rem; padding-bottom: 0.75rem;">
+    <div onclick="shOpenSearch()" style="display:flex; align-items:center; width:100%; height:44px; background:var(--shop-bg-base); border:1.5px solid var(--shop-border); border-radius:0.75rem; padding:0 1rem; cursor:text; gap:0.75rem; box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-text-secondary); flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" readonly placeholder="Rechercher smartphones, PC..." style="flex:1; background:transparent; border:none; outline:none; color:var(--shop-text-disabled); font-size:0.9rem; pointer-events:none; font-family:inherit;">
+    </div>
   </div>
 
   <!-- ── OVERLAY ── -->
