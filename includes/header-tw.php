@@ -905,7 +905,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
 
     <!-- Logo mobile -->
     <a href="<?php echo lienAccueil(); ?>" style="flex-shrink:0; text-decoration:none;">
-      <img src="media/site/<?php echo $logo; ?>" alt="Shop" style="max-height:38px; width:auto;">
+      <img src="media/site/<?php echo $logo; ?>" alt="Shop" style="max-height:48px; width:auto;">
     </a>
 
     <div style="display:flex; align-items:center; gap:0.75rem; margin-left:auto;">

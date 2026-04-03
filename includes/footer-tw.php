@@ -39,6 +39,7 @@
 /* ── Logo column ─────────────────────────────────────── */
 .ft-logo   { display: block; margin-bottom: 1rem; }
 .ft-logo img { max-height: 44px; width: auto; }
+@media (max-width: 1023px) { .ft-logo img { max-height: 75px; } }
 .ft-desc   { font-size: 0.8125rem; line-height: 1.6; margin-bottom: 1.25rem; }
 
 /* ── Social icons ────────────────────────────────────── */
