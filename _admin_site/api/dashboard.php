@@ -4,7 +4,7 @@
  * Retourne les KPIs, dernières commandes, derniers messages, top produits et données pour graphiques.
  */
 
-include("../includes/session_config.php");
+session_start();
 if (!isset($_SESSION['editor_id'])) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);

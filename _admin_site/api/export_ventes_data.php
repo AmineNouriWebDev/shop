@@ -5,7 +5,7 @@
  * Input: ?mois=03&annee=2026
  */
 
-include("../includes/session_config.php");
+session_start();
 if (!isset($_SESSION['editor_id'])) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);

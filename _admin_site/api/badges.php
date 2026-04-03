@@ -6,7 +6,7 @@
  */
 
 // Sécurité : admin uniquement
-include("../includes/session_config.php");
+session_start();
 if (!isset($_SESSION['editor_id'])) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);

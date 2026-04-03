@@ -228,6 +228,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.error) {
                 console.error("Erreur API Dashboard: ", data.error);
+                document.getElementById('kpi-ca').innerHTML = '<span style="color:var(--color-error);font-size:0.8rem;">Erreur</span>';
+                document.getElementById('kpi-cmd-jour').textContent = 'Erreur';
+                document.getElementById('tableRecentCommandes').innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--color-error);">Erreur de chargement: ${data.error}</td></tr>`;
+                document.getElementById('topProduitsList').innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--color-error);">Erreur de chargement</div>`;
+                document.getElementById('listRecentMessages').innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--color-error);">Erreur de chargement</div>`;
                 return;
             }
 
