@@ -210,21 +210,12 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
 
     unset($_SESSION['panier']);
     
-    // Ouvrir la fenêtre selon le mode de paiement (10,11,12,13)
-    if($moyen_paiement == 10 || $moyen_paiement == 11 || $moyen_paiement == 12 || $moyen_paiement == 13){
+    // Redirection propre vers la page de confirmation sans bloquage de popup
     ?>
-        <script language="javascript">
-          <!--
-          window.open('<?php echo $payment_link;?>');
-          window.location = '<?php echo lienConfirm($cmd); ?>';
-          //-->
-        </script>
-    <?php 
-    } else { ?>
         <script language="javascript">
          <!--
           window.location = '<?php echo lienConfirm($cmd); ?>';
          //-->
         </script>
-    <?php }
+    <?php 
 } ?>
