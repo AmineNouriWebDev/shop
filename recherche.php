@@ -88,12 +88,16 @@
  	<script type="text/javascript">
  	
     $(document).ready(function(){
+        
+        var currentPage = 1;
 
-		filter_data();
+		filter_data(1);
 
-		function filter_data()
+		function filter_data(page)
 		{
-			$('.filter_data').html('<div class="row"> <div class="col-12"><div id="loading"></div></div></div>');
+            if(typeof page === 'undefined') page = 1;
+            currentPage = page;
+
 			var action = 'fetch_data';
             var minimum_price = $('#hidden_minimum_price').val();
             var maximum_price = $('#hidden_maximum_price').val();
@@ -108,16 +112,37 @@
 			var categoryByTitre = '<?php if ((isset($_GET['categorie']) && $_GET['categorie'] != '')){ echo $_GET['categorie']; }elseif ((isset($_POST['categorie']) && $_POST['categorie'] != '')){ echo linkCategBlog($_POST['categorie']); }else{ echo ''; } ?>';
 			var sort = $('#sort_order').length ? $('#sort_order').val() : 'price_asc';
 			
+            $('.filter_data').html('<div class="row"> <div class="col-12"><div id="loading"></div></div></div>');
+
 			$.ajax({
 				url:"includes/fetch_data_test.php",
 				method:"POST",
-				data:{action:action,brand:brand, category:category,caracteristique:caracteristique, type:type,link:link,search:search, minimum_price:minimum_price, maximum_price:maximum_price,categoryByTitre:categoryByTitre,marque:marque,promo:promo,sort:sort },
+				data:{
+                    action:action,
+                    brand:brand, 
+                    category:category,
+                    caracteristique:caracteristique, 
+                    type:type,
+                    link:link,
+                    search:search, 
+                    minimum_price:minimum_price, 
+                    maximum_price:maximum_price,
+                    categoryByTitre:categoryByTitre,
+                    marque:marque,
+                    promo:promo,
+                    sort:sort,
+                    page:currentPage
+                },
 				
 				success:function(data){
 					$('.filter_data').html(data);
+                    if(window.compareSyncButtons) window.compareSyncButtons();
 				}
 			});
 		}
+
+        /* Exposed globally so pagination buttons in AJAX response can call this */
+        window.filter_data_page = function(page){ filter_data(page); };
 
 		function get_filter(class_name)
 		{
@@ -129,12 +154,21 @@
 		}
 
 		$(document).on('click', 'input.common_selector', function(){
-			filter_data();
+			filter_data(1);
 		});
 
 		$(document).on('change', '.sort_selector', function(){
-    filter_data();
-});
+            filter_data(1);
+        });
+
+        /* Pagination delegate (matching categorie.php logic) */
+        document.addEventListener('click', function(e){
+            var t = e.target.closest('.pag-btn');
+            if(t){
+                var page = parseInt(t.getAttribute('data-page'));
+                if(typeof window.filter_data_page === 'function') window.filter_data_page(page);
+            }
+        });
 
         $('#price_range').slider({
             range:true,

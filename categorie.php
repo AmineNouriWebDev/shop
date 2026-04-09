@@ -149,7 +149,7 @@
 		{
             if(typeof page === 'undefined') page = 1;
             currentPage = page;
-			$('.filter_data').html('<div style="min-height:200px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-spinner fa-spin fa-2x" style="color:var(--shop-primary,#5A31F4);"></i></div>');
+
 			var action = 'fetch_data';
             var minimum_price = $('#hidden_minimum_price').val();
             var maximum_price = $('#hidden_maximum_price').val();
@@ -160,6 +160,9 @@
 			var category = get_filter('category');
 			var caracteristique = get_filter('caracteristique');
 			var sort = $('#sort_order').length ? $('#sort_order').val() : 'price_asc';
+
+			$('.filter_data').html('<div style="min-height:200px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-spinner fa-spin fa-2x" style="color:var(--shop-primary,#5A31F4);"></i></div>');
+
 			$.ajax({
 				url:"includes/fetch_data_test.php",
 				method:"POST",
