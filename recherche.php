@@ -128,7 +128,7 @@
 			return filter;
 		}
 
-		$('.common_selector').click(function(){
+		$(document).on('click change', '.common_selector', function(){
 			filter_data();
 		});
 

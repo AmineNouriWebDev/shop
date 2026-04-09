@@ -202,7 +202,7 @@
 		}
 
         /* Reset to page 1 on any filter change */
-		$('.common_selector').on('click change', function(){
+		$(document).on('click change', '.common_selector', function(){
 			filter_data(1);
 		});
 
