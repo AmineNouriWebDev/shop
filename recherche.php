@@ -128,7 +128,11 @@
 			return filter;
 		}
 
-		$(document).on('click change', '.common_selector', function(){
+		$(document).on('click', 'input.common_selector', function(){
+			filter_data();
+		});
+
+		$(document).on('change', 'select.common_selector', function(){
 			filter_data();
 		});
 

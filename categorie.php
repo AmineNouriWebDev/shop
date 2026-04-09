@@ -202,7 +202,10 @@
 		}
 
         /* Reset to page 1 on any filter change */
-		$(document).on('click change', '.common_selector', function(){
+		$(document).on('click', 'input.common_selector', function(){
+			filter_data(1);
+		});
+		$(document).on('change', 'select.common_selector', function(){
 			filter_data(1);
 		});
 
