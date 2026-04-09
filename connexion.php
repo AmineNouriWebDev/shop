@@ -362,7 +362,7 @@ if (isset($_POST['action']) && $_POST['action'] == "login") {
                 'client_id'     => $FACEBOOK_APP_ID,
                 'redirect_uri'  => $oauth_base_cx . '/oauth-callback.php?provider=facebook',
                 'response_type' => 'code',
-                'scope'         => 'public_profile,email',
+                'scope'         => 'public_profile',
                 'state'         => $csrf_state,
             ]);
             $facebook_url = 'https://www.facebook.com/v19.0/dialog/oauth?' . $fb_params;

@@ -68,3 +68,96 @@ mysql -u offipro_user -p offipro_db
   - `offipro.net.nginx.conf` : configuration Nginx corrigée (réécritures gérées avec `@rewrite`).
   - `connec.php`, `env.php`, `index.php` : fichiers PHP du site après correction des redirections.
 - **Utilisation** : En cas de régression, copier ces fichiers vers leurs emplacements d’origine et recharger Nginx (`systemctl reload nginx`).
+## Configuration avancée de la messagerie (ajoutée le 6 avril 2026)
+
+### Objectifs
+- Éliminer les avertissements SSL (déjà fait)
+- Améliorer la délivrabilité des emails (éviter le dossier SPAM)
+- Configurer DKIM et PTR
+
+### État avant correction
+- DKIM : non réglé
+- PTR : non configuré (à demander à l’hébergeur)
+
+### Procédure DKIM (via aaPanel)
+
+1. Se connecter à aaPanel → **Serveur de messagerie** → onglet **DKIM**.
+2. Pour le domaine `offipro.net`, cliquer sur **Générer / Activer**.
+3. Récupérer l’enregistrement TXT proposé (exemple) :
+Nom : default._domainkey.offipro.net
+Type : TXT
+Valeur : v=DKIM1; k=rsa; p=MIGfMA0G...
+
+text
+4. Ajouter cet enregistrement dans **Cloudflare** (domaine `offipro.net`) :
+- Type : TXT
+- Nom : `default._domainkey.offipro.net`
+- Valeur : la chaîne DKIM
+- TTL : Auto
+5. Vérifier la propagation avec :
+```bash
+dig default._domainkey.offipro.net TXT
+Redémarrer Postfix et Dovecot :
+
+bash
+systemctl restart postfix dovecot
+Procédure PTR (Reverse DNS)
+Le PTR ne peut être défini que par l’hébergeur (Hostrainbow).
+
+Ouvrir un ticket support chez Hostrainbow avec la demande :
+
+« Merci de configurer le reverse DNS (PTR) pour l’IP 91.99.149.45 vers mail.offipro.net (ou offipro.net). »
+
+Une fois effectué, vérifier avec :
+
+bash
+dig -x 91.99.149.45
+ou
+
+bash
+host 91.99.149.45
+Le résultat doit afficher mail.offipro.net ou offipro.net.
+
+Vérification finale de la configuration email
+Tester l’envoi vers Gmail et consulter les en-têtes du message reçu :
+
+SPF = pass
+
+DKIM = pass
+
+DMARC = pass
+
+Si tout est OK, les emails n’iront plus dans le spam (ou très rarement).
+
+Fichiers de configuration sauvegardés (messagerie)
+Postfix : /etc/postfix/main.cf (certificats Let's Encrypt)
+
+Dovecot : /etc/dovecot/conf.d/10-ssl.conf (certificats Let's Encrypt)
+
+Sauvegarde des versions originales (avant modification) :
+
+bash
+cp /etc/postfix/main.cf /root/backups_offipro/main.cf.orig
+cp /etc/dovecot/conf.d/10-ssl.conf /root/backups_offipro/10-ssl.conf.orig
+Rappel : renouvellement automatique des certificats
+Un timer Certbot est actif. Pour recharger Postfix/Dovecot après chaque renouvellement, un hook a été ajouté :
+
+bash
+/etc/letsencrypt/renewal-hooks/post/reload-mail.sh
+Contenu :
+
+bash
+#!/bin/bash
+systemctl reload postfix dovecot
+Rendre exécutable : chmod +x /etc/letsencrypt/renewal-hooks/post/reload-mail.sh
+
+État après corrections (à cocher)
+Certificat SSL étendu à mail.offipro.net
+
+Postfix et Dovecot utilisent le nouveau certificat
+
+DKIM configuré et enregistrement DNS ajouté
+
+PTR demandé à Hostrainbow
+
+Test d’envoi vers Gmail concluant
