@@ -132,9 +132,9 @@
 			filter_data();
 		});
 
-		$(document).on('change', 'select.common_selector', function(){
-			filter_data();
-		});
+		$(document).on('change', '.sort_selector', function(){
+    filter_data();
+});
 
         $('#price_range').slider({
             range:true,

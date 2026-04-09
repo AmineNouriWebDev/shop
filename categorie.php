@@ -205,9 +205,9 @@
 		$(document).on('click', 'input.common_selector', function(){
 			filter_data(1);
 		});
-		$(document).on('change', 'select.common_selector', function(){
-			filter_data(1);
-		});
+		$(document).on('change', '.sort_selector', function(){
+    filter_data(1);
+});
 
         $('#price_range').slider({
             range:true,

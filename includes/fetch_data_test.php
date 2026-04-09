@@ -258,7 +258,7 @@ if(isset($_POST["action"])){
     
     // Sort dropdown
     $selected_sort = isset($_POST['sort']) ? $_POST['sort'] : 'price_asc';
-    $output .= '<select id="sort_order" class="common_selector" style="padding:0.35rem 0.6rem; border-radius:0.5rem; border:1.5px solid var(--shop-border,#E0DEFF); background:var(--shop-surface,#fff); color:var(--shop-text-secondary,#6B6589); font-size:0.875rem; font-family:inherit; outline:none; cursor:pointer;">';
+    $output .= '<select id="sort_order" class="sort_selector" style="padding:0.35rem 0.6rem; border-radius:0.5rem; border:1.5px solid var(--shop-border,#E0DEFF); background:var(--shop-surface,#fff); color:var(--shop-text-secondary,#6B6589); font-size:0.875rem; font-family:inherit; outline:none; cursor:pointer;">';
     $sortOptions = [
         'price_asc' => 'Prix : croissant',
         'price_desc' => 'Prix : décroissant',
