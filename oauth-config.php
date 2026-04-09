@@ -37,7 +37,7 @@ define('FACEBOOK_REDIRECT_URI', $oauth_base_url . '/oauth-callback.php?provider=
 
 // Scopes
 define('GOOGLE_SCOPES',   'openid email profile');
-define('FACEBOOK_SCOPES', 'public_profile');
+define('FACEBOOK_SCOPES', 'public_profile,email');
 
 // Endpoints OAuth
 define('GOOGLE_AUTH_URL',    'https://accounts.google.com/o/oauth2/v2/auth');
