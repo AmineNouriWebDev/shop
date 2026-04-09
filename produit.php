@@ -54,7 +54,7 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
 				$categorie_link2 = linkCategBlog(afficheChamp($data1['idparent']));
 				$typeOg = "Product";
 				$imgOg = 'media/products/'.$photo;
-				$urlOg = lienAccueil().''.lienProduits($link);
+				$urlOg = lienProduits($link);
 
 				if($PrixPromo != '0.000') $price=$PrixPromo; else $price=$PrixVente;
 				if ($etatStock == '1') $availability="in stock"; else $availability="out of stock";

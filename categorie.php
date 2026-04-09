@@ -21,12 +21,12 @@
 			    
                 $titrecp  = titreCategories(linkCategBlog($idp)); 
                 
-    			$urlOg  = lienAccueil().''.lienCategorieEquipements($link);
+    			$urlOg  = lienCategorieEquipements($link);
                 if($data['titre_page'] != '') $title_page=afficheChamp1($data['titre_page']); else { $title_page = str_replace("%%SOUSCATEGORIE%%",$titre,$title_scateg); $title_page = str_replace("%%CATEGORIE%%",$titrecp,$title_page); }
                 if($data['keywords'] != '') $keywords_page=afficheChamp($data['keywords']); else { $keywords_page = str_replace("%%SOUSCATEGORIE%%",$titre,$keywords_scateg); $keywords_page = str_replace("%%CATEGORIE%%",$titrecp,$keywords_page);  }
                 if($data['description'] != '') $description_page=afficheChamp($data['description']); else { $description_page = str_replace("%%SOUSCATEGORIE%%",$titre,$description_scateg); $description_page = str_replace("%%CATEGORIE%%",$titrecp,$description_page); }
 			}else{
-    			$urlOg  = lienAccueil().''.lienCategories($link);
+    			$urlOg  = lienCategories($link);
                 if($data['titre_page'] != '') $title_page=afficheChamp1($data['titre_page']); else $title_page = str_replace("%%CATEGORIE%%",$titre,$title_categ);
                 if($data['keywords'] != '') $keywords_page=afficheChamp($data['keywords']); else $keywords_page = str_replace("%%CATEGORIE%%",$titre,$keywords_categ);
                 if($data['description'] != '') $description_page=afficheChamp($data['description']); else $description_page = str_replace("%%CATEGORIE%%",$titre,$description_categ);
