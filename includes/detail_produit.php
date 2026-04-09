@@ -511,7 +511,7 @@
                                 <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; width:100%; min-height:40px;">
                                     <div style="position:relative; display:inline-flex; align-items:center;">
                                         <?php
-                                        $shareUrl   = urlencode(lienAccueil().''.lienProduits($link));
+                                        $shareUrl   = urlencode(lienProduits($link));
                                         $shareTitle  = urlencode($titre);
                                         $shareDesc   = urlencode(strip_tags(courtContenuProduits($id ?? '')));
                                         $shareImg    = urlencode($chemin_absolu.'media/products/'.$photo);
