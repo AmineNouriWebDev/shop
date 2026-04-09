@@ -55,17 +55,36 @@ if(isset($_POST["action"])){
         IFNULL((SELECT MIN(IF(v.prix_promo > 0, v.prix_promo, v.prix_vente)) FROM produit_variations v WHERE v.idproduit = pr.id AND v.prix_vente > 0), 999999)
     )";
 
+    $sort = isset($_POST['sort']) ? $_POST['sort'] : 'price_asc';
+    
     if(isset($_POST["promo"]) && $_POST["promo"] != ''){
         $query .= " AND (pr.prix_promo > 0 OR EXISTS (SELECT 1 FROM produit_variations v WHERE v.idproduit = pr.id AND v.prix_promo > 0))";
-        if($_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
-            $query .= " AND $eff_price_sql BETWEEN '$min_p' AND '$max_p'";
-        }
-        $query .= " GROUP BY pr.id ORDER BY $eff_price_sql ASC";
-    }else{
-        if($_POST["minimum_price"] != '' && $_POST["maximum_price"] != ''){
-            $query .= " AND $eff_price_sql BETWEEN '$min_p' AND '$max_p'";
-        }
-        $query .= " GROUP BY pr.id ORDER BY $eff_price_sql ASC";
+    }
+    
+    if($sort === 'stock') {
+        $query .= " AND pr.etat_stock = '1'";
+    }
+
+    if(isset($_POST["minimum_price"]) && $_POST["minimum_price"] != '' && isset($_POST["maximum_price"]) && $_POST["maximum_price"] != ''){
+        $query .= " AND $eff_price_sql BETWEEN '$min_p' AND '$max_p'";
+    }
+
+    $query .= " GROUP BY pr.id";
+
+    if($sort === 'price_asc') {
+        $query .= " ORDER BY $eff_price_sql ASC";
+    } elseif($sort === 'price_desc') {
+        $query .= " ORDER BY $eff_price_sql DESC";
+    } elseif($sort === 'newest') {
+        $query .= " ORDER BY pr.id DESC";
+    } elseif($sort === 'relevance') {
+        $query .= " ORDER BY pr.note_avis DESC, pr.nb_avis DESC";
+    } elseif($sort === 'name_asc') {
+        $query .= " ORDER BY pr.titre ASC";
+    } elseif($sort === 'name_desc') {
+        $query .= " ORDER BY pr.titre DESC";
+    } else {
+        $query .= " ORDER BY $eff_price_sql ASC";
     }
 
     /* ── Count without LIMIT ── */
@@ -235,6 +254,26 @@ if(isset($_POST["action"])){
     ======================================================== */
     $output .= '<div class="cat-topbar">';
     $output .= '<span class="cat-count">'.$total_row.' produit'.($total_row>1?'s':'').'</span>';
+    $output .= '<div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">';
+    
+    // Sort dropdown
+    $selected_sort = isset($_POST['sort']) ? $_POST['sort'] : 'price_asc';
+    $output .= '<select id="sort_order" class="common_selector" style="padding:0.35rem 0.6rem; border-radius:0.5rem; border:1.5px solid var(--shop-border,#E0DEFF); background:var(--shop-surface,#fff); color:var(--shop-text-secondary,#6B6589); font-size:0.875rem; font-family:inherit; outline:none; cursor:pointer;" onchange="filter_data(1)">';
+    $sortOptions = [
+        'price_asc' => 'Prix : croissant',
+        'price_desc' => 'Prix : décroissant',
+        'newest' => 'Nouveautés',
+        'relevance' => 'Pertinence (Avis)',
+        'name_asc' => 'De A à Z',
+        'name_desc' => 'De Z à A',
+        'stock' => 'En stock (uniquement)'
+    ];
+    foreach($sortOptions as $val => $lbl){
+        $sel = ($val === $selected_sort) ? 'selected' : '';
+        $output .= '<option value="'.$val.'" '.$sel.'>'.$lbl.'</option>';
+    }
+    $output .= '</select>';
+
     $output .= '<div class="view-toggle">';
     $output .= '<a href="javascript:void(0)" id="grid" class="vt-btn vt-active" title="Grille">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -243,7 +282,8 @@ if(isset($_POST["action"])){
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                 </a>';
     $output .= '</div>';
-    $output .= '</div>';
+    $output .= '</div>'; // End flex wrapper
+    $output .= '</div>'; // End cat-topbar
 
     if($total_row > 0){
 

@@ -159,6 +159,7 @@
 			var link = document.getElementById('linkProd').value;
 			var category = get_filter('category');
 			var caracteristique = get_filter('caracteristique');
+			var sort = $('#sort_order').length ? $('#sort_order').val() : 'price_asc';
 			$.ajax({
 				url:"includes/fetch_data_test.php",
 				method:"POST",
@@ -172,6 +173,7 @@
                     maximum_price:maximum_price,
                     link:link,
                     promo:promo,
+                    sort:sort,
                     page:currentPage
                 },
 				success:function(data){

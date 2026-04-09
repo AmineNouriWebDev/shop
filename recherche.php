@@ -106,10 +106,12 @@
 			var category = get_filter('category');
 			var caracteristique = get_filter('caracteristique');
 			var categoryByTitre = '<?php if ((isset($_GET['categorie']) && $_GET['categorie'] != '')){ echo $_GET['categorie']; }elseif ((isset($_POST['categorie']) && $_POST['categorie'] != '')){ echo linkCategBlog($_POST['categorie']); }else{ echo ''; } ?>';
+			var sort = $('#sort_order').length ? $('#sort_order').val() : 'price_asc';
+			
 			$.ajax({
 				url:"includes/fetch_data_test.php",
 				method:"POST",
-				data:{action:action,brand:brand, category:category,caracteristique:caracteristique, type:type,link:link,search:search, minimum_price:minimum_price, maximum_price:maximum_price,categoryByTitre:categoryByTitre,marque:marque,promo:promo },
+				data:{action:action,brand:brand, category:category,caracteristique:caracteristique, type:type,link:link,search:search, minimum_price:minimum_price, maximum_price:maximum_price,categoryByTitre:categoryByTitre,marque:marque,promo:promo,sort:sort },
 				
 				success:function(data){
 					$('.filter_data').html(data);
