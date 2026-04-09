@@ -517,14 +517,10 @@
                                         $shareImg    = urlencode($chemin_absolu.'media/products/'.$photo);
 
                                         /* Facebook */
-                                        // On utilise "dialog/feed" si un App ID est présent pour permettre le partage depuis localhost
-                                        // car "sharer.php" nécessite que Facebook puisse "scrapper" l'URL (impossible en local).
-                                        if (!empty($FACEBOOK_APP_ID)) {
-                                            $fbLink = 'https://www.facebook.com/dialog/feed?app_id='.$FACEBOOK_APP_ID.'&display=popup&link='.$shareUrl.'&name='.$shareTitle.'&description='.$shareDesc.'&picture='.$shareImg.'&redirect_uri='.$shareUrl;
-                                        } else {
-                                            // Fallback sur le sharer classique (ne fonctionnera pas bien en local pour l'aperçu)
-                                            $fbLink = 'https://www.facebook.com/sharer/sharer.php?u='.$shareUrl;
-                                        }
+                                        // On utilise uniquement le sharer classique.
+                                        // Comme l'application Facebook est en mode Développement, 
+                                        // passer un App ID via dialog/feed bloquerait le partage.
+                                        $fbLink = 'https://www.facebook.com/sharer/sharer.php?u='.$shareUrl;
 
                                         /* WhatsApp */
                                         $waLink = 'https://api.whatsapp.com/send?text='.$shareTitle.'%0A'.$shareImg.'%0A'.$shareUrl;
