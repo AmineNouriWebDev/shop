@@ -1,13 +1,30 @@
-<?php	if (isset($_GET['action']) && $_GET['action'] == 'supp' ) {
-		$idb   = $_GET['idb'];
-		supprimerSectionContent($_GET['idsc']);
-		  ?>
-	<script language="javascript">
-	<!--
-		window.location = 'index.php?r=addSectionContent&id=<?php echo $idb; ?>';
-	-->
-	</script>
-	<?php } ?>
+if (isset($_GET['action']) && $_GET['action'] == 'supp' ) {
+    $idb   = $_GET['idb'];
+    supprimerSectionContent($_GET['idsc']);
+    ?>
+    <script>window.location = 'index.php?r=addSectionContent&id=<?php echo $idb; ?>';</script>
+    <?php exit;
+}
+
+if (isset($_GET['action']) && ($_GET['action'] == 'del_photo' || $_GET['action'] == 'del_photo_m' || $_GET['action'] == 'del_photo_t')) {
+    $idsc_del = intval($_GET['idsc']);
+    $idb_del  = intval($_GET['idb']);
+    
+    if($_GET['action'] == 'del_photo') {
+        $r_del = executeRequete("SELECT photo FROM liste_section_content WHERE id='$idsc_del'");
+        $d_del = mysqli_fetch_array($r_del);
+        if (!empty($d_del['photo'])) @unlink('../media/site/' . $d_del['photo']);
+        executeRequete("UPDATE liste_section_content SET photo='' WHERE id='$idsc_del'");
+    } elseif($_GET['action'] == 'del_photo_m') {
+        supprimerImageMobileSectionContent($idsc_del);
+    } elseif($_GET['action'] == 'del_photo_t') {
+        supprimerImageTabletSectionContent($idsc_del);
+    }
+    
+    ?>
+    <script>window.location = 'index.php?r=addSectionContent&id=<?php echo $idb_del; ?>';</script>
+    <?php exit;
+}
 <?php 
 if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 	// Prevent VPS silent crashes on large image conversions
@@ -136,9 +153,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                     <tr>
                         <td>
                             <?php if($preview): ?>
-                                <img src="<?php echo htmlspecialchars($preview); ?>" width="70" height="50" 
-                                     style="object-fit:cover; border-radius:0.4rem; border:1px solid var(--color-border);"
-                                     onerror="this.style.display='none'">
+                                <div style="position:relative; display:inline-block;">
+                                    <img src="<?php echo htmlspecialchars($preview); ?>" width="70" height="50" 
+                                         style="object-fit:cover; border-radius:0.4rem; border:1px solid var(--color-border);"
+                                         onerror="this.style.display='none'">
+                                    
+                                    <?php if(!empty($data['photo'])): ?>
+                                    <a href="index.php?r=addSectionContent&id=<?php echo $_GET['id']; ?>&idsc=<?php echo $data['id']; ?>&idb=<?php echo $_GET['id']; ?>&action=del_photo"
+                                       onclick="return confirm('Supprimer l\'image desktop ?')"
+                                       style="position:absolute; top:-5px; right:-5px; width:18px; height:18px; background:#ef4444; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; text-decoration:none; box-shadow:0 1px 3px rgba(0,0,0,0.3);" title="Supprimer l'image">×</a>
+                                    <?php endif; ?>
+                                </div>
                             <?php else: ?>
                                 <span style="color:var(--color-text-muted); font-size:0.75rem;">–</span>
                             <?php endif; ?>

@@ -10,6 +10,14 @@ if(mysqli_num_rows($res_mig1) == 0) executeRequete("ALTER TABLE liste_produits A
 $res_mig2 = executeRequete("SHOW COLUMNS FROM bloc_accueil LIKE 'badge_titre'");
 if(mysqli_num_rows($res_mig2) == 0) executeRequete("ALTER TABLE bloc_accueil ADD badge_titre VARCHAR(255) DEFAULT ''");
 
+if (isset($_GET['supp_photo']) && $_GET['supp_photo'] == 1) {
+    supprimerImageBloc($_GET['id']);
+    ?>
+    <script>window.location = 'index.php?r=mbloc_accueil&id=<?php echo $_GET['id']; ?>';</script>
+    <?php
+    exit;
+}
+
 if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 {
 	$id			        = formReception($_POST['id']);
@@ -90,7 +98,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                       <div class="admin-form-group">
                                         <label>Image</label>
                                         <?php if(ApercuBloc($_GET['id'])) { ?>
-								         <div><img src="../<?php echo photoBlocSite($_GET['id']); ?>" style="max-width:150px" /></div>
+								         <div style="position:relative; display:inline-block; margin-bottom:10px;">
+                                            <img src="../<?php echo photoBlocSite($_GET['id']); ?>" style="max-width:150px; border:1px solid #ddd; border-radius:4px; padding:4px;" />
+                                            <a href="index.php?r=mbloc_accueil&id=<?php echo $_GET['id']; ?>&supp_photo=1" 
+                                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?')" 
+                                               style="position:absolute; top:-10px; right:-10px; background:#ef5350; color:white; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition: transform 0.2s;"
+                                               onmouseover="this.style.transform='scale(1.1)'" 
+                                               onmouseout="this.style.transform='scale(1)'">
+                                                <i class="fa fa-times" style="font-size:12px;"></i>
+                                            </a>
+                                         </div>
                                          <?php } ?>
                                         <div class="controls">
                                             <input type="file" name="photo" class="admin-input"> 
