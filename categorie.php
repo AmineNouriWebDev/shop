@@ -204,8 +204,8 @@
 			return filter;
 		}
 
-        /* Reset to page 1 on any filter change */
-		$(document).on('click', 'input.common_selector', function(){
+        /* On filter change (checkbox or mobile select) */
+		$(document).on('change', '.common_selector', function(){
 			filter_data(1);
 		});
 		$(document).on('change', '.sort_selector', function(){

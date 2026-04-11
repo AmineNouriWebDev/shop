@@ -150,10 +150,16 @@
 			$('.'+class_name+':checked').each(function(){
 				filter.push($(this).val());
 			});
+			/* Support for mobile select dropdowns */
+			$('select.'+class_name).each(function(){
+				if($(this).val() && $(this).val() !== '') {
+					filter.push($(this).val());
+				}
+			});
 			return filter;
 		}
 
-		$(document).on('click', 'input.common_selector', function(){
+		$(document).on('change', '.common_selector', function(){
 			filter_data(1);
 		});
 
