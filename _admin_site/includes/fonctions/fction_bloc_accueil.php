@@ -370,4 +370,20 @@ function titreIcones($id)
 	return afficheChamp($data['titre']);
 }
 
+function triListeProduits($id)
+{
+	$requete = "SELECT * FROM `liste_produits` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	return ($data && isset($data['tri'])) ? afficheChamp($data['tri']) : 'recent';
+}
+
+function stockOnlyListeProduits($id)
+{
+	$requete = "SELECT * FROM `liste_produits` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	return ($data && isset($data['stock_only'])) ? afficheChamp($data['stock_only']) : '0';
+}
+
 ?>

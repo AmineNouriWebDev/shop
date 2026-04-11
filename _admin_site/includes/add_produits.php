@@ -19,9 +19,11 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 	$en_promo  = formReception($_POST['en_promo']);
 	$categorie = formReception($_POST['categorie']);
 	$marque    = formReception($_POST['marque']);
-    $idproduit = formReception($_POST['idproduit'] ?? 0);
+	$idproduit = formReception($_POST['idproduit'] ?? 0);
+	$tri       = formReception($_POST['tri'] ?? 'recent');
+	$stock_only = formReception($_POST['stock_only'] ?? 0);
 	
-		$requete = 'INSERT INTO `liste_produits` (`idbloc`,`en_promo`, `categorie`, `marque`, `idproduit`) VALUES ("'. $idbloc .'","'. $en_promo .'","'. $categorie .'","'. $marque .'","'.$idproduit.'")';
+		$requete = 'INSERT INTO `liste_produits` (`idbloc`,`en_promo`, `categorie`, `marque`, `idproduit`, `tri`, `stock_only`) VALUES ("'. $idbloc .'","'. $en_promo .'","'. $categorie .'","'. $marque .'","'.$idproduit.'","'.$tri.'","'.$stock_only.'")';
 		$result = executeRequete($requete);	
 	?>
 	<script language="javascript">
@@ -46,6 +48,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                                 <th>En promo</th>
                                                 <th>Catégorie / Règle</th>
                                                 <th>Marque</th>
+                                                <th>Tri / Stock</th>
                                                 <th class="text-nowrap">Action</th>
                                             </tr>
                                         </thead>
@@ -72,6 +75,22 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
                                                 <td><?php if($data['en_promo'] == 0) echo 'Non'; else echo 'Oui'; ?></td>
                                                 <td><?php echo titreCategBlog($data['categorie']); ?></td>
                                                 <td><?php echo raisonByLinkMarque($data['marque']); ?></td>
+                                                <td>
+                                                    <div class="small">
+                                                        <i class="fa fa-sort"></i> 
+                                                        <?php 
+                                                            $t = $data['tri'] ?? 'recent';
+                                                            if($t == 'recent') echo 'Plus récent';
+                                                            elseif($t == 'prix_asc') echo 'Prix croissant';
+                                                            elseif($t == 'prix_desc') echo 'Prix décroissant';
+                                                            elseif($t == 'random') echo 'Aléatoire';
+                                                            else echo $t;
+                                                        ?>
+                                                        <br>
+                                                        <i class="fa fa-check-circle"></i> 
+                                                        <?php echo ($data['stock_only'] == 1) ? 'Stock uniquement' : 'Tous'; ?>
+                                                    </div>
+                                                </td>
                                                 <td class="text-nowrap">
                                                     <a href="index.php?r=editproduits&idsc=<?php echo $data['id']; ?>&idb=<?php echo $_GET['id']; ?>" data-toggle="tooltip" data-original-title="Modifier"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                                                     <a href="index.php?r=addproduits&idsc=<?php echo $data['id']; ?>&idb=<?php echo $_GET['id']; ?>&action=supp" data-toggle="tooltip" data-original-title="Supprimer"> <i class="fa fa-close text-danger"></i></a>
@@ -179,6 +198,33 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 											</div>
 										</div>
 									</div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Tri des produits (Auto)</h5>
+                                                <div class="controls">
+                                                    <select name="tri" class="form-control">
+                                                        <option value="recent">Plus récents en premier</option>
+                                                        <option value="prix_asc">Prix : Croissant</option>
+                                                        <option value="prix_desc">Prix : Décroissant</option>
+                                                        <option value="random">Aléatoire (Mix)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Disponibilité</h5>
+                                                <div class="controls">
+                                                    <select name="stock_only" class="form-control">
+                                                        <option value="0">Tous les produits</option>
+                                                        <option value="1">Produits en stock uniquement</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="text-xs-right">
                                        <button type="submit" class="btn btn-info">Enregistrer</button>

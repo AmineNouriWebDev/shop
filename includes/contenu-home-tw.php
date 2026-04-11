@@ -577,10 +577,23 @@
     $d_p = mysqli_fetch_array($r_p);
     $is_promo = ($d_p && $d_p['en_promo'] == '1');
 
-    // numColBloc() = direct columns per row (e.g. 6 = 6 per row, 4 = 4 per row)
     // Limit = 2 rows of products (matching original bloc_accueil.php logic)
     $limit_map = [2=>4, 3=>6, 4=>8, 5=>10, 6=>12];
     $limit = $limit_map[$num_cols] ?? ($num_cols * 2);
+
+    // Filter/Sort settings
+    $req_settings = "SELECT tri, stock_only FROM `liste_produits` WHERE idbloc = '$bloc_id' LIMIT 1";
+    $res_settings = executeRequete($req_settings);
+    $settings = mysqli_fetch_assoc($res_settings);
+    $tri_type = $settings['tri'] ?? 'recent';
+    $stock_only = $settings['stock_only'] ?? 0;
+
+    $order_sql = "is_manual DESC, id DESC";
+    if($tri_type == 'prix_asc') $order_sql = "is_manual DESC, prix_vente ASC";
+    elseif($tri_type == 'prix_desc') $order_sql = "is_manual DESC, prix_vente DESC";
+    elseif($tri_type == 'random') $order_sql = "is_manual DESC, RAND()";
+
+    $stock_sql = ($stock_only == 1) ? " AND pr.etat_stock = '1' " : "";
 
     // Vérifier si la colonne idproduit existe (safe check)
     $has_idproduit = false;
@@ -602,7 +615,7 @@
              AND (lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie)
              AND ((lpr.marque != '' AND pr.titre LIKE CONCAT('%', lpr.marque, '%')) OR lpr.marque = ''))
           ) AS inner_q
-          ORDER BY inner_q.is_manual DESC, inner_q.prix_vente ASC
+          ORDER BY $order_sql
           LIMIT 0,$limit
         ";
       } else {
@@ -611,7 +624,7 @@
           AND (pr.prix_promo != '0.000' AND lpr.en_promo='1')
           AND (lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie)
           AND ((lpr.marque != '' AND pr.titre LIKE CONCAT('%', lpr.marque, '%')) OR lpr.marque = '')
-          ORDER BY pr.prix_vente ASC LIMIT 0,$limit";
+          ORDER BY $order_sql LIMIT 0,$limit";
       }
     } else {
       if ($has_idproduit) {
@@ -628,7 +641,7 @@
              AND (lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie)
              AND ((lpr.marque != '' AND pr.titre LIKE CONCAT('%', lpr.marque, '%')) OR lpr.marque = ''))
           ) AS inner_q
-          ORDER BY inner_q.is_manual DESC, inner_q.id DESC, inner_q.prix_vente ASC
+          ORDER BY $order_sql
           LIMIT 0,$limit
         ";
       } else {
@@ -637,7 +650,7 @@
           AND (pr.prix_promo = '0.000' AND lpr.en_promo='0')
           AND (lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie)
           AND ((lpr.marque != '' AND pr.titre LIKE CONCAT('%', lpr.marque, '%')) OR lpr.marque = '')
-          ORDER BY pr.id DESC, pr.prix_vente ASC LIMIT 0,$limit";
+          ORDER BY $order_sql LIMIT 0,$limit";
       }
     }
     $res_products = executeRequete($req_products);

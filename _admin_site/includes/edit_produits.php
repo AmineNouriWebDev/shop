@@ -8,7 +8,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ){
 	$marque    = formReception($_POST['marque']);
 		
 	
-		$requete = 'UPDATE `liste_produits` SET `en_promo` = "'. $en_promo .'",`categorie` = "'. $categorie .'",`marque` = "'. $marque .'" WHERE `id`="'.$idsc.'"';
+	$tri       = formReception($_POST['tri'] ?? 'recent');
+	$stock_only = formReception($_POST['stock_only'] ?? 0);
+	
+		$requete = 'UPDATE `liste_produits` SET `en_promo` = "'. $en_promo .'",`categorie` = "'. $categorie .'",`marque` = "'. $marque .'", `tri` = "'.$tri.'", `stock_only` = "'.$stock_only.'" WHERE `id`="'.$idsc.'"';
 		$result = executeRequete($requete);	
 	?>
 	<script language="javascript">
@@ -95,6 +98,35 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' ){
 											</div>
 										</div>
 									</div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Tri des produits (Auto)</h5>
+                                                <div class="controls">
+                                                    <?php $current_tri = triListeProduits($_GET['idsc']); ?>
+                                                    <select name="tri" class="form-control">
+                                                        <option value="recent" <?php if($current_tri == 'recent') echo 'selected'; ?>>Plus récents en premier</option>
+                                                        <option value="prix_asc" <?php if($current_tri == 'prix_asc') echo 'selected'; ?>>Prix : Croissant</option>
+                                                        <option value="prix_desc" <?php if($current_tri == 'prix_desc') echo 'selected'; ?>>Prix : Décroissant</option>
+                                                        <option value="random" <?php if($current_tri == 'random') echo 'selected'; ?>>Aléatoire (Mix)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <h5>Disponibilité</h5>
+                                                <div class="controls">
+                                                    <?php $current_stock = stockOnlyListeProduits($_GET['idsc']); ?>
+                                                    <select name="stock_only" class="form-control">
+                                                        <option value="0" <?php if($current_stock == 0) echo 'selected'; ?>>Tous les produits</option>
+                                                        <option value="1" <?php if($current_stock == 1) echo 'selected'; ?>>Produits en stock uniquement</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="text-xs-right">
                                        <button type="submit" class="btn btn-info">Enregistrer</button>

@@ -16,11 +16,28 @@
 					
 					<?php if(typeSectionBloc($data1['id']) =='4' ) { ?>
 					
-                		        <?php
+                 		        <?php
                 		            if (numColBloc($data1['id']) =='2'){ $numRowsc = 6;  }elseif (numColBloc($data1['id']) =='3'){ $numRowsc = 12;}elseif (numColBloc($data1['id']) =='4'){ $numRowsc = 9;}elseif (numColBloc($data1['id']) =='5'){ $numRowsc = 10;}elseif (numColBloc($data1['id']) =='6'){ $numRowsc = 12;}
-            			            $req = "SELECT DISTINCT pr.id,pr.link FROM `produits` pr,`liste_produits` lpr,`categories_marques` ctgm WHERE lpr.idbloc ='".$data1['id']."' AND pr.etat='1' AND ( pr.prix_promo !='0.000' AND lpr.en_promo='1') AND 
-            			            ( lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie ) AND ( (lpr.marque !='' AND pr.titre LIKE CONCAT('%',lpr.marque,'%')) OR lpr.marque ='')
-            			            ORDER BY pr.prix_vente ASC LIMIT 0,".$numRowsc."";
+
+                                    // Get filter/sort settings from the first rule of this block
+                                    $req_settings = "SELECT tri, stock_only FROM `liste_produits` WHERE idbloc = '".$data1['id']."' LIMIT 1";
+                                    $res_settings = executeRequete($req_settings);
+                                    $settings = mysqli_fetch_assoc($res_settings);
+                                    $tri_type = $settings['tri'] ?? 'recent';
+                                    $stock_only = $settings['stock_only'] ?? 0;
+
+                                    $order_by = "pr.id DESC";
+                                    if($tri_type == 'prix_asc') $order_by = "pr.prix_vente ASC";
+                                    elseif($tri_type == 'prix_desc') $order_by = "pr.prix_vente DESC";
+                                    elseif($tri_type == 'random') $order_by = "RAND()";
+
+                                    $stock_sql = ($stock_only == 1) ? " AND pr.etat_stock = '1' " : "";
+
+            			            $req = "SELECT DISTINCT pr.id,pr.link FROM `produits` pr,`liste_produits` lpr WHERE lpr.idbloc ='".$data1['id']."' AND pr.etat='1' AND ( pr.prix_promo !='0.000' AND lpr.en_promo='1') AND 
+            			            ( (lpr.idproduit > 0 AND pr.id = lpr.idproduit) OR (lpr.idproduit = 0 AND (lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie) AND ( (lpr.marque !='' AND pr.titre LIKE CONCAT('%',lpr.marque,'%')) OR lpr.marque ='') ) )
+                                    $stock_sql
+            			            ORDER BY $order_by LIMIT 0,".$numRowsc."";
+                                    //echo $req;
                                     //echo $req;
                                     $res = executeRequete($req);
                                     $numRows = mysqli_num_rows($res);
@@ -79,9 +96,11 @@
 						
     		                    <?php } }else{  
     		                     
-            			            $req1 = "SELECT DISTINCT pr.id,pr.link FROM `produits` pr,`liste_produits` lpr,`categories_marques` ctgm WHERE lpr.idbloc ='".$data1['id']."' AND pr.etat='1' AND ( pr.prix_promo ='0.000' AND lpr.en_promo='0') AND 
-            			            ( lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie ) AND ( (lpr.marque !='' AND pr.titre LIKE CONCAT('%',lpr.marque,'%')) OR lpr.marque ='')
-            			            ORDER BY pr.id DESC,pr.prix_vente ASC LIMIT 0,".$numRowsc."";
+            			            $req1 = "SELECT DISTINCT pr.id,pr.link FROM `produits` pr,`liste_produits` lpr WHERE lpr.idbloc ='".$data1['id']."' AND pr.etat='1' AND ( pr.prix_promo ='0.000' AND lpr.en_promo='0') AND 
+            			            ( (lpr.idproduit > 0 AND pr.id = lpr.idproduit) OR (lpr.idproduit = 0 AND (lpr.categorie = pr.categorie OR pr.idparent_categ = lpr.categorie) AND ( (lpr.marque !='' AND pr.titre LIKE CONCAT('%',lpr.marque,'%')) OR lpr.marque ='') ) )
+                                    $stock_sql
+            			            ORDER BY $order_by LIMIT 0,".$numRowsc."";
+                                    //echo $req1;
                                     //echo $req1;
                                     $res1 = executeRequete($req1);
                                     $numRows = mysqli_num_rows($res1);
