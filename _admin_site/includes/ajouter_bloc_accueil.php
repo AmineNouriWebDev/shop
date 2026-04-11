@@ -122,31 +122,33 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="admin-form-group">
-                                                <label>Nombre de produits par ligne</label>
-                                                <div class="controls">
-                                                    <select name="num_col" class="admin-input">
-                                                        <option value="12">1 produit</option>
-                                                        <option value="6">2 produits</option>
-                                                        <option value="4" selected>3 produits</option>
-                                                        <option value="3">4 produits</option>
-                                                        <option value="5">5 produits</option>
-                                                        <option value="2">6 produits</option>
-                                                    </select>
+                                    <div id="product-settings-container" style="display:none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="admin-form-group">
+                                                    <label>Nombre d'éléments par ligne</label>
+                                                    <div class="controls">
+                                                        <select name="num_col" class="admin-input">
+                                                            <option value="12">1 produit</option>
+                                                            <option value="6">2 produits</option>
+                                                            <option value="4" selected>3 produits</option>
+                                                            <option value="3">4 produits</option>
+                                                            <option value="5">5 produits</option>
+                                                            <option value="2">6 produits</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="admin-form-group">
-                                                <label>Nombre de rangées</label>
-                                                <div class="controls">
-                                                    <select name="num_rows" class="admin-input">
-                                                        <?php for($i=1; $i<=10; $i++) { ?>
-                                                            <option value="<?php echo $i; ?>" <?php if($i==2) echo "selected"; ?>><?php echo $i; ?> rangée<?php echo ($i>1?'s':''); ?></option>
-                                                        <?php } ?>
-                                                    </select>
+                                            <div class="col-md-6">
+                                                <div class="admin-form-group">
+                                                    <label>Nombre de rangées</label>
+                                                    <div class="controls">
+                                                        <select name="num_rows" class="admin-input">
+                                                            <?php for($i=1; $i<=10; $i++) { ?>
+                                                                <option value="<?php echo $i; ?>" <?php if($i==2) echo "selected"; ?>><?php echo $i; ?> rangée<?php echo ($i>1?'s':''); ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,7 +158,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                        <div class="admin-form-group">
                                         <label>Type section <span class="text-danger">*</span></label>
                                         <div class="controls">
-                                            <select name="type_section" required class="admin-input">
+                                            <select name="type_section" id="type_section_select" onchange="toggleProductSettings()" required class="admin-input">
                                                 <option value="0" selected="selected">-- Selectionnez  --</option>
                                                  <?php
             	                                 $req = 'SELECT * FROM `liste_sections` ORDER BY `id` ASC';
@@ -168,6 +170,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                         </div>
                                     </div>
                                      </div>
+
+                                    <script>
+                                    function toggleProductSettings() {
+                                        var select = document.getElementById('type_section_select');
+                                        var container = document.getElementById('product-settings-container');
+                                        if (select.value == '4' || select.value == '6') {
+                                            container.style.display = 'block';
+                                        } else {
+                                            container.style.display = 'none';
+                                        }
+                                    }
+                                    </script>
                                     </div>
                                 
                                     <div class="row">

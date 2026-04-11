@@ -563,6 +563,12 @@
     $bloc_id   = $bloc['id'];
     $type_bloc = typeSectionBloc($bloc_id);
     $num_cols  = intval(numColBloc($bloc_id));
+    $num_rows  = numRowsBloc($bloc_id);
+    if ($num_cols == 5) {
+        $limit = 5 * $num_rows;
+    } else {
+        $limit = (12 / $num_cols) * $num_rows;
+    }
     $is_promo  = false;
 
     // Section alt background on even blocs
@@ -577,13 +583,6 @@
     $d_p = mysqli_fetch_array($r_p);
     $is_promo = ($d_p && $d_p['en_promo'] == '1');
 
-    // Dynamic Limit based on columns and rows
-    $num_rows = numRowsBloc($bloc_id);
-    if ($num_cols == 5) {
-        $limit = 5 * $num_rows;
-    } else {
-        $limit = (12 / $num_cols) * $num_rows;
-    }
 
     // Filter/Sort settings
     $req_settings = "SELECT tri, stock_only FROM `liste_produits` WHERE idbloc = '$bloc_id' LIMIT 1";
@@ -801,12 +800,15 @@
   <?php endif; ?>
 
   <?php elseif ($type_bloc == '6'): // ── Promo image banners ──
-    $req_bnr = "SELECT * FROM `liste_section_content` WHERE idbloc='$bloc_id'";
-    $res_bnr = executeRequete($req_bnr);
-    $bnrs    = [];
-    while ($b = mysqli_fetch_array($res_bnr)) $bnrs[] = $b;
-    $main_img = photoBlocSite($bloc_id);
-  ?>
+    $has_main = ApercuBloc($bloc_id);
+    $limit_tw = $limit - ($has_main ? 1 : 0);
+    $bnrs = [];
+    if($limit_tw > 0) {
+        $req_bnr = "SELECT * FROM `liste_section_content` WHERE idbloc='$bloc_id' ORDER BY id DESC LIMIT 0,$limit_tw";
+        $res_bnr = executeRequete($req_bnr);
+        while ($b = mysqli_fetch_array($res_bnr)) $bnrs[] = $b;
+    }
+?>
   <?php if (!empty($bnrs)): ?>
   <div class="<?php echo $section_class; ?>" id="<?php echo ancreBloc($bloc_id); ?>">
     <div class="hp-container">
@@ -818,9 +820,9 @@
 
       <?php
         // numColBloc() = direct columns per row (same logic as type 4)
-        $bnr_cols_desktop = max(1, $num_cols);
+        $bnr_cols_desktop = ($num_cols == 5) ? 5 : (12 / $num_cols);
         $bnr_cols_tablet  = max(2, (int)ceil($bnr_cols_desktop / 2));
-        $bnr_cols_mobile  = min(2, max(1, (int)ceil($bnr_cols_desktop / 3)));
+        $bnr_cols_mobile  = 2; // Always 2 on mobile
         $bnr_grid_id      = 'bnr-bloc-' . $bloc_id;
         $bnr_style        = "display:grid; gap:0.875rem; grid-template-columns:repeat({$bnr_cols_mobile},1fr);";
       ?>
@@ -829,6 +831,11 @@
         @media (min-width: 1024px) { #<?php echo $bnr_grid_id; ?> { grid-template-columns: repeat(<?php echo $bnr_cols_desktop; ?>, 1fr) !important; gap: 1rem !important; } }
       </style>
       <div id="<?php echo $bnr_grid_id; ?>" style="<?php echo $bnr_style; ?>">
+        <?php if($has_main): ?>
+          <a href="<?php echo htmlspecialchars(lienBloc($bloc_id)); ?>" class="hp-promo-card hp-reveal-item">
+            <img src="<?php echo photoBlocSite($bloc_id); ?>" alt="" loading="lazy" style="width:100%; height:100%; object-fit:cover; object-position:center;">
+          </a>
+        <?php endif; ?>
 
         <!-- Sub banners -->
         <?php foreach ($bnrs as $bnr):

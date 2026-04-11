@@ -5,26 +5,25 @@
 
 	                $resultat1 = executeRequete($requete1);
 
-					while($data1 = mysqli_fetch_array($resultat1)) {
-				?>
+					<?php while($data1 = mysqli_fetch_array($resultat1)) { 
+                        $col_width = intval(numColBloc($data1['id']));
+                        $num_rows  = numRowsBloc($data1['id']);
+                        if ($col_width == 5) {
+                            $numRowsc = 5 * $num_rows;
+                        } else {
+                            $numRowsc = (12 / $col_width) * $num_rows;
+                        }
+                    ?>
+					<div id="<?php echo ancreBloc($data1['id']); ?>" class="hp-section-wrapper">
 				<?php if( $data1['affichage_titre'] == '1'){ ?>
 				<div class="text-center my-4">
     				<h2><?php echo titreBloc($data1['id']); ?></h2>
 				</div>
 				<?php } ?>
-				<div class="row <?php if (numColBloc($data1['id']) =='5'){ echo "row-cols-lg-5  row-cols-md-3 row-cols-sm-2 row-cols-2"; } ?> justify-content-center" id="<?php echo ancreBloc($data1['id']); ?>">
+				<div class="row row-cols-2 row-cols-md-<?php echo ($col_width <= 3 ? 4 : 3); ?> row-cols-lg-<?php echo ($col_width == 5 ? 5 : (12 / $col_width)); ?> justify-content-center">
 					
 					<?php if(typeSectionBloc($data1['id']) =='4' ) { ?>
 					
-                 		        <?php
-                		            $col_width = intval(numColBloc($data1['id']));
-                                    $num_rows  = numRowsBloc($data1['id']);
-                                    
-                                    if ($col_width == 5) {
-                                        $numRowsc = 5 * $num_rows;
-                                    } else {
-                                        $numRowsc = (12 / $col_width) * $num_rows;
-                                    }
 
                                     // Get filter/sort settings from the first rule of this block
                                     $req_settings = "SELECT tri, stock_only FROM `liste_produits` WHERE idbloc = '".$data1['id']."' LIMIT 1";
@@ -55,7 +54,7 @@
                     				
                 		        ?>
         						
-                				<div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col-6"; }else{ ?>col-6 col-sm-6 col-md-6 col-lg-<?php echo numColBloc($data1['id']); } ?> mb-4">
+                				<div class="col mb-4">
         							<div class="single-product-wrapper border p-2 text-center hoverDiv">
         								<!-- Product Image -->
         								<a href="<?php echo  lienProduits($link_p); ?>" class="product-img hover-zoom">
@@ -117,7 +116,7 @@
                     				if($datapr1['link'])  $link_p1  = $datapr1['link'];
     		                    
     		                    ?>
-			                    <div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col-6"; }else{ ?>col-6 col-sm-6 col-md-6 col-lg-<?php echo numColBloc($data1['id']); } ?> mb-4">
+			                    <div class="col mb-4">
         							<div class="single-product-wrapper border p-2 text-center hoverDiv">
         								<!-- Product Image -->
         								<a href="<?php echo  lienProduits($link_p1); ?>" class="product-img hover-zoom">
@@ -166,7 +165,7 @@
 					<?php }elseif(typeSectionBloc($data1['id']) =='1' ) { ?>
 			                    <div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col"; }else{ ?> col-lg-<?php echo numColBloc($data1['id']); } ?> text-center my-4">
 	
-                            		<div id="carouselSection" class="carousel slide" data-ride="carousel">
+                            		<div id="carousel-<?php echo $data1['id']; ?>" class="carousel slide" data-ride="carousel">
                             	    <?php 
                             			$req   = "SELECT * FROM `liste_section_content` WHERE idbloc='".$data1['id']."'";
                             			$res  = executeRequete($req);
@@ -197,11 +196,11 @@
                                             
                             			<?php $counter++;  } ?>
                             			</div>
-                            			<a class="carousel-control-prev" href="#carouselSection" role="button" data-slide="prev" style="top: 80px;">
+                            			<a class="carousel-control-prev" href="#carousel-<?php echo $data1['id']; ?>" role="button" data-slide="prev" style="top: 80px;">
                             			  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             			  <span class="sr-only">Previous</span>
                             			</a>
-                            			<a class="carousel-control-next" href="#carouselSection" role="button" data-slide="next" style="top: 80px;">
+                            			<a class="carousel-control-next" href="#carousel-<?php echo $data1['id']; ?>" role="button" data-slide="next" style="top: 80px;">
                             			  <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             			  <span class="sr-only">Next</span>
                             			</a>
@@ -211,28 +210,34 @@
 					
 					<?php }elseif(typeSectionBloc($data1['id']) =='6' ) { ?>
 					
-					            <?php if(ApercuBloc($data1['id'])){ ?>
-			                    <div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col"; }else{ ?>col-xs-4 mobile-section col-sm-4 col-md-4 col-lg-<?php echo numColBloc($data1['id']); } ?> text-center mb-4">
+					            <?php 
+                                    $has_apercu = ApercuBloc($data1['id']);
+                                    if($has_apercu){ 
+                                ?>
+			                    <div class="col text-center mb-4">
 			                        <div class="h-100">
 			                            <a href="<?php echo lienBloc($data1['id']);  ?>"><img src="<?php echo photoBlocSite($data1['id']); ?>" class="img-fluid" style="width: 100%;object-fit: contain;height: -webkit-fill-available;"></a>
         						    </div>
         						</div>
         						<?php } ?>
                 		        <?php 
-            			            $req = "SELECT * FROM `liste_section_content` WHERE idbloc='".$data1['id']."' ";
-                                    $res = executeRequete($req);
+                                    $limit_banner = $numRowsc - ($has_apercu ? 1 : 0);
+                                    if ($limit_banner > 0) {
+            			                $req = "SELECT * FROM `liste_section_content` WHERE idbloc='".$data1['id']."' ORDER BY id DESC LIMIT 0, $limit_banner";
+                                        $res = executeRequete($req);
                 		            while ($databn = mysqli_fetch_array($res))  {
                     				if($databn['id'])    $id_bn    = $databn['id']; 
                     				
                 		        ?>
-			                    <div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col"; }else{ ?>col-xs-4 col-sm-4 mobile-section col-md-4 col-lg-<?php echo numColBloc($data1['id']); } ?> text-center mb-4">
+			                    <div class="col text-center mb-4">
 			                        <div class="h-100">
 			                            <a href="<?php echo lienSectionContent($id_bn);  ?>"><img src="<?php echo photoSectionContent($id_bn); ?>" class="img-fluid" style="width: 100%;object-fit: contain;height: -webkit-fill-available;"></a>
         						    </div>
         						</div>
-    		                    <?php }  ?>
+    		                    <?php } } ?>
 					<?php } ?>
 				</div>
+					</div>
 				<?php } ?>
 				
 				<?php include('categ-contact-accueil.php'); ?>
