@@ -22,12 +22,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 	$affichage_titre 	= formReception($_POST['affichage_titre']);
 	$affichage_accueil 	= formReception($_POST['affichage_accueil']);
 	$num_col 	        = formReception($_POST['num_col']);
+	$num_rows 	        = formReception($_POST['num_rows'] ?? 2);
 	$type_section       = formReception($_POST['type_section']);
 	$ordre 		        = formReception($_POST['ordre']);
 	$etat 	            = formReception($_POST['etat']);
 	$datec              = timestampTD(date("d/m/Y H:i:s"));
 		
-	$requete = "UPDATE `bloc_accueil` SET `titre`='".$titre."',`type_section`='".$type_section."',`contenu`='".$contenu."',`num_col`='".$num_col."',`ancre`='".$ancre."',`lien`='".$lien."', `icone`='".$icone."', `badge_titre`='".$badge_titre."', `ordre`='".$ordre."',
+	$requete = "UPDATE `bloc_accueil` SET `titre`='".$titre."',`type_section`='".$type_section."',`contenu`='".$contenu."',`num_col`='".$num_col."', `num_rows`='".$num_rows."', `ancre`='".$ancre."',`lien`='".$lien."', `icone`='".$icone."', `badge_titre`='".$badge_titre."', `ordre`='".$ordre."',
 	`affichage_titre`='".$affichage_titre."',`affichage_accueil`='".$affichage_accueil."',`etat`='".$etat."' WHERE `id`='".$id."'";
 	$resultat = executeRequete($requete);
 	
@@ -132,22 +133,35 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                         </div>
                                     </div>
                                     <div class="row">
-                                     <div class="col-md-6">
-                                       <div class="admin-form-group">
-                                        <label>Nombre des colonnes</label>
-                                        <div class="controls">
-                                            <select name="num_col" class="admin-input">
-                                                <option value="12" <?php if(numColBloc($_GET['id'])=="12") echo "selected"; ?>>1</option>
-                                                <option value="6" <?php if(numColBloc($_GET['id'])=="6") echo "selected"; ?>>2</option>
-                                                <option value="4" <?php if(numColBloc($_GET['id'])=="4") echo "selected"; ?>>3</option>
-                                                <option value="3" <?php if(numColBloc($_GET['id'])=="3") echo "selected"; ?>>4</option>
-                                                <option value="5" <?php if(numColBloc($_GET['id'])=="5") echo "selected"; ?>>5</option>
-                                                <option value="2" <?php if(numColBloc($_GET['id'])=="2") echo "selected"; ?>>6</option>
-                                            </select>
+                                        <div class="col-md-6">
+                                            <div class="admin-form-group">
+                                                <label>Nombre de produits par ligne</label>
+                                                <div class="controls">
+                                                    <select name="num_col" class="admin-input">
+                                                        <option value="12" <?php if(numColBloc($_GET['id'])=="12") echo "selected"; ?>>1 produit</option>
+                                                        <option value="6" <?php if(numColBloc($_GET['id'])=="6") echo "selected"; ?>>2 produits</option>
+                                                        <option value="4" <?php if(numColBloc($_GET['id'])=="4") echo "selected"; ?>>3 produits</option>
+                                                        <option value="3" <?php if(numColBloc($_GET['id'])=="3") echo "selected"; ?>>4 produits</option>
+                                                        <option value="5" <?php if(numColBloc($_GET['id'])=="5") echo "selected"; ?>>5 produits</option>
+                                                        <option value="2" <?php if(numColBloc($_GET['id'])=="2") echo "selected"; ?>>6 produits</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="admin-form-group">
+                                                <label>Nombre de rangées</label>
+                                                <div class="controls">
+                                                    <?php $cur_rows = numRowsBloc($_GET['id']); ?>
+                                                    <select name="num_rows" class="admin-input">
+                                                        <?php for($i=1; $i<=10; $i++) { ?>
+                                                            <option value="<?php echo $i; ?>" <?php if($cur_rows == $i) echo "selected"; ?>><?php echo $i; ?> rangée<?php echo ($i>1?'s':''); ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                     </div>
-                                     </div>
                                     <div class="row">
                                      <div class="col-md-6">
                                        <div class="admin-form-group">

@@ -12,12 +12,19 @@
     				<h2><?php echo titreBloc($data1['id']); ?></h2>
 				</div>
 				<?php } ?>
-				<div class="row <?php if (numColBloc($data1['id']) =='5'){ echo "row-cols-lg-5  row-cols-md-3 row-cols-sm-2 row-cols-1"; } ?> justify-content-center">
+				<div class="row <?php if (numColBloc($data1['id']) =='5'){ echo "row-cols-lg-5  row-cols-md-3 row-cols-sm-2 row-cols-2"; } ?> justify-content-center" id="<?php echo ancreBloc($data1['id']); ?>">
 					
 					<?php if(typeSectionBloc($data1['id']) =='4' ) { ?>
 					
                  		        <?php
-                		            if (numColBloc($data1['id']) =='2'){ $numRowsc = 6;  }elseif (numColBloc($data1['id']) =='3'){ $numRowsc = 12;}elseif (numColBloc($data1['id']) =='4'){ $numRowsc = 9;}elseif (numColBloc($data1['id']) =='5'){ $numRowsc = 10;}elseif (numColBloc($data1['id']) =='6'){ $numRowsc = 12;}
+                		            $col_width = intval(numColBloc($data1['id']));
+                                    $num_rows  = numRowsBloc($data1['id']);
+                                    
+                                    if ($col_width == 5) {
+                                        $numRowsc = 5 * $num_rows;
+                                    } else {
+                                        $numRowsc = (12 / $col_width) * $num_rows;
+                                    }
 
                                     // Get filter/sort settings from the first rule of this block
                                     $req_settings = "SELECT tri, stock_only FROM `liste_produits` WHERE idbloc = '".$data1['id']."' LIMIT 1";
@@ -48,7 +55,7 @@
                     				
                 		        ?>
         						
-                				<div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col"; }else{ ?>col-xs-12 col-sm-6 col-md-6 col-lg-<?php echo numColBloc($data1['id']); } ?> mb-4">
+                				<div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col-6"; }else{ ?>col-6 col-sm-6 col-md-6 col-lg-<?php echo numColBloc($data1['id']); } ?> mb-4">
         							<div class="single-product-wrapper border p-2 text-center hoverDiv">
         								<!-- Product Image -->
         								<a href="<?php echo  lienProduits($link_p); ?>" class="product-img hover-zoom">
@@ -110,7 +117,7 @@
                     				if($datapr1['link'])  $link_p1  = $datapr1['link'];
     		                    
     		                    ?>
-			                    <div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col"; }else{ ?>col-xs-12 col-sm-6 col-md-6 col-lg-<?php echo numColBloc($data1['id']); } ?> mb-4">
+			                    <div class="<?php if (numColBloc($data1['id']) =='5'){ echo "col-6"; }else{ ?>col-6 col-sm-6 col-md-6 col-lg-<?php echo numColBloc($data1['id']); } ?> mb-4">
         							<div class="single-product-wrapper border p-2 text-center hoverDiv">
         								<!-- Product Image -->
         								<a href="<?php echo  lienProduits($link_p1); ?>" class="product-img hover-zoom">

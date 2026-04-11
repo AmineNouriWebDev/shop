@@ -577,9 +577,13 @@
     $d_p = mysqli_fetch_array($r_p);
     $is_promo = ($d_p && $d_p['en_promo'] == '1');
 
-    // Limit = 2 rows of products (matching original bloc_accueil.php logic)
-    $limit_map = [2=>4, 3=>6, 4=>8, 5=>10, 6=>12];
-    $limit = $limit_map[$num_cols] ?? ($num_cols * 2);
+    // Dynamic Limit based on columns and rows
+    $num_rows = numRowsBloc($bloc_id);
+    if ($num_cols == 5) {
+        $limit = 5 * $num_rows;
+    } else {
+        $limit = (12 / $num_cols) * $num_rows;
+    }
 
     // Filter/Sort settings
     $req_settings = "SELECT tri, stock_only FROM `liste_produits` WHERE idbloc = '$bloc_id' LIMIT 1";
@@ -657,7 +661,7 @@
     $num_products = mysqli_num_rows($res_products);
   ?>
   <?php if ($num_products > 0): ?>
-  <div class="<?php echo $section_class; ?>">
+  <div class="<?php echo $section_class; ?>" id="<?php echo ancreBloc($bloc_id); ?>">
     <div class="hp-container">
       <!-- Section header -->
       <div class="hp-section-header">
@@ -683,13 +687,14 @@
 
       <!-- Product grid — numColBloc = DIRECT columns per row (admin-controlled) -->
       <?php
-        // numColBloc() = number of cols per row set in admin (directly)
-        $cols_desktop = max(1, $num_cols); // e.g. 6 → 6 cols desktop
-        $cols_tablet  = max(2, (int)ceil($cols_desktop / 2)); // half on tablet, min 2
-        $cols_mobile  = min(3, max(2, (int)ceil($cols_desktop / 3))); // ~1/3 on mobile, between 2-3
+        $cols_desktop = max(1, (12 / $num_cols)); 
+        if($num_cols == 5) $cols_desktop = 5;
+        $cols_tablet  = max(2, (int)ceil($cols_desktop / 2)); 
+        $cols_mobile  = 2; // Always 2 on mobile
         $grid_id      = 'grid-bloc-' . $bloc_id;
         $grid_style   = "display:grid; gap:0.75rem; grid-template-columns:repeat({$cols_mobile},1fr);";
-      ?>
+?>
+
       <style>
         @media (min-width: 640px)  { #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo $cols_tablet; ?>, 1fr) !important; gap: 0.875rem !important; } }
         @media (min-width: 1024px) { #<?php echo $grid_id; ?> { grid-template-columns: repeat(<?php echo $cols_desktop; ?>, 1fr) !important; gap: 1rem !important; } }
@@ -803,7 +808,7 @@
     $main_img = photoBlocSite($bloc_id);
   ?>
   <?php if (!empty($bnrs)): ?>
-  <div class="<?php echo $section_class; ?>">
+  <div class="<?php echo $section_class; ?>" id="<?php echo ancreBloc($bloc_id); ?>">
     <div class="hp-container">
       <?php if (affichageTitreBloc($bloc_id) == '1'): ?>
         <div class="hp-section-header">
@@ -881,7 +886,7 @@
     while ($sc = mysqli_fetch_array($res_sc)) $sc_items[] = $sc;
   ?>
   <?php if (!empty($sc_items)): ?>
-  <div class="<?php echo $section_class; ?>">
+  <div class="<?php echo $section_class; ?>" id="<?php echo ancreBloc($bloc_id); ?>">
     <div class="hp-container">
       <?php if (affichageTitreBloc($bloc_id) == '1'): ?>
         <div class="hp-section-header">

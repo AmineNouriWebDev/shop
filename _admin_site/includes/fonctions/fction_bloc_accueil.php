@@ -386,4 +386,12 @@ function stockOnlyListeProduits($id)
 	return ($data && isset($data['stock_only'])) ? afficheChamp($data['stock_only']) : '0';
 }
 
+function numRowsBloc($id)
+{
+	$requete = "SELECT * FROM `bloc_accueil` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	return ($data && isset($data['num_rows'])) ? intval($data['num_rows']) : 2;
+}
+
 ?>

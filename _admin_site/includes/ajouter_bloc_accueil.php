@@ -10,6 +10,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
 	$affichage_titre 	= formReception($_POST['affichage_titre']);
 	$affichage_accueil 	= formReception($_POST['affichage_accueil']);
 	$num_col 	        = formReception($_POST['num_col']);
+	$num_rows 	        = formReception($_POST['num_rows'] ?? 2);
 	$type_section       = formReception($_POST['type_section']);
 	$ordre 		        = formReception($_POST['ordre']);
 	$etat 	            = formReception($_POST['etat']);
@@ -17,9 +18,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
 	$auteur             = auteur_id();
 	
 	$requete = 'INSERT INTO `bloc_accueil` 
-	(`titre`,  `contenu`,  `ancre`, `lien`, `icone`, `affichage_titre`, `affichage_accueil`, `num_col`, `type_section`, `ordre`, `etat`, `auteur`, `datecreation`) 
+	(`titre`,  `contenu`,  `ancre`, `lien`, `icone`, `affichage_titre`, `affichage_accueil`, `num_col`, `num_rows`, `type_section`, `ordre`, `etat`, `auteur`, `datecreation`) 
 	VALUES
-	("'. $titre .'", "'. $contenu .'","'. $ancre .'", "'. $lien .'", "'. $icone .'","'. $affichage_titre .'","'. $affichage_accueil .'", "'. $num_col .'", "'. $type_section .'",   "'. $ordre .'",  "'. $etat .'","'. $auteur .'", "'. $datec .'")';
+	("'. $titre .'", "'. $contenu .'","'. $ancre .'", "'. $lien .'", "'. $icone .'","'. $affichage_titre .'","'. $affichage_accueil .'", "'. $num_col .'", "'. $num_rows .'", "'. $type_section .'",   "'. $ordre .'",  "'. $etat .'","'. $auteur .'", "'. $datec .'")';
 	//echo $requete; exit;
 	$result  = mysqli_query($connexion, $requete);	
 	$idb     = mysqli_insert_id($connexion);
@@ -122,22 +123,34 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                         </div>
                                     </div>
                                     <div class="row">
-                                     <div class="col-md-6">
-                                       <div class="admin-form-group">
-                                        <label>Nombre des colonnes</label>
-                                        <div class="controls">
-                                            <select name="num_col" class="admin-input">
-                                                <option value="12">1</option>
-                                                <option value="6">2</option>
-                                                <option value="4">3</option>
-                                                <option value="3">4</option>
-                                                <option value="5">5</option>
-                                                <option value="2">6</option>
-                                            </select>
+                                        <div class="col-md-6">
+                                            <div class="admin-form-group">
+                                                <label>Nombre de produits par ligne</label>
+                                                <div class="controls">
+                                                    <select name="num_col" class="admin-input">
+                                                        <option value="12">1 produit</option>
+                                                        <option value="6">2 produits</option>
+                                                        <option value="4" selected>3 produits</option>
+                                                        <option value="3">4 produits</option>
+                                                        <option value="5">5 produits</option>
+                                                        <option value="2">6 produits</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="admin-form-group">
+                                                <label>Nombre de rangées</label>
+                                                <div class="controls">
+                                                    <select name="num_rows" class="admin-input">
+                                                        <?php for($i=1; $i<=10; $i++) { ?>
+                                                            <option value="<?php echo $i; ?>" <?php if($i==2) echo "selected"; ?>><?php echo $i; ?> rangée<?php echo ($i>1?'s':''); ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                     </div>
-                                     </div>
                                     <div class="row">
                                      <div class="col-md-6">
                                        <div class="admin-form-group">
