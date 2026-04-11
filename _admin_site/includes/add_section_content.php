@@ -1,3 +1,4 @@
+<?php 
 if (isset($_GET['action']) && $_GET['action'] == 'supp' ) {
     $idb   = $_GET['idb'];
     supprimerSectionContent($_GET['idsc']);
@@ -25,7 +26,7 @@ if (isset($_GET['action']) && ($_GET['action'] == 'del_photo' || $_GET['action']
     <script>window.location = 'index.php?r=addSectionContent&id=<?php echo $idb_del; ?>';</script>
     <?php exit;
 }
-<?php 
+
 if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
 	// Prevent VPS silent crashes on large image conversions
 	ini_set('memory_limit', '512M');
