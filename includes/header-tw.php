@@ -523,7 +523,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   @media (max-width: 1023px) {
     .sh-mobile-bar {
       flex-wrap: nowrap;
-      overflow: hidden;
+      overflow: visible;
       box-sizing: border-box;
       width: 100%;
       max-width: 100vw;
@@ -928,11 +928,14 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
 
   </div>
 
-  <!-- ── MOBILE BAR (SEARCH) ── -->
-  <div class="sh-mobile-bar" style="padding-top: 0.375rem; padding-bottom: 0.75rem;">
-    <div onclick="shOpenSearch()" style="display:flex; align-items:center; width:100%; height:44px; background:var(--shop-bg-base); border:1.5px solid var(--shop-border); border-radius:0.75rem; padding:0 1rem; cursor:text; gap:0.75rem; box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-text-secondary); flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" readonly placeholder="Rechercher smartphones, PC..." style="flex:1; background:transparent; border:none; outline:none; color:var(--shop-text-disabled); font-size:0.9rem; pointer-events:none; font-family:inherit;">
+  <!-- ── MOBILE BAR (SEARCH) — Direct Dropdown ── -->
+  <div class="sh-mobile-bar" style="padding-top: 0.375rem; padding-bottom: 0.75rem; z-index: 52;">
+    <div class="ls-wrapper" style="flex:1;">
+      <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-mobile-search" style="display:flex; align-items:center; width:100%; height:44px; background:var(--shop-bg-base); border:1.5px solid var(--shop-border); border-radius:0.75rem; padding:0 1rem; cursor:text; gap:0.75rem; box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-text-secondary); flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" name="recherche" placeholder="Rechercher smartphones, PC..." style="flex:1; background:transparent; border:none; outline:none; color:var(--shop-text-primary); font-size:0.9rem; font-family:inherit;" autocomplete="off">
+        <input type="hidden" name="action" value="search">
+      </form>
     </div>
   </div>
 
@@ -1022,29 +1025,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
 
   </div>
 
-  <!-- ── SEARCH MODAL HTML ── -->
-  <div class="sh-search-modal" id="sh-search-modal">
-    <div class="sh-search-modal-inner">
-      <div class="sh-search-modal-header">
-        <span style="font-weight:800; font-size:1.25rem; color:var(--shop-primary);">Recherche</span>
-        <button class="sh-search-modal-close" onclick="shCloseSearch()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="sh-search-modal-body">
-        <div class="ls-wrapper" id="sh-modal-ls-wrapper">
-          <form action="<?php echo lienRecherche(); ?>" method="POST" class="sh-sm-input-wrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--shop-primary);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" name="recherche" class="sh-sm-input ls-input" placeholder="Que cherchez-vous ?" autocomplete="off" id="sh-sm-input">
-            <input type="hidden" name="action" value="search">
-            <button type="submit" class="sh-sm-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke="white"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Note: Le Search Modal Mobile a été supprimé au profit d'un dropdown direct -->
 
 </div><!-- #main-header -->
 
@@ -1080,31 +1061,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     if (chevron) chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
   };
 
-  // Search modal Logic
-  var sModal = document.getElementById('sh-search-modal');
-  var sInput = document.getElementById('sh-sm-input');
-  
-  window.shOpenSearch = function() {
-    sModal.classList.add('active');
-    setTimeout(() => {
-      sInput.focus();
-      // Ensure search and dropdown are initialized
-      if (window.initShopSearch) window.initShopSearch('#sh-modal-ls-wrapper .sh-sm-input-wrap');
-    }, 300);
-    document.body.style.overflow = 'hidden';
-  };
-  window.shCloseSearch = function() {
-    sModal.classList.remove('active');
-    document.body.style.overflow = '';
-  };
-  // Close on ESC
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && sModal.classList.contains('active')) shCloseSearch();
-  });
-  // Close on Backdrop click
-  sModal.addEventListener('click', function(e) {
-    if (e.target === sModal) shCloseSearch();
-  });
+  // Search Modal supprimé
 
   // Close drawer on resize to desktop
   var mq = window.matchMedia('(min-width: 1024px)');
@@ -1116,7 +1073,6 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       if (drawer)  drawer.classList.remove('open');
       if (overlay) overlay.classList.remove('open');
       if (burger)  burger.classList.remove('open');
-      if (sModal)  shCloseSearch();
       document.body.style.overflow = '';
     }
   });
