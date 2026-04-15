@@ -1,4 +1,5 @@
 <?php 
+    include_once("_admin_site/includes/fonctions/fction_codes_promo.php");
 
     //$url="https://api.preprod.konnect.network/api/v2/payments/init-payment";
     //$key_api="6604435ff85f11d7b8d67d67:yTvOzwXT1FL0tgc2Wu17";
@@ -33,9 +34,9 @@
      
         
         $requete = 'INSERT INTO `commandes` 
-        (`idclient`, `date`, `sous_total`, `total`, `moyen_paiement`, `moyen_livraison`, `frais_livraison`, `nom`, `prenom`, `email`, `adresse`, `ville`, `cp`, `tel`, `whatsapp`, `commentaire`, `remise`, `date_paiement`, `lien_paiement`, `ref_paiement`, `code_envoi`, `code`, `cmd_express`, `etat`) 
+        (`idclient`, `date`, `sous_total`, `total`, `moyen_paiement`, `moyen_livraison`, `frais_livraison`, `nom`, `prenom`, `email`, `adresse`, `ville`, `cp`, `tel`, `whatsapp`, `commentaire`, `remise`, `code_promo`, `remise_promo`, `date_paiement`, `lien_paiement`, `ref_paiement`, `code_envoi`, `code`, `cmd_express`, `etat`) 
         VALUES
-        ("'.$id_client .'", "'. $datec .'", "'. $montant_globale .'", "'. $globale .'", "'. $moyen_paiement .'", "0", "'.$frais_livraison.'", "'. $nom .'","'. $prenom .'","'. $email .'","'. $adresse .'", "'. $ville .'", "'. $cp .'","'. $phone .'", "'. $whatsapp_post .'", "'. $commentaire .'", "0.000", "", "", "", "", "", "", "'.$etat.'")';
+        ("'.$id_client .'", "'. $datec .'", "'. $montant_globale .'", "'. $globale .'", "'. $moyen_paiement .'", "0", "'.$frais_livraison.'", "'. $nom .'","'. $prenom .'","'. $email .'","'. $adresse .'", "'. $ville .'", "'. $cp .'","'. $phone .'", "'. $whatsapp_post .'", "'. $commentaire .'", "0.000", "'.($_SESSION['panier']['promo_code'] ?? '').'", "'.($_SESSION['panier']['promo_discount'] ?? '0.000').'", "", "", "", "", "", "", "'.$etat.'")';
 		$connexion = ouvrirCnx() or die("erreur cnx");
 	    $resultat  = mysqli_query($connexion, $requete);	
 	    $id_cmd    = mysqli_insert_id($connexion);
@@ -68,6 +69,12 @@
 		
 		$requete_cmd = 'UPDATE `commandes` set `code`="'.$code_cmd.'" WHERE `id`="'.$id_cmd.'"';
 		$resultat_cmd = executeRequete($requete_cmd); 
+		
+        // Incrémenter l'utilisation du code promo
+        if (!empty($_SESSION['panier']['promo_code'])) {
+            include_once("_admin_site/includes/fonctions/fction_codes_promo.php");
+            incrementerUtilisationCodePromo($_SESSION['panier']['promo_code']);
+        }
 		
 		$nbArticles=count($_SESSION['panier']['idcart']);
 		//echo $nbArticles;
@@ -178,8 +185,13 @@
 				. "📧 *Email :* {$email}\n"
 				. "📍 *Adresse :* {$adresse}, {$ville}\n"
 				. "💳 *Paiement :* {$moyen_paiement_label}\n\n"
-				. "📦 *Articles :*\n{$itemsSummary}\n"
-				. "💰 *Total :* {$globale} DT\n"
+				. "📦 *Articles :*\n{$itemsSummary}\n";
+			
+            if (!empty($_SESSION['panier']['promo_code'])) {
+                $message .= "🎫 *Code Promo :* {$_SESSION['panier']['promo_code']} (-{$_SESSION['panier']['promo_discount']} DT)\n";
+            }
+            
+            $message .= "💰 *Total :* {$globale} DT\n"
 				. "💬 *Commentaire :* {$commentaire}";
 
 			$tg_url = "https://api.telegram.org/bot{$tg_token}/sendMessage";
@@ -212,6 +224,8 @@
 				'address'         => "{$adresse}, {$ville}, {$cp}",
 				'payment_method'  => $moyen_paiement_label,
 				'items'           => $itemsSummary,
+                'promo_code'      => $_SESSION['panier']['promo_code'] ?? '',
+                'promo_discount'  => $_SESSION['panier']['promo_discount'] ?? 0,
 				'total'           => $globale,
 				'comment'         => $commentaire,
 			]);
@@ -335,6 +349,7 @@
 		$msg="Votre commande a été bien enregistrée.";
 
 		   unset($_SESSION['panier']);
+           unset($_SESSION['coupon']);
 		   if($moyen_paiement == 10 || $moyen_paiement == 11 || $moyen_paiement == 12){
 ?>
 	<script language="javascript">
@@ -446,18 +461,36 @@ foreach($supported_codes as $code) {
                         
                         <ul class="summary-table" style="list-style:none; padding:0; margin:0 0 2rem 0;">
 								<?php 
+								$sous_total = 0;
+								$total = 0;
+								$frais = 0;
+								$devise = "DT";
+								$cout = "0.000 DT";
+								
 								if($nbArticles) { 
-								$sous_total= 0;
-								$total= 0;
-								$frais= 0;
-								$devise="DT";
 								$type='';
 								   for($i = 0; $i < count($_SESSION['panier']['idcart']); $i++)
                                     {
-                                        $total_ligne =number_format($_SESSION['panier']['total'][$i], 3, '.', '');
+                                        $pid = $_SESSION['panier']['idcart'][$i];
+                                        $total_ligne = number_format($_SESSION['panier']['total'][$i], 3, '.', '');
 					                    $sous_total = $sous_total + $total_ligne;
-					                    $type .= typeProduits($_SESSION['panier']['idcart'][$i]).',';
-					                    
+					                    $type .= typeProduits($pid).',';
+                                        
+                                        $p_name = !empty($_SESSION['panier']['name'][$i]) ? $_SESSION['panier']['name'][$i] : titreProduits($pid);
+                                        $is_eligible = false;
+                                        if (isset($_SESSION['panier']['promo_code'])) {
+                                            $is_eligible = isProductEligibleForPromo($pid, $_SESSION['panier']['promo_code']);
+                                        }
+                                        ?>
+                                        <li id="cart_item_<?php echo $i; ?>" style="display:flex; justify-content:space-between; padding:0.5rem 0; font-size:0.95rem; color:var(--shop-text-secondary);">
+                                            <div style="flex:1;">
+                                                <?php echo $_SESSION['panier']['qte_prd'][$i]; ?> x <?php echo $p_name; ?>
+                                                
+                                                <span class="badge badge-success ml-1 promo-badge" style="font-size: 0.65rem; vertical-align: middle; display: <?php echo $is_eligible ? 'inline-block' : 'none'; ?>;">Éligible promo</span>
+                                            </div>
+                                            <span style="font-weight:600;"><?php echo $total_ligne; ?> <?php echo $devise; ?></span>
+                                        </li>
+                                        <?php
                                     }
                                     $type = rtrim($type,',');
                                     $req = "SELECT * FROM `frais_livraison` WHERE min < $sous_total AND max > $sous_total  ORDER BY `id`";
@@ -505,15 +538,32 @@ foreach($supported_codes as $code) {
                         			}
 							    ?>
                                 <li style="display:flex; justify-content:space-between; padding:0.75rem 0; font-size:1.05rem; color:var(--shop-text-primary); border-bottom:1px solid var(--shop-border);"><span>Sous-total:</span> <span style="font-weight:600;"><?php echo number_format($sous_total,3, '.', ' ').' '.$devise; ?> </span></li>
+                                
+                                <li id="row_promo" style="display:<?php echo isset($_SESSION['panier']['promo_discount']) ? 'flex' : 'none'; ?>; justify-content:space-between; padding:0.75rem 0; font-size:1.05rem; color:#16a34a; border-bottom:1px solid var(--shop-border);">
+                                    <span>Remise promo (<span id="txt_promo_code"><?php echo $_SESSION['panier']['promo_code'] ?? ''; ?></span>):</span> 
+                                    <span style="font-weight:600;">- <span id="val_promo_discount"><?php echo number_format($_SESSION['panier']['promo_discount'] ?? 0, 3, '.', ' '); ?></span> <?php echo $devise; ?></span>
+                                </li>
+<?php 
+                                    if(isset($_SESSION['panier']['promo_discount'])) {
+                                        $sous_total1 = ($sous_total - $_SESSION['panier']['promo_discount']) + $frais;
+                                        $total = number_format($sous_total1, 3, '.', '');
+                                    }
+?>
      
                                 <li style="display:flex; justify-content:space-between; padding:0.75rem 0; font-size:1.05rem; color:var(--shop-text-primary); border-bottom:1px solid var(--shop-border);"><span>Livraison:</span> <span id="cout_mod_liv" style="font-weight:600;"><?php echo $cout; ?></span></li>
                                 
                                 <li style="display:flex; justify-content:space-between; padding:1rem 0 0 0; font-size:1.2rem; color:var(--shop-text-primary); font-weight:700;"><span>Total:</span> <span id="total_cmd" style="color:var(--shop-primary);"><?php echo $total.' '.$devise; ?> </span></li>
-								
-								<?php } ?>
-								
                             </ul>
-                        </ul>
+
+                            <div class="promo-box mb-4" style="background: #f8fafc; padding: 1rem; border-radius: 0.75rem; border: 1px dashed #cbd5e1;">
+                                <label style="display:block; margin-bottom:.5rem; color:var(--shop-text-secondary); font-size:0.875rem; font-weight:600;">Avez-vous un code promo ?</label>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <input type="text" id="input_promo" class="cx-input" placeholder="Entrez votre code" style="padding: 0.5rem 0.75rem; font-size: 0.875rem; text-transform: uppercase;" value="<?php echo $_SESSION['panier']['promo_code'] ?? ''; ?>" oninput="this.value = this.value.toUpperCase(); debounceApplyPromo();">
+                                    <button type="button" onclick="applyPromo()" class="cx-btn" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Appliquer</button>
+                                </div>
+                                <div id="msg_promo" style="margin-top:0.5rem; font-size:0.75rem; display:none;"></div>
+                            </div>
+                        <?php } ?>
                         <input type="hidden" name="soustotal" value="<?php echo number_format($sous_total,3, '.', ''); ?>" />
                         <input type="hidden" name="total" id="total_commande" value="<?php echo $total; ?>" />
                         <input type="hidden" name="frais_livraison" id="frais_livraison" value="<?php echo $frais; ?>" />
@@ -582,6 +632,94 @@ foreach($supported_codes as $code) {
     </div>
     
     <script>
+        var promoTimeout = null;
+        function debounceApplyPromo() {
+            clearTimeout(promoTimeout);
+            promoTimeout = setTimeout(applyPromo, 600); // 600ms debounce
+        }
+        
+        function applyPromo() {
+            var code = document.getElementById('input_promo').value;
+            var msgBox = document.getElementById('msg_promo');
+            
+            if(!code) {
+                // Si le code est vide, on efface les badges et messages
+                msgBox.style.display = 'none';
+                document.getElementById('row_promo').style.display = 'none';
+                document.querySelectorAll('.promo-badge').forEach(function(badge) {
+                    badge.style.display = 'none';
+                });
+                var subtotal = parseFloat($('input[name="soustotal"]').val());
+                var frais = parseFloat($('input[name="frais_livraison"]').val());
+                var newTotal = (subtotal + frais).toFixed(3);
+                document.getElementById('total_cmd').innerText = newTotal + ' DT';
+                document.getElementById('total_commande').value = newTotal;
+                
+                // Appel silencieux pour vider la session
+                $.ajax({ url: '<?php echo $chemin_absolu; ?>ajax/ajax_validate_promo.php', type: 'POST', data: { code: '' }, dataType: 'json' });
+                return;
+            }
+            
+            $.ajax({
+                url: '<?php echo $chemin_absolu; ?>ajax/ajax_validate_promo.php',
+                type: 'POST',
+                data: { code: code },
+                dataType: 'json',
+                success: function(res) {
+                    msgBox.style.display = 'block';
+                    var message = res && res.message ? res.message : 'Erreur lors de la validation.';
+                    msgBox.innerText = message;
+                    
+                    if(res.valid) {
+                        msgBox.style.color = '#16a34a';
+                        document.getElementById('row_promo').style.display = 'flex';
+                        document.getElementById('txt_promo_code').innerText = res.promo.code;
+                        document.getElementById('val_promo_discount').innerText = res.reduction.toFixed(3);
+                        
+                        // Recalculate total
+                        var subtotal = parseFloat($('input[name="soustotal"]').val());
+                        var frais = parseFloat($('input[name="frais_livraison"]').val());
+                        var reduction = parseFloat(res.reduction);
+                        var newTotal = (subtotal - reduction + frais).toFixed(3);
+                        
+                        document.getElementById('total_cmd').innerText = newTotal + ' DT';
+                        document.getElementById('total_commande').value = newTotal;
+                        
+                        // Toggle individual items badges instantly
+                        var totalItems = <?php echo $nbArticles; ?>;
+                        for(var i=0; i<totalItems; i++) {
+                            var itemLine = document.getElementById('cart_item_' + i);
+                            if(itemLine) {
+                                var badge = itemLine.querySelector('.promo-badge');
+                                if(badge) {
+                                    if(res.eligible_indexes && res.eligible_indexes.includes(i)) {
+                                        badge.style.display = 'inline-block';
+                                    } else {
+                                        badge.style.display = 'none';
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        msgBox.style.color = '#dc2626';
+                        document.getElementById('row_promo').style.display = 'none';
+                        
+                        // Reset total
+                        var subtotal = parseFloat($('input[name="soustotal"]').val());
+                        var frais = parseFloat($('input[name="frais_livraison"]').val());
+                        var newTotal = (subtotal + frais).toFixed(3);
+                        
+                        document.getElementById('total_cmd').innerText = newTotal + ' DT';
+                        document.getElementById('total_commande').value = newTotal;
+                        
+                        // Hide all badges
+                        document.querySelectorAll('.promo-badge').forEach(function(badge) {
+                            badge.style.display = 'none';
+                        });
+                    }
+                }
+            });
+        }
         /*function SetSessionPayment(val){
             
             if($("input[name='paymentMethod']:checked").length > 0){

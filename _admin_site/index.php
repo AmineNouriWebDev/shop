@@ -790,6 +790,30 @@ include("includes/security.php");
 
 			 break; 
 
+			 case "codes_promo" :
+
+			 include("includes/fonctions/fction_codes_promo.php");  
+
+			 include("includes/codes_promo.php");
+
+			 break; 
+
+			 case "ajouter_code_promo" :
+
+			 include("includes/fonctions/fction_codes_promo.php");  
+
+			 include("includes/ajouter_code_promo.php");
+
+			 break; 
+
+			 case "modifier_code_promo" :
+
+			 include("includes/fonctions/fction_codes_promo.php");  
+
+			 include("includes/modifier_code_promo.php");
+
+			 break; 
+
 			 case "messages" :
 
 			 include("includes/fonctions/fction_messages.php");  

@@ -147,6 +147,21 @@ function navGroupActive($routes, $current) {
             <a href="index.php?r=facilitePaiement" class="admin-subnav-item<?php echo navActive('facilitePaiement', $current_route); ?>">Facilité paiement</a>
         </div>
 
+        <!-- Gestion des promotions -->
+        <button type="button" class="admin-nav-item<?php echo navGroupActive(['codes_promo','ajouter_code_promo','modifier_code_promo'], $current_route); ?>"
+                onclick="toggleSubmenu('submenu-promos', this)">
+            <svg class="admin-nav-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.608a18.166 18.166 0 0 0 5.198-3.86 3.398 3.398 0 0 0-.608-5.198L11.27 3.24a3 3 0 0 0-2.12-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
+            </svg>
+            <span class="admin-nav-item-text">Gestion des promotions</span>
+            <svg class="admin-nav-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div class="admin-nav-submenu<?php echo navGroupOpen(['codes_promo','ajouter_code_promo','modifier_code_promo'], $current_route); ?>" id="submenu-promos">
+            <a href="index.php?r=codes_promo" class="admin-subnav-item<?php echo navActive('codes_promo', $current_route); navActive('ajouter_code_promo', $current_route); navActive('modifier_code_promo', $current_route); ?>">🎫 Codes Promo</a>
+        </div>
+
         <!-- ─── CLIENTS ─── -->
         <div class="admin-nav-section" style="margin-top:0.5rem;">Clients</div>
 
