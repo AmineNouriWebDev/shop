@@ -274,6 +274,8 @@
 
 </footer>
 
+<?php include('includes/popup_display.php'); ?>
+
 <!-- Scroll to top button -->
 <button id="scrollUP" title="Retour en haut" aria-label="Retour en haut">
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>

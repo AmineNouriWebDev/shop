@@ -138,6 +138,21 @@ include("includes/security.php");
 
 			 break;
 
+			 case "popups" : 
+			 include("includes/fonctions/fction_popups.php"); 
+			 include("includes/popups.php");
+			 break;
+
+			 case "npopup" : 
+			 include("includes/fonctions/fction_popups.php"); 
+			 include("includes/ajouter_popup.php");
+			 break;
+
+			 case "mpopup" : 
+			 include("includes/fonctions/fction_popups.php"); 
+			 include("includes/modifier_popup.php");
+			 break;
+
 			 case "commandes" : 
 
 			 include("includes/fonctions/fction_clients.php"); 
