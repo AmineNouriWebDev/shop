@@ -41,7 +41,7 @@ function handleUploadPopupImage($fileItem, $prefix, $dest_folder = '../media/pop
     // Try WebP Conversion
     if (function_exists('convertAndSaveWebP')) {
         $webp_name = convertAndSaveWebP($fileItem['tmp_name'], $destination_base);
-        if ($webp_name) {
+        if ($webp_name && file_exists($dest_folder . $webp_name)) {
             return $webp_name;
         }
     }
@@ -49,6 +49,7 @@ function handleUploadPopupImage($fileItem, $prefix, $dest_folder = '../media/pop
     // Fallback if WebP fails or is not supported
     $fallback_dest = $destination_base . '.' . $ext;
     if (move_uploaded_file($fileItem['tmp_name'], $fallback_dest)) {
+        chmod($fallback_dest, 0644); // Garantir le droit de lecture
         return basename($fallback_dest);
     }
     
