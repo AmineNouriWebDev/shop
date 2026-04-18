@@ -128,7 +128,7 @@ if (!isset($popup_already_checked)) {
     <div class="shop-popup-content">
         <button class="shop-popup-close" onclick="closePromoPopup()" aria-label="Fermer">×</button>
         
-        <<?php echo $p_link ? 'a href="'.$p_link.'"' : 'div'; ?> class="shop-popup-image-container">
+        <<?php echo $p_link ? 'a href="'.$p_link.'" onclick="closePromoPopup()"' : 'div'; ?> class="shop-popup-image-container">
             <picture>
                 <source media="(max-width: 576px)" srcset="<?php echo $img_mobile; ?>">
                 <source media="(max-width: 991px)" srcset="<?php echo $img_tablet; ?>">
@@ -138,7 +138,7 @@ if (!isset($popup_already_checked)) {
 
         <?php if($p_btn && $p_link): ?>
         <div class="shop-popup-footer">
-            <a href="<?php echo $p_link; ?>" class="shop-popup-btn"><?php echo $p_btn; ?></a>
+            <a href="<?php echo $p_link; ?>" class="shop-popup-btn" onclick="closePromoPopup()"><?php echo $p_btn; ?></a>
         </div>
         <?php endif; ?>
     </div>
