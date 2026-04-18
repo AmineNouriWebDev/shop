@@ -49,7 +49,20 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
     $note_avis           = round(min(5, max(0, floatval(str_replace(',','.',$_POST['note_avis'] ?? 0)))), 2);
     $nb_avis             = intval($_POST['nb_avis'] ?? 0);
     
-    $link                = nett($titre);
+    // SEO: Handle link change and archive old one for 301 redirection
+    $q_old = executeRequete("SELECT `link`, `link_old` FROM `produits` WHERE `id` = '$id'");
+    $r_old = mysqli_fetch_assoc($q_old);
+    $old_link_db = $r_old['link'];
+    
+    $link = nett($_POST['titre']);
+    
+    if ($link !== $old_link_db && !empty($old_link_db)) {
+        // Archive the current link as 'old' before it gets overwritten
+        executeRequete("UPDATE `produits` SET `link_old` = '$old_link_db' WHERE `id` = '$id'");
+        // Also add to the secondary redirect table for unlimited history
+        $old_link_esc = mysqli_real_escape_string($connexion, $old_link_db);
+        executeRequete("INSERT INTO `produits_redirects` (`id_produit`, `old_link`) VALUES ('$id', '$old_link_esc')");
+    }
     
     // Single optimized update query
     $query = "UPDATE `produits` SET 

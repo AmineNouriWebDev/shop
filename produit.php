@@ -95,11 +95,31 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
                 }
             }
 		}
-    }else{
+    } else {
+        // SECOND CHANCE: Search in old links for 301 redirection
+        $q_redirect = executeRequete("SELECT `link`, `id` FROM `produits` WHERE `link_old` = '$link' LIMIT 1");
+        if (mysqli_num_rows($q_redirect) == 0) {
+            // Third chance: search in the dedicated redirect table
+            $q_redirect = executeRequete("SELECT p.link, p.id FROM produits p 
+                                          JOIN produits_redirects pr ON p.id = pr.id_produit 
+                                          WHERE pr.old_link = '$link' LIMIT 1");
+        }
+        
+        if (mysqli_num_rows($q_redirect) > 0) {
+            $r_new = mysqli_fetch_assoc($q_redirect);
+            $new_link = $r_new['link'];
+            $target_url = lienProduits($new_link);
+            
+            // Performa a clean 301 Redirect for SEO
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: " . $target_url);
+            exit;
+        }
+
         $url = current_url();
         $date = timestampTD(date("d/m/Y H:i:s"));
         executeRequete("INSERT INTO `pages_introuvables`(`url_page`, `date`) VALUES ('".$url."','".$date."')");
-    header('Location: /error404.html'); exit;
+        header('Location: /error404.html'); exit;
     }
 }
 ?>

@@ -10,7 +10,8 @@
 - Utilisateur : offipro_user
 - Base : offipro_db
 - Mot de passe : oPab12588*
-
+ssh root@91.99.149.45
+MAEwbhUrxiab
 ### PHP-FPM
 - Version : 8.1
 - Socket : /run/php/php8.1-fpm.sock

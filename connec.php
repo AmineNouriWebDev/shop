@@ -61,10 +61,31 @@ function tronquer1($texte, $taille, $lien) { if (strlen($texte) >= $taille) { $t
 function tronquer($texte, $taille) { if (strlen($texte) >= $taille) { $texte = substr($texte, 0, $taille); $espace = strrpos($texte, " "); $texte = substr($texte, 0, $espace) . '...'; } return $texte; }
 function formatage($txt) { return strtolower($txt); }
 function majuscule($Chaine) { $pos = $Chaine[0]; $maj = strtoupper($pos); $i = 1; $Suite = ""; while ($Chaine[$i]) { $Suite .= $Chaine[$i]; $i++; } return $maj . $Suite; }
-function nettrecherche($chaine) { $chaine = trim($chaine); }
-function nettflux($chaine) { $chaine = trim($chaine); $new = str_replace(array("&amp;", "&nbsp;", "&agrave;", "&acirc;", "&eacute;", "&Eacute;", "&egrave;", "&ecirc;", "&icirc;", "&ccedil;", "&iuml;", "&oelig;", "&ugrave;", "&ucirc;", "&ocirc;", "&lt;", "&gt;", "&laquo;", "&raquo;", "&quot;", "&rsquo;", "&euro;"), array("&", " ", "", "", "", "", "", "", "", "", "", "", "", "", "", "<", ">", "", "", "'", "'", ""), $chaine); return $new; }
-function nett($chaine) { $chaine = trim($chaine); $chaine = strtolower($chaine); $chaine = url_rewrite($chaine, 'utf-8'); $new = str_replace(array(" ", "#216;", "&amp;#200;", "&amp;#201;", "&amp;#202;", "&agrave;", "&acirc;", "&eacute;", "&egrave;", "&ecirc;", "&icirc;", "&ccedil;", "&iuml;", "&oelig;", "&ugrave;", "&ucirc;", "&ocirc;", "&Agrave;", "&Acirc;", "&Eacute;", "&Egrave;", "&Ecirc;", "&Icirc;", "&Ccedil;", "&Iuml;", "&Oelig;", "&Ugrave;", "&Ucirc;", "&Ocirc;", "&lt;", "&gt;", "&laquo;", "&raquo;", "&quot;", "&amp;", "'", "*", "&", ":", "+", "_", ")", "\\'", "/", "\\", "(", "%", ",", "!", " ", "--"), "-", $chaine); $new = rtrim($new, '-'); return strtolower($new); }
-function url_rewrite($text, $charset = 'utf-8') { $text = htmlentities($text, ENT_NOQUOTES, $charset); $text = preg_replace('#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $text); $text = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $text); $text = preg_replace('#&[^;]+;#', '', $text); $text = mb_strtolower($text, 'UTF-8'); $text = preg_replace('#[^a-zA-Z0-9]#', '-', $text); while (strstr($text, '--')) $text = str_replace('--', '-', $text); return $text; }
+function nett($text) {
+    if (empty($text)) return "";
+    $text = strip_tags($text);
+    // Supprimer les entités HTML déjà existantes (comme &#039;) avant de traiter
+    $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+    
+    $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                                'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                                'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                                'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                                'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+    $text = strtr( $text, $unwanted_array );
+
+    // Remplacer tout ce qui n'est pas une lettre ou un chiffre par un tiret
+    $text = preg_replace('~[^\\pL\\d]+~u', '-', $text);
+    $text = trim($text, '-');
+    $text = strtolower($text);
+    
+    if (empty($text)) return 'p';
+    return $text;
+}
+
+function url_rewrite($text, $charset = 'utf-8') {
+    return nett($text);
+}
 function nettinverse($chaine) { $new = str_replace(array("", ""), array("&agrave;", "&acirc;"), $chaine); return $new; } // Simplified for brevity as mostly unused in login
 
 $req = 'SELECT * FROM `site_configuration`';
