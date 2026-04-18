@@ -193,7 +193,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                                     <input type="text" name="prix_vente" value="" class="admin-input"> </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" style="display:none;">
                                             <div class="admin-form-group">
                                                 <label>Prix promo </label>
                                                 <div class="controls">
@@ -241,9 +241,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                     </div>
 
                                     <!-- ── Section Badges de garantie ── -->
-                                    <div class="admin-card mb-4" style="border: 1px solid #e2e8f0; background: #fff;">
-                                        <div class="admin-card-header" style="background: #f8f9fc; padding: 10px 15px; border-bottom: 1px solid #e2e8f0;">
-                                            <div class="admin-card-title" style="font-size: 0.95rem; font-weight: 600; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                                    <div class="admin-card mb-4" style="border: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.02);">
+                                        <div class="admin-card-header" style="background: rgba(0,0,0,0.05); padding: 10px 15px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                                            <div class="admin-card-title" style="font-size: 0.95rem; font-weight: 600; color: inherit; display: flex; align-items: center; gap: 8px;">
                                                 <i class="fa-solid fa-shield-halved" style="color: var(--color-primary);"></i>
                                                 Badges de garantie (icône FontAwesome + texte)
                                             </div>
@@ -322,10 +322,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                                 <?php
                                                 $q_colors = executeRequete("SELECT * FROM couleurs ORDER BY nom ASC");
                                                 while($color = mysqli_fetch_assoc($q_colors)) {
-                                                    echo '<label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #f8f9fc; padding: 5px 15px; border-radius: 20px; border: 1px solid #e2e8f0;">
+                                                    echo '<label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: rgba(0,0,0,0.05); padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1);">
                                                             <input type="checkbox" name="couleurs_selected[]" value="'.$color['id'].'" onchange="toggleColorUploads()">
-                                                            <span style="display:inline-block; width:16px; height:16px; border-radius:50%; background-color:'.$color['code'].'; box-shadow: 0 0 0 1px #cbd5e1;"></span>
-                                                            <span style="font-size: 0.9rem; font-weight: 500;">'.$color['nom'].'</span>
+                                                            <span style="display:inline-block; width:16px; height:16px; border-radius:50%; background-color:'.$color['code'].'; box-shadow: 0 0 0 1px rgba(0,0,0,0.2);"></span>
+                                                            <span style="font-size: 0.9rem; font-weight: 500; color: inherit;">'.$color['nom'].'</span>
                                                           </label>';
                                                 }
                                                 ?>
@@ -343,8 +343,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                             checkboxes.forEach(cb => {
                                                 const colorName = cb.nextElementSibling.nextElementSibling.textContent.trim();
                                                 const colorId = cb.value;
-                                                container.innerHTML += `<div class="admin-form-group" style="padding: 15px; border-left: 4px solid var(--color-primary); background: #f8f9fc; border-radius: 4px; margin-bottom: 10px;">
-                                                    <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Images pour la couleur <span style="color: var(--color-primary);">${colorName}</span></label>
+                                                container.innerHTML += `<div class="admin-form-group" style="padding: 15px; border-left: 4px solid var(--color-primary); background: rgba(0,0,0,0.05); border-radius: 4px; margin-bottom: 10px;">
+                                                    <label style="font-weight: 600; color: inherit; margin-bottom: 8px;">Images pour la couleur <span style="color: var(--color-primary);">${colorName}</span></label>
                                                     <div class="controls">
                                                         <input type="file" name="photos_couleur_${colorId}[]" multiple class="admin-input" accept="image/jpeg, image/png, image/webp">
                                                         <small style="display: block; margin-top: 5px; color: #64748b;">Sélectionnez plusieurs images. Celles-ci seront automatiquement compressées et converties en WebP lors de l'enregistrement pour un chargement plus rapide de votre boutique.</small>
@@ -542,14 +542,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                         }
 
                                         container.show();
-                                        var html = '<div style="background: #f8f9fc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">';
+                                        var html = '<div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1);">';
                                         html += '<h6 style="font-weight: 600; margin-bottom: 5px; color: var(--color-primary);">Prix par combinaison de caractéristiques</h6>';
-                                        html += '<p style="font-size: 0.82rem; color: #64748b; margin-bottom: 12px;">Chaque ligne = une configuration précise du produit. Laissez vide pour hériter du prix global.</p>';
+                                        html += '<p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 12px; opacity: 0.8;">Chaque ligne = une configuration précise du produit. Laissez vide pour hériter du prix global.</p>';
                                         html += '<table style="width:100%; text-align: left; border-collapse: collapse;">';
-                                        html += '<thead style="border-bottom: 2px solid #e2e8f0;"><tr>';
+                                        html += '<thead style="border-bottom: 2px solid rgba(0,0,0,0.1);"><tr>';
                                         html += '<th style="padding: 8px; font-size:0.85rem;">Combinaison</th>';
                                         html += '<th style="padding: 8px; font-size:0.85rem;">Prix vente (TND)</th>';
-                                        html += '<th style="padding: 8px; font-size:0.85rem;">Prix promo (TND)</th>';
+                                        html += '<th style="padding: 8px; font-size:0.85rem; display:none;">Prix promo (TND)</th>';
                                         html += '</tr></thead><tbody>';
 
                                         combinations.forEach(function(combo) {
@@ -557,14 +557,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                             var label = makeCombinationLabel(combo);
                                             var pv = (currentValues[key] && currentValues[key].pv !== undefined) ? currentValues[key].pv : (savedVariations[key] ? savedVariations[key].pv : '');
                                             var pp = (currentValues[key] && currentValues[key].pp !== undefined) ? currentValues[key].pp : (savedVariations[key] ? savedVariations[key].pp : '');
-                                            html += '<tr style="border-bottom: 1px solid #e2e8f0;">';
+                                            html += '<tr style="border-bottom: 1px solid rgba(0,0,0,0.1);">';
                                             html += '<td style="padding: 8px; font-weight: 500; font-size:0.85rem;">' + label + '</td>';
                                             html += '<td style="padding: 8px;"><input type="number" step="0.001" min="0"';
                                             html += ' name="variations[' + key + '][prix_vente]"';
                                             html += ' data-combo-key="' + key + '" data-field="pv"';
                                             html += ' data-label="' + label.replace(/"/g, '&quot;') + '"';
                                             html += ' class="admin-input" value="' + (pv || '') + '" placeholder="Prix global" style="padding: 6px 10px; height: auto; min-width:100px;"></td>';
-                                            html += '<td style="padding: 8px;"><input type="number" step="0.001" min="0"';
+                                            html += '<td style="padding: 8px; display:none;"><input type="number" step="0.001" min="0"';
                                             html += ' name="variations[' + key + '][prix_promo]"';
                                             html += ' data-combo-key="' + key + '" data-field="pp"';
                                             html += ' class="admin-input" value="' + (pp || '') + '" placeholder="Sans promo" style="padding: 6px 10px; height: auto; min-width:100px;"></td>';

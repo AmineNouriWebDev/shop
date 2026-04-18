@@ -376,16 +376,22 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                         <div class="controls">
                                             <input type="text" name="titre" value="<?php echo titreProduits($_GET['id']); ?>" class="admin-input" required data-validation-required-message="Ce champ est obligatoire"> </div>
                                     </div>
-                                    <div class="admin-form-group">
-                                        <label>Prix vente </label>
-                                        <div class="controls">
-                                            <input type="text" name="prix_vente" value="<?php echo prixVenteProduits($_GET['id'], true); ?>" class="admin-input"> 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="admin-form-group">
+                                                <label>Prix vente </label>
+                                                <div class="controls">
+                                                    <input type="text" name="prix_vente" value="<?php echo prixVenteProduits($_GET['id'], true); ?>" class="admin-input"> 
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="admin-form-group">
-                                        <label>Prix promo </label>
-                                        <div class="controls">
-                                            <input type="text" name="prix_promo" value="<?php echo prixPromoProduits($_GET['id'], true); ?>" class="admin-input"> </div>
+                                        <div class="col-md-6" style="display:none;">
+                                            <div class="admin-form-group">
+                                                <label>Prix promo </label>
+                                                <div class="controls">
+                                                    <input type="text" name="prix_promo" value="<?php echo prixPromoProduits($_GET['id'], true); ?>" class="admin-input"> </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -427,9 +433,9 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                     </div>
 
                                     <!-- ── Section Badges de garantie ── -->
-                                    <div class="admin-card mb-4" style="border: 1px solid #e2e8f0; background: #fff;">
-                                        <div class="admin-card-header" style="background: #f8f9fc; padding: 10px 15px; border-bottom: 1px solid #e2e8f0;">
-                                            <div class="admin-card-title" style="font-size: 0.95rem; font-weight: 600; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                                    <div class="admin-card mb-4" style="border: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.02);">
+                                        <div class="admin-card-header" style="background: rgba(0,0,0,0.05); padding: 10px 15px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                                            <div class="admin-card-title" style="font-size: 0.95rem; font-weight: 600; color: inherit; display: flex; align-items: center; gap: 8px;">
                                                 <i class="fa-solid fa-shield-halved" style="color: var(--color-primary);"></i>
                                                 Badges de garantie (icône FontAwesome + texte)
                                             </div>
@@ -526,10 +532,10 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                 $q_colors = executeRequete("SELECT * FROM couleurs ORDER BY nom ASC");
                                                 while($color = mysqli_fetch_assoc($q_colors)) {
                                                     $checked = in_array($color['id'], $selected_colors) ? 'checked' : '';
-                                                    echo '<label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #f8f9fc; padding: 5px 15px; border-radius: 20px; border: 1px solid #e2e8f0;">
+                                                    echo '<label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: rgba(0,0,0,0.05); padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1);">
                                                             <input type="checkbox" name="couleurs_selected[]" value="'.$color['id'].'" onchange="toggleColorUploads()" '.$checked.'>
-                                                            <span style="display:inline-block; width:16px; height:16px; border-radius:50%; background-color:'.$color['code'].'; box-shadow: 0 0 0 1px #cbd5e1;"></span>
-                                                            <span style="font-size: 0.9rem; font-weight: 500;">'.$color['nom'].'</span>
+                                                            <span style="display:inline-block; width:16px; height:16px; border-radius:50%; background-color:'.$color['code'].'; box-shadow: 0 0 0 1px rgba(0,0,0,0.2);"></span>
+                                                            <span style="font-size: 0.9rem; font-weight: 500; color: inherit;">'.$color['nom'].'</span>
                                                           </label>';
                                                 }
                                                 ?>
@@ -577,8 +583,8 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                     existingHtml += '</div></div>';
                                                 }
                                                 
-                                                container.innerHTML += `<div class="admin-form-group" style="padding: 15px; border-left: 4px solid var(--color-primary); background: #f8f9fc; border-radius: 4px; margin-bottom: 10px;">
-                                                    <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Images pour la couleur <span style="color: var(--color-primary);">${colorName}</span></label>
+                                                container.innerHTML += `<div class="admin-form-group" style="padding: 15px; border-left: 4px solid var(--color-primary); background: rgba(0,0,0,0.05); border-radius: 4px; margin-bottom: 10px;">
+                                                    <label style="font-weight: 600; color: inherit; margin-bottom: 8px;">Images pour la couleur <span style="color: var(--color-primary);">${colorName}</span></label>
                                                     ${existingHtml}
                                                     <div class="controls">
                                                         <label style="font-size: 0.85rem; font-weight: 500; color: #475569;">Ajouter/Remplacer (<small>Laissez vide pour garder vos images actuelles</small>)</label>
@@ -839,11 +845,11 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
 
                                         // 6. Render the price table
                                         container.show();
-                                        var html = '<div style="background: #f8f9fc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">';
+                                        var html = '<div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1);">';
                                         html += '<h6 style="font-weight: 600; margin-bottom: 5px; color: var(--color-primary);">Prix par combinaison de caractéristiques</h6>';
-                                        html += '<p style="font-size: 0.82rem; color: #64748b; margin-bottom: 12px;">Chaque ligne = une configuration précise du produit. Laissez vide pour hériter du prix global.</p>';
-                                        html += '<div style="display: grid; grid-template-columns: minmax(150px, 1fr) 120px 120px; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; font-size: 0.85rem;">';
-                                        html += '<div>Combinaison</div><div>Prix vente</div><div>Prix promo</div></div>';
+                                        html += '<p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 12px; opacity: 0.8;">Chaque ligne = une configuration précise du produit. Laissez vide pour hériter du prix global.</p>';
+                                        html += '<div style="display: grid; grid-template-columns: minmax(150px, 1fr) 120px; gap: 10px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 5px; margin-bottom: 10px; font-weight: bold; font-size: 0.85rem;">';
+                                        html += '<div>Combinaison</div><div>Prix vente</div><div style="display:none;">Prix promo</div></div>';
 
                                         combinations.forEach(function(combo) {
                                             var key = makeCombinationKey(combo);
@@ -857,10 +863,10 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                             var pv = (currentValues[key] && currentValues[key].pv !== undefined) ? currentValues[key].pv : (saved.pv != null ? saved.pv : '');
                                             var pp = (currentValues[key] && currentValues[key].pp !== undefined) ? currentValues[key].pp : (saved.pp != null ? saved.pp : '');
 
-                                            html += '<div style="display: grid; grid-template-columns: minmax(150px, 1fr) 120px 120px; gap: 10px; margin-bottom: 10px; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">';
+                                            html += '<div style="display: grid; grid-template-columns: minmax(150px, 1fr) 120px; gap: 10px; margin-bottom: 10px; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px;">';
                                             html += '<div style="font-weight: 500; font-size:0.85rem;">' + label + '</div>';
                                             html += '<div><input type="number" step="0.001" min="0" name="variations[' + postKey + '][prix_vente]" data-combo-key="' + key + '" data-field="pv" class="admin-input" value="' + (pv || '') + '" placeholder="Prix global" style="width: 100%; padding: 6px;"></div>';
-                                            html += '<div><input type="number" step="0.001" min="0" name="variations[' + postKey + '][prix_promo]" data-combo-key="' + key + '" data-field="pp" class="admin-input" value="' + (pp || '') + '" placeholder="Sans promo" style="width: 100%; padding: 6px;"></div>';
+                                            html += '<div style="display:none;"><input type="number" step="0.001" min="0" name="variations[' + postKey + '][prix_promo]" data-combo-key="' + key + '" data-field="pp" class="admin-input" value="' + (pp || '') + '" placeholder="Sans promo" style="width: 100%; padding: 6px;"></div>';
                                             html += '<div style="display:none;">';
                                             html += '<input type="hidden" name="variations[' + postKey + '][valeurs_ids]" value="' + key + '">';
                                             html += '<input type="hidden" name="variations[' + postKey + '][label]" value="' + label.replace(/"/g, '&quot;') + '">';
