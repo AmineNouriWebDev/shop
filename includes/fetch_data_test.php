@@ -112,6 +112,11 @@ if(isset($_POST["action"])){
         $g_pp_n = floatval(preg_replace('/[^0-9.]/', '', $g_pp));
         $g_disc = ($g_pp_n > 0 && $g_pv_n > 0 && $g_pp_n < $g_pv_n) ? round((($g_pv_n - $g_pp_n) / $g_pv_n) * 100) : 0;
         
+        $req_fl = executeRequete("SELECT promo_end_date, is_flash FROM produits WHERE id='$id_p'");
+        $fl_inf = mysqli_fetch_assoc($req_fl);
+        $is_flash = ($fl_inf && $fl_inf['is_flash'] == 1);
+        $p_end = $fl_inf ? $fl_inf['promo_end_date'] : null;
+        
         $hasVars = hasVariationPrices($id_p);
         $fromLbl = $hasVars ? '<span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; margin-bottom:-2px;">À partir de</span>' : '';
 
@@ -124,8 +129,16 @@ if(isset($_POST["action"])){
         }
 
         /* Image + Overlay */
-        $o .= '<div class="hp-card-img-wrap">';
+        $o .= '<div class="hp-card-img-wrap" style="position:relative;">';
         $o .= '<a href="'.lienProduits($link_p).'" tabindex="-1"><img src="'.$photo.'" alt="'.htmlspecialchars($titre).'" loading="lazy"></a>';
+        
+        if ($is_flash && $g_pp_n > 0 && !empty($p_end) && strtotime($p_end) > time()) {
+            $o .= '<div style="position: absolute; bottom: 8px; left: 8px; right: 8px; background: rgba(0,0,0,0.75); color: white; border-radius: 6px; padding: 6px; text-align: center; font-weight: 700; font-size: 0.75rem; z-index: 10; display: flex; align-items: center; justify-content: center; gap: 6px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px rgba(0,0,0,0.3); outline: 1px solid rgba(255,152,0,0.5);">';
+            $o .= '<span style="color: #ffb74d;">🔥 Flash</span>';
+            $o .= '<span class="flash-countdown" data-end="'.strtotime($p_end).'" style="letter-spacing: 1px;">Calcul...</span>';
+            $o .= '</div>';
+        }
+
         $o .= '<div class="hp-card-overlay">';
         $o .= '<button class="hp-card-overlay-btn ghost compare-ol" data-compare-id="'.intval($id_p).'" onclick=\'compareToggle('.intval($id_p).','.htmlspecialchars(json_encode($titre), ENT_QUOTES).','.htmlspecialchars(json_encode($photo), ENT_QUOTES).')\' title="Comparer">'
             . '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 0-2-2V9m0 0h18"/></svg>'
@@ -183,6 +196,11 @@ if(isset($_POST["action"])){
         $l_pp_n = floatval(preg_replace('/[^0-9.]/', '', $l_pp));
         $l_disc = ($l_pp_n > 0 && $l_pv_n > 0 && $l_pp_n < $l_pv_n) ? round((($l_pv_n - $l_pp_n) / $l_pv_n) * 100) : 0;
         
+        $req_fl = executeRequete("SELECT promo_end_date, is_flash FROM produits WHERE id='$id_p'");
+        $fl_inf = mysqli_fetch_assoc($req_fl);
+        $is_flash = ($fl_inf && $fl_inf['is_flash'] == 1);
+        $p_end = $fl_inf ? $fl_inf['promo_end_date'] : null;
+        
         $resVar = executeRequete("SELECT COUNT(*) as cnt FROM produit_variations WHERE idproduit='$id_p' AND prix_vente > 0");
         $hasVars = ($resVar && mysqli_fetch_assoc($resVar)['cnt'] > 0);
         $fromLbl = $hasVars ? '<span style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400;">À partir de </span>' : '';
@@ -195,6 +213,9 @@ if(isset($_POST["action"])){
         $o .= '<img src="'.photoProduitsSite($id_p).'" alt="" loading="lazy">';
         if($l_disc > 0){
             $o .= '<span style="position:absolute;top:0.6rem;left:0.6rem;background:var(--shop-accent,#ef4444);color:#fff;font-size:0.65rem;font-weight:800;padding:3px 8px;border-radius:99px;z-index:10;">-'.$l_disc.'%</span>';
+        }
+        if ($is_flash && $l_pp_n > 0 && !empty($p_end) && strtotime($p_end) > time()) {
+            $o .= '<div style="position: absolute; bottom: 8px; left: 8px; right: 8px; background: rgba(0,0,0,0.75); color: white; border-radius: 6px; padding: 4px; text-align: center; font-weight: 700; font-size: 0.65rem; z-index: 10; display: flex; align-items: center; justify-content: center; gap: 4px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px rgba(0,0,0,0.3); outline: 1px solid rgba(255,152,0,0.5);"><span style="color: #ffb74d;">🔥</span> <span class="flash-countdown" data-end="'.strtotime($p_end).'">Calcul...</span></div>';
         }
         $o .= '</a>';
         /* Content */

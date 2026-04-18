@@ -138,6 +138,11 @@ include("includes/security.php");
 
 			 break;
 
+			 case "promotions_articles" : 
+			 include("includes/fonctions/fction_produits.php"); 
+			 include("includes/promotions_articles.php");
+			 break;
+
 			 case "popups" : 
 			 include("includes/fonctions/fction_popups.php"); 
 			 include("includes/popups.php");

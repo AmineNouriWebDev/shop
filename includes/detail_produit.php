@@ -472,6 +472,19 @@
                         <div class="sticky-top pt-2">
                             <div class="single_product_desc shadow-sm border px-3 py-4 rounded-3xl text-center" style="background: var(--shop-surface);">
     	                        
+                                <?php
+                                $req_fl = executeRequete("SELECT promo_end_date, is_flash FROM produits WHERE id='$id'");
+                                $fl_inf = mysqli_fetch_assoc($req_fl);
+                                $is_flash = ($fl_inf && $fl_inf['is_flash'] == 1);
+                                $p_end = $fl_inf ? $fl_inf['promo_end_date'] : null;
+                                if ($is_flash && $PrixPromo != '0.000' && !empty($p_end) && strtotime($p_end) > time()):
+                                ?>
+                                <div class="flash-sale-badge mb-3" style="background: rgba(255,100,0,0.1); border:1px solid #ffb74d; color: #e65100; border-radius: 12px; padding: 12px; text-align: center; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;">
+                                    <div style="display:flex; align-items:center; gap:8px;"><span style="font-size: 1.2rem;">🔥</span> <span>Vente Flash se termine dans :</span></div>
+                                    <span class="flash-countdown text-danger fs-5" data-end="<?php echo strtotime($p_end); ?>" style="letter-spacing: 1px;">Calcul...</span>
+                                </div>
+                                <?php endif; ?>
+                                
                                 <div class="product-meta-data mb-4">
                                     <div class="price-display">
                                         <div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">
@@ -1111,6 +1124,11 @@ function rateProduct(prodId, note) {
                             $sp_disc = round(((floatval($sp_pv) - floatval($sp_pp)) / floatval($sp_pv)) * 100);
                         }
                         $sp_stock = (etatStockProduits($sp_id) == '1');
+                        
+                        $req_fl = executeRequete("SELECT promo_end_date, is_flash FROM produits WHERE id='$sp_id'");
+                        $fl_inf = mysqli_fetch_assoc($req_fl);
+                        $is_flash = ($fl_inf && $fl_inf['is_flash'] == 1);
+                        $p_end = $fl_inf ? $fl_inf['promo_end_date'] : null;
                     ?>
                     <div class="px-2 h-100">
                         <article class="hp-card">
@@ -1120,10 +1138,16 @@ function rateProduct(prodId, note) {
                             <?php endif; ?>
 
                             <!-- Image + Overlay -->
-                            <div class="hp-card-img-wrap">
+                            <div class="hp-card-img-wrap" style="position:relative;">
                                 <a href="<?php echo lienProduits($sp_link); ?>" tabindex="-1">
                                     <img src="<?php echo photoProduitsSite($sp_id); ?>" alt="<?php echo htmlspecialchars(titreProduits($sp_id)); ?>" loading="lazy">
                                 </a>
+                                <?php if ($is_flash && $sp_pp && $sp_pp != '0.000' && !empty($p_end) && strtotime($p_end) > time()): ?>
+                                <div style="position: absolute; bottom: 8px; left: 8px; right: 8px; background: rgba(0,0,0,0.75); color: white; border-radius: 6px; padding: 6px; text-align: center; font-weight: 700; font-size: 0.75rem; z-index: 10; display: flex; align-items: center; justify-content: center; gap: 6px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px rgba(0,0,0,0.3); outline: 1px solid rgba(255,152,0,0.5);">
+                                    <span style="color: #ffb74d;">🔥 Flash</span>
+                                    <span class="flash-countdown" data-end="<?php echo strtotime($p_end); ?>" style="letter-spacing: 1px;">Calcul...</span>
+                                </div>
+                                <?php endif; ?>
                                 <div class="hp-card-overlay">
                                     <button class="hp-card-overlay-btn ghost compare-ol" 
                                         data-compare-id="<?php echo intval($sp_id); ?>"

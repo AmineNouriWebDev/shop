@@ -49,6 +49,7 @@
             ${p.prix_barre ? `<span class="ls-price-old">${p.prix_barre} DT</span>` : ''}
             ${p.promo ? '<span class="ls-price-badge">Promo</span>' : ''}
           </div>
+          ${p.is_flash && p.promo_end_date ? `<div style="background:rgba(255,100,0,0.1); border:1px solid #ffb74d; color:#e65100; border-radius:4px; padding:2px 5px; font-size:0.65rem; font-weight:700; margin-top:4px; display:inline-flex; align-items:center; gap:4px;">🔥 Flash <span class="flash-countdown" data-end="${p.promo_end_date}">Calcul...</span></div>` : ''}
         </div>
         <svg class="ls-item-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </a>`).join('');

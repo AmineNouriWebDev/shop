@@ -15,7 +15,10 @@ function linkCategBlog($id)
 	$requete = "SELECT * FROM `categories_blog` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
-	return afficheChamp($data['link']);
+	if($data) {
+	    return afficheChamp($data['link']);
+	}
+	return '';
 }
 
 function linkParentCategBlog($id)

@@ -706,6 +706,11 @@
           $prix_promo = prixPromoProduits($pid);
           $in_stock   = (etatStockProduits($pid) == '1');
 
+          $flash_info_query = executeRequete("SELECT promo_end_date, is_flash FROM produits WHERE id='$pid'");
+          $flash_info = mysqli_fetch_assoc($flash_info_query);
+          $is_flash = ($flash_info && $flash_info['is_flash'] == 1);
+          $promo_end_date = $flash_info ? $flash_info['promo_end_date'] : null;
+
           // Compute discount %
           $discount = 0;
           if ($prix_promo && $prix_promo != '0.000' && floatval($prix_vente) > 0) {
@@ -722,10 +727,18 @@
           <?php endif; ?>
 
           <!-- Image + Quick view overlay -->
-          <div class="hp-card-img-wrap">
+          <div class="hp-card-img-wrap" style="position:relative;">
             <a href="<?php echo lienProduits($plink); ?>" tabindex="-1">
               <img src="<?php echo photoProduitsSite($pid); ?>" alt="<?php echo htmlspecialchars(titreProduits($pid)); ?>" loading="lazy">
             </a>
+            
+            <?php if ($is_flash && $prix_promo && $prix_promo != '0.000' && !empty($promo_end_date) && strtotime($promo_end_date) > time()): ?>
+                <div style="position: absolute; bottom: 8px; left: 8px; right: 8px; background: rgba(0,0,0,0.75); color: white; border-radius: 6px; padding: 6px; text-align: center; font-weight: 700; font-size: 0.75rem; z-index: 10; display: flex; align-items: center; justify-content: center; gap: 6px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px rgba(0,0,0,0.3); outline: 1px solid rgba(255,152,0,0.5);">
+                    <span style="color: #ffb74d;">🔥 Flash</span>
+                    <span class="flash-countdown" data-end="<?php echo strtotime($promo_end_date); ?>" style="letter-spacing: 1px;">Calcul...</span>
+                </div>
+            <?php endif; ?>
+
             <div class="hp-card-overlay">
               <button class="hp-card-overlay-btn compare-ol"
                 data-compare-id="<?php echo intval($pid); ?>"

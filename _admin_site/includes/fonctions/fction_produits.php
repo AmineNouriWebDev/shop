@@ -55,10 +55,17 @@ function prixVenteProduits($id, $raw = false)
 }
 function prixPromoProduits($id, $raw = false)
 {
-    $requete  = "SELECT prix_promo FROM `produits` WHERE `id` = '" . $id . "'";
+    $requete  = "SELECT prix_promo, promo_end_date FROM `produits` WHERE `id` = '" . $id . "'";
     $resultat = executeRequete($requete);
     $data     = mysqli_fetch_array($resultat);
     if (!$data) return '';
+    
+    // Auto-expiration check
+    if (!empty($data['promo_end_date']) && strtotime($data['promo_end_date']) < time()) {
+        if ($raw) return '0.000';
+        return '0.000';
+    }
+
     $default_price = $data['prix_promo'];
 
     // Use combination-based variations table for minimum promo price

@@ -132,8 +132,51 @@
 		});
 	</script>
 
+<script>
+// -- Flash Sales Countdown Script --
+document.addEventListener('DOMContentLoaded', function() {
+    function formatTime(totalSeconds) {
+        if (totalSeconds <= 0) return "Expiré";
+        
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const secs = Math.floor(totalSeconds % 60);
+        
+        let out = "";
+        if (days > 0) out += days + "j ";
+        out += String(hours).padStart(2, '0') + "h ";
+        out += String(mins).padStart(2, '0') + "m ";
+        out += String(secs).padStart(2, '0') + "s";
+        return out;
+    }
 
-	
+    function updateCountdowns() {
+        // Query inside the function so AJAX-injected elements are correctly selected
+        const flashElements = document.querySelectorAll('.flash-countdown');
+        if (flashElements.length === 0) return;
+
+        const now = Math.floor(Date.now() / 1000); // current timestamp in seconds
+        
+        flashElements.forEach(el => {
+            const endAttr = el.getAttribute('data-end');
+            if(!endAttr) return; // safety check
+            
+            const endTimestamp = parseInt(endAttr);
+            const remaining = endTimestamp - now;
+            
+            if (remaining <= 0) {
+                el.innerHTML = "Terminé";
+            } else {
+                el.innerHTML = formatTime(remaining);
+            }
+        });
+    }
+
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+});
+</script>
  	 
  	 
  	 

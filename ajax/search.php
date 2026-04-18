@@ -39,7 +39,7 @@ if (mb_strlen($q) < 2) {
 $q_safe = sanitize($q);  // sanitize() = mysqli_real_escape_string from connec.php
 
 // ── Query: products ─────────────────────────────────────────────
-$req_products = "SELECT DISTINCT p.id, p.titre, p.link, p.prix_vente, p.prix_promo
+$req_products = "SELECT DISTINCT p.id, p.titre, p.link, p.prix_vente, p.prix_promo, p.is_flash, p.promo_end_date
                  FROM `produits` p
                  WHERE p.etat = '1'
                    AND p.titre LIKE '%{$q_safe}%'
@@ -53,11 +53,16 @@ $results       = [];
 
 while ($row = mysqli_fetch_assoc($res_products)) {
     $id         = $row['id'];
-    // L'appel aux fonctions assure qu'on parcourt `caracteristique_prod` s'il y a des variations (ex: Stockage)
-    // et récupère correctement le prix minimum, même si le prix global est à 0.
     $prix_promo = prixPromoProduits($id);
     $prix_vente = prixVenteProduits($id);
     $has_promo  = (!empty($prix_promo) && $prix_promo !== '0.000' && $prix_promo !== '0');
+    
+    // Check flash validities
+    $promo_end_date = $row['promo_end_date'];
+    $is_flash_active = false;
+    if ($row['is_flash'] == '1' && $has_promo && !empty($promo_end_date) && strtotime($promo_end_date) > time()) {
+        $is_flash_active = true;
+    }
 
     $results[] = [
         'id'         => (int)$id,
@@ -68,6 +73,8 @@ while ($row = mysqli_fetch_assoc($res_products)) {
         'prix_barre' => ($has_promo && floatval($prix_vente) > floatval($prix_promo)) ? $prix_vente : null,
         'promo'      => ($has_promo && floatval($prix_vente) > floatval($prix_promo)),
         'has_var'    => hasVariationPrices($id),
+        'is_flash'       => $is_flash_active,
+        'promo_end_date' => $is_flash_active ? strtotime($promo_end_date) : null
     ];
 }
 

@@ -1084,4 +1084,4 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   // Expose base path to live-search.js so it resolves the AJAX endpoint correctly
   window.__shopBasePath = '<?php echo rtrim($chemin_absolu, '/'); ?>/';
 </script>
-<script src="<?php echo $chemin_absolu; ?>dist/js/live-search.js" defer></script>
+<script src="<?php echo $chemin_absolu; ?>dist/js/live-search.js?v=<?php echo time(); ?>" defer></script>
