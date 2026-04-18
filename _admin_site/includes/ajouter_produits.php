@@ -244,7 +244,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                     <div class="admin-card mb-4" style="border: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.02);">
                                         <div class="admin-card-header" style="background: rgba(0,0,0,0.05); padding: 10px 15px; border-bottom: 1px solid rgba(0,0,0,0.1);">
                                             <div class="admin-card-title" style="font-size: 0.95rem; font-weight: 600; color: inherit; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fa-solid fa-shield-halved" style="color: var(--color-primary);"></i>
+                                                <i class="fa fa-shield" style="color: var(--color-primary);"></i>
                                                 Badges de garantie (icône FontAwesome + texte)
                                             </div>
                                         </div>
@@ -253,42 +253,42 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                                 <!-- Row 1 (Default) -->
                                                 <div class="badge-row row mb-2 align-items-center">
                                                     <div class="col-md-4">
-                                                        <input type="text" name="badges[0][icone]" value="fa-solid fa-rotate-left" class="admin-input" placeholder="ex: fa-solid fa-lock">
+                                                        <input type="text" name="badges[0][icone]" value="fa fa-rotate-left" class="admin-input" placeholder="ex: fa fa-lock">
                                                     </div>
                                                     <div class="col-md-7">
                                                         <input type="text" name="badges[0][texte]" value="Satisfait ou remboursé 30 jours" class="admin-input" placeholder="Texte du badge">
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                     </div>
                                                 </div>
                                                 <!-- Row 2 (Default) -->
                                                 <div class="badge-row row mb-2 align-items-center">
                                                     <div class="col-md-4">
-                                                        <input type="text" name="badges[1][icone]" value="fa-solid fa-truck-fast" class="admin-input" placeholder="ex: fa-solid fa-truck">
+                                                        <input type="text" name="badges[1][icone]" value="fa fa-truck" class="admin-input" placeholder="ex: fa fa-truck">
                                                     </div>
                                                     <div class="col-md-7">
                                                         <input type="text" name="badges[1][texte]" value="Livraison suivie et sécurisée" class="admin-input" placeholder="Texte du badge">
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                     </div>
                                                 </div>
                                                 <!-- Row 3 (Default) -->
                                                 <div class="badge-row row mb-2 align-items-center">
                                                     <div class="col-md-4">
-                                                        <input type="text" name="badges[2][icone]" value="fa-solid fa-headset" class="admin-input" placeholder="ex: fa-solid fa-headset">
+                                                        <input type="text" name="badges[2][icone]" value="fa fa-headphones" class="admin-input" placeholder="ex: fa fa-headset">
                                                     </div>
                                                     <div class="col-md-7">
                                                         <input type="text" name="badges[2][texte]" value="Support client réactif 7j/7" class="admin-input" placeholder="Texte du badge">
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addBadgeRow()">
-                                                <i class="fa-solid fa-plus"></i> Ajouter un badge
+                                                <i class="fa fa-plus"></i> Ajouter un badge
                                             </button>
                                             <script>
                                                 let badgeIndex = 3;
@@ -298,13 +298,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                                     div.className = 'badge-row row mb-2 align-items-center';
                                                     div.innerHTML = `
                                                         <div class="col-md-4">
-                                                            <input type="text" name="badges[${badgeIndex}][icone]" class="admin-input" placeholder="Icone (ex: fa-solid fa-star)">
+                                                            <input type="text" name="badges[${badgeIndex}][icone]" class="admin-input" placeholder="Icone (ex: fa fa-star)">
                                                         </div>
                                                         <div class="col-md-7">
                                                             <input type="text" name="badges[${badgeIndex}][texte]" class="admin-input" placeholder="Texte du badge">
                                                         </div>
                                                         <div class="col-md-1">
-                                                            <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                            <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                         </div>
                                                     `;
                                                     container.appendChild(div);

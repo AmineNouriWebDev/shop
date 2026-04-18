@@ -17,6 +17,30 @@ if(isset($_GET['action']) && $_GET['action'] == 'del_color_img' && isset($_GET['
     exit();
 }
 
+if(isset($_GET['action']) && $_GET['action'] == 'del_main_img' && isset($_GET['id'])) {
+    $prod_id = intval($_GET['id']);
+    $q_img = executeRequete("SELECT photo FROM produits WHERE id='$prod_id'");
+    if($r_img = mysqli_fetch_assoc($q_img)) {
+        $photo_path = $r_img['photo'];
+        if(!empty($photo_path)) {
+            $file_path = "../media/products/" . $photo_path;
+            if(file_exists($file_path)) unlink($file_path);
+        }
+        executeRequete("UPDATE produits SET photo='' WHERE id='$prod_id'");
+    }
+    phpToastRedirect("Photo principale supprimée !", "index.php?r=mproduits&id=$prod_id&start=" . ($_GET['start'] ?? 0), "success");
+    exit();
+}
+
+if(isset($_GET['action']) && $_GET['action'] == 'del_sec_img' && isset($_GET['img_id'])) {
+    $img_id = intval($_GET['img_id']);
+    $prod_id = intval($_GET['id']);
+    include_once("includes/fonctions/fction_produits.php");
+    supprimerimagessupplimentaires($img_id);
+    phpToastRedirect("Image secondaire supprimée !", "index.php?r=mproduits&id=$prod_id&start=" . ($_GET['start'] ?? 0), "success");
+    exit();
+}
+
 if (isset($_POST['action']) && $_POST['action'] == "mod") {
     // START DEBUG
     file_put_contents('debug_post_log.txt', date('Y-m-d H:i:s') . "\n" . print_r($_POST, true) . "\n", FILE_APPEND);
@@ -436,7 +460,7 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                     <div class="admin-card mb-4" style="border: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.02);">
                                         <div class="admin-card-header" style="background: rgba(0,0,0,0.05); padding: 10px 15px; border-bottom: 1px solid rgba(0,0,0,0.1);">
                                             <div class="admin-card-title" style="font-size: 0.95rem; font-weight: 600; color: inherit; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fa-solid fa-shield-halved" style="color: var(--color-primary);"></i>
+                                                <i class="fa fa-shield" style="color: var(--color-primary);"></i>
                                                 Badges de garantie (icône FontAwesome + texte)
                                             </div>
                                         </div>
@@ -450,13 +474,13 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                 ?>
                                                 <div class="badge-row row mb-2 align-items-center">
                                                     <div class="col-md-4">
-                                                        <input type="text" name="badges[<?php echo $b_idx; ?>][icone]" value="<?php echo afficheChamp($b_row['icone']); ?>" class="admin-input" placeholder="ex: fa-solid fa-lock">
+                                                        <input type="text" name="badges[<?php echo $b_idx; ?>][icone]" value="<?php echo afficheChamp($b_row['icone']); ?>" class="admin-input" placeholder="ex: fa fa-lock">
                                                     </div>
                                                     <div class="col-md-7">
                                                         <input type="text" name="badges[<?php echo $b_idx; ?>][texte]" value="<?php echo afficheChamp($b_row['texte']); ?>" class="admin-input" placeholder="Texte du badge">
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                     </div>
                                                 </div>
                                                 <?php
@@ -465,21 +489,21 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                 // If no badges exist, show the 3 default ones for ease of use
                                                 if ($b_idx === 0) {
                                                     $defaults = [
-                                                        ['ico' => 'fa-solid fa-rotate-left', 'txt' => 'Satisfait ou remboursé 30 jours'],
-                                                        ['ico' => 'fa-solid fa-truck-fast', 'txt' => 'Livraison suivie et sécurisée'],
-                                                        ['ico' => 'fa-solid fa-headset', 'txt' => 'Support client réactif 7j/7']
+                                                        ['ico' => 'fa fa-rotate-left', 'txt' => 'Satisfait ou remboursé 30 jours'],
+                                                        ['ico' => 'fa fa-truck', 'txt' => 'Livraison suivie et sécurisée'],
+                                                        ['ico' => 'fa fa-headphones', 'txt' => 'Support client réactif 7j/7']
                                                     ];
                                                     foreach($defaults as $di => $dv) {
                                                 ?>
                                                 <div class="badge-row row mb-2 align-items-center">
                                                     <div class="col-md-4">
-                                                        <input type="text" name="badges[<?php echo $di; ?>][icone]" value="<?php echo $dv['ico']; ?>" class="admin-input" placeholder="ex: fa-solid fa-lock">
+                                                        <input type="text" name="badges[<?php echo $di; ?>][icone]" value="<?php echo $dv['ico']; ?>" class="admin-input" placeholder="ex: fa fa-lock">
                                                     </div>
                                                     <div class="col-md-7">
                                                         <input type="text" name="badges[<?php echo $di; ?>][texte]" value="<?php echo $dv['txt']; ?>" class="admin-input" placeholder="Texte du badge">
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                     </div>
                                                 </div>
                                                 <?php
@@ -489,7 +513,7 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                 ?>
                                             </div>
                                             <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addBadgeRow()">
-                                                <i class="fa-solid fa-plus"></i> Ajouter un badge
+                                                <i class="fa fa-plus"></i> Ajouter un badge
                                             </button>
                                             <script>
                                                 let badgeIndex = <?php echo $b_idx; ?>;
@@ -499,13 +523,13 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                     div.className = 'badge-row row mb-2 align-items-center';
                                                     div.innerHTML = `
                                                         <div class="col-md-4">
-                                                            <input type="text" name="badges[${badgeIndex}][icone]" class="admin-input" placeholder="Icone (ex: fa-solid fa-star)">
+                                                            <input type="text" name="badges[${badgeIndex}][icone]" class="admin-input" placeholder="Icone (ex: fa fa-star)">
                                                         </div>
                                                         <div class="col-md-7">
                                                             <input type="text" name="badges[${badgeIndex}][texte]" class="admin-input" placeholder="Texte du badge">
                                                         </div>
                                                         <div class="col-md-1">
-                                                            <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa-solid fa-trash"></i></button>
+                                                            <button type="button" class="btn btn-sm btn-danger remove-badge" onclick="this.closest('.badge-row').remove()"><i class="fa fa-close"></i></button>
                                                         </div>
                                                     `;
                                                     container.appendChild(div);
@@ -599,15 +623,46 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                     </div>
                                     
                                     <div class="row">
-                                     <div class="col-md-6">
+                                     <div class="col-md-12">
                                       <div class="admin-form-group">
-                                        <label>Image</label>
-                                        <?php if(ApercuProduits($_GET['id'])) { ?>
-								         <div><img src="../<?php echo photoProduitsSite($_GET['id']); ?>" style="max-width:150px" /></div>
-                                         <?php } ?>
+                                        <label>Images du produit (Principale et Secondaires)</label>
+                                        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; padding: 10px 0;">
+                                            <?php 
+                                            // Photo Principale
+                                            $main_photo = ApercuProduits($_GET['id']);
+                                            if(!empty($main_photo)) {
+                                                $main_url = "../media/products/".$main_photo;
+                                            ?>
+                                            <div style="position:relative; width: 110px; height: 110px; border: 2px solid var(--color-primary); border-radius: 8px; padding: 2px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                                <img src="<?php echo $main_url; ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+                                                <span style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); background: var(--color-primary); color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Principale</span>
+                                                <a href="index.php?r=mproduits&id=<?php echo $_GET['id']; ?>&start=<?php echo $_GET['start'] ?? 0; ?>&action=del_main_img" 
+                                                   onclick="return confirm('Voulez-vous vraiment supprimer la photo principale ?');" 
+                                                   style="position: absolute; top: -12px; right: -12px; background: #ef4444; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 2px solid #fff; z-index: 10;">&times;</a>
+                                            </div>
+                                            <?php } ?>
+
+                                            <?php
+                                            // Photos Secondaires
+                                            $q_sec = executeRequete("SELECT * FROM images_produit WHERE id_produit='".intval($_GET['id'])."' ORDER BY id ASC");
+                                            while($r_sec = mysqli_fetch_assoc($q_sec)) {
+                                                $sec_url = "../media/products/".$r_sec['image'];
+                                            ?>
+                                            <div style="position:relative; width: 110px; height: 110px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 2px; background: #fff;">
+                                                <img src="<?php echo $sec_url; ?>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+                                                <a href="index.php?r=mproduits&id=<?php echo $_GET['id']; ?>&start=<?php echo $_GET['start'] ?? 0; ?>&action=del_sec_img&img_id=<?php echo $r_sec['id']; ?>" 
+                                                   onclick="return confirm('Supprimer cette image secondaire ?');" 
+                                                   style="position: absolute; top: -12px; right: -12px; background: #ef4444; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 2px solid #fff; z-index: 10;">&times;</a>
+                                            </div>
+                                            <?php } ?>
+                                        </div>
                                         <div class="controls">
+                                            <label style="font-size: 0.85rem; font-weight: 600; color: inherit; margin-bottom: 8px; display: block;">
+                                                <i class="fa fa-cloud-upload" style="margin-right: 5px; color: var(--color-primary);"></i>
+                                                Ajouter de nouvelles photos
+                                            </label>
                                             <input type="file" name="photos[]" multiple class="admin-input" accept="image/jpeg, image/png, image/webp"> 
-                                            <small style="display: block; margin-top: 5px; color: #64748b;">La première sélectionnée remplacera l'image principale, les autres seront ajoutées aux images secondaires. Elles seront optimisées (WebP).</small>
+                                            <small style="display: block; margin-top: 5px; color: var(--color-text-muted); opacity: 0.8;">La première sélectionnée remplacera l'image principale, les autres seront ajoutées aux images secondaires. Elles seront optimisées (WebP).</small>
                                         </div>
                                     </div>
                                      </div>
@@ -890,7 +945,7 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                         $submitBtn.html('<i class="fa fa-spinner fa-spin" style="margin-right:6px;"></i> Chargement...');
 
                                         function enableSubmit() {
-                                            $submitBtn.prop('disabled', false).html('<i class="fa-solid fa-floppy-disk" style="margin-right:6px;"></i> Enregistrer');
+                                            $submitBtn.prop('disabled', false).html('<i class="fa fa-save" style="margin-right:6px;"></i> Enregistrer');
                                         }
 
                                         // Rebuild table when user changes selection
