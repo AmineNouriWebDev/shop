@@ -143,6 +143,11 @@ include("includes/security.php");
 			 include("includes/promotions_articles.php");
 			 break;
 
+			 case "stats_promos" :
+			 include("includes/stats_promos.php");
+			 break;
+
+
 			 case "popups" : 
 			 include("includes/fonctions/fction_popups.php"); 
 			 include("includes/popups.php");

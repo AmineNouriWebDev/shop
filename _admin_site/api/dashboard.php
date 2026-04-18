@@ -37,6 +37,12 @@ $data = [
         'clients_actifs'  => 0,
         'messages_total'  => 0
     ],
+    'promo_summary' => [
+        'promos_actives' => 0,
+        'flash_actifs'   => 0,
+        'expiring_soon'  => 0,
+        'ca_promo_mois'  => 0,
+    ],
     'recent_commandes' => [],
     'recent_messages'  => [],
     'top_produits'     => [],
@@ -67,6 +73,19 @@ try {
 
     $res = executeRequete("SELECT COUNT(*) as nb FROM messages");
     if($res && $row = mysqli_fetch_assoc($res)) $data['kpis']['messages_total'] = (int)$row['nb'];
+
+    // Promo Summary for dashboard widget
+    $res = executeRequete("SELECT COUNT(*) as nb FROM produits WHERE prix_promo > 0 AND (promo_end_date IS NULL OR promo_end_date > NOW())");
+    if($res && $row = mysqli_fetch_assoc($res)) $data['promo_summary']['promos_actives'] = (int)$row['nb'];
+
+    $res = executeRequete("SELECT COUNT(*) as nb FROM produits WHERE is_flash = 1 AND prix_promo > 0 AND (promo_end_date IS NULL OR promo_end_date > NOW())");
+    if($res && $row = mysqli_fetch_assoc($res)) $data['promo_summary']['flash_actifs'] = (int)$row['nb'];
+
+    $res = executeRequete("SELECT COUNT(*) as nb FROM produits WHERE prix_promo > 0 AND promo_end_date IS NOT NULL AND promo_end_date > NOW() AND promo_end_date <= DATE_ADD(NOW(), INTERVAL 48 HOUR)");
+    if($res && $row = mysqli_fetch_assoc($res)) $data['promo_summary']['expiring_soon'] = (int)$row['nb'];
+
+    $res = executeRequete("SELECT SUM(lc.quantite * lc.prix) as ca FROM ligne_commande lc JOIN produits p ON p.id = lc.id_produit JOIN commandes c ON c.id = lc.idcommande LEFT JOIN etat_commandes ec ON ec.id = c.etat WHERE p.prix_promo > 0 AND MONTH(FROM_UNIXTIME(c.date)) = MONTH(CURDATE()) AND YEAR(FROM_UNIXTIME(c.date)) = YEAR(CURDATE()) AND LOWER(IFNULL(ec.etat,'')) NOT LIKE '%annul%'");
+    if($res && $row = mysqli_fetch_assoc($res)) $data['promo_summary']['ca_promo_mois'] = round((float)($row['ca'] ?? 0), 3);
 
     // 2. Dernières Commandes (10)
     $q_cmd = "SELECT c.id, c.nom, c.prenom, c.total, c.date, ec.etat as libelle_etat, c.etat as id_etat

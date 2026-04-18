@@ -68,18 +68,30 @@
                 <div class="kpi-value" id="kpi-clients">0</div>
                 <div class="kpi-label">Clients Inscrits</div>
             </div>
-        </div>
-
-        <!-- KPI 4 : Total Produits -->
+        </div>        <!-- KPI 4 : Total Produits -->
         <div class="kpi-card animate-fade-in-up" onclick="openProduitsModal()" style="animation-delay: 0.4s; cursor: pointer;" title="Voir le détail par catégorie">
             <div class="kpi-icon-wrap" style="background: var(--color-warning-light); color: var(--color-warning);">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;">
-                    <path fill-rule="evenodd" d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
                 </svg>
             </div>
             <div>
                 <div class="kpi-value" id="kpi-produits">0</div>
                 <div class="kpi-label">Total Produits</div>
+            </div>
+        </div>
+
+        <!-- KPI 5 : Promotions Actives -->
+        <div class="kpi-card animate-fade-in-up" onclick="window.location='index.php?r=stats_promos'" style="animation-delay: 0.5s; cursor: pointer;" title="Voir les statistiques des promotions">
+            <div class="kpi-icon-wrap" style="background: rgba(124,58,237,0.1); color: #7C3AED;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px;">
+                    <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.608a18.166 18.166 0 0 0 5.198-3.86 3.398 3.398 0 0 0-.608-5.198L11.27 3.24a3 3 0 0 0-2.12-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <div class="kpi-value" id="kpi-promos" style="color:#7C3AED;">0</div>
+                <div class="kpi-label">Promotions actives</div>
+                <div class="kpi-trend neutral" id="kpi-flash" style="font-size:0.65rem;">Flash: 0</div>
             </div>
         </div>
 
@@ -134,7 +146,7 @@
     </div>
 
     <!-- Ligne 4 : Tableaux Récents -->
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
 
         <!-- Dernières Commandes -->
         <div class="admin-card animate-fade-in-up" style="animation-delay: 0.8s;">
@@ -187,7 +199,27 @@
         </div>
 
     </div>
+
+    <!-- Ligne 5 : Widget Promotions -->
+    <div class="admin-card animate-fade-in-up" style="animation-delay: 1s; margin-bottom: 2rem;">
+        <div class="admin-card-header">
+            <div class="admin-card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;color:#7C3AED;">
+                    <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.608a18.166 18.166 0 0 0 5.198-3.86 3.398 3.398 0 0 0-.608-5.198L11.27 3.24a3 3 0 0 0-2.12-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
+                </svg>
+                Résumé des Promotions ce mois
+            </div>
+            <a href="index.php?r=stats_promos" class="admin-btn admin-btn-sm admin-btn-ghost">Analytiques complètes →</a>
+        </div>
+        <div class="admin-card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem;" id="promo-widget-content">
+                <div style="text-align:center; padding:1.5rem; opacity:0.5; font-size:0.875rem; grid-column:1/-1;">Chargement...</div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 <!-- Modal Produits -->
 <div id="produitsModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5); backdrop-filter:blur(4px);">
@@ -242,9 +274,49 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('kpi-cmd-total').textContent = 'Total historique: ' + (data.kpis.total_commandes || 0);
             document.getElementById('kpi-clients').textContent = data.kpis.clients_actifs || 0;
             document.getElementById('kpi-produits').textContent = data.kpis.produits_actifs || 0;
+
+            // KPI Promos
+            if (data.promo_summary) {
+                const promoKpi = document.getElementById('kpi-promos');
+                const flashKpi = document.getElementById('kpi-flash');
+                if (promoKpi) promoKpi.textContent = data.promo_summary.promos_actives || 0;
+                if (flashKpi) flashKpi.textContent = '⚡ Flash: ' + (data.promo_summary.flash_actifs || 0) + (data.promo_summary.expiring_soon > 0 ? ' · ⏰ ' + data.promo_summary.expiring_soon + ' expirent bientôt' : '');
+
+                // Widget promo
+                const promoWidget = document.getElementById('promo-widget-content');
+                if (promoWidget) {
+                    const ps = data.promo_summary;
+                    promoWidget.innerHTML = `
+                        <div style="text-align:center; padding:1rem; border-right:1px solid var(--color-border);">
+                            <div style="font-size:2rem; font-weight:800; color:#7C3AED;">${ps.promos_actives}</div>
+                            <div style="font-size:0.8rem; opacity:0.65; margin-top:4px;">Promos actives</div>
+                        </div>
+                        <div style="text-align:center; padding:1rem; border-right:1px solid var(--color-border);">
+                            <div style="font-size:2rem; font-weight:800; color:#F97316;">${ps.flash_actifs}</div>
+                            <div style="font-size:0.8rem; opacity:0.65; margin-top:4px;">⚡ Ventes Flash</div>
+                        </div>
+                        <div style="text-align:center; padding:1rem; border-right:1px solid var(--color-border);">
+                            <div style="font-size:1.4rem; font-weight:800; color:#10B981;">${parseFloat(ps.ca_promo_mois||0).toFixed(3)} TND</div>
+                            <div style="font-size:0.8rem; opacity:0.65; margin-top:4px;">CA promo ce mois</div>
+                        </div>
+                        <div style="text-align:center; padding:1rem;">
+                            ${ps.expiring_soon > 0 
+                                ? `<div style="font-size:1.5rem; font-weight:800; color:#F43F5E;">${ps.expiring_soon}</div><div style="font-size:0.8rem; opacity:0.65; margin-top:4px;">⏰ Expirent dans 48h</div>`
+                                : `<div style="font-size:1.5rem;">✅</div><div style="font-size:0.8rem; opacity:0.65; margin-top:4px;">Aucune expiration imminente</div>`
+                            }
+                        </div>
+                        <div style="grid-column:1/-1; text-align:center; padding:0.75rem 0 0; border-top:1px solid var(--color-border);">
+                            <a href="index.php?r=stats_promos" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">
+                                📊 Voir l'analyse complète des promotions →
+                            </a>
+                        </div>
+                    `;
+                }
+            }
             
             // Stocker pour le modal
             window.produitsDetailsData = data.produits_details || [];
+
 
             // --- 2. DERNIERES COMMANDES ---
             const tbodyCmd = document.getElementById('tableRecentCommandes');
