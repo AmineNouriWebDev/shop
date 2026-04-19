@@ -704,6 +704,7 @@ function valeurCaracteristiques($id)
 	$requete = "SELECT * FROM `valeur_caracteristique` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
+	if (!$data) return '';
 	return afficheChamp($data['valeur']);
 }
 function idvaleurCaracteristiques($id)
@@ -711,6 +712,7 @@ function idvaleurCaracteristiques($id)
 	$requete = "SELECT * FROM `valeur_caracteristique` WHERE `valeur` LIKE '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
+	if (!$data) return '';
 	return afficheChamp($data['id']);
 }
 function idcaracCaracteristiques($id)

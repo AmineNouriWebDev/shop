@@ -837,9 +837,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
         <a href="<?php echo lienPanier(); ?>" class="sh-cart sh-desktop-cart">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           Panier
-          <?php if ($nbArticlesHeader > 0): ?>
-            <span class="sh-cart-badge"><?php echo $nbArticlesHeader; ?></span>
-          <?php endif; ?>
+          <span id="navCartBadgeDesktop" class="sh-cart-badge" style="<?php echo ($nbArticlesHeader > 0) ? '' : 'display:none;'; ?>"><?php echo ($nbArticlesHeader > 0) ? $nbArticlesHeader : ''; ?></span>
         </a>
 
       </div>
@@ -912,11 +910,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       <!-- Panier mobile -->
       <a href="<?php echo lienPanier(); ?>" style="position:relative; color:var(--shop-primary); text-decoration:none; padding:0.25rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <?php if ($nbArticlesHeader > 0): ?>
-          <span style="position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; background:var(--shop-accent); color:white; font-size:0.625rem; font-weight:700; border-radius:9999px; display:flex; align-items:center; justify-content:center; padding:0 3px;">
-            <?php echo $nbArticlesHeader; ?>
-          </span>
-        <?php endif; ?>
+        <span id="navCartBadgeMobile" style="position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; background:var(--shop-accent); color:white; font-size:0.625rem; font-weight:700; border-radius:9999px; display:<?php echo ($nbArticlesHeader > 0) ? 'flex' : 'none'; ?>; align-items:center; justify-content:center; padding:0 3px;"><?php echo ($nbArticlesHeader > 0) ? $nbArticlesHeader : ''; ?></span>
       </a>
 
       <!-- Dark toggle mobile -->

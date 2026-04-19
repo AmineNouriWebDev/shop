@@ -90,9 +90,31 @@
 				}).showToast();
 				
 				// Update all cart counters
-			    if(document.getElementById("blocDepartementsPanier")) document.getElementById("blocDepartementsPanier").innerHTML = data[0];
-			    if(document.getElementById("lblCartCount")) document.getElementById("lblCartCount").innerHTML = '('+data[0]+')';
-        		if(document.getElementById("floatingCartCount")) document.getElementById("floatingCartCount").innerHTML = data[0];
+			var newCount = parseInt(data[0]) || 0;
+
+			// Panier flottant
+		    if(document.getElementById("floatingCartCount")) {
+		    	document.getElementById("floatingCartCount").innerHTML = newCount;
+		    }
+
+		    // Badge nav desktop
+		    var badgeDesktop = document.getElementById("navCartBadgeDesktop");
+		    if(badgeDesktop) {
+		    	badgeDesktop.innerHTML = newCount;
+		    	badgeDesktop.style.display = newCount > 0 ? '' : 'none';
+		    }
+
+		    // Badge nav mobile
+		    var badgeMobile = document.getElementById("navCartBadgeMobile");
+		    if(badgeMobile) {
+		    	badgeMobile.innerHTML = newCount;
+		    	badgeMobile.style.display = newCount > 0 ? 'flex' : 'none';
+		    }
+
+		    // Anciens IDs (compatibilité)
+		    if(document.getElementById("blocDepartementsPanier")) document.getElementById("blocDepartementsPanier").innerHTML = data[0];
+            if(document.getElementById("lblCartCount")) document.getElementById("lblCartCount").innerHTML = '('+data[0]+')';
+
 				
 				// Re-enable buttons after a short delay
 				setTimeout(function() {
