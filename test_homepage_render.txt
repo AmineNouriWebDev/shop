@@ -1,7 +1,0 @@
-<br />
-<b>Fatal error</b>:  Uncaught mysqli_sql_exception: Unknown column 'title_home' in 'field list' in C:\projects\htdocs\shop\_admin_site\includes\fonctions\fction_db.php:11
-Stack trace:
-#0 C:\projects\htdocs\shop\_admin_site\includes\fonctions\fction_db.php(11): mysqli_query(Object(mysqli), 'SELECT title_ho...')
-#1 C:\projects\htdocs\shop\index.php(16): executeRequete('SELECT title_ho...')
-#2 {main}
-  thrown in <b>C:\projects\htdocs\shop\_admin_site\includes\fonctions\fction_db.php</b> on line <b>11</b><br />
