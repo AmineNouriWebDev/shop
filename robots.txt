@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# Interdire l'accès à l'administration et aux fichiers sensibles
+Disallow: /_admin_site/
+Disallow: /scratch/
+Disallow: /connec.php
+Disallow: /env.php
+Disallow: /config.php
+Disallow: /include.php
+Disallow: /lien.php
+Disallow: /ajax/
+Disallow: /cron/
+Disallow: /node_modules/
+Disallow: /ckfinder/
+Disallow: /*.sql$
+Disallow: /*.md$
+Disallow: /*.txt$
+
+# Permettre les ressources CSS/JS/images
+Allow: /dist/
+Allow: /assets/
+Allow: /media/
+
+# Sitemap
+Sitemap: https://offipro.net/sitemap.php
+
+# Crawl-delay recommandé
+Crawl-delay: 2

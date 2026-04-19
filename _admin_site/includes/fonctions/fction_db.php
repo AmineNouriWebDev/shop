@@ -258,4 +258,57 @@ if (!function_exists('convertAndSaveWebP')) {
         return false;
     }
 }
+
+// Generate PWA Icons (192 and 512)
+if (!function_exists('generatePwaIcons')) {
+    function generatePwaIcons($source, $dest_folder) {
+        if (!file_exists($source)) return false;
+        
+        $info = @getimagesize($source);
+        if ($info === false) return false;
+        $mime = $info['mime'];
+        $image = false;
+        
+        if ($mime == 'image/jpeg' && function_exists('imagecreatefromjpeg')) $image = @imagecreatefromjpeg($source);
+        elseif ($mime == 'image/png' && function_exists('imagecreatefrompng')) {
+            $image = @imagecreatefrompng($source);
+            if($image) {
+                imagepalettetotruecolor($image);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
+            }
+        } elseif ($mime == 'image/webp' && function_exists('imagecreatefromwebp')) $image = @imagecreatefromwebp($source);
+        elseif ($mime == 'image/gif' && function_exists('imagecreatefromgif')) $image = @imagecreatefromgif($source);
+        
+        if ($image !== false) {
+            $width = imagesx($image);
+            $height = imagesy($image);
+            
+            $sizes = [192, 512];
+            foreach ($sizes as $size) {
+                $new_image = imagecreatetruecolor($size, $size);
+                imagealphablending($new_image, false);
+                imagesavealpha($new_image, true);
+                $transparent = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+                imagefilledrectangle($new_image, 0, 0, $size, $size, $transparent);
+                
+                imagecopyresampled($new_image, $image, 0, 0, 0, 0, $size, $size, $width, $height);
+                
+                // Save as PNG
+                if (function_exists('imagepng')) {
+                    imagepng($new_image, rtrim($dest_folder, '/') . '/icon-' . $size . 'x' . $size . '.png');
+                }
+                // Save as WEBP
+                if (function_exists('imagewebp')) {
+                    imagewebp($new_image, rtrim($dest_folder, '/') . '/icon-' . $size . 'x' . $size . '.webp', 80);
+                }
+                
+                imagedestroy($new_image);
+            }
+            imagedestroy($image);
+            return true;
+        }
+        return false;
+    }
+}
 ?>

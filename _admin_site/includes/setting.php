@@ -144,6 +144,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 
 			copy ($_FILES['image']['tmp_name'], "../media/site/".$destination1);
 			$image = $destination1;
+            
+            // Génération dynamique des icônes PWA au format WebP
+            if (function_exists('generatePwaIcons')) {
+                generatePwaIcons("../media/site/".$destination1, "../media/site/");
+            }
+
 			$requete = 'UPDATE `site_configuration` set `favicon`="'. $image .'"';
 			$result = executeRequete($requete);	
 		}

@@ -23,6 +23,13 @@
     <link rel="icon" href="media/site/<?php echo $favicon; ?>" type="image/png" sizes="32x32" />
     <link rel="icon" href="media/site/<?php echo $favicon; ?>" type="image/png" sizes="16x16" />
     <link rel="shortcut icon" href="media/site/<?php echo $favicon; ?>" type="image/x-icon" />
+    
+    <!-- PWA Manifest — Permet l'installation sur mobile/desktop -->
+    <link rel="manifest" href="<?php echo $chemin_absolu; ?>manifest.webmanifest.php">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="<?php echo isset($nom_site) ? htmlspecialchars($nom_site, ENT_QUOTES) : 'Offipro'; ?>">
         
     <title><?php if(isset($title_page) && $title_page !='') echo $title_page; else echo 'Accueil'; ?></title>
     <meta name="description" content="<?php echo isset($description_page) ? $description_page : ''; ?>" />

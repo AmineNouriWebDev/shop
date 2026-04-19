@@ -32,6 +32,15 @@ RewriteCond %{REQUEST_URI} !/_admin_site/ [NC]
 RewriteCond %{THE_REQUEST} \s/(?:shop/)?([^/.]+)\.php\s [NC]
 RewriteRule ^([^/]+)\.php$ %{ENV:BASE}%1/ [R=301,L]
 
+# ── PWA & SEO Dynamic Files ──────────────────────────────────────────────────
+# Serve sitemap.xml dynamically from PHP
+RewriteCond %{REQUEST_URI} ^(/shop/)?sitemap\.xml$ [NC]
+RewriteRule ^sitemap\.xml$ sitemap.php [L,QSA]
+
+# Serve manifest.webmanifest dynamically from PHP
+RewriteCond %{REQUEST_URI} ^(/shop/)?manifest\.webmanifest$ [NC]
+RewriteRule ^manifest\.webmanifest$ manifest.webmanifest.php [L,QSA]
+
 # New Clean URLs (Priority)
 RewriteRule ^produit/([^/]+)/?$ %{ENV:BASE}produit.php?link=$1 [L,QSA]
 RewriteRule ^boutique/([^/]+)/?$ %{ENV:BASE}categorie.php?link=$1 [L,QSA]
