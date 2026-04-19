@@ -135,24 +135,30 @@
     				}
                 	 while ($data3 = mysqli_fetch_array($res3)) 
                 	   { 
-                	       $req4 = 'SELECT * FROM `caracteristique_prod`  WHERE valeur != "0" AND `idcarac`= "'.$data3['idcarac'].'" GROUP BY valeur ORDER BY `id` ASC';
+                	       // INNER JOIN pour exclure les IDs orphelins (valeurs supprimées de valeur_caracteristique)
+                	       $req4 = 'SELECT cp.* FROM `caracteristique_prod` cp
+                	               INNER JOIN `valeur_caracteristique` vc ON vc.id = cp.valeur
+                	               WHERE cp.valeur != "0" AND cp.`idcarac` = "'.$data3['idcarac'].'"
+                	               GROUP BY cp.valeur ORDER BY cp.`id` ASC';
                     	   $res4 = executeRequete($req4);
                 	       $numRows = mysqli_num_rows($res4);
                 	       if($numRows > 0){
                     ?>
                     <!-- Widget Title -->
                     <h6 class="widget-title mb-3"><?php echo titreCaracteristiques($data3['idcarac']); ?></h6>
-    
+
                     <div class="widget-desc mb-3">
                         <?php
-    				
+			
                     	        while ($data4 = mysqli_fetch_array($res4)) 
-                    	        { 
+                    	        {
+                    	            $valLib = valeurCaracteristiques($data4['valeur']);
+                    	            if ($valLib === '' || $valLib === null) continue;
                     	?>
                         <!-- Single Form Check -->
                         <div class="form-check">
-                            <input class="form-check-input common_selector caracteristique" type="checkbox" value="<?php echo valeurCaracteristiques($data4['valeur']); ?>" id="<?php echo $data4['id'].'-'.nett(valeurCaracteristiques($data4['valeur'])); ?>">
-                            <label class="form-check-label" for="<?php echo $data4['id'].'-'.nett(valeurCaracteristiques($data4['valeur'])); ?>"><?php echo valeurCaracteristiques($data4['valeur']); ?></label>
+                            <input class="form-check-input common_selector caracteristique" type="checkbox" value="<?php echo htmlspecialchars($valLib); ?>" id="<?php echo $data4['id'].'-'.nett($valLib); ?>">
+                            <label class="form-check-label" for="<?php echo $data4['id'].'-'.nett($valLib); ?>"><?php echo htmlspecialchars($valLib); ?></label>
                         </div>
                         
                         <?php } ?>
@@ -160,6 +166,7 @@
                     </div>
                     <?php } } ?>
                 </div>
+
     
                 
             </div>
@@ -271,17 +278,24 @@
                         	 $reqM3 = "SELECT * FROM `caracteristique_prod` WHERE valeur != '0' GROUP BY idcarac ORDER BY `id` ASC";
     					}
                     	 $resM3 = executeRequete($reqM3);
-                    	 while ($dataM3 = mysqli_fetch_array($resM3)) { 
-                    	       $reqM4 = 'SELECT * FROM `caracteristique_prod`  WHERE valeur != "0" AND `idcarac`= "'.$dataM3['idcarac'].'" GROUP BY valeur ORDER BY `id` ASC';
-                        	   $resM4 = executeRequete($reqM4);
-                    	       if(mysqli_num_rows($resM4) > 0){
+                	 while ($dataM3 = mysqli_fetch_array($resM3)) { 
+                	       // INNER JOIN pour exclure les IDs orphelins
+                	       $reqM4 = 'SELECT cp.* FROM `caracteristique_prod` cp
+                	                INNER JOIN `valeur_caracteristique` vc ON vc.id = cp.valeur
+                	                WHERE cp.valeur != "0" AND cp.`idcarac` = "'.$dataM3['idcarac'].'"
+                	                GROUP BY cp.valeur ORDER BY cp.`id` ASC';
+                	   $resM4 = executeRequete($reqM4);
+                	       if(mysqli_num_rows($resM4) > 0){
                         ?>
                         <div class="form-group mb-3">
                             <label class="fw-semibold small" style="color:var(--shop-text-secondary,#6B6589)"><?php echo titreCaracteristiques($dataM3['idcarac']); ?></label>
                             <select class="form-control common_selector caracteristique" style="height:auto; padding: 0.6rem 1rem; font-size: 0.9rem; border-color: var(--shop-border,#E0DEFF); border-radius: 0.5rem;">
                                 <option value="">Tous</option>
-                                <?php while ($dataM4 = mysqli_fetch_array($resM4)) { ?>
-                                <option value="<?php echo valeurCaracteristiques($dataM4['valeur']); ?>"><?php echo valeurCaracteristiques($dataM4['valeur']); ?></option>
+                                <?php while ($dataM4 = mysqli_fetch_array($resM4)) {
+                                    $valLibM = valeurCaracteristiques($dataM4['valeur']);
+                                    if ($valLibM === '' || $valLibM === null) continue;
+                                ?>
+                                <option value="<?php echo htmlspecialchars($valLibM); ?>"><?php echo htmlspecialchars($valLibM); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
