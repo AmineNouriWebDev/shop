@@ -23,7 +23,16 @@
                     <div class="col-md-12" id="divToPrint">
                         <div class="admin-card printableArea" style="padding: 1.5rem;">
                             <style>
+                                /* ─── Suppression des en-têtes/pieds navigateur à l'impression ─── */
+                                @page {
+                                    size: A4;
+                                    margin: 0;
+                                }
                                 @media print {
+                                    body {
+                                        padding: 12mm 14mm !important;
+                                        margin: 0 !important;
+                                    }
                                     #printFooterLegal {
                                         display: block !important;
                                         position: fixed;
@@ -38,6 +47,7 @@
                                     }
                                     .print-hide { display: none !important; }
                                     .invoice-header-right { text-align: right; }
+                                    .admin-card { box-shadow: none !important; border: none !important; }
                                 }
                             </style>
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem;">
@@ -48,9 +58,30 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
-                                        <div>
-                                            <img src="../media/site/<?php echo $logo; ?>" class="img-fluid" style="max-width:180px">
+                                        <div style="display:flex; align-items:center;">
+                                            <?php
+                                            // Récupérer le logo depuis site_configuration (URL absolue pour l'impression)
+                                            $print_logo = '';
+                                            $res_logo_print = executeRequete("SELECT logo FROM site_configuration LIMIT 1");
+                                            if ($res_logo_print && $row_logo_print = mysqli_fetch_assoc($res_logo_print)) {
+                                                $print_logo = $row_logo_print['logo'];
+                                            }
+                                            if (!$print_logo && isset($logo)) $print_logo = $logo;
+                                            // Construire URL absolue dynamique (fonctionne même après document.body.innerHTML=)
+                                            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                                            $base_url = $protocol . '://' . $_SERVER['HTTP_HOST'];
+                                            // Le dossier _admin_site est dans le même répertoire que media/
+                                            // On remonte d'un niveau depuis _admin_site/ pour trouver media/site/
+                                            $admin_path = dirname($_SERVER['SCRIPT_NAME']); // ex: /_admin_site ou /shop/_admin_site
+                                            $site_root_path = dirname($admin_path); // ex: / ou /shop
+                                            $site_root_path = rtrim($site_root_path, '/');
+                                            $logo_abs_url = $base_url . $site_root_path . '/media/site/' . htmlspecialchars($print_logo);
+                                            if (!empty($print_logo)):
+                                            ?>
+                                            <img src="<?php echo $logo_abs_url; ?>" alt="Logo" style="max-width:160px; max-height:80px; object-fit:contain;">
+                                            <?php endif; ?>
                                         </div>
+
                                         <div class="invoice-header-right">
                                             <h2 style="font-weight: bold; font-size: 16pt; margin-bottom: 5px;"><?php echo htmlspecialchars($nom_site); ?></h2>
                                             <p style="margin: 0; font-size: 10pt; color: #555;"><?php echo htmlspecialchars($adresse); ?></p>
@@ -357,21 +388,33 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
             function printDocument(docType) {
                 var titleSpan = document.getElementById('dynamicDocTitle');
                 var originalTitle = titleSpan.innerHTML;
-                
+
+                // Mettre à jour le titre dynamique dans le document
                 titleSpan.innerHTML = docType.toUpperCase();
-                
+
                 var printsection = document.getElementById('divToPrint').innerHTML;
-                
+
                 titleSpan.innerHTML = originalTitle;
-                
+
+                // ── Changer le <title> de la page : évite "Tableau de bord" dans le header navigateur ──
+                var originalPageTitle = document.title;
+                var docLabels = {
+                    'FACTURE': 'Facture',
+                    'BON DE COMMANDE': 'Bon de Commande',
+                    'BON DE LIVRAISON': 'Bon de Livraison'
+                };
+                document.title = (docLabels[docType.toUpperCase()] || docType) + ' - <?php echo addslashes(htmlspecialchars($nom_site ?? '')); ?>';
+
                 var getFullContent = document.body.innerHTML;
-                
+
                 document.body.innerHTML = printsection;
                 window.print();
-                
+
+                // Restaurer
+                document.title = originalPageTitle;
                 document.body.innerHTML = getFullContent;
-                
-                // Recharger la page pour reconnecter les listeners JavaScript perdus (sécurité d'interface)
+
+                // Recharger la page pour reconnecter les listeners JavaScript perdus
                 window.location.reload();
             }
         </script>
