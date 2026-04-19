@@ -136,10 +136,10 @@
                 	 while ($data3 = mysqli_fetch_array($res3)) 
                 	   { 
                 	       // INNER JOIN pour exclure les IDs orphelins (valeurs supprimées de valeur_caracteristique)
-                	       $req4 = 'SELECT cp.* FROM `caracteristique_prod` cp
+                	       $req4 = 'SELECT cp.*, vc.valeur as val_label, vc.ordre as val_ordre FROM `caracteristique_prod` cp
                 	               INNER JOIN `valeur_caracteristique` vc ON vc.id = cp.valeur
-                	               WHERE cp.valeur != "0" AND cp.`idcarac` = "'.$data3['idcarac'].'"
-                	               GROUP BY cp.valeur ORDER BY cp.`id` ASC';
+                	               WHERE cp.valeur != "0" AND cp.`idcarac` = "'.$data3['idcarac'].'"  
+                	               GROUP BY cp.valeur ORDER BY vc.`ordre` ASC, vc.`id` ASC';
                     	   $res4 = executeRequete($req4);
                 	       $numRows = mysqli_num_rows($res4);
                 	       if($numRows > 0){
@@ -280,10 +280,10 @@
                     	 $resM3 = executeRequete($reqM3);
                 	 while ($dataM3 = mysqli_fetch_array($resM3)) { 
                 	       // INNER JOIN pour exclure les IDs orphelins
-                	       $reqM4 = 'SELECT cp.* FROM `caracteristique_prod` cp
+                	       $reqM4 = 'SELECT cp.*, vc.valeur as val_label, vc.ordre as val_ordre FROM `caracteristique_prod` cp
                 	                INNER JOIN `valeur_caracteristique` vc ON vc.id = cp.valeur
-                	                WHERE cp.valeur != "0" AND cp.`idcarac` = "'.$dataM3['idcarac'].'"
-                	                GROUP BY cp.valeur ORDER BY cp.`id` ASC';
+                	                WHERE cp.valeur != "0" AND cp.`idcarac` = "'.$dataM3['idcarac'].'"  
+                	                GROUP BY cp.valeur ORDER BY vc.`ordre` ASC, vc.`id` ASC';
                 	   $resM4 = executeRequete($reqM4);
                 	       if(mysqli_num_rows($resM4) > 0){
                         ?>
