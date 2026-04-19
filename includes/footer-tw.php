@@ -196,10 +196,10 @@
         <li><a href="<?php echo lienContenu(2); ?>">À propos de nous</a></li>
         <li><a href="<?php echo lienContenu(8); ?>">Aide</a></li>
         <li><a href="<?php echo lienContact(); ?>">Contactez-nous</a></li>
-        <li><a href="<?php echo CHEMIN; ?>Conditions-Generales-de-Vente/">Conditions générales de Ventes</a></li>
-        <li><a href="<?php echo CHEMIN; ?>politique-de-confidentialite/">Politique de confidentialité</a></li>
-        <li><a href="<?php echo CHEMIN; ?>mentions-legales/">Mentions Légales</a></li>
-        <li><a href="<?php echo CHEMIN; ?>politiques-de-retour/">Politiques de retour</a></li>
+        <li><a href="<?php echo lienContenu(32); ?>">Conditions générales de Ventes</a></li>
+        <li><a href="<?php echo lienContenu(28); ?>">Politique de confidentialité</a></li>
+        <li><a href="<?php echo lienContenu(29); ?>">Mentions Légales</a></li>
+        <li><a href="<?php echo lienContenu(30); ?>">Politiques de retour</a></li>
       </ul>
     </div>
 
