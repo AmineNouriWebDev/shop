@@ -320,11 +320,11 @@
 			?>
 			
 			
-			<div class="container-fluid mb-5">
-			    <div class="mb-4" style="border-bottom: 2px solid var(--shop-primary); display: inline-block; padding-bottom: 5px;">
-			        <h3 style="font-size:1.25rem; font-weight:700; color:var(--shop-text-primary); margin:0;">Sélectionnez votre marque préférée :</h3>
+			<div class="container-fluid mb-5 d-none d-md-block">
+			    <div class="mb-3" style="border-bottom: 2px solid var(--shop-primary); display: inline-block; padding-bottom: 4px;">
+			        <h3 style="font-size:1rem; font-weight:700; color:var(--shop-text-primary); margin:0;">Sélectionnez votre marque préférée :</h3>
 			    </div>
-			    <div class="row g-3">
+			    <div class="d-flex flex-wrap" style="gap: 10px;">
     		        <?php 
 				            $categ     =  sanitize($_GET['link']);
 				            $idc       = idCategBlog($categ);
@@ -333,13 +333,13 @@
     		            while ($datactg = mysqli_fetch_array($res))  {
                             if($datactg['marque'] == '0') continue;
     		        ?>
-				        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 marque-logo">
-    		            <a href="<?php echo lienRechercheByCM(linkMarque($datactg['marque']),$categ); ?>">
-    		                <div class="card cx-surface cx-border d-flex align-items-center justify-content-center" style="min-height:110px; border-radius: 1rem; cursor:pointer;">
-    		                    <img src="<?php echo photoMarqueSite($datactg['marque']); ?>" class="p-3" style="object-fit:contain; max-height:80px; width:100%;">
+				        <div class="marque-logo">
+    		            <a href="<?php echo lienRechercheByCM(linkMarque($datactg['marque']),$categ); ?>" style="text-decoration:none;">
+    		                <div class="card cx-surface cx-border d-flex align-items-center justify-content-center" style="width:125px; height:65px; border-radius: 0.6rem; cursor:pointer; padding: 4px !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition:transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+    		                    <img src="<?php echo photoMarqueSite($datactg['marque']); ?>" style="object-fit:contain; width:100%; height:100%; max-height:none; max-width:none; display:block; margin:auto;">
     		                </div>
     		            </a>
-				            </div>
+				        </div>
     		        <?php }  ?>
                 </div>
             </div>
