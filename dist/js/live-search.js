@@ -54,17 +54,7 @@
         <svg class="ls-item-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </a>`).join('');
 
-        const footer = total > results.length
-            ? `<a href="${search_url}" class="ls-footer">
-            Voir les ${total} résultats pour "<strong>${query}</strong>"
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>`
-            : `<a href="${search_url}" class="ls-footer">
-            Voir tous les résultats
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>`;
-
-        return items + footer;
+        return items;
     }
 
     /* ─── Show/hide dropdown ─────────────────────────────── */
