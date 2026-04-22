@@ -215,6 +215,10 @@ include("includes/security.php");
 
 			 break;
 
+			 case "demandes_produits" : 
+			 include("includes/demandes_produits.php");
+			 break;
+
 			 case "addproduitssimilaire" :
 
 			 include("includes/fonctions/fction_produits.php");

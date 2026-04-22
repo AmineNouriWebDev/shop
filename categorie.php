@@ -155,8 +155,10 @@
             var maximum_price = $('#hidden_maximum_price').val();
             var promo         = "<?php if(isset($_GET['promo'])) echo 'promo';else echo ''; ?>";
 			var brand = get_filter('brand');
-			var type = document.getElementById('typeProd').value;
-			var link = document.getElementById('linkProd').value;
+			var typeEl = document.getElementById('typeProd');
+			var linkEl = document.getElementById('linkProd');
+			var type = typeEl ? typeEl.value : '';
+			var link = linkEl ? linkEl.value : '';
 			var category = get_filter('category');
 			var caracteristique = get_filter('caracteristique');
 			var sort = $('#sort_order').length ? $('#sort_order').val() : 'price_asc';
@@ -164,7 +166,7 @@
 			$('.filter_data').html('<div style="min-height:200px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-spinner fa-spin fa-2x" style="color:var(--shop-primary,#5A31F4);"></i></div>');
 
 			$.ajax({
-				url:"includes/fetch_data_test.php",
+				url:"<?php echo CHEMIN; ?>includes/fetch_data_test.php",
 				method:"POST",
 				data:{
                     action:action,

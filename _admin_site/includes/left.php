@@ -65,7 +65,7 @@ function navGroupActive($routes, $current) {
         <div class="admin-nav-section" style="margin-top:0.5rem;">Catalogue</div>
 
         <!-- Gestion produits -->
-        <button type="button" class="admin-nav-item<?php echo navGroupActive(['produits','nproduits','mproduits','addproduit','addproduits','editproduits','addproduitssimilaire'], $current_route); ?>"
+        <button type="button" class="admin-nav-item<?php echo navGroupActive(['produits','nproduits','mproduits','addproduit','addproduits','editproduits','addproduitssimilaire','demandes_produits'], $current_route); ?>"
                 onclick="toggleSubmenu('submenu-produits', this)">
             <svg class="admin-nav-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
@@ -76,9 +76,10 @@ function navGroupActive($routes, $current) {
                 <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd"/>
             </svg>
         </button>
-        <div class="admin-nav-submenu<?php echo navGroupOpen(['produits','nproduits','mproduits','addproduit','addproduits','editproduits','addproduitssimilaire'], $current_route); ?>" id="submenu-produits">
+        <div class="admin-nav-submenu<?php echo navGroupOpen(['produits','nproduits','mproduits','addproduit','addproduits','editproduits','addproduitssimilaire','demandes_produits'], $current_route); ?>" id="submenu-produits">
             <a href="index.php?r=produits" class="admin-subnav-item<?php echo navActive('produits', $current_route); ?>">Liste des produits</a>
             <a href="index.php?r=nproduits" class="admin-subnav-item<?php echo navActive('nproduits', $current_route); ?>">Ajouter un produit</a>
+            <a href="index.php?r=demandes_produits" class="admin-subnav-item<?php echo navActive('demandes_produits', $current_route); ?>">Propositions Produits</a>
         </div>
 
 

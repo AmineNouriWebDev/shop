@@ -210,7 +210,9 @@
 			    $variable4='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.$_GET['marque'].'</li>';
 			}
 			if(isset($_GET['search']) && $_GET['search'] != ''){
-			    $variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.$_GET['search'].'</li>';
+			    $variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.htmlspecialchars($_GET['search']).'</li>';
+			} elseif(isset($_GET['recherche']) && $_GET['recherche'] != ''){
+			    $variable3='<li class="breadcrumb-item active fw-bold text-primary" aria-current="page">'.htmlspecialchars($_GET['recherche']).'</li>';
 			}
 			
 			?>

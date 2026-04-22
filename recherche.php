@@ -101,12 +101,14 @@
 			var action = 'fetch_data';
             var minimum_price = $('#hidden_minimum_price').val();
             var maximum_price = $('#hidden_maximum_price').val();
-			var search    = "<?php if ((isset($_POST['recherche']) && $_POST['recherche'] != '')){ echo $_POST['recherche']; } /*elseif ((isset($_GET['marque']) && $_GET['marque'] != '')){ echo $_GET['marque']; }*/elseif((isset($_POST['action']) && $_POST['action'] == 'search') || (isset($_POST['action']) && $_POST['action'] == 'search1')){ echo addslashes($_POST['recherche']); }else{ echo  ''; }  ?>";
+			var search    = "<?php if (isset($_POST['recherche']) && $_POST['recherche'] != ''){ echo addslashes($_POST['recherche']); } elseif (isset($_GET['recherche']) && $_GET['recherche'] != '') { echo addslashes($_GET['recherche']); } elseif (isset($_GET['search']) && $_GET['search'] != '') { echo addslashes($_GET['search']); } else { echo ''; } ?>";
 			var brand = get_filter('brand') ;
             var promo         = "<?php if(isset($_GET['promo'])) echo 'promo';else echo ''; ?>";
 			var marque = "<?php if((isset($_GET['marque']) && $_GET['marque'] != '')){ echo $_GET['marque']; }else{ echo  ''; }  ?>";
-			var type = document.getElementById('typeProd').value;
-			var link = document.getElementById('linkProd').value;
+			var typeEl = document.getElementById('typeProd');
+			var linkEl = document.getElementById('linkProd');
+			var type = typeEl ? typeEl.value : '';
+			var link = linkEl ? linkEl.value : '';
 			var category = get_filter('category');
 			var caracteristique = get_filter('caracteristique');
 			var categoryByTitre = '<?php if ((isset($_GET['categorie']) && $_GET['categorie'] != '')){ echo $_GET['categorie']; }elseif ((isset($_POST['categorie']) && $_POST['categorie'] != '')){ echo linkCategBlog($_POST['categorie']); }else{ echo ''; } ?>';
@@ -115,7 +117,7 @@
             $('.filter_data').html('<div class="row"> <div class="col-12"><div id="loading"></div></div></div>');
 
 			$.ajax({
-				url:"includes/fetch_data_test.php",
+				url:"<?php echo CHEMIN; ?>includes/fetch_data_test.php",
 				method:"POST",
 				data:{
                     action:action,

@@ -327,7 +327,75 @@ if(isset($_POST["action"])){
         $output .= renderPagination($current_page, $total_pages, $total_row);
 
     }else{
-        $output .= '<div class="text-center py-5" style="color:var(--shop-text-secondary,#6B6589);"><i class="fa fa-search fa-2x mb-3 d-block"></i><p>Aucun produit trouvé.</p></div>';
+        $searchQuery = isset($_POST['search']) ? htmlspecialchars(trim($_POST['search'])) : '';
+        $displayQuery = !empty($searchQuery) ? ' "<strong>'.$searchQuery.'</strong>"' : '';
+        $output .= '
+        <div class="d-flex flex-column align-items-center justify-content-center py-5 px-3" style="min-height: 400px; width: 100%; text-align: center; color:var(--shop-text-secondary,#6B6589);">
+            <div style="max-width: 600px; width: 100%;">
+                <i class="fa fa-frown-o fa-3x mb-3 d-block" style="color: var(--shop-border, #E0DEFF);"></i>
+                <h4 style="font-weight: 700; color: var(--shop-text-primary, #120B2E); margin-bottom: 1rem;">Oups, nous n\'avons pas trouvé ce que vous cherchez...</h4>
+                <p style="margin-bottom: 2rem; font-size: 1.05rem;">Vous ne trouvez pas'.$displayQuery.' ? Dites-nous ce que vous cherchez et notre équipe fera son possible pour vous l\'apporter au meilleur prix !</p>
+                
+                <form id="form-demande-produit" class="bg-white p-4 shadow-sm border mx-auto" style="border-radius: 1.25rem; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important;">
+                    <input type="hidden" name="recherche" value="'.$searchQuery.'">
+                    <div class="mb-4">
+                        <label class="form-label mb-2" style="font-weight: 600; font-size: 0.95rem; color: var(--shop-text-primary, #120B2E);">De quel produit s\'agit-il ? *</label>
+                        <input type="text" name="nom_produit" class="form-control" placeholder="Quel produit cherchez-vous ?" required style="border-radius: 0.75rem; padding: 0.875rem; border: 1.5px solid var(--shop-border, #E0DEFF); background: #fcfbff;">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label mb-2" style="font-weight: 600; font-size: 0.95rem; color: var(--shop-text-primary, #120B2E);">Votre numéro de téléphone (optionnel)</label>
+                        <input type="text" name="telephone" class="form-control" placeholder="Pour vous informer dès la disponibilité" style="border-radius: 0.75rem; padding: 0.875rem; border: 1.5px solid var(--shop-border, #E0DEFF); background: #fcfbff;">
+                    </div>
+                    <button type="submit" class="btn w-100 py-3 mt-2" style="background: var(--shop-primary, #5A31F4); color: white; border-radius: 0.75rem; font-weight: 700; transition: all 0.3s; border:none; box-shadow: 0 4px 12px rgba(90,49,244,0.2);">
+                        Soumettre ma demande
+                    </button>
+                </form>
+                
+                <div id="reponse-demande" style="display:none; margin-top: 2rem; padding: 1.5rem; border-radius: 1.25rem; background: #ecfdf5; color: #065f46; font-weight: 600; border: 1px solid #10b981;">
+                    <i class="fa fa-check-circle fa-2x mb-3" style="display:block; color: #10b981;"></i>
+                    <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">C\'est envoyé !</div>
+                    <span style="font-size: 0.95rem; font-weight: 400; color: #047857;">Merci pour votre suggestion. Notre équipe va s\'en occuper très rapidement.</span>
+                </div>
+            </div>
+            
+            <script>
+            document.getElementById("form-demande-produit")?.addEventListener("submit", function(e) {
+                e.preventDefault();
+                var form = this;
+                var btn = form.querySelector("button[type=submit]");
+                if(btn) { 
+                    btn.disabled = true; 
+                    btn.style.opacity = "0.7";
+                    btn.innerHTML = "<i class=\'fa fa-spinner fa-spin me-2\'></i> Envoi en cours..."; 
+                }
+                
+                var formData = new FormData(form);
+                fetch("'.CHEMIN.'ajax/submit_demande_produit.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(res => res.text())
+                .then(data => {
+                    if(data.trim() === "OK") {
+                        form.style.display = "none";
+                        document.getElementById("reponse-demande").style.display = "block";
+                        document.getElementById("reponse-demande").scrollIntoView({behavior: "smooth", block: "center"});
+                    } else {
+                        throw new Error(data);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    if(btn) { 
+                        btn.disabled = false; 
+                        btn.style.opacity = "1";
+                        btn.innerHTML = "Soumettre ma demande"; 
+                    }
+                    alert("Désolé, une erreur technique est survenue. Veuillez réessayer ou nous contacter directement.");
+                });
+            });
+            </script>
+        </div>';
     }
 
     echo $output;
