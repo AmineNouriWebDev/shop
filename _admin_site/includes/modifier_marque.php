@@ -31,7 +31,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 				$result1 = executeRequete($requete1);	
 			}
 		}
-	?>
+	
 	phpToastRedirect("Marque modifiée avec succès.", 'index.php?r=marques', 'success');
 	exit;
 }
