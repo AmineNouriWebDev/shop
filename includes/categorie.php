@@ -335,7 +335,7 @@
     		        ?>
 				        <div class="marque-logo">
     		            <a href="<?php echo lienRechercheByCM(linkMarque($datactg['marque']),$categ); ?>" style="text-decoration:none;">
-    		                <div class="card cx-surface cx-border d-flex align-items-center justify-content-center" style="width:125px; height:65px; border-radius: 0.6rem; cursor:pointer; padding: 4px !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition:transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+    		                <div class="card cx-surface cx-border d-flex align-items-center justify-content-center" style="width:150px; height:78px; border-radius: 0.6rem; cursor:pointer; padding: 4px !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition:transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
     		                    <img src="<?php echo photoMarqueSite($datactg['marque']); ?>" style="object-fit:contain; width:100%; height:100%; max-height:none; max-width:none; display:block; margin:auto;">
     		                </div>
     		            </a>

@@ -22,6 +22,7 @@ include($chemin_admin . "includes/" . $chemin_functions . "/fction_moyens_paieme
 include($chemin_admin . "includes/" . $chemin_functions . "/fction_recherches.php");
 include($chemin_admin . "includes/" . $chemin_functions . "/fction_emails.php");
 include($chemin_admin . "includes/" . $chemin_functions . "/fction_produits.php");
+include($chemin_admin . "includes/" . $chemin_functions . "/fction_marques.php");
 include($chemin_admin . "includes/" . $chemin_functions . "/fction_partenaires.php");
 include($chemin_admin . "includes/" . $chemin_functions . "/fction_applications.php");
 

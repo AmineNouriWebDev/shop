@@ -88,7 +88,7 @@
     body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--shop-bg-base); color: var(--shop-text-primary); }
     .marque-logo .card { width:100%; height:100%; overflow:hidden; justify-content:center; border-radius: 1rem; border: 1px solid var(--shop-border, #e5e7eb); transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .marque-logo .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); border-color: var(--shop-primary, #5a31f4); }
-    .marque-logo .card img { width:100%; object-fit:contain; height:-webkit-fill-available; padding: 1rem; }
+    .marque-logo .card img { width:100%; object-fit:contain; height:-webkit-fill-available; padding: 4px; }
     /* jQuery UI slider: brand purple */
     #price_range.ui-slider { height:5px !important; background:var(--shop-border,#E0DEFF) !important; border:none !important; border-radius:3px !important; width: 85% !important; margin: 1.5rem auto 1rem auto !important; }
     #price_range .ui-slider-range { background:var(--shop-primary,#5A31F4) !important; }

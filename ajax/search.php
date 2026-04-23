@@ -66,7 +66,7 @@ while ($row = mysqli_fetch_assoc($res_products)) {
 
     $results[] = [
         'id'         => (int)$id,
-        'titre'      => htmlspecialchars($row['titre']),
+        'titre'      => htmlspecialchars(html_entity_decode($row['titre'], ENT_QUOTES | ENT_HTML5, 'UTF-8')),
         'url'        => lienProduits($row['link']),
         'photo'      => photoProduitsSite($id),
         'prix'       => $has_promo ? $prix_promo : $prix_vente,
