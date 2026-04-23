@@ -286,76 +286,103 @@
                                     }
                                 }
 
-                                function updateVariationAvailability() {
-                                    // Hierarchical Filtering: Parent groups filter children, not vice versa.
-                                    var allGroups = Array.from(document.querySelectorAll('.variation-group[data-group-id]'));
-                                    
-                                    allGroups.forEach(function(group, groupIndex) {
-                                        var buttons = group.querySelectorAll('.variation-btn');
-                                        
-                                        // Get selections from PREVIOUS groups only (Hierarchical)
-                                        var parentSelections = [];
-                                        for (var i = 0; i < groupIndex; i++) {
-                                            var active = allGroups[i].querySelector('.variation-btn.btn-dark');
-                                            if (active) parentSelections.push(parseInt(active.getAttribute('data-val-id')));
-                                        }
+                                 function updateVariationAvailability() {
+                                     // Hierarchical Filtering: Parent groups filter children, not vice versa.
+                                     var allGroups = Array.from(document.querySelectorAll('.variation-group[data-group-id]'));
+                                     
+                                     allGroups.forEach(function(group, groupIndex) {
+                                         var buttons = group.querySelectorAll('.variation-btn');
+                                         
+                                         // Get selections from PREVIOUS groups only (Hierarchical)
+                                         var parentSelections = [];
+                                         for (var i = 0; i < groupIndex; i++) {
+                                             var active = allGroups[i].querySelector('.variation-btn.btn-dark');
+                                             if (active) parentSelections.push(parseInt(active.getAttribute('data-val-id')));
+                                         }
 
-                                        buttons.forEach(function(btn) {
-                                            var valId = parseInt(btn.getAttribute('data-val-id'));
-                                            
-                                            // Available if there's a variation with THIS val AND ALL parents
-                                            var isAvailable = false;
-                                            for (var key in variationsMap) {
-                                                var entry = variationsMap[key];
-                                                if (entry && (entry.pv > 0 || entry.pp > 0)) {
-                                                    var keyIds = key.split(',').map(Number);
-                                                    if (keyIds.indexOf(valId) !== -1) {
-                                                        var matchParents = true;
-                                                        for (var k=0; k<parentSelections.length; k++) {
-                                                            if (keyIds.indexOf(parentSelections[k]) === -1) {
-                                                                matchParents = false;
-                                                                break;
-                                                            }
-                                                        }
-                                                        if (matchParents) {
-                                                            isAvailable = true;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                         buttons.forEach(function(btn) {
+                                             var valId = parseInt(btn.getAttribute('data-val-id'));
+                                             
+                                             // ── NEW LOGIC: Is this value part of the variation price system at all? ──
+                                             // If it's not in any key of variationsMap, it's a Static Property and should always show.
+                                             var isParticipating = false;
+                                             for (var key in variationsMap) {
+                                                 if (key.split(',').map(Number).indexOf(valId) !== -1) {
+                                                     isParticipating = true;
+                                                     break;
+                                                 }
+                                             }
 
-                                            if (isAvailable) {
-                                                btn.disabled = false;
-                                                btn.style.display = 'inline-block';
-                                                btn.style.opacity = '1';
-                                                btn.style.pointerEvents = 'auto';
-                                                btn.style.cursor = 'pointer';
-                                            } else {
-                                                btn.disabled = true;
-                                                btn.style.display = 'none';
-                                                btn.style.opacity = '0.3';
-                                                btn.style.pointerEvents = 'none';
-                                                btn.style.cursor = 'not-allowed';
-                                                if (btn.classList.contains('btn-dark')) {
-                                                    btn.classList.remove('btn-dark', 'text-white');
-                                                    btn.classList.add('btn-outline-secondary');
-                                                }
-                                            }
-                                        });
+                                             if (!isParticipating) {
+                                                 btn.disabled = false;
+                                                 btn.style.display = 'inline-block';
+                                                 btn.style.opacity = '1';
+                                                 btn.style.pointerEvents = 'auto';
+                                                 btn.style.cursor = 'pointer';
+                                                 return;
+                                             }
 
-                                        // AUTO-SELECTION Logic:
-                                        // If no active button in this group, select first available.
-                                        var active = group.querySelector('.variation-btn.btn-dark');
-                                        if (!active) {
-                                            var firstVisible = group.querySelector('.variation-btn:not([style*="display: none"])');
-                                            if (firstVisible) {
-                                                firstVisible.classList.remove('btn-outline-secondary');
-                                                firstVisible.classList.add('btn-dark', 'text-white');
-                                            }
-                                        }
-                                    });
-                                }
+                                             // ── Participating value: apply hierarchical filtering ──
+                                             // Available if there's a variation with THIS val AND ALL parents
+                                             var isAvailable = false;
+                                             for (var key in variationsMap) {
+                                                 var entry = variationsMap[key];
+                                                 if (entry && (entry.pv > 0 || entry.pp > 0)) {
+                                                     var keyIds = key.split(',').map(Number);
+                                                     if (keyIds.indexOf(valId) !== -1) {
+                                                         var matchParents = true;
+                                                         for (var k=0; k<parentSelections.length; k++) {
+                                                             var pValId = parentSelections[k];
+                                                             // Only check compatibility if the parent selection also participates in variations
+                                                             var pParticipates = false;
+                                                             for (var k2 in variationsMap) {
+                                                                 if (k2.split(',').map(Number).indexOf(pValId) !== -1) { pParticipates = true; break; }
+                                                             }
+
+                                                             if (pParticipates && keyIds.indexOf(pValId) === -1) {
+                                                                 matchParents = false;
+                                                                 break;
+                                                             }
+                                                         }
+                                                         if (matchParents) {
+                                                             isAvailable = true;
+                                                             break;
+                                                         }
+                                                     }
+                                                 }
+                                             }
+
+                                             if (isAvailable) {
+                                                 btn.disabled = false;
+                                                 btn.style.display = 'inline-block';
+                                                 btn.style.opacity = '1';
+                                                 btn.style.pointerEvents = 'auto';
+                                                 btn.style.cursor = 'pointer';
+                                             } else {
+                                                 btn.disabled = true;
+                                                 btn.style.display = 'none';
+                                                 btn.style.opacity = '0.3';
+                                                 btn.style.pointerEvents = 'none';
+                                                 btn.style.cursor = 'not-allowed';
+                                                 if (btn.classList.contains('btn-dark')) {
+                                                     btn.classList.remove('btn-dark', 'text-white');
+                                                     btn.classList.add('btn-outline-secondary');
+                                                 }
+                                             }
+                                         });
+
+                                         // AUTO-SELECTION Logic:
+                                         // If no active button in this group, select first available.
+                                         var active = group.querySelector('.variation-btn.btn-dark');
+                                         if (!active) {
+                                             var firstVisible = group.querySelector('.variation-btn:not([style*="display: none"])');
+                                             if (firstVisible) {
+                                                 firstVisible.classList.remove('btn-outline-secondary');
+                                                 firstVisible.classList.add('btn-dark', 'text-white');
+                                             }
+                                         }
+                                     });
+                                 }
 
                                 function selectVariation(element) {
                                     // UI styling — highlight within same group
