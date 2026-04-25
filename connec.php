@@ -113,39 +113,26 @@ if ($data1) {
     }
 }
 
-function cheminAbsolu() {
-        $chemin = array();
-        if ($_SERVER['SERVER_ADDR'] == "127.0.0.1") {
-                $chemin['chemin_absolu'] = "https://clients.onlytech.tn/motaawebsite/";
-                $chemin['chemin_admin'] = "_admin_site/";
-                $chemin['chemin_media'] = "media";
-                $chemin['chemin_functions'] = "fonctions";
-        } else {
-                $chemin['chemin_absolu'] = "localhost";
-                $chemin['chemin_admin'] = "root";
-                $chemin['chemin_media'] = "media";
-                $chemin['chemin_functions'] = "fonctions";
-        }
-        return $chemin;
-}
 
-// Détection de l'environnement : on force la production si le nom d'hôte est offipro.net
+// Détection de l'environnement
 $is_local = (
-    (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'offipro.net')
-    || (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] === 'offipro.net')
-) ? false : (
-    (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] == 'localhost')
-    || (isset($_SERVER['REMOTE_ADDR']) && (
-        $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ||
-        $_SERVER['REMOTE_ADDR'] == '::1'
-    ))
+    (isset($_SERVER['SERVER_NAME']) && ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '127.0.0.1'))
+    || (isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false))
+    || (isset($_SERVER['REMOTE_ADDR']) && ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $_SERVER['REMOTE_ADDR'] == '::1'))
 );
+
+// Force production false si on est sur le domaine officiel
+if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'offipro.net') {
+    $is_local = false;
+}
 
 if ($is_local) {
     $chemin_absolu = "http://localhost/shop/";
+    // Désactiver Cloudflare Turnstile en local pour éviter les erreurs de domaine
+    $cloudflare_site_key = "";
+    $cloudflare_secret_key = "";
 } else {
     // PRODUCTION : on utilise la valeur déjà récupérée depuis site_configuration
-    // La variable $chemin_absolu a été définie plus haut par le SELECT
     if (empty($chemin_absolu)) {
         $chemin_absolu = '/';
     }

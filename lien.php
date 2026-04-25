@@ -103,3 +103,14 @@ return CHEMIN."recherche.php?categorie=".$categorie."&marque=".$marque;
 //return "recherche/".$categorie.'/'.$marque.'/';
 }
 
+
+function fixLien($url) {
+    if (empty($url) || $url === '#') return '#';
+    // Si c'est déjà une URL absolue ou un lien spécial, on ne touche à rien
+    if (preg_match('/^(https?:\/\/|tel:|mailto:|javascript:)/', $url)) {
+        return $url;
+    }
+    // On retire le slash au début s'il existe pour éviter les doubles slashes avec CHEMIN
+    $url = ltrim($url, '/');
+    return CHEMIN . $url;
+}

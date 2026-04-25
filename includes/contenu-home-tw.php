@@ -394,7 +394,7 @@
       ?>
         <span class="hp-ticker-item">
             <?php if(!empty($ticker['link'])): ?>
-                <a href="<?php echo htmlspecialchars($ticker['link']); ?>"><?php echo $ticker['html']; ?></a>
+                <a href="<?php echo htmlspecialchars(fixLien($ticker['link'])); ?>"><?php echo $ticker['html']; ?></a>
             <?php else: ?>
                 <?php echo $ticker['html']; ?>
             <?php endif; ?>
@@ -863,7 +863,7 @@
           $bnr_lien  = !empty($bnr['lien']) ? $bnr['lien'] : '#';
           $bnr_btn   = !empty($bnr['titre_bouton']) ? $bnr['titre_bouton'] : 'Découvrir';
         ?>
-          <a href="<?php echo htmlspecialchars($bnr_lien); ?>" class="hp-promo-card hp-reveal-item">
+          <a href="<?php echo htmlspecialchars(fixLien($bnr_lien)); ?>" class="hp-promo-card hp-reveal-item">
             <?php if($bnr_img): ?>
             <img src="<?php echo htmlspecialchars($bnr_img); ?>" alt="<?php echo htmlspecialchars($bnr_titre); ?>" loading="lazy" style="width:100%; height:100%; object-fit:cover; object-position:center;">
             <?php else: ?>
@@ -926,7 +926,7 @@
             $sci_lien  = !empty($sci['lien']) ? $sci['lien'] : '#';
             $sci_titre = !empty($sci['titre']) ? $sci['titre'] : '';
           ?>
-            <a href="<?php echo htmlspecialchars($sci_lien); ?>" style="min-width:100%; display:block; flex-shrink:0; position:relative;">
+            <a href="<?php echo htmlspecialchars(fixLien($sci_lien)); ?>" style="min-width:100%; display:block; flex-shrink:0; position:relative;">
               <picture>
                 <?php 
                   $photo_m = '';
