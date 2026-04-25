@@ -15,7 +15,7 @@ env.php
 *.txt
 !robots.txt
 rootdeployment_plan.txt
-
+offipro-configurateur-camera.md
 # Media zips
 media/products/products.zip
 
