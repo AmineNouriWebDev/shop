@@ -44,6 +44,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'add_etape') {
     $ordre         = intval($_POST['etape_ordre']);
     $obligatoire   = intval($_POST['etape_obligatoire']);
     $role          = formReception($_POST['etape_role'] ?? '');
+    $montant_fixe  = ($role === 'frais_installation') ? floatval($_POST['montant_fixe'] ?? 0) : 0;
 
     // Multi-catégories
     $cats_raw = isset($_POST['etape_categories']) && is_array($_POST['etape_categories'])
@@ -54,7 +55,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'add_etape') {
         ? array_map('intval', $_POST['etape_produits'])
         : [];
 
-    if (!empty($titre) && (!empty($cats_raw) || !empty($prods_raw))) {
+    // Pour frais_installation, pas besoin de produits/catégories
+    $is_fixe = ($role === 'frais_installation');
+
+    if (!empty($titre) && ($is_fixe || !empty($cats_raw) || !empty($prods_raw))) {
         $cats_json  = mysqli_real_escape_string(ouvrirCnx(), json_encode($cats_raw));
         $prods_json = mysqli_real_escape_string(ouvrirCnx(), json_encode($prods_raw));
 
@@ -62,13 +66,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'add_etape') {
         if (!empty($cats_raw)) {
             $type_lien = 'categorie';
             $id_lien   = $cats_raw[0];
-        } else {
+        } elseif (!empty($prods_raw)) {
             $type_lien = 'produit';
             $id_lien   = $prods_raw[0];
+        } else {
+            $type_lien = 'fixe';
+            $id_lien   = 0;
         }
 
-        $req = "INSERT INTO conf_etapes (id_kit, titre, type_lien, id_lien, categories_ids, produits_ids, ordre, choix_multiple, obligatoire, role)
-                VALUES ('$id', '$titre', '$type_lien', '$id_lien', '$cats_json', '$prods_json', '$ordre', '0', '$obligatoire', '$role')";
+        $req = "INSERT INTO conf_etapes (id_kit, titre, type_lien, id_lien, categories_ids, produits_ids, ordre, choix_multiple, obligatoire, role, montant_fixe)
+                VALUES ('$id', '$titre', '$type_lien', '$id_lien', '$cats_json', '$prods_json', '$ordre', '0', '$obligatoire', '$role', '$montant_fixe')";
         executeRequete($req);
     }
     echo "<script>window.location.href='index.php?r=mconfigurateur&id=$id';</script>";
@@ -226,7 +233,7 @@ while ($datCat = mysqli_fetch_array($resCat)) {
                             <div class="col-md-3">
                                 <div class="admin-form-group">
                                     <label>Rôle intelligent</label>
-                                    <select name="etape_role" class="admin-input">
+                                    <select name="etape_role" id="etape_role_select" class="admin-input" onchange="toggleMontantFixe(this.value)">
                                         <option value="">-- Aucun --</option>
                                         <option value="dvr">dvr (Enregistreur DVR)</option>
                                         <option value="nvr">nvr (Enregistreur NVR)</option>
@@ -237,6 +244,7 @@ while ($datCat = mysqli_fetch_array($resCat)) {
                                         <option value="switch">switch</option>
                                         <option value="alimentation">alimentation</option>
                                         <option value="accessoire">accessoire</option>
+                                        <option value="frais_installation" style="font-weight:700;color:#7c3aed;">💶 frais_installation</option>
                                     </select>
                                 </div>
                             </div>
@@ -251,7 +259,28 @@ while ($datCat = mysqli_fetch_array($resCat)) {
                             </div>
                         </div>
 
+                        <!-- Bloc Frais d'installation (visible uniquement si rôle = frais_installation) -->
+                        <div id="bloc-montant-fixe" style="display:none; margin-bottom:12px;">
+                            <div class="admin-form-group" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe); border:1.5px solid #7c3aed; border-radius:8px; padding:14px;">
+                                <label style="color:#5b21b6; font-weight:700;">
+                                    <i class="fa fa-wrench"></i> Montant des frais d'installation (DT TTC)
+                                </label>
+                                <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                                    <input type="number" name="montant_fixe" id="montant_fixe_input"
+                                           class="admin-input" step="0.001" min="0"
+                                           placeholder="Ex: 150.000"
+                                           style="max-width:180px; font-size:1.1rem; font-weight:700; color:#5b21b6;">
+                                    <span style="font-weight:700; color:#5b21b6; font-size:1rem;">DT TTC</span>
+                                </div>
+                                <small class="text-muted d-block mt-1">
+                                    <i class="fa fa-info-circle"></i>
+                                    Ce montant fixe sera affiché au client comme frais d'installation — sans liste de produits.
+                                </small>
+                            </div>
+                        </div>
+
                         <!-- Catégories multiples -->
+                        <div id="bloc-sources" style="">
                         <div class="admin-form-group">
                             <label>
                                 <i class="fa fa-folder text-primary"></i>
@@ -282,7 +311,7 @@ while ($datCat = mysqli_fetch_array($resCat)) {
                                     $reqProd = 'SELECT id, titre FROM `produits` WHERE `etat` = "1" ORDER BY `titre` ASC';
                                     $resProd = executeRequete($reqProd);
                                     while ($prod = mysqli_fetch_array($resProd)) {
-                                        // Decode HTML entities first to avoid double-encoding (e.g. Cam&eacute;ra)
+                                        // Decode HTML entities first to avoid double-encoding (e.g. Caméra)
                                         $titre_clean = html_entity_decode(afficheChamp($prod['titre']), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                                         echo '<option value="'.$prod['id'].'" data-titre="'.htmlspecialchars(strtolower($titre_clean), ENT_QUOTES, 'UTF-8').'">';
                                         echo htmlspecialchars($titre_clean, ENT_QUOTES, 'UTF-8');
@@ -295,6 +324,7 @@ while ($datCat = mysqli_fetch_array($resCat)) {
                                 <i class="fa fa-info-circle"></i> Ces produits seront <strong>ajoutés en plus</strong> de ceux des catégories.
                             </small>
                         </div>
+                        </div><!-- fin #bloc-sources -->
 
                         <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
                             <?php
@@ -373,6 +403,12 @@ while ($datCat = mysqli_fetch_array($resCat)) {
                                     }
                                 }
 
+                                // Si montant fixe (frais d'installation)
+                                if ($e['role'] === 'frais_installation' && $e['montant_fixe'] > 0) {
+                                    $sources_html .= '<div style="font-weight:700; color:#7c3aed; font-size:0.85rem; margin-top:2px;">'
+                                        .'<i class="fa fa-money"></i> '.number_format($e['montant_fixe'], 3, '.', ' ').' DT TTC</div>';
+                                }
+
                                 $role_badge = '';
                                 if (!empty($e['role'])) {
                                     $role_badge = '<span style="display:inline-block; background:#fef3c7; color:#92400e; border-radius:4px; padding:1px 6px; font-size:0.7rem; margin-top:3px;">'
@@ -435,6 +471,18 @@ function filterProduits(query) {
         var titre = opt.getAttribute('data-titre') || '';
         opt.style.display = (q === '' || titre.includes(q)) ? '' : 'none';
     });
+}
+
+function toggleMontantFixe(role) {
+    var blocMontant = document.getElementById('bloc-montant-fixe');
+    var blocSources = document.getElementById('bloc-sources');
+    if (role === 'frais_installation') {
+        blocMontant.style.display = 'block';
+        blocSources.style.display = 'none';
+    } else {
+        blocMontant.style.display = 'none';
+        blocSources.style.display = 'block';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

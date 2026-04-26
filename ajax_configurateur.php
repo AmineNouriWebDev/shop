@@ -43,13 +43,20 @@ if ($action == 'get_steps') {
 
     while ($etape = mysqli_fetch_assoc($res_etapes)) {
         $step = [
-            'id'         => $etape['id'],
-            'titre'      => afficheChamp($etape['titre']),
-            'type_lien'  => $etape['type_lien'],
-            'role'       => $etape['role'] ?? '',
-            'obligatoire'=> intval($etape['obligatoire'] ?? 1),
-            'produits'   => []
+            'id'           => $etape['id'],
+            'titre'        => afficheChamp($etape['titre']),
+            'type_lien'    => $etape['type_lien'],
+            'role'         => $etape['role'] ?? '',
+            'obligatoire'  => intval($etape['obligatoire'] ?? 1),
+            'montant_fixe' => floatval($etape['montant_fixe'] ?? 0),
+            'produits'     => []
         ];
+
+        // Étape spéciale frais d'installation — pas de produits
+        if (($etape['role'] ?? '') === 'frais_installation') {
+            $steps[] = $step;
+            continue;
+        }
 
         // ── Collecter les IDs produits depuis les nouvelles colonnes JSON ──
         $product_ids_to_load = [];

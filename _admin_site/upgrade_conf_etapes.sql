@@ -3,11 +3,12 @@
 -- À exécuter dans phpMyAdmin (LOCAL et EN LIGNE)
 -- =====================================================================
 
--- 1. Ajouter les colonnes multi-sources et rôle (IF NOT EXISTS = sans erreur si déjà fait)
+-- 1. Ajouter les colonnes multi-sources, rôle et montant fixe
 ALTER TABLE `conf_etapes`
     ADD COLUMN IF NOT EXISTS `categories_ids` TEXT DEFAULT NULL COMMENT 'JSON array of category IDs',
     ADD COLUMN IF NOT EXISTS `produits_ids`   TEXT DEFAULT NULL COMMENT 'JSON array of specific product IDs',
-    ADD COLUMN IF NOT EXISTS `role`           VARCHAR(50) DEFAULT NULL COMMENT 'dvr|nvr|camera_filaire|camera_wifi|hdd|cable|switch|alimentation|accessoire';
+    ADD COLUMN IF NOT EXISTS `role`           VARCHAR(50) DEFAULT NULL COMMENT 'dvr|nvr|camera_filaire|camera_wifi|hdd|cable|switch|alimentation|accessoire|frais_installation',
+    ADD COLUMN IF NOT EXISTS `montant_fixe`   DECIMAL(12,3) DEFAULT 0.000 COMMENT 'Montant pour frais_installation';
 
 -- 2. Migration automatique des données existantes
 --    (Pour les étapes déjà créées, on peuple les nouvelles colonnes depuis id_lien)

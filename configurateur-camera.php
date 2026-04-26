@@ -248,6 +248,52 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       .summary-item.filled { border-left-color: var(--shop-primary); }
       .summary-item.missing { border-left-color: #ef4444; }
       .summary-item-title { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--shop-text-secondary); margin-bottom: 0.25rem; }
+
+      /* ── Installation Fee Card ───────────────────────────────────────── */
+      .conf-frais-card {
+          display: flex;
+          align-items: center;
+          gap: 1.25rem;
+          padding: 1.25rem;
+          background: white;
+          border: 2px solid var(--shop-border);
+          border-radius: 1rem;
+          cursor: pointer;
+          transition: all 250ms ease;
+          margin: 1rem 0;
+          width: 100%;
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+      .conf-frais-card:hover {
+          border-color: var(--shop-primary);
+          background: color-mix(in srgb, var(--shop-primary) 2%, white);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      }
+      .conf-frais-card.selected {
+          border-color: var(--shop-primary);
+          background: color-mix(in srgb, var(--shop-primary) 5%, white);
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+      }
+      .conf-frais-icon {
+          width: 54px;
+          height: 54px;
+          border-radius: 12px;
+          background: color-mix(in srgb, var(--shop-primary) 10%, transparent);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--shop-primary);
+          font-size: 1.5rem;
+          flex-shrink: 0;
+      }
+      .conf-frais-body { flex: 1; min-width: 0; }
+      .conf-frais-label { font-weight: 700; font-size: 1rem; color: var(--shop-text-primary); margin-bottom: 0.15rem; }
+      .conf-frais-amount { font-weight: 600; color: var(--shop-primary); font-size: 0.95rem; }
+      .conf-frais-action { flex-shrink: 0; }
+      .conf-frais-card.selected .cx-btn { background: #ef4444; }
     </style>
 </head>
 <body>
@@ -367,6 +413,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                 steps: [],
                 currentIndex: 0,
                 selectedItems: {}, // { productId: { quantity: 1, stepId: X, data: {} } }
+                selectedFrais: {} // { stepId: { montant: X, selected: bool } }
             };
 
             const DOM = {
@@ -458,7 +505,29 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
             function buildApp() {
                 DOM.stepsContent.innerHTML = state.steps.map((step, index) => {
                     let productsHtml = '';
-                    if(step.produits.length === 0) {
+                    
+                    // ── Special step: Installation Fee ───────────────────────────
+                    if (step.role === 'frais_installation') {
+                        const montant = step.montant_fixe || 0;
+                        const montantFormate = montant.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' DT TTC';
+                        productsHtml = `
+                        <div id="frais-card-${step.id}" class="conf-frais-card" onclick="window.confToggleFrais(${step.id}, ${montant})">
+                            <div class="conf-frais-icon">
+                                <i class="fa fa-wrench"></i>
+                            </div>
+                            <div class="conf-frais-body">
+                                <div class="conf-frais-label">${step.titre}</div>
+                                <div class="conf-frais-amount">${montantFormate}</div>
+                            </div>
+                            <div class="conf-frais-action" id="frais-action-${step.id}">
+                                <button class="cx-btn">
+                                    Ajouter
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    // ── Normal step: Product list ─────────────────────────────────
+                    else if(step.produits.length === 0) {
                         productsHtml = `<div class="text-center py-6 text-gray-400 bg-gray-50 rounded-lg border border-dashed border-gray-300">Aucun produit disponible.</div>`;
                     } else {
                         productsHtml = step.produits.map(p => {
@@ -544,45 +613,73 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
             }
 
             function refreshCardsState() {
-                const currentStepId = state.steps[state.currentIndex].id;
+                const currentStep = state.steps[state.currentIndex];
+                if (!currentStep) return;
+                const currentStepId = currentStep.id;
                 
-                state.steps[state.currentIndex].produits.forEach(p => {
-                    const card = document.getElementById(`card-${p.id}`);
-                    const actionContainer = document.getElementById(`action-${p.id}`);
-                    if(!card || !actionContainer) return;
+                // Handle normal products
+                if (currentStep.produits) {
+                    currentStep.produits.forEach(p => {
+                        const card = document.getElementById(`card-${p.id}`);
+                        const actionContainer = document.getElementById(`action-${p.id}`);
+                        if(!card || !actionContainer) return;
 
-                    const isSelected = !!state.selectedItems[p.id];
-                    const productUrl = `${BASE_URL}produit/${p.link}/`;
-                    
-                    if(isSelected) {
-                        card.classList.add('selected');
-                        const qty = state.selectedItems[p.id].quantity;
-                        actionContainer.innerHTML = `
-                            <div class="price-block">${p.prix_formate}</div>
-                            <div style="display:flex; align-items:center; gap:4px;">
-                                <div style="display:flex; align-items:center; background:var(--shop-bg-base); border:1.5px solid var(--shop-primary); border-radius:6px; overflow:hidden; height:30px;">
-                                    <button class="conf-qty-btn" style="border-radius:0; height:100%; width:22px; background:transparent; color:var(--shop-text-primary);" onclick="window.confUpdateQty(${p.id}, -1)">−</button>
-                                    <span class="conf-qty-val" style="font-size:0.82rem; color:var(--shop-text-primary);">${qty}</span>
-                                    <button class="conf-qty-btn" style="border-radius:0; height:100%; width:22px; background:transparent; color:var(--shop-text-primary);" onclick="window.confUpdateQty(${p.id}, 1)">+</button>
+                        const isSelected = !!state.selectedItems[p.id];
+                        
+                        if(isSelected) {
+                            card.classList.add('selected');
+                            const qty = state.selectedItems[p.id].quantity;
+                            actionContainer.innerHTML = `
+                                <div class="price-block">${p.prix_formate}</div>
+                                <div style="display:flex; align-items:center; gap:4px;">
+                                    <div style="display:flex; align-items:center; background:var(--shop-bg-base); border:1.5px solid var(--shop-primary); border-radius:6px; overflow:hidden; height:30px;">
+                                        <button class="conf-qty-btn" style="border-radius:0; height:100%; width:22px; background:transparent; color:var(--shop-text-primary);" onclick="window.confUpdateQty(${p.id}, -1)">−</button>
+                                        <span class="conf-qty-val" style="font-size:0.82rem; color:var(--shop-text-primary);">${qty}</span>
+                                        <button class="conf-qty-btn" style="border-radius:0; height:100%; width:22px; background:transparent; color:var(--shop-text-primary);" onclick="window.confUpdateQty(${p.id}, 1)">+</button>
+                                    </div>
+                                    <button style="height:30px; width:30px; border:1.5px solid #ef4444; color:#ef4444; background:transparent; border-radius:6px; font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"
+                                            onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${currentStepId})'>
+                                        ✕
+                                    </button>
                                 </div>
-                                <button style="height:30px; width:30px; border:1.5px solid #ef4444; color:#ef4444; background:transparent; border-radius:6px; font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"
+                            `;
+                        } else {
+                            card.classList.remove('selected');
+                            actionContainer.innerHTML = `
+                                <div class="price-block">${p.prix_formate}</div>
+                                <button class="cx-btn"
+                                        style="padding: 0.4rem 0.8rem; font-size: 0.8rem;"
                                         onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${currentStepId})'>
-                                    ✕
+                                    Choisir
                                 </button>
-                            </div>
-                        `;
-                    } else {
-                        card.classList.remove('selected');
-                        actionContainer.innerHTML = `
-                            <div class="price-block">${p.prix_formate}</div>
-                            <button class="cx-btn"
-                                    style="padding: 0.4rem 0.8rem; font-size: 0.8rem;"
-                                    onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${currentStepId})'>
-                                Choisir
-                            </button>
-                        `;
+                            `;
+                        }
+                    });
+                }
+
+                // Handle Installation Fee card
+                if (currentStep.role === 'frais_installation') {
+                    const card = document.getElementById(`frais-card-${currentStepId}`);
+                    const actionContainer = document.getElementById(`frais-action-${currentStepId}`);
+                    if (card && actionContainer) {
+                        const isSelected = !!state.selectedFrais[currentStepId];
+                        if (isSelected) {
+                            card.classList.add('selected');
+                            actionContainer.innerHTML = `
+                                <button class="cx-btn selected-btn">
+                                    Retirer
+                                </button>
+                            `;
+                        } else {
+                            card.classList.remove('selected');
+                            actionContainer.innerHTML = `
+                                <button class="cx-btn">
+                                    Ajouter
+                                </button>
+                            `;
+                        }
                     }
-                });
+                }
             }
 
             function renderSummary() {
@@ -598,17 +695,20 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                 // Parcourir toutes les étapes pour afficher la liste complète
                 state.steps.forEach(step => {
                     const itemsInStep = Object.values(state.selectedItems).filter(item => String(item.stepId) === String(step.id));
+                    const fraisInStep = state.selectedFrais[step.id];
                     const stepRole = step.role || '';
                     
-                    if(itemsInStep.length > 0) {
+                    if(itemsInStep.length > 0 || fraisInStep) {
                         // Rempli
                         html += `<div class="summary-item filled">
                                     <div class="summary-item-title">${step.titre}</div>`;
+                        
+                        // Products
                         itemsInStep.forEach(item => {
                             const p = item.data;
                             total += p.prix * item.quantity;
                             
-                            // Logique DVR/NVR via RÔLE (plus via le titre)
+                            // Logique DVR/NVR via RÔLE
                             if(RECORDER_ROLES.includes(stepRole)) {
                                 for(const [key, val] of Object.entries(p.caracteristiques)) {
                                     const kl = key.toLowerCase();
@@ -635,6 +735,20 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                             </div>
                             `;
                         });
+
+                        // Special Fee
+                        if (fraisInStep) {
+                            total += fraisInStep.montant;
+                            html += `
+                            <div class="flex justify-between items-start gap-2 mt-1 group">
+                                <div class="text-sm font-medium leading-tight flex-1">Service d'installation</div>
+                                <button class="shrink-0 text-gray-400 hover:text-red-500 transition-colors" title="Retirer" onclick="window.confToggleFrais(${step.id})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </div>
+                            `;
+                        }
+
                         html += `</div>`;
                     } else {
                         // Vide
@@ -648,7 +762,29 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                     }
                 });
 
-                DOM.summaryItems.innerHTML = html;
+                // Compatibility Check
+                let compatibilityHtml = '';
+                if (recorderChannels > 0 && totalCameras > recorderChannels) {
+                    compatibilityHtml = `
+                    <div class="mt-4 p-3 bg-red-50 border border-red-100 rounded-lg flex gap-3 items-start animate-pulse">
+                        <i class="fa fa-exclamation-triangle text-red-500 mt-1"></i>
+                        <div>
+                            <div class="text-sm font-bold text-red-900">Capacité dépassée</div>
+                            <div class="text-xs text-red-700">Votre enregistreur supporte ${recorderChannels} caméras, mais vous en avez sélectionné ${totalCameras}.</div>
+                        </div>
+                    </div>`;
+                } else if (recorderChannels > 0) {
+                    compatibilityHtml = `
+                    <div class="mt-4 p-3 bg-green-50 border border-green-100 rounded-lg flex gap-3 items-start">
+                        <i class="fa fa-check-circle text-green-500 mt-1"></i>
+                        <div>
+                            <div class="text-sm font-bold text-green-900">Système compatible</div>
+                            <div class="text-xs text-green-700">L'enregistreur (${recorderChannels} ch) peut accueillir vos ${totalCameras} caméras.</div>
+                        </div>
+                    </div>`;
+                }
+                
+                DOM.summaryItems.innerHTML = html + compatibilityHtml;
                 DOM.totalPrice.innerHTML = total.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' TND';
 
                 let warningHtml = '';
@@ -747,6 +883,16 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                 }
             };
 
+            window.confToggleFrais = function(stepId, montant) {
+                if (state.selectedFrais[stepId]) {
+                    delete state.selectedFrais[stepId];
+                } else {
+                    state.selectedFrais[stepId] = { montant: montant };
+                }
+                refreshCardsState();
+                renderSummary();
+            };
+
             window.confRemoveItem = function(productId) {
                 if(state.selectedItems[productId]) {
                     delete state.selectedItems[productId];
@@ -757,8 +903,23 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
 
             DOM.addToCartBtn.addEventListener('click', function() {
                 if(this.disabled) return;
-                const items = Object.values(state.selectedItems);
-                if(items.length === 0) return;
+                
+                const productItems = Object.values(state.selectedItems);
+                const fraisItems = Object.entries(state.selectedFrais).map(([stepId, data]) => {
+                    const step = state.steps.find(s => String(s.id) === String(stepId));
+                    return {
+                        isFrais: true,
+                        data: {
+                            id: 1, // Fallback ID - should be a valid product ID in DB
+                            titre: step ? step.titre : "Frais d'installation",
+                            prix: data.montant
+                        },
+                        quantity: 1
+                    };
+                });
+
+                const allItems = [...productItems, ...fraisItems];
+                if(allItems.length === 0) return;
 
                 const originalText = this.innerHTML;
                 this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Ajout en cours...';
@@ -766,15 +927,20 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
 
                 let index = 0;
                 function processNext() {
-                    if (index >= items.length) {
+                    if (index >= allItems.length) {
                         window.location.href = '<?php echo lienPanier(); ?>';
                         return;
                     }
-                    const item = items[index];
+                    const item = allItems[index];
+                    let url = 'includes/cart.php?action=add&id_produit=' + item.data.id + '&quantity=' + item.quantity;
+                    
+                    if (item.isFrais) {
+                        url += '&vprice=' + item.data.prix + '&vname=' + encodeURIComponent(item.data.titre);
+                    }
+
                     $.ajax({
-                        url: 'includes/cart.php',
+                        url: url,
                         type: 'GET',
-                        data: 'id_produit=' + item.data.id + '&quantity=' + item.quantity + '&action=add',
                         dataType: "json",
                         success: function(data) {
                             index++;
