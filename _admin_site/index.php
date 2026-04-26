@@ -501,6 +501,21 @@ include("includes/security.php");
 
 			 break;
 
+			 case "configurateur" : 
+			 include("includes/fonctions/fction_produits.php"); 
+			 include("includes/configurateur.php");
+			 break;
+
+			 case "nconfigurateur" : 
+			 include("includes/fonctions/fction_produits.php"); 
+			 include("includes/ajouter_configurateur.php");
+			 break;
+
+			 case "mconfigurateur" : 
+			 include("includes/fonctions/fction_produits.php"); 
+			 include("includes/modifier_configurateur.php");
+			 break;
+
 			 case "categoriesMarques" : 
 
 			 include("includes/fonctions/fction_produits.php"); 

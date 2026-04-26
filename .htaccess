@@ -47,6 +47,8 @@ RewriteRule ^boutique/([^/]+)/?$ %{ENV:BASE}categorie.php?link=$1 [L,QSA]
 RewriteRule ^boutique/?$ %{ENV:BASE}categorie.php [L,QSA]
 RewriteRule ^panier/?$ %{ENV:BASE}cart.php [L,QSA]
 RewriteRule ^applications/?$ %{ENV:BASE}applications.php [L,QSA]
+RewriteRule ^configurateur-camera/?$ %{ENV:BASE}configurateur-camera.php [L,QSA]
+RewriteRule ^ajax_configurateur/?$ %{ENV:BASE}ajax_configurateur.php [L,QSA]
 RewriteRule ^contact/?$ %{ENV:BASE}contact.php [L,QSA]
 RewriteRule ^inscription/?$ %{ENV:BASE}inscription.php [L,QSA]
 RewriteRule ^connexion/?$ %{ENV:BASE}connexion.php [L,QSA]
@@ -81,6 +83,10 @@ RewriteRule ^boutique/?$ %{ENV:BASE}categorie.php [L,QSA]
 # Applications page
 # Example: /applications/
 RewriteRule ^applications/?$ %{ENV:BASE}applications.php [L,QSA]
+
+# Configurateur page
+# Example: /configurateur-camera/
+RewriteRule ^configurateur-camera/?$ %{ENV:BASE}configurateur-camera.php [L,QSA]
 
 # Contact page
 # Example: /contact/
