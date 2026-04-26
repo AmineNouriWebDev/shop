@@ -129,6 +129,7 @@ function navGroupActive($routes, $current) {
                 </svg>
                 Export mensuel .xlsx
             </a>
+            <a href="index.php?r=diagnostic_demandes" class="admin-subnav-item<?php echo navActive('diagnostic_demandes', $current_route); ?>">📋 Demandes Diagnostics</a>
         </div>
 
         <!-- Paiement & Livraison -->

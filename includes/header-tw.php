@@ -287,6 +287,40 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
   html.dark .sh-dark-toggle .icon-sun  { opacity: 0; transform: rotate(90deg) scale(0.7); }
   html.dark .sh-dark-toggle .icon-moon { opacity: 1; transform: rotate(0deg)   scale(1); }
 
+  /* ── BLINKING LINK ── */
+  @keyframes blink-soft {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.98); }
+  }
+  .sh-blink-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    background: var(--shop-accent, #f59e0b);
+    color: white !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none !important;
+    animation: blink-soft 2s ease-in-out infinite;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--shop-accent, #f59e0b) 30%, transparent);
+    white-space: nowrap;
+    transition: all 200ms ease;
+  }
+  .sh-blink-link:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--shop-accent, #f59e0b) 40%, transparent);
+    background: color-mix(in srgb, var(--shop-accent, #f59e0b) 90%, white);
+  }
+  @media (max-width: 1280px) {
+    .sh-blink-link-text { display: none; }
+    .sh-blink-link { padding: 0.5rem; }
+  }
+  @media (min-width: 1281px) {
+    .sh-blink-link-icon { margin-right: 2px; }
+  }
+
   /* ── NAV BAR ── */
   .sh-navbar {
     background: var(--shop-surface);
@@ -809,6 +843,12 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       <!-- Actions -->
       <div class="sh-actions">
 
+        <!-- Diagnostic Link (Desktop) -->
+        <a href="<?php echo $chemin_absolu; ?>diagnostic-securite/" class="sh-blink-link" id="nav-diag-link">
+          <svg class="sh-blink-link-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="sh-blink-link-text">Je configure mon système surveillance</span>
+        </a>
+
         <!-- Dark mode toggle -->
         <button class="sh-dark-toggle" id="dark-mode-toggle" onclick="window.__toggleTheme()" aria-label="Toggle dark mode">
           <!-- Soleil -->
@@ -1015,6 +1055,10 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
           <?php endif; ?>
         </div>
       <?php endforeach; ?>
+      <a href="<?php echo $chemin_absolu; ?>diagnostic-securite/" class="sh-blink-link" style="margin-top:1.5rem; width:100%; justify-content:center; box-sizing:border-box;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Je configure mon système surveillance
+      </a>
     <?php endif; ?>
 
   </div>

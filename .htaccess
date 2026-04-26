@@ -59,6 +59,7 @@ RewriteRule ^commande/([0-9]+)/?$ %{ENV:BASE}detail_commande.php?cmdId=$1 [L,QSA
 RewriteRule ^checkout/([0-9]+)/?$ %{ENV:BASE}checkout.php?cmdId=$1 [L,QSA]
 RewriteRule ^checkout/?$ %{ENV:BASE}checkout.php [L,QSA]
 RewriteRule ^confirm/([^/]+)/?$ %{ENV:BASE}confirm.php?cmd=$1 [L,QSA]
+RewriteRule ^diagnostic-securite/?$ %{ENV:BASE}diagnostic-securite.php [L,QSA]
 RewriteRule ^recherche/([^/]+)/?$ %{ENV:BASE}recherche.php?search=$1 [L,QSA]
 RewriteRule ^recherche/?$ %{ENV:BASE}recherche.php [L,QSA]
 
