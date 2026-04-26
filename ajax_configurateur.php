@@ -12,8 +12,8 @@ if ($action == 'get_kits') {
     while ($row = mysqli_fetch_assoc($res)) {
         $kits[] = [
             'id'          => $row['id'],
-            'titre'       => afficheChamp($row['titre']),
-            'description' => afficheChamp($row['description']),
+            'titre'       => html_entity_decode(afficheChamp($row['titre']), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'description' => html_entity_decode(afficheChamp($row['description']), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
             'photo'       => $row['photo'] ?? ''
         ];
     }

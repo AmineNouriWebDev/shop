@@ -19,55 +19,84 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       .cx-wrap { flex:1; padding: 2rem 1rem; width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
       
       /* ── Kit selection cards ─────────────────────────────────────────── */
+      #conf-kits-view { width: 100%; text-align: center; }
       #conf-kits-container {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
+          /* Desktop: 2+ cards per row; Mobile: 1 per row */
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 1rem;
-          justify-content: center;
           width: 100%;
           max-width: 700px;
           margin: 0 auto;
+      }
+      @media (max-width: 640px) {
+          #conf-kits-container {
+              grid-template-columns: 1fr; /* 1 card per row on mobile */
+          }
       }
       .kit-card {
           cursor: pointer;
           border: 2px solid var(--shop-border);
           border-radius: 1rem;
-          padding: 1.25rem 1rem;
-          text-align: center;
+          padding: 1.1rem 1.25rem;
+          text-align: left;
           transition: all 220ms ease;
           background: var(--shop-surface);
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           align-items: center;
-          /* Fixed height so all cards are identical */
-          min-height: 160px;
+          gap: 1rem;
+          min-height: 80px;
+      }
+      @media (min-width: 641px) {
+          .kit-card {
+              flex-direction: column;
+              text-align: center;
+              align-items: center;
+              min-height: 160px;
+              padding: 1.25rem 1rem;
+          }
       }
       .kit-card:hover {
           border-color: var(--shop-primary);
           background: color-mix(in srgb, var(--shop-primary) 4%, var(--shop-surface));
-          transform: translateY(-3px);
-          box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 22px rgba(0,0,0,0.07);
       }
       .kit-icon {
-          width: 56px;
-          height: 56px;
-          margin: 0 auto 0.75rem;
+          width: 52px;
+          height: 52px;
+          flex-shrink: 0;
           border-radius: 50%;
           background: color-mix(in srgb, var(--shop-primary) 10%, transparent);
           display: flex;
           align-items: center;
           justify-content: center;
           color: var(--shop-primary);
-          font-size: 1.5rem;
-          flex-shrink: 0;
+          font-size: 1.4rem;
       }
-      .kit-icon img { max-width: 36px; max-height: 36px; object-fit: contain; }
+      @media (min-width: 641px) {
+          .kit-icon { margin-bottom: 0.5rem; }
+      }
+      .kit-icon img { max-width: 30px; max-height: 30px; object-fit: contain; }
+      .kit-text { flex: 1; min-width: 0; text-align: left; }
+      @media (min-width: 641px) { .kit-text { text-align: center; } }
       .kit-title {
-          font-size: 0.875rem;
+          font-size: 0.9rem;
           font-weight: 700;
-          line-height: 1.35;
-          margin-top: auto;
+          line-height: 1.3;
           color: var(--shop-text-primary);
+          margin: 0 0 0.2rem;
+      }
+      .kit-desc {
+          font-size: 0.75rem;
+          color: var(--shop-text-secondary);
+          line-height: 1.35;
+          margin: 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
       }
 
       /* ── Main App Layout ─────────────────────────────────────────────── */
@@ -88,17 +117,11 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       .step-dot.completed .step-dot-circle { background: #10b981; color: white; border-color: #10b981; }
       .step-separator { height: 1px; width: 20px; background: var(--shop-border); }
 
-      /* ── Product List Item — DESKTOP (row) / MOBILE (column) ─────────── */
+      /* ── Product List Item — responsive ──────────────────────────── */
       .conf-list-item {
           border-bottom: 1px solid var(--shop-border);
-          padding: 0.6rem 0;
+          padding: 0.65rem 0;
           transition: background 200ms ease;
-          display: grid;
-          /* Desktop: [img] [name flex] [price] [btn] */
-          grid-template-columns: 48px 1fr auto auto;
-          grid-template-areas: "img name price btn";
-          align-items: center;
-          gap: 0.6rem;
           width: 100%;
       }
       .conf-list-item:last-child { border-bottom: none; }
@@ -109,29 +132,35 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
           padding-right: 0.4rem;
       }
 
-      /* Mobile: stack into 2 rows */
-      @media (max-width: 640px) {
+      /* Desktop: single row [img] [name] [price+btn] */
+      @media (min-width: 641px) {
           .conf-list-item {
-              grid-template-columns: 48px 1fr;
-              grid-template-rows: auto auto;
-              grid-template-areas:
-                  "img name"
-                  ".   actions";
-              gap: 0.4rem 0.6rem;
-              padding: 0.7rem 0;
-          }
-          .cli-actions {
-              grid-area: actions;
               display: flex;
               align-items: center;
-              gap: 0.5rem;
+              gap: 0.7rem;
           }
-          .price-block { flex-shrink: 0; }
-          #conf-app .cx-btn { font-size: 0.8rem; padding: 0.35rem 0.7rem; height: auto; min-height: 32px; }
+          .cli-name { flex: 1; min-width: 0; }
+          .cli-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+      }
+
+      /* Mobile: 2-row layout */
+      @media (max-width: 640px) {
+          .conf-list-item { display: flex; flex-direction: column; gap: 0; padding: 0.75rem 0; }
+          .cli-row1 { display: flex; align-items: center; gap: 0.6rem; width: 100%; }
+          .cli-name  { flex: 1; min-width: 0; }
+          .cli-actions {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              width: 100%;
+              margin-top: 0.5rem;
+              padding-left: calc(48px + 0.6rem); /* align under name */
+          }
+          #conf-app .cx-btn { font-size: 0.82rem; padding: 0.38rem 0.9rem; }
       }
 
       .conf-list-img-wrap {
-          grid-area: img;
           height: 48px; width: 48px;
           flex-shrink: 0;
           background: white;
@@ -141,20 +170,6 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
           border: 1px solid var(--shop-border);
       }
       .conf-list-img-wrap img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
-      .cli-name { grid-area: name; min-width: 0; }
-
-      /* Desktop actions column */
-      .cli-actions {
-          grid-area: price / price / btn / btn; /* span price+btn areas */
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          flex-shrink: 0;
-      }
-      @media (min-width: 641px) {
-          .cli-actions { grid-area: unset; grid-column: 3 / 5; }
-      }
 
       .price-block {
           background: var(--shop-bg-alt);
@@ -200,7 +215,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       /* Desktop: 2-line clamp */
       .product-title {
           font-size: 0.84rem;
-          line-height: 1.3;
+          line-height: 1.35;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
@@ -208,14 +223,11 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
           color: var(--shop-text-primary);
           font-weight: 600;
       }
-      /* Mobile: 1 line strict, truncate with ellipsis */
+      /* Mobile: on 2 rows max but full width — no forced single line */
       @media (max-width: 640px) {
           .product-title {
-              display: block;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              -webkit-line-clamp: unset;
+              font-size: 0.82rem;
+              -webkit-line-clamp: 2;
           }
       }
 
@@ -223,6 +235,15 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       .step-container.active { display: block; }
       @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+      /* Mobile: h1 compact single line */
+      .conf-h1 {
+          font-size: clamp(1.1rem, 5vw, 1.5rem);
+          font-weight: 700;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-bottom: 0.4rem;
+      }
       .summary-item { border-left: 3px solid var(--shop-border); padding-left: 1rem; margin-bottom: 1rem; }
       .summary-item.filled { border-left-color: var(--shop-primary); }
       .summary-item.missing { border-left-color: #ef4444; }
@@ -236,7 +257,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
     <main class="cx-wrap">
         <!-- 1. SÉLECTION DU KIT -->
         <div id="conf-kits-view" style="margin-bottom: 4rem;">
-            <h1 class="text-2xl font-bold mb-2">Configurez votre système</h1>
+            <h1 class="conf-h1">Configurez votre système</h1>
             <p class="text-gray-500 text-sm mb-6">Choisissez votre point de départ.</p>
             
             <div id="conf-kits-container">
@@ -396,7 +417,10 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                             html += `
                             <div class="kit-card" onclick="window.confSelectKit(${kit.id})">
                                 <div class="kit-icon">${iconHtml}</div>
-                                <div class="kit-title">${kit.titre}</div>
+                                <div class="kit-text">
+                                    <div class="kit-title">${kit.titre}</div>
+                                    ${kit.description ? `<p class="kit-desc">${kit.description}</p>` : ''}
+                                </div>
                             </div>
                             `;
                         });
@@ -441,14 +465,14 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                             const productUrl = `${BASE_URL}produit/${p.link}/`;
                             return `
                             <div class="conf-list-item" id="card-${p.id}">
-                                <a href="${productUrl}" target="_blank" class="conf-list-img-wrap" title="Voir la fiche produit">
-                                    <img src="${p.photo}" alt="${p.titre}" loading="lazy">
-                                </a>
-
-                                <div class="cli-name">
-                                    <h4 class="product-title" title="${p.titre}">${p.titre}</h4>
+                                <div class="cli-row1">
+                                    <a href="${productUrl}" target="_blank" class="conf-list-img-wrap" title="Voir la fiche produit">
+                                        <img src="${p.photo}" alt="${p.titre}" loading="lazy">
+                                    </a>
+                                    <div class="cli-name">
+                                        <h4 class="product-title" title="${p.titre}">${p.titre}</h4>
+                                    </div>
                                 </div>
-
                                 <div class="cli-actions" id="action-${p.id}">
                                     <div class="price-block">${p.prix_formate}</div>
                                     <button class="cx-btn"
@@ -528,6 +552,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                     if(!card || !actionContainer) return;
 
                     const isSelected = !!state.selectedItems[p.id];
+                    const productUrl = `${BASE_URL}produit/${p.link}/`;
                     
                     if(isSelected) {
                         card.classList.add('selected');
