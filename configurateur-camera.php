@@ -18,21 +18,67 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       
       .cx-wrap { flex:1; padding: 2rem 1rem; width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
       
-      /* View selection kits */
-      #conf-kits-view { width: 100%; text-align: center; }
-      .kit-card { flex: 1; cursor: pointer; border: 2px solid var(--shop-border); border-radius: 0.75rem; padding: 1rem; text-align: center; transition: all 200ms ease; background: var(--shop-surface); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 140px; width: 220px; }
-      .kit-card:hover { border-color: var(--shop-primary); background: color-mix(in srgb, var(--shop-primary) 3%, transparent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-      .kit-icon { width: 40px; height: 40px; margin: 0 auto 0.5rem; border-radius: 50%; background: var(--shop-bg-alt); display: flex; align-items: center; justify-content: center; color: var(--shop-primary); font-size: 1.25rem; }
-      
-      /* Main App Layout - TWO COLUMNS */
+      /* ── Kit selection cards ─────────────────────────────────────────── */
+      #conf-kits-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
+          gap: 1rem;
+          justify-content: center;
+          width: 100%;
+          max-width: 700px;
+          margin: 0 auto;
+      }
+      .kit-card {
+          cursor: pointer;
+          border: 2px solid var(--shop-border);
+          border-radius: 1rem;
+          padding: 1.25rem 1rem;
+          text-align: center;
+          transition: all 220ms ease;
+          background: var(--shop-surface);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          /* Fixed height so all cards are identical */
+          min-height: 160px;
+      }
+      .kit-card:hover {
+          border-color: var(--shop-primary);
+          background: color-mix(in srgb, var(--shop-primary) 4%, var(--shop-surface));
+          transform: translateY(-3px);
+          box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+      }
+      .kit-icon {
+          width: 56px;
+          height: 56px;
+          margin: 0 auto 0.75rem;
+          border-radius: 50%;
+          background: color-mix(in srgb, var(--shop-primary) 10%, transparent);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--shop-primary);
+          font-size: 1.5rem;
+          flex-shrink: 0;
+      }
+      .kit-icon img { max-width: 36px; max-height: 36px; object-fit: contain; }
+      .kit-title {
+          font-size: 0.875rem;
+          font-weight: 700;
+          line-height: 1.35;
+          margin-top: auto;
+          color: var(--shop-text-primary);
+      }
+
+      /* ── Main App Layout ─────────────────────────────────────────────── */
       #conf-app { width: 100%; display: none; }
       .layout-row { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
       @media (min-width: 768px) {
           .layout-row { flex-direction: row; align-items: flex-start; justify-content: center; }
       }
       .flex-col-force { display: flex; flex-direction: column !important; }
-      
-      /* Timeline / Steps Indicator */
+
+      /* ── Timeline ────────────────────────────────────────────────────── */
       .steps-indicator { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; width: 100%; }
       .step-dot { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--shop-text-secondary); opacity: 0.5; transition: all 300ms ease; }
       .step-dot.active { opacity: 1; color: var(--shop-primary); }
@@ -42,83 +88,135 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
       .step-dot.completed .step-dot-circle { background: #10b981; color: white; border-color: #10b981; }
       .step-separator { height: 1px; width: 20px; background: var(--shop-border); }
 
-      /* List Layout (Table-like) for Products */
+      /* ── Product List Item — DESKTOP (row) / MOBILE (column) ─────────── */
       .conf-list-item {
           border-bottom: 1px solid var(--shop-border);
-          padding: 0.75rem 0;
-          transition: all 200ms ease;
-          display: flex;
+          padding: 0.6rem 0;
+          transition: background 200ms ease;
+          display: grid;
+          /* Desktop: [img] [name flex] [price] [btn] */
+          grid-template-columns: 48px 1fr auto auto;
+          grid-template-areas: "img name price btn";
           align-items: center;
-          gap: 0.75rem;
-          flex-wrap: nowrap;
+          gap: 0.6rem;
           width: 100%;
       }
       .conf-list-item:last-child { border-bottom: none; }
-      .conf-list-item.selected { background: color-mix(in srgb, var(--shop-primary) 3%, transparent); border-radius: 0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+      .conf-list-item.selected {
+          background: color-mix(in srgb, var(--shop-primary) 4%, transparent);
+          border-radius: 0.5rem;
+          padding-left: 0.4rem;
+          padding-right: 0.4rem;
+      }
+
+      /* Mobile: stack into 2 rows */
+      @media (max-width: 640px) {
+          .conf-list-item {
+              grid-template-columns: 48px 1fr;
+              grid-template-rows: auto auto;
+              grid-template-areas:
+                  "img name"
+                  ".   actions";
+              gap: 0.4rem 0.6rem;
+              padding: 0.7rem 0;
+          }
+          .cli-actions {
+              grid-area: actions;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+          }
+          .price-block { flex-shrink: 0; }
+          #conf-app .cx-btn { font-size: 0.8rem; padding: 0.35rem 0.7rem; height: auto; min-height: 32px; }
+      }
 
       .conf-list-img-wrap {
-          height: 45px;
-          width: 45px;
+          grid-area: img;
+          height: 48px; width: 48px;
           flex-shrink: 0;
           background: white;
           border-radius: 0.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: flex; align-items: center; justify-content: center;
           padding: 0.25rem;
           border: 1px solid var(--shop-border);
       }
       .conf-list-img-wrap img { max-height: 100%; max-width: 100%; object-fit: contain; }
-      
+
+      .cli-name { grid-area: name; min-width: 0; }
+
+      /* Desktop actions column */
+      .cli-actions {
+          grid-area: price / price / btn / btn; /* span price+btn areas */
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          flex-shrink: 0;
+      }
+      @media (min-width: 641px) {
+          .cli-actions { grid-area: unset; grid-column: 3 / 5; }
+      }
+
       .price-block {
           background: var(--shop-bg-alt);
           color: var(--shop-primary);
           font-weight: 700;
-          padding: 0.35rem 0.5rem;
+          padding: 0.3rem 0.5rem;
           border-radius: 0.5rem;
           white-space: nowrap;
-          text-align: center;
-          width: 105px;
-          flex-shrink: 0;
+          font-size: 0.82rem;
           border: 1px solid var(--shop-border);
-          font-size: 0.85rem;
+          flex-shrink: 0;
       }
 
-      /* Buttons */
+      /* ── Buttons ─────────────────────────────────────────────────────── */
       .cx-btn {
-        display: inline-flex; justify-content: center; align-items: center; gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        display: inline-flex; justify-content: center; align-items: center; gap: 0.4rem;
+        padding: 0.5rem 1rem;
         background: var(--shop-primary); color: white;
-        border: none; border-radius: 0.75rem;
-        font-weight: 600; font-size: 0.9375rem; cursor: pointer;
+        border: none; border-radius: 0.6rem;
+        font-weight: 600; font-size: 0.85rem; cursor: pointer;
         transition: all 200ms ease;
+        white-space: nowrap;
       }
       .cx-btn:hover:not(:disabled) { background: var(--shop-primary-hover); transform: translateY(-1px); box-shadow: 0 4px 15px color-mix(in srgb, var(--shop-primary) 30%, transparent); color: white; }
       .cx-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-      
+      .cx-btn.selected-btn { background: #ef4444; }
+      .cx-btn.selected-btn:hover:not(:disabled) { background: #dc2626; }
+
       .cx-btn-outline {
         display: inline-flex; justify-content: center; align-items: center; gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        padding: 0.6rem 1.2rem;
         background: transparent; color: var(--shop-text-primary);
         border: 1.5px solid var(--shop-border); border-radius: 0.75rem;
-        font-weight: 600; font-size: 0.9375rem; cursor: pointer;
+        font-weight: 600; font-size: 0.9rem; cursor: pointer;
         transition: all 200ms ease;
       }
       .cx-btn-outline:hover { border-color: var(--shop-text-primary); background: var(--shop-bg-alt); }
 
-      .conf-qty-btn { width: 30px; height: 30px; border-radius: 0.5rem; border: none; background: var(--shop-primary); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: all 150ms ease; font-size: 1.1rem; }
+      .conf-qty-btn { width: 28px; height: 28px; border-radius: 0.4rem; border: none; background: var(--shop-primary); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: all 150ms ease; font-size: 1rem; flex-shrink: 0; }
       .conf-qty-btn:hover { background: var(--shop-primary-hover); }
-      .conf-qty-val { font-size: 0.9rem; font-weight: 700; width: 30px; text-align: center; display: inline-block; }
-      
+      .conf-qty-val { font-size: 0.88rem; font-weight: 700; min-width: 24px; text-align: center; }
+
+      /* Desktop: 2-line clamp */
       .product-title {
-          font-size: 0.85rem;
+          font-size: 0.84rem;
           line-height: 1.3;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          text-overflow: ellipsis;
           color: var(--shop-text-primary);
+          font-weight: 600;
+      }
+      /* Mobile: 1 line strict, truncate with ellipsis */
+      @media (max-width: 640px) {
+          .product-title {
+              display: block;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              -webkit-line-clamp: unset;
+          }
       }
 
       .step-container { display: none; animation: fadeIn 300ms ease; }
@@ -141,7 +239,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
             <h1 class="text-2xl font-bold mb-2">Configurez votre système</h1>
             <p class="text-gray-500 text-sm mb-6">Choisissez votre point de départ.</p>
             
-            <div id="conf-kits-container" style="display:flex; justify-content:center; gap:1rem; max-width:600px; margin:0 auto; flex-wrap: wrap;">
+            <div id="conf-kits-container">
                 <!-- Injecté par JS -->
             </div>
         </div>
@@ -281,14 +379,24 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                         
                         let html = '';
                         data.kits.forEach(kit => {
-                            let icon = kit.titre.toLowerCase().includes('wifi') 
-                                ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>'
-                                : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>';
+                            let iconHtml = '';
+                            if (kit.photo && kit.photo.trim() !== '') {
+                                if (kit.photo.includes('fa-') || kit.photo.startsWith('fa ')) {
+                                    iconHtml = `<i class="${kit.photo}" style="font-size:1.5rem;"></i>`;
+                                } else {
+                                    iconHtml = `<img src="media/products/${kit.photo}" alt="${kit.titre}">`;
+                                }
+                            } else {
+                                // Default SVGs based on title hint
+                                iconHtml = kit.titre.toLowerCase().includes('wifi') || kit.titre.toLowerCase().includes('ip')
+                                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>'
+                                    : '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>';
+                            }
                             
                             html += `
                             <div class="kit-card" onclick="window.confSelectKit(${kit.id})">
-                                <div class="kit-icon">${icon}</div>
-                                <h3 class="text-sm font-bold leading-tight">${kit.titre}</h3>
+                                <div class="kit-icon">${iconHtml}</div>
+                                <div class="kit-title">${kit.titre}</div>
                             </div>
                             `;
                         });
@@ -336,21 +444,18 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                                 <a href="${productUrl}" target="_blank" class="conf-list-img-wrap" title="Voir la fiche produit">
                                     <img src="${p.photo}" alt="${p.titre}" loading="lazy">
                                 </a>
-                                
-                                <div class="flex-1 min-w-0 pr-2">
-                                    <h4 class="font-bold product-title" title="${p.titre}">
-                                        ${p.titre}
-                                    </h4>
+
+                                <div class="cli-name">
+                                    <h4 class="product-title" title="${p.titre}">${p.titre}</h4>
                                 </div>
-                                
-                                <div class="shrink-0 justify-end" style="display: flex; align-items: center; gap: 0.5rem; width: 210px; margin-left: auto;">
+
+                                <div class="cli-actions" id="action-${p.id}">
                                     <div class="price-block">${p.prix_formate}</div>
-                                    <div id="action-${p.id}" style="display: flex; justify-content: flex-end; width: 90px; flex-shrink: 0;">
-                                        <button class="cx-btn w-full" style="padding: 0.4rem 0.5rem; font-size: 0.8rem; height: 32px;"
-                                                onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${step.id})'>
-                                            Choisir
-                                        </button>
-                                    </div>
+                                    <button class="cx-btn"
+                                            style="padding: 0.4rem 0.8rem; font-size: 0.8rem;"
+                                            onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${step.id})'>
+                                        Choisir
+                                    </button>
                                 </div>
                             </div>
                             `;
@@ -428,22 +533,25 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                         card.classList.add('selected');
                         const qty = state.selectedItems[p.id].quantity;
                         actionContainer.innerHTML = `
-                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 4px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; background: var(--shop-bg-base); border: 1px solid var(--shop-primary); border-radius: 4px; overflow: hidden; height: 32px; width: 56px;">
-                                    <button class="conf-qty-btn" style="border-radius: 0; height: 100%; width: 18px; background: transparent; color: var(--shop-text-primary); font-size: 1rem; line-height: 1;" onclick="window.confUpdateQty(${p.id}, -1)">-</button>
-                                    <span class="conf-qty-val" style="font-size: 0.8rem; color: var(--shop-text-primary); width: 20px; line-height: 32px; text-align: center;">${qty}</span>
-                                    <button class="conf-qty-btn" style="border-radius: 0; height: 100%; width: 18px; background: transparent; color: var(--shop-text-primary); font-size: 1rem; line-height: 1;" onclick="window.confUpdateQty(${p.id}, 1)">+</button>
+                            <div class="price-block">${p.prix_formate}</div>
+                            <div style="display:flex; align-items:center; gap:4px;">
+                                <div style="display:flex; align-items:center; background:var(--shop-bg-base); border:1.5px solid var(--shop-primary); border-radius:6px; overflow:hidden; height:30px;">
+                                    <button class="conf-qty-btn" style="border-radius:0; height:100%; width:22px; background:transparent; color:var(--shop-text-primary);" onclick="window.confUpdateQty(${p.id}, -1)">−</button>
+                                    <span class="conf-qty-val" style="font-size:0.82rem; color:var(--shop-text-primary);">${qty}</span>
+                                    <button class="conf-qty-btn" style="border-radius:0; height:100%; width:22px; background:transparent; color:var(--shop-text-primary);" onclick="window.confUpdateQty(${p.id}, 1)">+</button>
                                 </div>
-                                <button style="height: 32px; flex: 1; border: 1px solid #ef4444; color: #ef4444; background: transparent; border-radius: 4px; font-weight: bold; font-size: 0.7rem; cursor: pointer;"
+                                <button style="height:30px; width:30px; border:1.5px solid #ef4444; color:#ef4444; background:transparent; border-radius:6px; font-weight:bold; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;"
                                         onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${currentStepId})'>
-                                    X
+                                    ✕
                                 </button>
                             </div>
                         `;
                     } else {
                         card.classList.remove('selected');
                         actionContainer.innerHTML = `
-                            <button class="cx-btn w-full" style="padding: 0.4rem 0.5rem; font-size: 0.8rem; height: 32px;"
+                            <div class="price-block">${p.prix_formate}</div>
+                            <button class="cx-btn"
+                                    style="padding: 0.4rem 0.8rem; font-size: 0.8rem;"
                                     onclick='window.confToggleItem(${JSON.stringify(p).replace(/'/g, "&#39;")}, ${currentStepId})'>
                                 Choisir
                             </button>
@@ -455,13 +563,17 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
             function renderSummary() {
                 let total = 0;
                 let html = '';
-                let dvrChannels = 0;
+                let recorderChannels = 0;
                 let totalCameras = 0;
                 let missingObligatory = false;
+
+                const RECORDER_ROLES = ['dvr', 'nvr'];
+                const CAMERA_ROLES   = ['camera_filaire', 'camera_wifi'];
 
                 // Parcourir toutes les étapes pour afficher la liste complète
                 state.steps.forEach(step => {
                     const itemsInStep = Object.values(state.selectedItems).filter(item => String(item.stepId) === String(step.id));
+                    const stepRole = step.role || '';
                     
                     if(itemsInStep.length > 0) {
                         // Rempli
@@ -471,17 +583,21 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                             const p = item.data;
                             total += p.prix * item.quantity;
                             
-                            // Logique DVR / Caméras
-                            if(step.titre.toLowerCase().includes('enregistreur')) {
+                            // Logique DVR/NVR via RÔLE (plus via le titre)
+                            if(RECORDER_ROLES.includes(stepRole)) {
                                 for(const [key, val] of Object.entries(p.caracteristiques)) {
-                                    if(key.toLowerCase().includes('canaux')) dvrChannels = Math.max(dvrChannels, parseInt(val) || 0);
+                                    const kl = key.toLowerCase();
+                                    if(kl.includes('canal') || kl.includes('voie') || kl.includes('channel') || kl.includes('ch')) {
+                                        const n = parseInt(val);
+                                        if(!isNaN(n)) recorderChannels = Math.max(recorderChannels, n);
+                                    }
                                 }
-                                if(dvrChannels === 0) {
-                                    const match = p.titre.match(/(\d+)\s*(canaux|voies|ch|port)/i);
-                                    if(match) dvrChannels = Math.max(dvrChannels, parseInt(match[1]));
+                                if(recorderChannels === 0) {
+                                    const match = p.titre.match(/(\d+)\s*(canaux|voies?|ch\b|port)/i);
+                                    if(match) recorderChannels = Math.max(recorderChannels, parseInt(match[1]));
                                 }
                             }
-                            if(step.titre.toLowerCase().includes('caméra') || step.titre.toLowerCase().includes('camera')) {
+                            if(CAMERA_ROLES.includes(stepRole)) {
                                 totalCameras += item.quantity;
                             }
 
@@ -513,11 +629,11 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                 let warningHtml = '';
                 let hasBlockingError = false;
 
-                if(dvrChannels > 0 && totalCameras > dvrChannels) {
+                if(recorderChannels > 0 && totalCameras > recorderChannels) {
                     warningHtml += `
                     <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg flex items-start gap-2 mb-2 text-amber-800">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mt-0.5 shrink-0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        <span class="text-xs">Vous avez ${totalCameras} caméras mais votre enregistreur n'a que ${dvrChannels} canaux.</span>
+                        <span class="text-xs"><strong>Incompatibilité :</strong> ${totalCameras} caméra(s) sélectionnée(s) mais votre enregistreur ne supporte que <strong>${recorderChannels} canaux</strong>.</span>
                     </div>`;
                     hasBlockingError = true;
                 }
@@ -569,15 +685,14 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
 
             window.confToggleItem = function(product, stepId) {
                 if(state.selectedItems[product.id]) {
-                    // S'il est déjà sélectionné, on l'annule (Toggle Off)
                     delete state.selectedItems[product.id];
                 } else {
-                    // Sinon, on l'ajoute (Toggle On)
                     const step = state.steps.find(s => s.id === stepId);
-                    const stepTitle = step?.titre.toLowerCase() || '';
+                    const stepRole = step ? (step.role || '') : '';
+                    const SINGLE_CHOICE = ['dvr', 'nvr', 'hdd', 'switch'];
                     
-                    // Remplacement automatique si choix unique
-                    if(stepTitle.includes('enregistreur') || stepTitle.includes('disque') || stepTitle.includes('ecran')) {
+                    // Remplacement automatique pour rôles à choix unique
+                    if(SINGLE_CHOICE.includes(stepRole)) {
                         Object.keys(state.selectedItems).forEach(id => {
                             if(state.selectedItems[id].stepId === stepId) {
                                 delete state.selectedItems[id];
@@ -587,9 +702,9 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
 
                     state.selectedItems[product.id] = { quantity: 1, stepId: stepId, data: product };
                     
-                    // Passage automatique à l'étape suivante pour les choix uniques
-                    if(stepTitle.includes('enregistreur') || stepTitle.includes('disque')) {
-                        setTimeout(() => window.confNextStep(), 300);
+                    // Avancement automatique pour les rôles à sélection unique
+                    if(SINGLE_CHOICE.includes(stepRole)) {
+                        setTimeout(() => window.confNextStep(), 350);
                     }
                 }
                 refreshCardsState();
