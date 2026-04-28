@@ -18,21 +18,30 @@ if (isset($_POST['action']) && $_POST['action'] === 'submit_diagnostic') {
             VALUES ('$type_batiment', '$type_camera', '$zones', '$raisons', '$alimentation', '$nom', '$prenom', '$adresse', '$telephone', '$whatsapp')";
     
     if (mysqli_query($connexion, $sql)) {
-        // Notification n8n / Telegram
+        $diag_id = mysqli_insert_id($connexion);
+        
+        // Formater les détails du diagnostic pour le champ "items" de Telegram
+        $summary = "🏠 Type: $type_batiment\n";
+        $summary .= "📷 Caméras: $type_camera\n";
+        $summary .= "📍 Zones: $zones\n";
+        $summary .= "❓ Raisons: $raisons\n";
+        $summary .= "🔌 Alimentation: $alimentation";
+
+        // Notification n8n / Telegram (Workflow Offipro Notifications Commandes)
         $n8n_payload = array(
             'event' => 'security_diagnostic',
-            'type_batiment' => $type_batiment,
-            'type_camera' => $type_camera,
-            'zones' => $zones,
-            'raisons' => $raisons,
-            'alimentation' => $alimentation,
+            'order_id' => 'DIAG-' . $diag_id,
             'customer_name' => $nom . ' ' . $prenom,
             'customer_phone' => $telephone,
-            'customer_address' => $adresse,
+            'customer_email' => 'N/A', // Pas d'email dans ce formulaire
+            'address' => $adresse,
+            'payment_method' => 'Diagnostic Gratuit',
+            'items' => $summary,
+            'total' => '0.000',
             'whatsapp' => $whatsapp ? 'Oui' : 'Non',
             'date' => date('d/m/Y H:i')
         );
-        envoiEmail_n8n($n8n_payload);
+        envoiNotification_n8n($n8n_payload);
 
         echo json_encode(['status' => 'success', 'message' => 'Demande enregistrée']);
     } else {

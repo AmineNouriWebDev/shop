@@ -57,4 +57,27 @@ function envoiEmail_n8n($payload) {
     return false;
 }
 
+/**
+ * Fonction pour envoyer des notifications de type "Commande/Lead" vers Telegram via n8n
+ */
+function envoiNotification_n8n($payload) {
+    global $n8n_webhook_url;
+    
+    // Le webhook pour les notifications Telegram
+    $webhook_url = !empty($n8n_webhook_url) ? $n8n_webhook_url : '';
+    
+    if ($_SERVER['SERVER_NAME'] != 'localhost' && !empty($webhook_url)) {
+        $ch = curl_init($webhook_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return $response;
+    }
+    return false;
+}
+
 ?>

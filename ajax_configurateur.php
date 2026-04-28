@@ -152,14 +152,21 @@ if ($action == 'get_steps') {
 if ($action == 'notify_config') {
     $data = json_decode(file_get_contents('php://input'), true);
     if ($data) {
+        $items_text = implode("\n", $data['items'] ?? []);
+        
         $payload = [
             'event' => 'camera_configuration',
-            'kit_name' => $data['kit_name'] ?? 'Inconnu',
-            'items' => $data['items'] ?? [],
+            'order_id' => 'CONF-' . date('His'),
+            'customer_name' => 'Prospect (Configurateur)',
+            'customer_phone' => 'N/A',
+            'customer_email' => 'N/A',
+            'address' => 'N/A',
+            'payment_method' => 'Configurateur',
+            'items' => "🏗️ Kit: " . ($data['kit_name'] ?? 'Inconnu') . "\n" . $items_text,
             'total' => $data['total'] ?? 0,
             'date' => date('d/m/Y H:i')
         ];
-        envoiEmail_n8n($payload);
+        envoiNotification_n8n($payload);
         echo json_encode(['status' => 'success']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'No data']);
