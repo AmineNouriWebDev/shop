@@ -195,7 +195,7 @@
       <ul class="ft-links">
         <li><a href="<?php echo lienContenu(2); ?>">À propos de nous</a></li>
         <li><a href="<?php echo lienContact(); ?>">Contactez-nous</a></li>
-        <li><a href="<?php echo lienContenu(32); ?>">Conditions générales de Ventes</a></li>
+        <li><a href="<?php echo lienContenu(26); ?>">Conditions générales de Ventes</a></li>
         <li><a href="<?php echo lienContenu(28); ?>">Politique de confidentialité</a></li>
         <li><a href="<?php echo lienContenu(29); ?>">Mentions Légales</a></li>
         <li><a href="<?php echo lienContenu(30); ?>">Politiques de retour</a></li>

@@ -9,6 +9,7 @@ function lienContenu($id){
     $requete = "SELECT * FROM `site_menu` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
+	if(!$data) return CHEMIN; // Fallback if page not found
 	if(afficheChamp($data['link']) == 'accueil' || afficheChamp($data['link']) == 'home')
 	    return CHEMIN;
 	else
