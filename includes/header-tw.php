@@ -308,6 +308,14 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     white-space: nowrap;
     transition: all 200ms ease;
   }
+  @media (max-width: 1023px) {
+    .sh-blink-link {
+      white-space: normal;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0.625rem 1rem;
+    }
+  }
   .sh-blink-link:hover {
     transform: translateY(-1px) scale(1.02);
     box-shadow: 0 6px 16px color-mix(in srgb, var(--shop-accent, #f59e0b) 40%, transparent);
@@ -452,8 +460,8 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     top: 0; left: 0; bottom: 0;
     width: 300px;
     background: var(--shop-surface);
-    z-index: 200;
-    padding: 1.5rem;
+    z-index: 10000;
+    padding: 1.5rem 1.5rem 5rem;
     transform: translateX(-100%);
     transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
     overflow-y: auto;
@@ -464,7 +472,7 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.5);
-    z-index: 199;
+    z-index: 9999;
     opacity: 0;
     visibility: hidden;
     transition: all 300ms ease;
