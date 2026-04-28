@@ -18,6 +18,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'submit_diagnostic') {
             VALUES ('$type_batiment', '$type_camera', '$zones', '$raisons', '$alimentation', '$nom', '$prenom', '$adresse', '$telephone', '$whatsapp')";
     
     if (mysqli_query($connexion, $sql)) {
+        // Notification n8n / Telegram
+        $n8n_payload = array(
+            'event' => 'security_diagnostic',
+            'type_batiment' => $type_batiment,
+            'type_camera' => $type_camera,
+            'zones' => $zones,
+            'raisons' => $raisons,
+            'alimentation' => $alimentation,
+            'customer_name' => $nom . ' ' . $prenom,
+            'customer_phone' => $telephone,
+            'customer_address' => $adresse,
+            'whatsapp' => $whatsapp ? 'Oui' : 'Non',
+            'date' => date('d/m/Y H:i')
+        );
+        envoiEmail_n8n($n8n_payload);
+
         echo json_encode(['status' => 'success', 'message' => 'Demande enregistrée']);
     } else {
         echo json_encode(['status' => 'error', 'message' => mysqli_error($connexion)]);

@@ -928,7 +928,19 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                 let index = 0;
                 function processNext() {
                     if (index >= allItems.length) {
-                        window.location.href = '<?php echo lienPanier(); ?>';
+                        // Envoi de la notification n8n avant redirection
+                        const summaryData = {
+                            kit_name: state.kit.titre,
+                            items: allItems.map(it => `${it.quantity}x ${it.data.titre}`),
+                            total: DOM.totalPrice.innerText
+                        };
+                        fetch('ajax_configurateur.php?action=notify_config', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(summaryData)
+                        }).finally(() => {
+                            window.location.href = '<?php echo lienPanier(); ?>';
+                        });
                         return;
                     }
                     const item = allItems[index];

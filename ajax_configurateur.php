@@ -147,4 +147,23 @@ if ($action == 'get_steps') {
     echo json_encode($response);
     exit;
 }
+
+// ─── NOTIFY CONFIG ──────────────────────────────────────────────────────────
+if ($action == 'notify_config') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if ($data) {
+        $payload = [
+            'event' => 'camera_configuration',
+            'kit_name' => $data['kit_name'] ?? 'Inconnu',
+            'items' => $data['items'] ?? [],
+            'total' => $data['total'] ?? 0,
+            'date' => date('d/m/Y H:i')
+        ];
+        envoiEmail_n8n($payload);
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'No data']);
+    }
+    exit;
+}
 ?>
