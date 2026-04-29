@@ -62,6 +62,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'supp' && isset($_GET['id'])) {
                                     <td style="font-size:0.85rem;">
                                         <div class="mb-1"><strong>Zones:</strong> <?php echo implode(', ', array_map('htmlspecialchars', $zones)); ?></div>
                                         <div><strong>Raisons:</strong> <?php echo implode(', ', array_map('htmlspecialchars', $raisons)); ?></div>
+                                        <?php if(!empty($data['details'])): ?>
+                                            <hr style="margin: 5px 0;">
+                                            <div style="white-space: pre-line; color: #555; font-style: italic;">
+                                                <?php echo htmlspecialchars($data['details']); ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <?php if($data['alimentation'] == 'Batterie'): ?>

@@ -1,39 +1,75 @@
 <?php
 include("include.php");
 
+// Fetch dynamic steps from DB
+$etapes_db = [];
+$res_etapes = executeRequete("SELECT * FROM diagnostic_etapes WHERE etat = 1 ORDER BY ordre ASC");
+while ($e = mysqli_fetch_assoc($res_etapes)) {
+    $e_id = $e['id'];
+    $res_options = executeRequete("SELECT * FROM diagnostic_options WHERE id_etape = $e_id ORDER BY ordre ASC");
+    $options = [];
+    while ($o = mysqli_fetch_assoc($res_options)) {
+        $options[] = $o;
+    }
+    $e['options'] = $options;
+    $etapes_db[] = $e;
+}
+
 // Handle AJAX Submission
 if (isset($_POST['action']) && $_POST['action'] === 'submit_diagnostic') {
-    $type_batiment = sanitize($_POST['type_batiment'] ?? '');
-    $type_camera   = sanitize($_POST['type_camera'] ?? '');
-    $zones         = sanitize($_POST['zones'] ?? ''); // Expecting JSON or comma-separated
-    $raisons       = sanitize($_POST['raisons'] ?? ''); // Expecting JSON or comma-separated
-    $alimentation  = sanitize($_POST['alimentation'] ?? '');
-    $nom           = sanitize($_POST['nom'] ?? '');
-    $prenom        = sanitize($_POST['prenom'] ?? '');
-    $adresse       = sanitize($_POST['adresse'] ?? '');
-    $telephone     = sanitize($_POST['telephone'] ?? '');
-    $whatsapp      = isset($_POST['whatsapp']) && $_POST['whatsapp'] === '1' ? 1 : 0;
+    // S'assurer que la colonne 'details' existe (auto-migration)
+    executeRequete("ALTER TABLE diagnostic_demandes ADD COLUMN IF NOT EXISTS details TEXT AFTER alimentation");
 
-    $sql = "INSERT INTO diagnostic_demandes (type_batiment, type_camera, zones, raisons, alimentation, nom, prenom, adresse, telephone, whatsapp) 
-            VALUES ('$type_batiment', '$type_camera', '$zones', '$raisons', '$alimentation', '$nom', '$prenom', '$adresse', '$telephone', '$whatsapp')";
+    // 1. Build summary and extract values for known columns
+    $summary_parts = [];
+    $responses = [];
     
-    if (mysqli_query($connexion, $sql)) {
-        $diag_id = mysqli_insert_id($connexion);
+    foreach ($etapes_db as $etape) {
+        $champ = $etape['champ'];
+        $val = $_POST[$champ] ?? '';
         
-        // Formater les détails du diagnostic pour le champ "items" de Telegram
-        $summary = "🏠 Type: $type_batiment\n";
-        $summary .= "📷 Caméras: $type_camera\n";
-        $summary .= "📍 Zones: $zones\n";
-        $summary .= "❓ Raisons: $raisons\n";
-        $summary .= "🔌 Alimentation: $alimentation";
+        // If it's a JSON array (multi-choix), decode it for the summary
+        $display_val = $val;
+        if (strpos($val, '[') === 0) {
+            $arr = json_decode($val, true);
+            if (is_array($arr)) $display_val = implode(', ', $arr);
+        }
+        
+        $summary_parts[] = "• " . $etape['question'] . " : " . $display_val;
+        $responses[$champ] = sanitize($val);
+    }
+    
+    $summary = implode("\n", $summary_parts);
 
-        // Notification n8n / Telegram (Workflow Offipro Notifications Commandes)
+    // 2. Fixed fields
+    $nom       = sanitize($_POST['nom'] ?? '');
+    $prenom    = sanitize($_POST['prenom'] ?? '');
+    $adresse   = sanitize($_POST['adresse'] ?? '');
+    $telephone = sanitize($_POST['telephone'] ?? '');
+    $whatsapp  = isset($_POST['whatsapp']) && $_POST['whatsapp'] === '1' ? 1 : 0;
+
+    // 3. Insert into DB (Mapping responses to existing columns if they exist)
+    $type_batiment = $responses['type_batiment'] ?? '';
+    $type_camera   = $responses['type_camera'] ?? '';
+    $zones         = $responses['zones'] ?? '';
+    $raisons       = $responses['raisons'] ?? '';
+    $alimentation  = $responses['alimentation'] ?? '';
+
+    $sql = "INSERT INTO diagnostic_demandes (type_batiment, type_camera, zones, raisons, alimentation, details, nom, prenom, adresse, telephone, whatsapp) 
+            VALUES ('$type_batiment', '$type_camera', '$zones', '$raisons', '$alimentation', '$summary', '$nom', '$prenom', '$adresse', '$telephone', '$whatsapp')";
+    
+    executeRequete($sql);
+    $diag_id = mysqli_insert_id($connexion);
+    
+    if ($diag_id) {
+        
+        // Notification n8n / Telegram
         $n8n_payload = array(
             'event' => 'security_diagnostic',
             'order_id' => 'DIAG-' . $diag_id,
             'customer_name' => $nom . ' ' . $prenom,
             'customer_phone' => $telephone,
-            'customer_email' => 'N/A', // Pas d'email dans ce formulaire
+            'customer_email' => 'N/A',
             'address' => $adresse,
             'payment_method' => 'Diagnostic Gratuit',
             'items' => $summary,
@@ -391,134 +427,46 @@ $description_page = "Réalisez votre diagnostic sécurité en quelques étapes p
         </div>
 
         <div id="diag-main-content" style="width:100%;">
-            <div class="diag-step-counter" id="diag-step-counter">Étape 1 / 6</div>
+            <div class="diag-step-counter" id="diag-step-counter">Étape 1 / <?php echo count($etapes_db) + 1; ?></div>
             <div class="diag-progress-container">
                 <div class="diag-progress-bar" id="diag-progress-bar"></div>
             </div>
 
-            <!-- Step 1: Que souhaitez-vous protéger ? -->
-            <div class="diag-step active" data-step="1">
-                <h2 class="diag-question">Que souhaitez-vous protéger ?</h2>
+            <?php foreach($etapes_db as $index => $etape): ?>
+            <!-- Step <?php echo $index + 1; ?>: <?php echo htmlspecialchars($etape['question']); ?> -->
+            <div class="diag-step <?php echo $index === 0 ? 'active' : ''; ?>" data-step="<?php echo $index + 1; ?>">
+                <h2 class="diag-question">
+                    <?php echo htmlspecialchars($etape['question']); ?>
+                    <?php if(!empty($etape['sous_titre'])): ?>
+                        <br><small style="font-size:0.8rem; font-weight:normal;"><?php echo htmlspecialchars($etape['sous_titre']); ?></small>
+                    <?php endif; ?>
+                </h2>
                 <div class="diag-options-grid">
-                    <div class="diag-option-card" onclick="selectOption('type_batiment', 'Ma maison', true)">
-                        <div class="diag-option-icon"><i class="fa fa-home"></i></div>
-                        <div class="diag-option-text">Ma maison</div>
-                        <div class="diag-option-check"></div>
+                    <?php foreach($etape['options'] as $option): ?>
+                    <div class="diag-option-card" 
+                         onclick="<?php echo $etape['choix_multiple'] ? "toggleMultiOption" : "selectOption"; ?>('<?php echo $etape['champ']; ?>', '<?php echo htmlspecialchars($option['valeur']); ?>'<?php echo !$etape['choix_multiple'] ? ($etape['avance_auto'] ? ", true" : ", false") : ""; ?>)">
+                        <div class="diag-option-icon">
+                            <?php if(!empty($option['icone'])): ?>
+                                <i class="<?php echo htmlspecialchars($option['icone']); ?>"></i>
+                            <?php else: ?>
+                                <i class="fa fa-dot-circle-o"></i>
+                            <?php endif; ?>
+                        </div>
+                        <div class="diag-option-text"><?php echo htmlspecialchars($option['label']); ?></div>
+                        <div class="diag-option-check"><?php if($etape['choix_multiple']): ?><i class="fa fa-check"></i><?php endif; ?></div>
                     </div>
-                    <div class="diag-option-card" onclick="selectOption('type_batiment', 'Mon appartement', true)">
-                        <div class="diag-option-icon"><i class="fa fa-building"></i></div>
-                        <div class="diag-option-text">Mon appartement</div>
-                        <div class="diag-option-check"></div>
-                    </div>
-                    <div class="diag-option-card" onclick="selectOption('type_batiment', 'Mon entreprise', true)">
-                        <div class="diag-option-icon"><i class="fa fa-briefcase"></i></div>
-                        <div class="diag-option-text">Mon entreprise</div>
-                        <div class="diag-option-check"></div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-
-            <!-- Step 2: Type de caméra -->
-            <div class="diag-step" data-step="2">
-                <h2 class="diag-question">Avec quel type de caméra souhaitez vous être équipé ?</h2>
-                <div class="diag-options-grid">
-                    <div class="diag-option-card" onclick="selectOption('type_camera', 'Caméra intérieure', true)">
-                        <div class="diag-option-icon"><i class="fa fa-video-camera"></i></div>
-                        <div class="diag-option-text">Caméra intérieure</div>
-                        <div class="diag-option-check"></div>
-                    </div>
-                    <div class="diag-option-card" onclick="selectOption('type_camera', 'Caméra intérieure et extérieure', true)">
-                        <div class="diag-option-icon"><i class="fa fa-shield"></i></div>
-                        <div class="diag-option-text">Caméra intérieure et extérieure</div>
-                        <div class="diag-option-check"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3: Zones à sécuriser (Multiple) -->
-            <div class="diag-step" data-step="3">
-                <h2 class="diag-question">Quelles zones souhaitez vous sécuriser ?<br><small style="font-size:0.8rem; font-weight:normal;">Plusieurs choix possibles</small></h2>
-                <div class="diag-options-grid">
-                    <div class="diag-option-card" onclick="toggleMultiOption('zones', 'Mon entrée')">
-                        <div class="diag-option-icon"><i class="fa fa-sign-in"></i></div>
-                        <div class="diag-option-text">Mon entrée</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('zones', 'Mon salon')">
-                        <div class="diag-option-icon"><i class="fa fa-television"></i></div>
-                        <div class="diag-option-text">Mon salon</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('zones', 'Mon jardin')">
-                        <div class="diag-option-icon"><i class="fa fa-leaf"></i></div>
-                        <div class="diag-option-text">Mon jardin</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('zones', 'Mon garage')">
-                        <div class="diag-option-icon"><i class="fa fa-car"></i></div>
-                        <div class="diag-option-text">Mon garage</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('zones', 'Autres')">
-                        <div class="diag-option-icon"><i class="fa fa-ellipsis-h"></i></div>
-                        <div class="diag-option-text">Autres</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                </div>
+                <?php if($etape['choix_multiple']): ?>
                 <div class="diag-actions">
                     <button class="diag-btn diag-btn-primary" onclick="nextStep()">Valider</button>
                 </div>
+                <?php endif; ?>
             </div>
+            <?php endforeach; ?>
 
-            <!-- Step 4: Raisons (Multiple) -->
-            <div class="diag-step" data-step="4">
-                <h2 class="diag-question">Quelles sont les raisons principales de votre besoin ?<br><small style="font-size:0.8rem; font-weight:normal;">Plusieurs choix possibles</small></h2>
-                <div class="diag-options-grid">
-                    <div class="diag-option-card" onclick="toggleMultiOption('raisons', 'Sécurité des personnes')">
-                        <div class="diag-option-icon"><i class="fa fa-users"></i></div>
-                        <div class="diag-option-text">Sécurité des personnes</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('raisons', 'Sécurité des animaux')">
-                        <div class="diag-option-icon"><i class="fa fa-paw"></i></div>
-                        <div class="diag-option-text">Sécurité des animaux</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('raisons', 'Sécurité des biens')">
-                        <div class="diag-option-icon"><i class="fa fa-cube"></i></div>
-                        <div class="diag-option-text">Sécurité des biens</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                    <div class="diag-option-card" onclick="toggleMultiOption('raisons', 'Autre')">
-                        <div class="diag-option-icon"><i class="fa fa-question-circle"></i></div>
-                        <div class="diag-option-text">Autre</div>
-                        <div class="diag-option-check"><i class="fa fa-check"></i></div>
-                    </div>
-                </div>
-                <div class="diag-actions">
-                    <button class="diag-btn diag-btn-primary" onclick="nextStep()">Valider</button>
-                </div>
-            </div>
-
-            <!-- Step 5: Alimentation -->
-            <div class="diag-step" data-step="5">
-                <h2 class="diag-question">Souhaitez-vous une caméra avec batterie ou sur secteur ?</h2>
-                <div class="diag-options-grid">
-                    <div class="diag-option-card" onclick="selectOption('alimentation', 'Batterie', true)">
-                        <div class="diag-option-icon"><i class="fa fa-battery-full"></i></div>
-                        <div class="diag-option-text">Batterie</div>
-                        <div class="diag-option-check"></div>
-                    </div>
-                    <div class="diag-option-card" onclick="selectOption('alimentation', 'Secteur', true)">
-                        <div class="diag-option-icon"><i class="fa fa-plug"></i></div>
-                        <div class="diag-option-text">Secteur</div>
-                        <div class="diag-option-check"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 6: Coordonnées -->
-            <div class="diag-step" data-step="6">
+            <!-- Final Step: Coordonnées -->
+            <div class="diag-step" data-step="<?php echo count($etapes_db) + 1; ?>">
                 <h2 class="diag-question">Vos coordonnées</h2>
                 <div style="max-width:500px; margin:0 auto;">
                     <div class="diag-form-group">
@@ -549,8 +497,8 @@ $description_page = "Réalisez votre diagnostic sécurité en quelques étapes p
                 </div>
             </div>
 
-            <!-- Step 7: Merci -->
-            <div class="diag-step" data-step="7">
+            <!-- Step Merci -->
+            <div class="diag-step" data-step="<?php echo count($etapes_db) + 2; ?>">
                 <div class="diag-final">
                     <div class="diag-success-icon"><i class="fa fa-check-circle"></i></div>
                     <h2 class="diag-question">Merci pour votre confiance !</h2>
@@ -578,13 +526,11 @@ $description_page = "Réalisez votre diagnostic sécurité en quelques étapes p
     <script>
         const state = {
             currentStep: 1,
-            totalSteps: 6,
+            totalSteps: <?php echo count($etapes_db) + 1; ?>,
             responses: {
-                type_batiment: '',
-                type_camera: '',
-                zones: [],
-                raisons: [],
-                alimentation: '',
+                <?php foreach($etapes_db as $e): ?>
+                '<?php echo $e['champ']; ?>': <?php echo $e['choix_multiple'] ? '[]' : "''"; ?>,
+                <?php endforeach; ?>
                 nom: '',
                 prenom: '',
                 adresse: '',
@@ -611,14 +557,14 @@ $description_page = "Réalisez votre diagnostic sécurité en quelques étapes p
             btnPrev.style.display = (state.currentStep > 1 && state.currentStep <= state.totalSteps) ? 'inline-flex' : 'none';
 
             // Hide header on final step
-            if (state.currentStep === 7) {
+            if (state.currentStep === <?php echo count($etapes_db) + 2; ?>) {
                 document.getElementById('diag-header').style.display = 'none';
                 document.getElementById('diag-nav-actions').style.display = 'none';
             }
         }
 
         function nextStep() {
-            if (state.currentStep < 7) {
+            if (state.currentStep < <?php echo count($etapes_db) + 2; ?>) {
                 document.querySelector(`.diag-step[data-step="${state.currentStep}"]`).classList.remove('active');
                 state.currentStep++;
                 document.querySelector(`.diag-step[data-step="${state.currentStep}"]`).classList.add('active');
@@ -639,34 +585,27 @@ $description_page = "Réalisez votre diagnostic sécurité en quelques étapes p
 
         function selectOption(key, value, autoAdvance) {
             state.responses[key] = value;
-            
-            // UI Update
-            const cards = document.querySelector(`.diag-step[data-step="${state.currentStep}"]`).querySelectorAll('.diag-option-card');
+            const stepEl = document.querySelector(`.diag-step[data-step="${state.currentStep}"]`);
+            const cards = stepEl.querySelectorAll('.diag-option-card');
             cards.forEach(card => {
-                if (card.querySelector('.diag-option-text').innerText === value) {
+                if (card.getAttribute('onclick').includes(`'${value}'`)) {
                     card.classList.add('selected');
                 } else {
                     card.classList.remove('selected');
                 }
             });
-
-            if (autoAdvance) {
-                setTimeout(nextStep, 350);
-            }
+            if (autoAdvance) setTimeout(nextStep, 350);
         }
 
         function toggleMultiOption(key, value) {
             const index = state.responses[key].indexOf(value);
-            if (index > -1) {
-                state.responses[key].splice(index, 1);
-            } else {
-                state.responses[key].push(value);
-            }
-
-            // UI Update
-            const cards = document.querySelector(`.diag-step[data-step="${state.currentStep}"]`).querySelectorAll('.diag-option-card');
+            if (index > -1) state.responses[key].splice(index, 1);
+            else state.responses[key].push(value);
+            
+            const stepEl = document.querySelector(`.diag-step[data-step="${state.currentStep}"]`);
+            const cards = stepEl.querySelectorAll('.diag-option-card');
             cards.forEach(card => {
-                if (card.querySelector('.diag-option-text').innerText === value) {
+                if (card.getAttribute('onclick').includes(`'${value}'`)) {
                     card.classList.toggle('selected');
                 }
             });

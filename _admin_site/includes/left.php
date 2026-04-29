@@ -109,7 +109,7 @@ function navGroupActive($routes, $current) {
         <div class="admin-nav-section" style="margin-top:0.5rem;">Ventes</div>
 
         <!-- Commandes -->
-        <button type="button" class="admin-nav-item<?php echo navGroupActive(['commandes','dcommande','etat_commandes','netatcommande','metatcommande'], $current_route); ?>"
+        <button type="button" class="admin-nav-item<?php echo navGroupActive(['commandes','dcommande','etat_commandes','netatcommande','metatcommande','diagnostic_demandes','diagnostic_etapes','ndiagnostic_etape','mdiagnostic_etape'], $current_route); ?>"
                 onclick="toggleSubmenu('submenu-cmds', this)">
             <svg class="admin-nav-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"/>
@@ -120,7 +120,7 @@ function navGroupActive($routes, $current) {
                 <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd"/>
             </svg>
         </button>
-        <div class="admin-nav-submenu<?php echo navGroupOpen(['commandes','dcommande','etat_commandes','netatcommande','metatcommande'], $current_route); ?>" id="submenu-cmds">
+        <div class="admin-nav-submenu<?php echo navGroupOpen(['commandes','dcommande','etat_commandes','netatcommande','metatcommande','diagnostic_demandes','diagnostic_etapes','ndiagnostic_etape','mdiagnostic_etape'], $current_route); ?>" id="submenu-cmds">
             <a href="index.php?r=commandes" class="admin-subnav-item<?php echo navActive('commandes', $current_route); ?>">Liste des commandes</a>
             <a href="index.php?r=etat_commandes" class="admin-subnav-item<?php echo navActive('etat_commandes', $current_route); ?>">États des commandes</a>
             <a href="index.php?r=export_ventes" class="admin-subnav-item<?php echo navActive('export_ventes', $current_route); ?>" style="display:flex;align-items:center;gap:0.375rem;">
@@ -130,6 +130,7 @@ function navGroupActive($routes, $current) {
                 Export mensuel .xlsx
             </a>
             <a href="index.php?r=diagnostic_demandes" class="admin-subnav-item<?php echo navActive('diagnostic_demandes', $current_route); ?>">📋 Demandes Diagnostics</a>
+            <a href="index.php?r=diagnostic_etapes" class="admin-subnav-item<?php echo navActive('diagnostic_etapes', $current_route); ?>">🛠️ Config. Diagnostics</a>
         </div>
 
         <!-- Paiement & Livraison -->

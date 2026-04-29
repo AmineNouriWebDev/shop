@@ -223,6 +223,18 @@ include("includes/security.php");
 			 include("includes/diagnostic_demandes.php");
 			 break;
 
+			 case "diagnostic_etapes" :
+			 include("includes/diagnostic_etapes.php");
+			 break;
+
+			 case "ndiagnostic_etape" :
+			 include("includes/ajouter_diagnostic_etape.php");
+			 break;
+
+			 case "mdiagnostic_etape" :
+			 include("includes/modifier_diagnostic_etape.php");
+			 break;
+
 			 case "addproduitssimilaire" :
 
 			 include("includes/fonctions/fction_produits.php");
