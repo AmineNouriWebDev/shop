@@ -1,6 +1,22 @@
 User-agent: *
 Allow: /
 
+# Autoriser spécifiquement les outils d'IA (ChatGPT & Claude)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 # Interdire l'accès à l'administration et aux fichiers sensibles
 Disallow: /_admin_site/
 Disallow: /scratch/
