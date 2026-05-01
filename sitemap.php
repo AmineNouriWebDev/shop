@@ -95,13 +95,15 @@ while ($cat = mysqli_fetch_assoc($res_cats)) {
 }
 
 // ─── Produits actifs ──────────────────────────────────────────────────────────
-$res_prods = mysqli_query($connexion, "SELECT link, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
+$res_prods = mysqli_query($connexion, "SELECT titre, link, photo, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
 while ($prod = mysqli_fetch_assoc($res_prods)) {
     $urls[]  = [
         'loc'        => $base . 'produit/' . htmlspecialchars($prod['link'], ENT_XML1) . '/',
         'priority'   => '0.9',
         'changefreq' => 'weekly',
-        'lastmod'    => formatSitemapDate($prod['datecreation'], $today)
+        'lastmod'    => formatSitemapDate($prod['datecreation'], $today),
+        'photo'      => $prod['photo'],
+        'titre'      => htmlspecialchars(html_entity_decode($prod['titre'], ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_XML1)
     ];
 }
 
@@ -127,6 +129,16 @@ foreach ($urls as $url) {
     echo "    <lastmod>" . $url['lastmod'] . "</lastmod>\n";
     echo "    <changefreq>" . $url['changefreq'] . "</changefreq>\n";
     echo "    <priority>" . $url['priority'] . "</priority>\n";
+    
+    if (!empty($url['photo'])) {
+        echo "    <image:image>\n";
+        echo "      <image:loc>" . $base . "media/products/" . htmlspecialchars($url['photo'], ENT_XML1) . "</image:loc>\n";
+        if (!empty($url['titre'])) {
+            echo "      <image:title>" . $url['titre'] . "</image:title>\n";
+        }
+        echo "    </image:image>\n";
+    }
+    
     echo "  </url>\n";
 }
 

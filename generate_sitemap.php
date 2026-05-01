@@ -93,7 +93,7 @@ function generateSitemap($silent = false) {
     $res_prods = mysqli_query($connexion, "SELECT titre, link, photo, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
     while ($prod = mysqli_fetch_assoc($res_prods)) {
         $link    = htmlspecialchars($prod['link'], ENT_XML1);
-        $titre   = htmlspecialchars($prod['titre'], ENT_XML1);
+        $titre   = htmlspecialchars(html_entity_decode($prod['titre'], ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_XML1);
         
         $xml_content .= "  <url>\n";
         $xml_content .= "    <loc>" . $base . "produit/" . $link . "/</loc>\n";
