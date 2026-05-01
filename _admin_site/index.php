@@ -3,8 +3,13 @@
 session_start();
 
 include("includes/include.php");
-
 include("includes/security.php");
+
+// Génération automatique du sitemap.xml en arrière-plan
+if (file_exists("../generate_sitemap.php")) {
+    require_once("../generate_sitemap.php");
+    generateSitemap(true); // true = exécution silencieuse
+}
 
 ?> 
 

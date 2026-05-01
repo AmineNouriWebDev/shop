@@ -23,7 +23,7 @@ Allow: /assets/
 Allow: /media/
 
 # Sitemap
-Sitemap: https://offipro.net/sitemap.php
+Sitemap: https://offipro.net/sitemap.xml
 
 # Crawl-delay recommandé
 Crawl-delay: 2
