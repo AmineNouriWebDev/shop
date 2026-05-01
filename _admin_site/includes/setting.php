@@ -471,14 +471,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             <div class="form-group">
                                                 <label>Code vérification Google Search Console</label>
                                                 <p class="text-xs text-muted mb-1">Insérez unquement le code de la balise meta (ex: <code>AbcDefGhiJklMno</code>)</p>
-                                                <input type="text" name="google_search_console" value="<?php echo htmlspecialchars($row['google_search_console'] ?? '', ENT_QUOTES); ?>" class="admin-input"> 
+                                                <input type="text" name="google_search_console" value="<?php echo htmlspecialchars($google_search_console ?? '', ENT_QUOTES); ?>" class="admin-input"> 
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Google Analytics (Measurement ID)</label>
                                                 <p class="text-xs text-muted mb-1">Ex: <code>G-XXXXXXXXXX</code> ou l'ancien mode <code>UA-XXXXX-Y</code></p>
-                                                <input type="text" name="analytics" value="<?php echo htmlspecialchars($row['analytics'] ?? '', ENT_QUOTES); ?>" class="admin-input"> 
+                                                <input type="text" name="analytics" value="<?php echo htmlspecialchars($analytics ?? '', ENT_QUOTES); ?>" class="admin-input"> 
                                             </div>
                                         </div>
                                     </div>
@@ -487,7 +487,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             <div class="form-group">
                                                 <label>ID Facebook Pixel</label>
                                                 <p class="text-xs text-muted mb-1">Insérez uniquement l'ID du pixel (ex: <code>123456789098765</code>)</p>
-                                                <input type="text" name="facebook_pixel" value="<?php echo htmlspecialchars($row['facebook_pixel'] ?? '', ENT_QUOTES); ?>" class="admin-input"> 
+                                                <input type="text" name="facebook_pixel" value="<?php echo htmlspecialchars($facebook_pixel ?? '', ENT_QUOTES); ?>" class="admin-input"> 
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -495,8 +495,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                                 <label>Couleur du Thème Mobile (PWA)</label>
                                                 <p class="text-xs text-muted mb-1">Couleur primaire pour la barre de navigateur mobile (ex: <code>#1E3A8A</code>)</p>
                                                 <div class="d-flex align-items-center">
-                                                    <input type="color" name="theme_color" value="<?php echo htmlspecialchars($row['theme_color'] ?? '#ffffff', ENT_QUOTES); ?>" class="form-control" style="width:50px; height:38px; padding:2px; cursor:pointer;"> 
-                                                    <span class="ml-2 font-mono text-sm"><?php echo htmlspecialchars($row['theme_color'] ?? '#ffffff', ENT_QUOTES); ?></span>
+                                                    <input type="color" name="theme_color" value="<?php echo htmlspecialchars($theme_color ?? '#ffffff', ENT_QUOTES); ?>" class="form-control" style="width:50px; height:38px; padding:2px; cursor:pointer;"> 
+                                                    <span class="ml-2 font-mono text-sm"><?php echo htmlspecialchars($theme_color ?? '#ffffff', ENT_QUOTES); ?></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -506,7 +506,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             <div class="form-group">
                                                 <label>Commentaire Développeur (Code Source)</label>
                                                 <p class="text-xs text-muted mb-1">Ce texte sera inséré sous forme de commentaire HTML masqué au début du code source de votre site (balise <code>&lt;!-- --&gt;</code>).</p>
-                                                <textarea name="developer_comment" class="form-control" rows="6" placeholder="<!--&#10;  Website Developer: Nom Prénom&#10;  Company: Mon Entreprise&#10;-->"><?php echo htmlspecialchars($row['developer_comment'] ?? '', ENT_QUOTES); ?></textarea>
+                                                <textarea name="developer_comment" class="form-control" rows="6" placeholder="<!--&#10;  Website Developer: Nom Prénom&#10;  Company: Mon Entreprise&#10;-->"><?php echo htmlspecialchars($developer_comment ?? '', ENT_QUOTES); ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -874,7 +874,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                                 <label>Token / Scripts de partage</label>
                                                 <p class="text-xs text-muted mb-1">Si vous avez des tokens ou des configurations de partage pour vos réseaux sociaux, collez-les ici.</p>
                                                 <div class="controls">
-                                                    <textarea name="social_share_token" class="admin-input" rows="4"><?php echo htmlspecialchars($row['social_share_token'] ?? ''); ?></textarea>
+                                                    <textarea name="social_share_token" class="admin-input" rows="4"><?php echo htmlspecialchars($social_share_token ?? ''); ?></textarea>
                                                 </div>
                                             </div>
                                         </div>

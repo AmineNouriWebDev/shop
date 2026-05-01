@@ -46,6 +46,18 @@
     <meta name="google-site-verification" content="<?php echo $google_search_console; ?>" />
     <?php endif; ?>
 
+    <?php if(isset($analytics) && $analytics != ''): ?>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '<?php echo $analytics; ?>');
+    </script>
+    <?php endif; ?>
+
     <?php 
         if(isset($price) && $price!="" && $price!="0.000"){
     ?>
