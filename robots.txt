@@ -1,4 +1,4 @@
-# RÈGLES POUR LES IA (AUTORISÉES)
+# REGLES POUR LES IA (AUTORISEES)
 User-agent: GPTBot
 Allow: /
 
@@ -17,7 +17,7 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-# RÈGLES DE SÉCURITÉ GÉNÉRALES
+# REGLES DE SECURITE GENERALES
 User-agent: *
 Disallow: /_admin_site/
 Disallow: /scratch/
@@ -42,5 +42,5 @@ Allow: /media/
 # Sitemap
 Sitemap: https://offipro.net/sitemap.xml
 
-# Crawl-delay recommandé
+# Crawl-delay recommande
 Crawl-delay: 2
