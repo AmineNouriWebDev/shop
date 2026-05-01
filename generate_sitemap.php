@@ -3,9 +3,33 @@
  * Script de génération du fichier sitemap.xml physique
  */
 
-function isValidDate($date) {
-    if (empty($date) || $date == '0000-00-00' || $date == '0000-00-00 00:00:00') return false;
-    return (strtotime($date) !== false);
+/**
+ * Formate une date pour le sitemap (YYYY-MM-DD)
+ * @param mixed $raw_date Date brute de la BDD (timestamp ou string)
+ * @param string $fallback Date par défaut si invalide
+ * @return string
+ */
+function formatSitemapDate($raw_date, $fallback) {
+    if (empty($raw_date) || $raw_date == '0000-00-00' || $raw_date == '0000-00-00 00:00:00' || $raw_date == '0000-00-00 00:00:00.000000') {
+        return $fallback;
+    }
+
+    // Si c'est un timestamp (plus de 10 chiffres pour être sûr que ce n'est pas juste une année)
+    if (is_numeric($raw_date) && strlen($raw_date) >= 10) {
+        return date('Y-m-d', (int)$raw_date);
+    }
+
+    // Sinon on tente strtotime
+    $ts = strtotime($raw_date);
+    if ($ts && $ts > 0) {
+        // Vérification si l'année est réaliste (ex: pas 1970 par erreur)
+        $year = (int)date('Y', $ts);
+        if ($year > 2000 && $year < 2100) {
+            return date('Y-m-d', $ts);
+        }
+    }
+
+    return $fallback;
 }
 
 function generateSitemap($silent = false) {
@@ -45,19 +69,9 @@ function generateSitemap($silent = false) {
     while ($page = mysqli_fetch_assoc($res_pages)) {
         $link    = htmlspecialchars($page['link'], ENT_XML1);
         
-        // Vérification robuste de la date
-        $raw_date = $page['datecreation'];
-        if (is_numeric($raw_date) && $raw_date > 0) {
-            $lastmod = date('Y-m-d', $raw_date);
-        } elseif (isValidDate($raw_date)) {
-            $lastmod = date('Y-m-d', strtotime($raw_date));
-        } else {
-            $lastmod = $today;
-        }
-
         $xml_content .= "  <url>\n";
         $xml_content .= "    <loc>" . $base . $link . "/</loc>\n";
-        $xml_content .= "    <lastmod>" . $lastmod . "</lastmod>\n";
+        $xml_content .= "    <lastmod>" . formatSitemapDate($page['datecreation'], $today) . "</lastmod>\n";
         $xml_content .= "    <changefreq>monthly</changefreq>\n";
         $xml_content .= "    <priority>0.8</priority>\n";
         $xml_content .= "  </url>\n";
@@ -81,17 +95,9 @@ function generateSitemap($silent = false) {
         $link    = htmlspecialchars($prod['link'], ENT_XML1);
         $titre   = htmlspecialchars($prod['titre'], ENT_XML1);
         
-        // Vérification robuste de la date produit
-        $raw_date = $prod['datecreation'];
-        if (isValidDate($raw_date)) {
-            $lastmod = date('Y-m-d', strtotime($raw_date));
-        } else {
-            $lastmod = $today;
-        }
-        
         $xml_content .= "  <url>\n";
         $xml_content .= "    <loc>" . $base . "produit/" . $link . "/</loc>\n";
-        $xml_content .= "    <lastmod>" . $lastmod . "</lastmod>\n";
+        $xml_content .= "    <lastmod>" . formatSitemapDate($prod['datecreation'], $today) . "</lastmod>\n";
         $xml_content .= "    <changefreq>weekly</changefreq>\n";
         $xml_content .= "    <priority>0.9</priority>\n";
         

@@ -35,6 +35,35 @@ if ($is_local) {
 $today = date('Y-m-d');
 $urls  = [];
 
+/**
+ * Formate une date pour le sitemap (YYYY-MM-DD)
+ * @param mixed $raw_date Date brute de la BDD (timestamp ou string)
+ * @param string $fallback Date par défaut si invalide
+ * @return string
+ */
+function formatSitemapDate($raw_date, $fallback) {
+    if (empty($raw_date) || $raw_date == '0000-00-00' || $raw_date == '0000-00-00 00:00:00' || $raw_date == '0000-00-00 00:00:00.000000') {
+        return $fallback;
+    }
+
+    // Si c'est un timestamp (plus de 10 chiffres pour être sûr que ce n'est pas juste une année)
+    if (is_numeric($raw_date) && strlen($raw_date) >= 10) {
+        return date('Y-m-d', (int)$raw_date);
+    }
+
+    // Sinon on tente strtotime
+    $ts = strtotime($raw_date);
+    if ($ts && $ts > 0) {
+        // Vérification si l'année est réaliste (ex: pas 1970 par erreur)
+        $year = (int)date('Y', $ts);
+        if ($year > 2000 && $year < 2100) {
+            return date('Y-m-d', $ts);
+        }
+    }
+
+    return $fallback;
+}
+
 // ─── Page d'accueil ───────────────────────────────────────────────────────────
 $urls[] = [
     'loc'        => $base,
@@ -46,20 +75,11 @@ $urls[] = [
 // ─── Pages du site (site_menu) ────────────────────────────────────────────────
 $res_pages = mysqli_query($connexion, "SELECT link, datecreation FROM site_menu WHERE etat='1' AND link != '' AND link != 'accueil' ORDER BY ordre ASC");
 while ($page = mysqli_fetch_assoc($res_pages)) {
-    $link    = $page['link'];
-    $raw_date = $page['datecreation'];
-    if (is_numeric($raw_date) && $raw_date > 0) {
-        $lastmod = date('Y-m-d', $raw_date);
-    } elseif (!empty($raw_date) && $raw_date != '0000-00-00' && $raw_date != '0000-00-00 00:00:00') {
-        $lastmod = date('Y-m-d', strtotime($raw_date));
-    } else {
-        $lastmod = $today;
-    }
     $urls[]  = [
-        'loc'        => $base . htmlspecialchars($link, ENT_XML1) . '/',
+        'loc'        => $base . htmlspecialchars($page['link'], ENT_XML1) . '/',
         'priority'   => '0.8',
         'changefreq' => 'monthly',
-        'lastmod'    => $lastmod
+        'lastmod'    => formatSitemapDate($page['datecreation'], $today)
     ];
 }
 
@@ -77,17 +97,11 @@ while ($cat = mysqli_fetch_assoc($res_cats)) {
 // ─── Produits actifs ──────────────────────────────────────────────────────────
 $res_prods = mysqli_query($connexion, "SELECT link, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
 while ($prod = mysqli_fetch_assoc($res_prods)) {
-    $raw_date = $prod['datecreation'];
-    if (!empty($raw_date) && $raw_date != '0000-00-00' && $raw_date != '0000-00-00 00:00:00') {
-        $lastmod = date('Y-m-d', strtotime($raw_date));
-    } else {
-        $lastmod = $today;
-    }
     $urls[]  = [
         'loc'        => $base . 'produit/' . htmlspecialchars($prod['link'], ENT_XML1) . '/',
         'priority'   => '0.9',
         'changefreq' => 'weekly',
-        'lastmod'    => $lastmod
+        'lastmod'    => formatSitemapDate($prod['datecreation'], $today)
     ];
 }
 
