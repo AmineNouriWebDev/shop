@@ -3,6 +3,11 @@
  * Script de génération du fichier sitemap.xml physique
  */
 
+function isValidDate($date) {
+    if (empty($date) || $date == '0000-00-00' || $date == '0000-00-00 00:00:00') return false;
+    return (strtotime($date) !== false);
+}
+
 function generateSitemap($silent = false) {
     global $connexion;
     
@@ -39,7 +44,17 @@ function generateSitemap($silent = false) {
     $res_pages = mysqli_query($connexion, "SELECT link, datecreation FROM site_menu WHERE etat='1' AND link != '' AND link != 'accueil' ORDER BY ordre ASC");
     while ($page = mysqli_fetch_assoc($res_pages)) {
         $link    = htmlspecialchars($page['link'], ENT_XML1);
-        $lastmod = $page['datecreation'] ? date('Y-m-d', $page['datecreation']) : $today;
+        
+        // Vérification robuste de la date
+        $raw_date = $page['datecreation'];
+        if (is_numeric($raw_date) && $raw_date > 0) {
+            $lastmod = date('Y-m-d', $raw_date);
+        } elseif (isValidDate($raw_date)) {
+            $lastmod = date('Y-m-d', strtotime($raw_date));
+        } else {
+            $lastmod = $today;
+        }
+
         $xml_content .= "  <url>\n";
         $xml_content .= "    <loc>" . $base . $link . "/</loc>\n";
         $xml_content .= "    <lastmod>" . $lastmod . "</lastmod>\n";
@@ -65,7 +80,14 @@ function generateSitemap($silent = false) {
     while ($prod = mysqli_fetch_assoc($res_prods)) {
         $link    = htmlspecialchars($prod['link'], ENT_XML1);
         $titre   = htmlspecialchars($prod['titre'], ENT_XML1);
-        $lastmod = (!empty($prod['datecreation']) && $prod['datecreation'] != '0000-00-00 00:00:00') ? date('Y-m-d', strtotime($prod['datecreation'])) : $today;
+        
+        // Vérification robuste de la date produit
+        $raw_date = $prod['datecreation'];
+        if (isValidDate($raw_date)) {
+            $lastmod = date('Y-m-d', strtotime($raw_date));
+        } else {
+            $lastmod = $today;
+        }
         
         $xml_content .= "  <url>\n";
         $xml_content .= "    <loc>" . $base . "produit/" . $link . "/</loc>\n";

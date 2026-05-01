@@ -47,7 +47,14 @@ $urls[] = [
 $res_pages = mysqli_query($connexion, "SELECT link, datecreation FROM site_menu WHERE etat='1' AND link != '' AND link != 'accueil' ORDER BY ordre ASC");
 while ($page = mysqli_fetch_assoc($res_pages)) {
     $link    = $page['link'];
-    $lastmod = $page['datecreation'] ? date('Y-m-d', $page['datecreation']) : $today;
+    $raw_date = $page['datecreation'];
+    if (is_numeric($raw_date) && $raw_date > 0) {
+        $lastmod = date('Y-m-d', $raw_date);
+    } elseif (!empty($raw_date) && $raw_date != '0000-00-00' && $raw_date != '0000-00-00 00:00:00') {
+        $lastmod = date('Y-m-d', strtotime($raw_date));
+    } else {
+        $lastmod = $today;
+    }
     $urls[]  = [
         'loc'        => $base . htmlspecialchars($link, ENT_XML1) . '/',
         'priority'   => '0.8',
@@ -70,7 +77,12 @@ while ($cat = mysqli_fetch_assoc($res_cats)) {
 // ─── Produits actifs ──────────────────────────────────────────────────────────
 $res_prods = mysqli_query($connexion, "SELECT link, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
 while ($prod = mysqli_fetch_assoc($res_prods)) {
-    $lastmod = $prod['datecreation'] ? date('Y-m-d', strtotime($prod['datecreation'])) : $today;
+    $raw_date = $prod['datecreation'];
+    if (!empty($raw_date) && $raw_date != '0000-00-00' && $raw_date != '0000-00-00 00:00:00') {
+        $lastmod = date('Y-m-d', strtotime($raw_date));
+    } else {
+        $lastmod = $today;
+    }
     $urls[]  = [
         'loc'        => $base . 'produit/' . htmlspecialchars($prod['link'], ENT_XML1) . '/',
         'priority'   => '0.9',
