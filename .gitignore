@@ -14,8 +14,13 @@ env.php
 .env.example
 *.txt
 !robots.txt
-rootdeployment_plan.txt
+!root-deployment-offipro.txt
 offipro-configurateur-camera.md
+
+# Docker local config
+Dockerfile
+docker-compose.yml
+
 # Media zips
 media/products/products.zip
 
@@ -25,6 +30,11 @@ media/products/products.zip
 *.rar
 *.log
 
+# Databases and tests
+*.sql
+test_*.php
+_admin_site/test_*.php
+
 # OS generated files
 .DS_Store
 Thumbs.db
@@ -33,3 +43,4 @@ Thumbs.db
 *.tmp
 *.bak
 error_log
+
