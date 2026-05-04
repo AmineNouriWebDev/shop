@@ -502,7 +502,8 @@
        CATEGORIES RAPIDES
        ════════════════════════════════════════════════ -->
   <?php
-  $req_cats = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' ORDER BY `ordre` LIMIT 14";
+  $type_cond_home = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+  $req_cats = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' $type_cond_home ORDER BY `ordre` LIMIT 14";
   $res_cats = executeRequete($req_cats);
   $cats_list = [];
   while ($c = mysqli_fetch_array($res_cats)) $cats_list[] = $c;

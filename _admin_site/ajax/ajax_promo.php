@@ -81,7 +81,7 @@ if ($action == 'load_config') {
         while($var = mysqli_fetch_assoc($res_var)) {
             $vid = $var['id'];
             $vlabel = $var['label'];
-            $v_pv = $var['prix_vente'];
+            $v_pv = (floatval($var['prix_vente']) > 0) ? $var['prix_vente'] : $prod['prix_vente'];
             $v_pp = $var['prix_promo'] > 0 ? $var['prix_promo'] : '';
             
             echo '<tr class="transition-colors" onmouseover="this.style.background=\'rgba(0,0,0,0.05)\'" onmouseout="this.style.background=\'transparent\'">';

@@ -47,14 +47,15 @@
                                 
                                 $link=  sanitize($_GET['link']);
                                 
-                    	        $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `link` = "'.$link.'" ORDER BY `ordre` ASC';
+                                $type_cond_rech = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+                    	        $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `link` = "'.$link.'" '.$type_cond_rech.' ORDER BY `ordre` ASC';
                     	        $res = executeRequete($req);
                     	        
                             }elseif(isset($_GET['marque']) && $_GET['marque'] != '' ){
                                 
                                 $categ = isset($_GET['categorie']) ? $_GET['categorie'] :'';
                                 
-                    	        $req = 'SELECT DISTINCT ctg.id,ctg.titre,ctg.link,ctg.type FROM `categories_blog` ctg  WHERE ctg.etat = "1" AND ctg.link = "'.$categ.'"  ORDER BY ctg.ordre ASC';
+                    	        $req = 'SELECT DISTINCT ctg.id,ctg.titre,ctg.link,ctg.type FROM `categories_blog` ctg  WHERE ctg.etat = "1" AND ctg.link = "'.$categ.'" '.$type_cond_rech.' ORDER BY ctg.ordre ASC';
                     	        //echo $req;
                     	        $res = executeRequete($req);
                     	        
@@ -62,13 +63,13 @@
                             
                                 $idcateg=  categorieBySearchProduits(str_replace (" ","%",$_POST['recherche']));
                                 
-                    	        $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `id` = "'.$idcateg.'" ORDER BY `ordre` ASC';
+                    	        $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `id` = "'.$idcateg.'" '.$type_cond_rech.' ORDER BY `ordre` ASC';
                     	        
                     	        $res = executeRequete($req);
                     	        
                             }else{
                                 
-                                $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" ORDER BY `ordre` ASC';
+                                $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" '.$type_cond_rech.' ORDER BY `ordre` ASC';
                     	        $res = executeRequete($req);
                     	        
                             }

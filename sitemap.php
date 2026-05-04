@@ -84,7 +84,8 @@ while ($page = mysqli_fetch_assoc($res_pages)) {
 }
 
 // ─── Catégories de la boutique ────────────────────────────────────────────────
-$res_cats = mysqli_query($connexion, "SELECT link FROM categories_blog WHERE etat='1' AND link != '' ORDER BY ordre ASC");
+$type_cond_smap = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND type != 'A' " : "";
+$res_cats = mysqli_query($connexion, "SELECT link FROM categories_blog WHERE etat='1' AND link != '' $type_cond_smap ORDER BY ordre ASC");
 while ($cat = mysqli_fetch_assoc($res_cats)) {
     $urls[] = [
         'loc'        => $base . 'boutique/' . htmlspecialchars($cat['link'], ENT_XML1) . '/',
@@ -95,10 +96,11 @@ while ($cat = mysqli_fetch_assoc($res_cats)) {
 }
 
 // ─── Produits actifs ──────────────────────────────────────────────────────────
-$res_prods = mysqli_query($connexion, "SELECT titre, link, photo, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
+$res_prods = mysqli_query($connexion, "SELECT titre, link, photo, datecreation, type FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
 while ($prod = mysqli_fetch_assoc($res_prods)) {
+    $prefix = (isset($prod['type']) && $prod['type'] == 'A') ? 'abonnement/' : 'produit/';
     $urls[]  = [
-        'loc'        => $base . 'produit/' . htmlspecialchars($prod['link'], ENT_XML1) . '/',
+        'loc'        => $base . $prefix . htmlspecialchars($prod['link'], ENT_XML1) . '/',
         'priority'   => '0.9',
         'changefreq' => 'weekly',
         'lastmod'    => formatSitemapDate($prod['datecreation'], $today),

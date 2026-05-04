@@ -48,7 +48,8 @@
 	                        <nav>
 	                         	<ul>
 	                         	    <?php
-                	                   $req = 'SELECT * FROM `categories_blog` WHERE `etat` = "1" ORDER BY `ordre` ASC LIMIT 4';
+                	                   $type_cond_ft_old = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+                	                   $req = 'SELECT * FROM `categories_blog` WHERE `etat` = "1" '.$type_cond_ft_old.' ORDER BY `ordre` ASC LIMIT 4';
                 	                   $res = executeRequete($req);
                 	                    while ($data = mysqli_fetch_array($res)) 
                 	                    { 

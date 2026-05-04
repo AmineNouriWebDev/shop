@@ -16,19 +16,28 @@
                     <div class="widget-desc">
                         <div class="slider-range">
                             <?php
-                            if ((isset($_GET['link']) && $_GET['link'] != '')){ 
-                            $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits` WHERE categorie="'.idCategBlog($_GET['link']).'" || idparent_categ="'.idCategBlog($_GET['link']).'"';
-                            $resprice = executeRequete($reqprice);
+                            $categ_cond_inc = (isset($_GET['link']) && $_GET['link'] != '') ? ' (pv.categorie="'.idCategBlog($_GET['link']).'" || pv.idparent_categ="'.idCategBlog($_GET['link']).'") ' : ' 1 ';
+                            $p_categ_cond_inc = (isset($_GET['link']) && $_GET['link'] != '') ? ' (p.categorie="'.idCategBlog($_GET['link']).'" || p.idparent_categ="'.idCategBlog($_GET['link']).'") ' : ' 1 ';
+                            $promo_cond_inc = (isset($_GET['promo'])) ? ' AND (pv.prix_promo > 0) ' : '';
+                            $p_promo_cond_inc = (isset($_GET['promo'])) ? ' AND (v.prix_promo > 0) ' : '';
+
+                            $type_cond_inc = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND pv.type != 'A' " : " ";
+                            $p_type_cond_inc = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND p.type != 'A' " : " ";
+
+                            $reqprice_inc = "SELECT MIN(val) as min, MAX(val) as max FROM (
+                                SELECT prix_vente as val FROM produits pv WHERE $categ_cond_inc $promo_cond_inc $type_cond_inc AND prix_vente > 0
+                                UNION ALL
+                                SELECT prix_promo as val FROM produits pv WHERE $categ_cond_inc $promo_cond_inc $type_cond_inc AND prix_promo > 0
+                                UNION ALL
+                                SELECT v.prix_vente as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond_inc $p_promo_cond_inc $p_type_cond_inc AND v.prix_vente > 0
+                                UNION ALL
+                                SELECT v.prix_promo as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond_inc $p_promo_cond_inc $p_type_cond_inc AND v.prix_promo > 0
+                            ) as all_prices";
+
+                            $resprice = executeRequete($reqprice_inc);
                             $dataprice = mysqli_fetch_array($resprice);
-                        	}elseif ((isset($_GET['promo']) )){ 
-                            $reqprice = 'SELECT MIN(prix_promo) as min, MAX(prix_promo) as max FROM `produits` WHERE prix_promo !="0.000"';
-                            $resprice = executeRequete($reqprice);
-                            $dataprice = mysqli_fetch_array($resprice);
-                        	}else{
-                            $reqprice = 'SELECT MIN(prix_vente) as min, MAX(prix_vente) as max FROM `produits`';
-                            $resprice = executeRequete($reqprice);
-                            $dataprice = mysqli_fetch_array($resprice);
-                        	}
+                            if (!$dataprice['min']) $dataprice['min'] = 0;
+                            if (!$dataprice['max']) $dataprice['max'] = 1000;
                             ?>	
         					<input type="hidden" id="hidden_minimum_price" value="<?php echo $dataprice['min']; ?>" />
                             <input type="hidden" id="hidden_maximum_price" value="<?php echo $dataprice['max']; ?>" />
@@ -50,12 +59,13 @@
                                 
                                 $link=  sanitize($_GET['link']);
                                 
-                    	        $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `link` = "'.$link.'" ORDER BY `ordre` ASC';
+                                $type_cond_categ = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+                    	        $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `link` = "'.$link.'" '.$type_cond_categ.' ORDER BY `ordre` ASC';
                     	        $res = executeRequete($req);
                     	        
                             }else{
                                 
-                                $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" ORDER BY `ordre` ASC';
+                                $req = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" '.$type_cond_categ.' ORDER BY `ordre` ASC';
                     	        $res = executeRequete($req);
                     	        
                             }
@@ -236,9 +246,9 @@
                                 <?php
                                 if(isset($_GET['link']) && $_GET['link'] != '' ){
                                     $link=  sanitize($_GET['link']);
-                        	        $reqM = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `link` = "'.$link.'" ORDER BY `ordre` ASC';
+                        	        $reqM = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" AND  `link` = "'.$link.'" '.$type_cond_categ.' ORDER BY `ordre` ASC';
                                 }else{
-                                    $reqM = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" ORDER BY `ordre` ASC';
+                                    $reqM = 'SELECT DISTINCT id,titre,link,type FROM `categories_blog` WHERE `etat` = "1" '.$type_cond_categ.' ORDER BY `ordre` ASC';
                                 }
                                 $resM = executeRequete($reqM);
                                 while ($dataM = mysqli_fetch_array($resM)) { 

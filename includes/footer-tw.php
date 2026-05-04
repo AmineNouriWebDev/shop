@@ -207,7 +207,8 @@
       <h3 class="ft-heading">Boutique</h3>
       <ul class="ft-links">
         <?php
-          $req_ft = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent` = '0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' ORDER BY `ordre` LIMIT 5";
+          $type_cond_ft = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+          $req_ft = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent` = '0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' $type_cond_ft ORDER BY `ordre` LIMIT 5";
           $res_ft = executeRequete($req_ft);
           while ($cat_ft = mysqli_fetch_array($res_ft)):
         ?>

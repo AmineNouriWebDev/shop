@@ -21,10 +21,11 @@ $nbArticlesHeader = isset($nbArticles) ? intval($nbArticles) : 0;
 // Récupérer les catégories parentes pour la nav
 $nav_categories = [];
 // Exclude promotional categories from main nav (managed only in admin)
-$req_nav = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' ORDER BY `ordre`";
+$cat_type_cond = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+$req_nav = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' $cat_type_cond ORDER BY `ordre`";
 $res_nav = executeRequete($req_nav);
 while ($cat = mysqli_fetch_array($res_nav)) {
-    $req_sub = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='".$cat['id']."' ORDER BY `ordre`";
+    $req_sub = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='".$cat['id']."' $cat_type_cond ORDER BY `ordre`";
     $res_sub = executeRequete($req_sub);
     $subs = [];
     while ($sub = mysqli_fetch_array($res_sub)) {

@@ -78,7 +78,8 @@ function generateSitemap($silent = false) {
     }
 
     // 3. Catégories boutique
-    $res_cats = mysqli_query($connexion, "SELECT link FROM categories_blog WHERE etat='1' AND link != '' ORDER BY ordre ASC");
+    $type_cond_smap2 = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND type != 'A' " : "";
+    $res_cats = mysqli_query($connexion, "SELECT link FROM categories_blog WHERE etat='1' AND link != '' $type_cond_smap2 ORDER BY ordre ASC");
     while ($cat = mysqli_fetch_assoc($res_cats)) {
         $link = htmlspecialchars($cat['link'], ENT_XML1);
         $xml_content .= "  <url>\n";
@@ -90,13 +91,14 @@ function generateSitemap($silent = false) {
     }
 
     // 4. Produits avec Images
-    $res_prods = mysqli_query($connexion, "SELECT titre, link, photo, datecreation FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
+    $res_prods = mysqli_query($connexion, "SELECT titre, link, photo, datecreation, type FROM produits WHERE etat='1' AND link != '' ORDER BY datecreation DESC");
     while ($prod = mysqli_fetch_assoc($res_prods)) {
         $link    = htmlspecialchars($prod['link'], ENT_XML1);
         $titre   = htmlspecialchars(html_entity_decode($prod['titre'], ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_XML1);
+        $prefix  = (isset($prod['type']) && $prod['type'] == 'A') ? 'abonnement/' : 'produit/';
         
         $xml_content .= "  <url>\n";
-        $xml_content .= "    <loc>" . $base . "produit/" . $link . "/</loc>\n";
+        $xml_content .= "    <loc>" . $base . $prefix . $link . "/</loc>\n";
         $xml_content .= "    <lastmod>" . formatSitemapDate($prod['datecreation'], $today) . "</lastmod>\n";
         $xml_content .= "    <changefreq>weekly</changefreq>\n";
         $xml_content .= "    <priority>0.9</priority>\n";

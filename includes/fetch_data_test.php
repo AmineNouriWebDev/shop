@@ -15,6 +15,10 @@ if(isset($_POST["action"])){
 
     /* ── Base query ── */
     $query = "SELECT DISTINCT pr.id, pr.link, pr.categorie FROM produits pr ".$inreq." WHERE pr.etat = '1'";
+    
+    if (isset($afficher_abonnements) && $afficher_abonnements == '0') {
+        $query .= " AND pr.type != 'A'";
+    }
 
     if(isset($_POST["link"]) && $_POST["link"] != ''){
         $query .= " AND (pr.categorie ='".$_POST["link"]."' OR pr.idparent_categ ='".$_POST["link"]."')";

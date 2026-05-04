@@ -19,7 +19,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$quantite	         = formReception($_POST['quantite']);
 	$etat_stock	         = formReception($_POST['etat_stock']);
 	$marque 	         = formReception($_POST['marque']);
-	$type        	     = 'E';
+	$type        	     = isset($_POST['type']) ? formReception($_POST['type']) : 'E';
 	$afficher_accueil  	 = 0;
 	$duree               = '';
 	$nbr_vod             = 0;
@@ -595,7 +595,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                     });
                                     </script>
 									
-									<div class="row" style="display: none;">
+									<div class="row">
 										<div class="col-md-6">
 											<div class="admin-form-group">
 											<label>Type</label>

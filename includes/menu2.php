@@ -42,7 +42,8 @@
 
                             <?php  $data2 = mysqli_fetch_array($resultat2);
 							
-								$req2 = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' ORDER BY `titre`";
+								$type_cond_menu2 = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+								$req2 = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' $type_cond_menu2 ORDER BY `titre`";
 								
 								$res2 = executeRequete($req2);
 								
@@ -52,7 +53,7 @@
 
 							    <a class="dropdown-item waves-effect waves-light" href="<?php echo lienCategorieEquipements($data3['link'],$data3['type']);  ?>"><i class="fa fa-caret-right"></i> &nbsp; <?php echo afficheChamp($data3['titre']); ?></a>
 								<?php
-        	                        $req1 = "SELECT * FROM `categories_blog` WHERE `idparent` = '".$data3["id"]."' AND `etat` = '1' ORDER BY `ordre` ASC ";
+        	                        $req1 = "SELECT * FROM `categories_blog` WHERE `idparent` = '".$data3["id"]."' AND `etat` = '1' $type_cond_menu2 ORDER BY `ordre` ASC ";
         	                        $res1 = executeRequete($req1);
         	                         while ($data1 = mysqli_fetch_array($res1)) { 
 								?>

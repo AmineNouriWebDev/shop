@@ -53,15 +53,14 @@
     				<ul class="navbar-nav ml-auto">
     					
     				<?php
-    
-    		           $requete2 ="SELECT * FROM `categories_blog` WHERE`etat` = '1' AND `idparent`='0' ORDER BY `ordre`";
-    
+    		           $type_cond_menu = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+    		           $requete2 ="SELECT * FROM `categories_blog` WHERE`etat` = '1' AND `idparent`='0' $type_cond_menu ORDER BY `ordre`";
+
     	               $resultat2 = executeRequete($requete2);
     				   
     					   
     	               while($data2 = mysqli_fetch_array($resultat2)) {
-    
-    					    $requete3 ="SELECT * FROM `categories_blog` WHERE `etat` = '1' AND  `idparent`='".$data2['id']."' ORDER BY `ordre`";
+    					    $requete3 ="SELECT * FROM `categories_blog` WHERE `etat` = '1' AND  `idparent`='".$data2['id']."' $type_cond_menu ORDER BY `ordre`";
     
     	                    $resultat3 = executeRequete($requete3);
     

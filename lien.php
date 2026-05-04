@@ -47,7 +47,17 @@ function idCategorieProduits($id){
     $data = mysqli_fetch_array($resultat);
 	return afficheChamp($data['link']);
 } 
-function lienProduits($link){
+function lienProduits($link, $type = ''){
+    if(empty($type)) {
+        $link_esc = addslashes($link);
+        $req = executeRequete("SELECT type FROM produits WHERE link = '".$link_esc."' LIMIT 1");
+        if($data = mysqli_fetch_array($req)) {
+            $type = $data['type'];
+        }
+    }
+    if($type == 'A') {
+        return CHEMIN."abonnement/".$link."/";
+    }
     return CHEMIN."produit/".$link."/";
 }
 function liencontact(){

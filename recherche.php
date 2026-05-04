@@ -68,14 +68,17 @@
     $categ_cond = (isset($_GET['categorie']) && $_GET['categorie'] != '') ? ' (pv.categorie="'.idCategBlog($_GET['categorie']).'" || pv.idparent_categ="'.idCategBlog($_GET['categorie']).'") ' : ' 1 ';
     $p_categ_cond = (isset($_GET['categorie']) && $_GET['categorie'] != '') ? ' (p.categorie="'.idCategBlog($_GET['categorie']).'" || p.idparent_categ="'.idCategBlog($_GET['categorie']).'") ' : ' 1 ';
 
+    $type_cond = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND pv.type != 'A' " : " ";
+    $p_type_cond = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND p.type != 'A' " : " ";
+
     $reqprice = "SELECT MIN(val) as min, MAX(val) as max FROM (
-        SELECT prix_vente as val FROM produits pv WHERE $categ_cond AND prix_vente > 0
+        SELECT prix_vente as val FROM produits pv WHERE $categ_cond $type_cond AND prix_vente > 0
         UNION ALL
-        SELECT prix_promo as val FROM produits pv WHERE $categ_cond AND prix_promo > 0
+        SELECT prix_promo as val FROM produits pv WHERE $categ_cond $type_cond AND prix_promo > 0
         UNION ALL
-        SELECT v.prix_vente as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond AND v.prix_vente > 0
+        SELECT v.prix_vente as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond $p_type_cond AND v.prix_vente > 0
         UNION ALL
-        SELECT v.prix_promo as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond AND v.prix_promo > 0
+        SELECT v.prix_promo as val FROM produit_variations v JOIN produits p ON v.idproduit = p.id WHERE $p_categ_cond $p_type_cond AND v.prix_promo > 0
     ) as all_prices";
     
     $resprice = executeRequete($reqprice);

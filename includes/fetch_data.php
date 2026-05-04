@@ -19,7 +19,9 @@ if(isset($_POST["action"]) )
 	{
 		
 		$query = "	SELECT DISTINCT pr.id, pr.link FROM produits pr, categories_blog ctg WHERE pr.etat = '1'";
-        
+        if (isset($afficher_abonnements) && $afficher_abonnements == '0') {
+            $query .= " AND pr.type != 'A'";
+        }
 		if(isset($_POST["link"]) && $_POST["link"]!= '' )
 		{
 			$link_filter =  $_POST["link"];
@@ -267,7 +269,9 @@ if(isset($_POST["action"]) )
 	{
 	
 		$query = "	SELECT DISTINCT pr.id, pr.link FROM produits pr, categories_blog ctg WHERE pr.etat = '1'  AND pr.type = 'E'";
-        
+        if (isset($afficher_abonnements) && $afficher_abonnements == '0') {
+            $query .= " AND pr.type != 'A'";
+        }
 		if(isset($_POST["link"]) && $_POST["link"]!= '' )
 		{
 			$link_filter =  $_POST["link"];
@@ -481,7 +485,9 @@ if(isset($_POST["action"]) )
 	}elseif($type_filter == 'A'){
 		
 		$query = " SELECT DISTINCT pr.id, pr.link FROM produits pr,categories_blog ctg WHERE pr.etat = '1'  AND pr.type = 'A'";
-        
+        if (isset($afficher_abonnements) && $afficher_abonnements == '0') {
+            $query .= " AND 1=0 ";
+        }
 		if(isset($_POST["link"]) && $_POST["link"]!= '' )
 		{
 			$link_filter =  $_POST["link"];

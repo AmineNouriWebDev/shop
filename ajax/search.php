@@ -42,8 +42,13 @@ $q_safe = sanitize($q);  // sanitize() = mysqli_real_escape_string from connec.p
 $req_products = "SELECT DISTINCT p.id, p.titre, p.link, p.prix_vente, p.prix_promo, p.is_flash, p.promo_end_date
                  FROM `produits` p
                  WHERE p.etat = '1'
-                   AND p.titre LIKE '%{$q_safe}%'
-                 ORDER BY
+                   AND p.titre LIKE '%{$q_safe}%'";
+
+if (isset($afficher_abonnements) && $afficher_abonnements == '0') {
+    $req_products .= " AND p.type != 'A' ";
+}
+
+$req_products .= " ORDER BY
                    CASE WHEN p.titre LIKE '{$q_safe}%' THEN 0 ELSE 1 END,
                    p.titre ASC
                  LIMIT 0, {$limit}";
@@ -81,6 +86,10 @@ while ($row = mysqli_fetch_assoc($res_products)) {
 // ── Count total matches ─────────────────────────────────────────
 $req_count = "SELECT COUNT(DISTINCT id) AS total FROM `produits`
               WHERE etat = '1' AND titre LIKE '%{$q_safe}%'";
+
+if (isset($afficher_abonnements) && $afficher_abonnements == '0') {
+    $req_count .= " AND type != 'A' ";
+}
 $res_count = executeRequete($req_count);
 $row_count = mysqli_fetch_assoc($res_count);
 $total     = (int)($row_count['total'] ?? 0);

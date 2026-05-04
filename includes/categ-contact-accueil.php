@@ -40,13 +40,14 @@
 				<div class="row row-cols-lg-5  row-cols-md-3 row-cols-sm-2 row-cols-1 justify-content-center">   		
         		
                 	<?php 
-            			            $req = "SELECT * FROM categories_blog WHERE etat='1' AND idparent ='0'";
+            			            $type_cond_cca = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
+            			            $req = "SELECT * FROM categories_blog WHERE etat='1' AND idparent ='0' $type_cond_cca";
                                     $res = executeRequete($req);
                 		            while ($datactg = mysqli_fetch_array($res))  {
                     				if($datactg['id'])    $id_categ    = $datactg['id']; 
                     				if($datactg['link'])  $link_categ  = $datactg['link']; 
                     				
-            			            $reqsc = "SELECT * FROM categories_blog WHERE etat='1' AND idparent ='".$id_categ."'";
+            			            $reqsc = "SELECT * FROM categories_blog WHERE etat='1' AND idparent ='".$id_categ."' $type_cond_cca";
                                     $ressc = executeRequete($reqsc);
                 	?>
 			                    <div class="col mb-4">
