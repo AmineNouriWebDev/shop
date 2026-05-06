@@ -19,7 +19,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
 	$datec        = timestampTD(date("d/m/Y H:i:s"));
 	$auteur       = auteur_id();
 	
-	$requete = "UPDATE `categories_blog` set `titre`='".$titre."',`link`='".$link."',`idparent`='".$idparent."',  `ordre`='".$ordre."', `type`='".$type."', `etat`='".$etat."', `titre_page`='".$titre_page."',`keywords`='".$keywords."', `description`='".$description."' WHERE `id`='".$id."'";
+	$affichage_menu = formReception($_POST['affichage_menu']);
+	
+	$requete = "UPDATE `categories_blog` set `titre`='".$titre."',`link`='".$link."',`idparent`='".$idparent."',  `ordre`='".$ordre."', `type`='".$type."', `etat`='".$etat."', `affichage_menu`='".$affichage_menu."', `titre_page`='".$titre_page."',`keywords`='".$keywords."', `description`='".$description."' WHERE `id`='".$id."'";
 	$resultat = executeRequete($requete);	
 			
 	if (isset($_FILES['photo']) && $_FILES['photo']['type'] != '') {
@@ -144,16 +146,28 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                     <div class="row">
                                      <div class="col-md-6">
                                        <div class="admin-form-group">
-                                        <label>Etat</label>
-                                        <div class="controls">
-                                            <select name="etat" id="select" class="admin-input">
-                                                <option value="1" <?php if(StatusCategBlog($_GET['id'])=="1") echo "selected"; ?>>Actif</option>
-                                                <option value="0" <?php if(StatusCategBlog($_GET['id'])=="0") echo "selected"; ?>>Inactif</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                         <label>Etat</label>
+                                         <div class="controls">
+                                             <select name="etat" id="select" class="admin-input">
+                                                 <option value="1" <?php if(StatusCategBlog($_GET['id'])=="1") echo "selected"; ?>>Actif</option>
+                                                 <option value="0" <?php if(StatusCategBlog($_GET['id'])=="0") echo "selected"; ?>>Inactif</option>
+                                             </select>
+                                         </div>
                                      </div>
-                                    </div>   
+                                      </div>
+                                    <div class="col-md-6">
+                                       <div class="admin-form-group">
+                                         <label>Affichage menu</label>
+                                         <div class="controls">
+                                             <select name="affichage_menu" id="select" class="admin-input">
+                                                 <option value="1" <?php if(StatusMenuCategBlog($_GET['id'])=="1") echo "selected"; ?>>Oui</option>
+                                                 <option value="0" <?php if(StatusMenuCategBlog($_GET['id'])=="0") echo "selected"; ?>>Non (Catégorie Virtuelle)</option>
+                                             </select>
+                                         </div>
+                                     </div>
+                                      </div>
+                                    </div> 
+  
                                     
                                     <div class="row">
                                      <div class="col-md-6">

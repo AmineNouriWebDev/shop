@@ -21,7 +21,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$auteur       = auteur_id();
 	
 	
-		$requete = 'INSERT INTO `categories_blog` (`titre`, `link`, `idparent`, `type`, `ordre`,`etat`, `titre_page`, `keywords`, `description`, `datecreation`,`auteur`) VALUES ("'. $titre .'","'. $link .'","'. $idparent .'","'. $type .'", "'. $ordre .'","'. $etat .'", "'. $titre_page .'","'. $keywords .'","'. $description .'","'. $datec .'","'. $auteur .'")'; 
+	$affichage_menu = formReception($_POST['affichage_menu']);
+	
+		$requete = 'INSERT INTO `categories_blog` (`titre`, `link`, `idparent`, `type`, `ordre`,`etat`, `affichage_menu`, `titre_page`, `keywords`, `description`, `datecreation`,`auteur`) VALUES ("'. $titre .'","'. $link .'","'. $idparent .'","'. $type .'", "'. $ordre .'","'. $etat .'", "'. $affichage_menu .'", "'. $titre_page .'","'. $keywords .'","'. $description .'","'. $datec .'","'. $auteur .'")'; 
 
 		$connexion=ouvrirCnx() or die("erreur cnx");
 		$result  = mysqli_query($connexion, $requete);	
@@ -138,15 +140,26 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                     <div class="row">
                                      <div class="col-md-6">
                                        <div class="admin-form-group">
-                                        <label>Etat</label>
-                                        <div class="controls">
-                                            <select name="etat" id="select" class="admin-input">
-                                                <option value="1" selected="selected">Actif</option>
-                                                <option value="0">Inactif</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                         <label>Etat</label>
+                                         <div class="controls">
+                                             <select name="etat" id="select" class="admin-input">
+                                                 <option value="1" selected="selected">Actif</option>
+                                                 <option value="0">Inactif</option>
+                                             </select>
+                                         </div>
                                      </div>
+                                      </div>
+                                    <div class="col-md-6">
+                                       <div class="admin-form-group">
+                                         <label>Affichage menu</label>
+                                         <div class="controls">
+                                             <select name="affichage_menu" id="select" class="admin-input">
+                                                 <option value="1" selected="selected">Oui</option>
+                                                 <option value="0">Non (Catégorie Virtuelle)</option>
+                                             </select>
+                                         </div>
+                                     </div>
+                                      </div>
                                     </div> 
 
 

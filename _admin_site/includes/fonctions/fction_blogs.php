@@ -129,6 +129,13 @@ function StatusCategBlog($id)
 	$data = mysqli_fetch_array($resultat);
 	return afficheChamp($data['etat']);
 }
+function StatusMenuCategBlog($id)
+{
+	$requete = "SELECT * FROM `categories_blog` WHERE `id` = '".$id."'";
+	$resultat = executeRequete($requete);
+	$data = mysqli_fetch_array($resultat);
+	return isset($data['affichage_menu']) ? afficheChamp($data['affichage_menu']) : '1';
+}
 function OrdreCategBlog($id)
 {
 	$requete = "SELECT * FROM `categories_blog` WHERE `id` = '".$id."'";

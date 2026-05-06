@@ -208,7 +208,7 @@
       <ul class="ft-links">
         <?php
           $type_cond_ft = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
-          $req_ft = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent` = '0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' $type_cond_ft ORDER BY `ordre` LIMIT 5";
+          $req_ft = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `affichage_menu` = '1' AND `idparent` = '0' AND `titre` NOT LIKE '%Promo%' AND `titre` NOT LIKE '%IPTV%' $type_cond_ft ORDER BY `ordre` LIMIT 5";
           $res_ft = executeRequete($req_ft);
           while ($cat_ft = mysqli_fetch_array($res_ft)):
         ?>

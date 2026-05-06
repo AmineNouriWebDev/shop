@@ -215,6 +215,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' ){
             Ajouter un nouvel élément
         </div>
 
+        <!-- Tip for Virtual Categories -->
+        <div style="background:color-mix(in srgb, var(--color-primary) 5%, transparent); border-left:4px solid var(--color-primary); padding:1rem; border-radius:0.5rem; margin-bottom:1.5rem; font-size:0.875rem;">
+            <div style="font-weight:700; color:var(--color-primary); margin-bottom:0.25rem; display:flex; align-items:center; gap:8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Catégorie Virtuelle ?
+            </div>
+            Vous souhaitez ajouter une catégorie qui n'apparaît **pas** dans le menu principal ? <br>
+            Créez-la dans <a href="index.php?r=ncategorie_blog" style="color:var(--color-primary); font-weight:600; text-decoration:underline;">Gestion des Catégories</a> en décochant l'option <strong>"Affichage menu"</strong>.
+        </div>
+
         <form method="POST" enctype="multipart/form-data" novalidate="novalidate">
             <!-- IMAGE BLOCK -->
             <div style="background:color-mix(in srgb, var(--color-primary) 4%, transparent); border:1px dashed color-mix(in srgb, var(--color-primary) 35%, transparent); border-radius:0.75rem; padding:1.25rem; margin-bottom:1.5rem;">
