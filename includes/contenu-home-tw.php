@@ -498,58 +498,7 @@
 
   <?php endif; ?>
 
-  <!-- ════════════════════════════════════════════════
-       CATEGORIES RAPIDES
-       ════════════════════════════════════════════════ -->
-  <?php
-  $type_cond_home = (isset($afficher_abonnements) && $afficher_abonnements == '0') ? " AND `type` != 'A' " : "";
-  $req_cats = "SELECT * FROM `categories_blog` WHERE `etat` = '1' AND `idparent`='0' $type_cond_home ORDER BY `ordre` LIMIT 14";
-  $res_cats = executeRequete($req_cats);
-  $cats_list = [];
-  while ($c = mysqli_fetch_array($res_cats)) $cats_list[] = $c;
-
-  // Category icons mapping by keyword
-  $catIconMap = [
-    'television' => '📺', 'tv' => '📺', 'téléviseur' => '📺',
-    'smartphone' => '📱', 'telephone' => '📱', 'téléphonie' => '📱', 'mobile' => '📱',
-    'pc' => '💻', 'ordinateur' => '💻', 'laptop' => '💻', 'informatique' => '💻',
-    'tablette' => '📟', 'tablet' => '📟',
-    'accessoire' => '🎧', 'audio' => '🎧',
-    'montre' => '⌚', 'watch' => '⌚', 'smartwatch' => '⌚',
-    'camera' => '📷', 'photo' => '📷',
-    'gaming' => '🎮', 'jeux' => '🎮', 'gamer' => '🎮',
-    'récepteur' => '📡', 'parabole' => '📡', 'sat' => '📡',
-    'abonnement' => '🔔', 'iptv' => '🔔', 'vod' => '🎬',
-    'composant' => '⚙️', 'processeur' => '⚙️',
-    'imprimante' => '🖨️',
-    'drone' => '✈️',
-    'default' => '🔌',
-  ];
-
-  function getCategIcon($titre, $map) {
-    $t = strtolower($titre);
-    foreach ($map as $kw => $icon) {
-      if ($kw !== 'default' && strpos($t, $kw) !== false) return $icon;
-    }
-    return $map['default'];
-  }
-  ?>
-
-  <?php if (!empty($cats_list)): ?>
-  <div class="hp-section" style="padding-top: 2rem; padding-bottom: 2rem;">
-    <div class="hp-container">
-      <div class="hp-categ-grid">
-        <?php foreach ($cats_list as $cat): ?>
-          <a href="<?php echo lienCategories($cat['link']); ?>" class="hp-categ-card">
-            <div class="hp-categ-icon"><?php echo getCategIcon($cat['titre'], $catIconMap); ?></div>
-            <span class="hp-categ-name"><?php echo htmlspecialchars($cat['titre']); ?></span>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  </div>
-  <div class="hp-divider"></div>
-  <?php endif; ?>
+  <!-- CATEGORIES RAPIDES - MIGRÉ VERS BLOC_ACCUEIL (ID 10) -->
 
 
   <!-- ════════════════════════════════════════════════
@@ -968,6 +917,33 @@
   </div>
   <div class="hp-divider"></div>
   <?php endif; ?>
+
+  <?php elseif ($type_bloc == '10'): // ── Grille Catégories ── ?>
+  <div class="<?php echo $section_class; ?>" style="padding-top: 2rem; padding-bottom: 2rem;" id="<?php echo ancreBloc($bloc_id); ?>">
+    <div class="hp-container">
+      <?php if (affichageTitreBloc($bloc_id) == '1'): ?>
+        <div class="hp-section-header">
+          <h2 class="hp-section-title"><?php echo titreBloc($bloc_id); ?></h2>
+        </div>
+      <?php endif; ?>
+      <div class="hp-categ-grid">
+        <?php
+        $req_cat_bloc = "SELECT * FROM `liste_section_content` WHERE `idbloc`='".$bloc_id."' ORDER BY `id` ASC";
+        $res_cat_bloc = executeRequete($req_cat_bloc);
+        while ($cat_item = mysqli_fetch_array($res_cat_bloc)):
+            $iconClass = !empty($cat_item['icone']) ? htmlspecialchars($cat_item['icone']) : 'fa-solid fa-layer-group';
+        ?>
+          <a href="<?php echo htmlspecialchars($cat_item['lien']); ?>" class="hp-categ-card">
+            <div class="hp-categ-icon" style="font-size:1.75rem; color:var(--color-primary); display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
+                <i class="<?php echo $iconClass; ?>"></i>
+            </div>
+            <span class="hp-categ-name"><?php echo htmlspecialchars($cat_item['titre']); ?></span>
+          </a>
+        <?php endwhile; ?>
+      </div>
+    </div>
+  </div>
+  <div class="hp-divider"></div>
 
   <?php endif; // end type checks
   endwhile; // end blocs loop
