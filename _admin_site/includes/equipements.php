@@ -63,7 +63,7 @@
 			                               while ($data = mysqli_fetch_array($resultat))  {
 								         ?>
                                             <tr>
-                                                <td><?php echo afficheChamp1($data['titre']); ?></td>
+                                                <td><?php echo photoEquipements($data['id']); ?> <?php echo afficheChamp1($data['titre']); ?></td>
                                                 <td><?php echo afficheChamp($data['prix_vente']).' DT'; ?></td>
                                                 <td><?php echo auteur_name($data['auteur']); ?><br/><?php echo timestampTDtodate($data['datecreation']); ?></td>
                                                 <td class="text-nowrap">

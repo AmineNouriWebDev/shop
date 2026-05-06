@@ -91,7 +91,7 @@
 			                               while ($data = mysqli_fetch_array($resultat))  {
 								         ?>
                                             <tr>
-                                                <td style="font-weight: 500;"><?php echo afficheChamp($data['titre']); ?></td>
+                                                <td style="font-weight: 500;"><?php echo photoAbonnements($data['id']); ?> <?php echo afficheChamp($data['titre']); ?></td>
                                                 <td style="font-weight: 700; color: var(--color-primary);"><?php echo afficheChamp($data['prix_vente']).' DT'; ?></td>
                                                 <td>
                                                     <span style="font-weight: 500;"><?php echo auteur_name($data['auteur']); ?></span><br/>

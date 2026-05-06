@@ -240,25 +240,27 @@ function ApercuProduits($id)
 
 function photoProduits($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `produits` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['photo']) && $data['photo']!=""){
-	return '<img src="../media/products/'.afficheChamp($data['photo']).'" border="0" width="60"  class="mr-2" />';
+	return '<img src="../media/products/'.afficheChamp($data['photo']).'" border="0" width="60" height="60" style="object-fit:contain" class="mr-2" />';
 	}
 	else{
-	return '<img src="../media/products/image_non_dispo.jpg" border="0" width="60"  height="60" />';
+	return '<img src="../media/site/'.$logo.'" border="0" width="60"  height="60" style="object-fit:contain" class="mr-2" />';
 	}
 }
 
 function photoProduitsSite($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `produits` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['photo']) && $data['photo']!=""){
 	return 'media/products/'.afficheChamp($data['photo']);
-	} else { return 'media/products/image_non_dispo.jpg'; }
+	} else { return 'media/site/'.$logo; }
 }
 
 function ordreProduits($id)
@@ -503,25 +505,27 @@ function ApercuAbonnements($id)
 
 function photoAbonnements($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `abonnements` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['photo']) && $data['photo']!=""){
-	return '<img src="../media/products/'.afficheChamp($data['photo']).'" border="0" width="60"  height="60" />';
+	return '<img src="../media/products/'.afficheChamp($data['photo']).'" border="0" width="60" height="60" style="object-fit:contain" class="mr-2" />';
 	}
 	else{
-	return '<img src="../media/products/indispo.jpg" border="0" width="60"  height="60" />';
+	return '<img src="../media/site/'.$logo.'" border="0" width="60"  height="60" style="object-fit:contain" class="mr-2" />';
 	}
 }
 
 function photoAbonnementsSite($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `abonnements` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['photo']) && $data['photo']!=""){
 	return 'media/products/'.afficheChamp($data['photo']);
-	} else { return 'media/products/image_non_dispo.jpg'; }
+	} else { return 'media/site/'.$logo; }
 }
 
 /*-------------------------------- Equipement -------------------------------------------*/
@@ -608,25 +612,27 @@ function ApercuEquipements($id)
 
 function photoEquipements($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `equipements` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['photo']) && $data['photo']!=""){
-	return '<img src="../media/products/'.afficheChamp($data['photo']).'" border="0" width="60"  height="60" />';
+	return '<img src="../media/products/'.afficheChamp($data['photo']).'" border="0" width="60" height="60" style="object-fit:contain" class="mr-2" />';
 	}
 	else{
-	return '<img src="../media/products/indispo.jpg" border="0" width="60"  height="60" />';
+	return '<img src="../media/site/'.$logo.'" border="0" width="60"  height="60" style="object-fit:contain" class="mr-2" />';
 	}
 }
 
 function photoEquipementsSite($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `equipements` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['photo']) && $data['photo']!=""){
 	return 'media/products/'.afficheChamp($data['photo']);
-	} else { return 'media/products/image_non_dispo.jpg'; }
+	} else { return 'media/site/'.$logo; }
 }
 function ordreEquipements($id)
 {
@@ -776,13 +782,14 @@ function imagesproduit($id)
 
 function imagesproduitSite($id)
 {
+	global $logo;
 	$requete = "SELECT * FROM `images_produit` WHERE `id` = '".$id."'";
 	$resultat = executeRequete($requete);
 	$data = mysqli_fetch_array($resultat);
 	if(isset($data['image']) && $data['image']!=""){
 	return 'media/products/'.afficheChamp($data['image']);
 	}else {
-	return 'media/products/image_non_dispo.jpg';
+	return 'media/site/'.$logo;
 	}
 }
 

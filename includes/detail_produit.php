@@ -13,7 +13,7 @@
                                 <div
                                     style="border:1px solid var(--shop-border, #e5e7eb); border-radius:1rem; overflow:hidden; background:var(--shop-surface, #fff); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; position:relative;">
                                     <img id="main-product-image" class="myImage"
-                                        src="media/products/<?php echo $photo; ?>"
+                                        src="<?php echo $photo; ?>"
                                         alt="<?php echo htmlspecialchars($titre); ?>"
                                         style="max-width:100%; max-height:100%; object-fit:contain; display:block;">
                                     <div
@@ -27,7 +27,7 @@
                                     style="display:flex; gap:0.625rem; overflow-x:auto; padding-bottom:0.25rem;">
                                     <?php
                                     /* Main photo — generic (no color) */
-                                    $mainSrc = 'media/products/' . $photo;
+                                    $mainSrc = $photo;
                                     ?>
                                     <button type="button" class="thumb-btn active-thumb" data-color-group="0"
                                         onclick="changeMainImage(this,'<?php echo $mainSrc; ?>')">
@@ -607,7 +607,7 @@
                                     $shareUrl = urlencode(lienProduits($link));
                                     $shareTitle = urlencode($titre);
                                     $shareDesc = urlencode(strip_tags(courtContenuProduits($id ?? '')));
-                                    $shareImg = urlencode($chemin_absolu . 'media/products/' . $photo);
+                                    $shareImg = urlencode($chemin_absolu . $photo);
 
                                     /* Facebook */
                                     // On utilise uniquement le sharer classique.

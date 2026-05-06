@@ -35,8 +35,7 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
 			$titre			  = afficheChamp($data['titre']);		        
 			$PrixVente	      = prixVenteProduits($id);		        
 			$PrixPromo	      = prixPromoProduits($id);	        
-			$photo		      = afficheChamp($data['photo']);		        
-			if(empty($photo)) $photo = 'image_non_dispo.jpg';		        
+			$photo		      = photoProduitsSite($id);		        
 			$caracteristique  = afficheChamp($data['caracteristique']);		        
 			$etatStock		  = afficheChamp($data['etat_stock']);
 			// The database stores the long HTML format in the "caracteristique" column
@@ -53,7 +52,7 @@ $type= isset($_GET['type']) ? sanitize($_GET['type']) : '';
 				$categorie_title2 = titreCategBlog(afficheChamp($data1['idparent']));
 				$categorie_link2 = linkCategBlog(afficheChamp($data1['idparent']));
 				$typeOg = "Product";
-				$imgOg = 'media/products/'.$photo;
+				$imgOg = $photo;
 				$urlOg = lienProduits($link);
 
 				if($PrixPromo != '0.000') $price=$PrixPromo; else $price=$PrixVente;

@@ -107,12 +107,7 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
     }
 
     // Photo
-    $photo_html = "";
-    if($row['photo'] != "") {
-        $photo_html = '<img src="../media/products/'.$row['photo'].'" border="0" width="60" class="mr-2" />';
-    } else {
-        $photo_html = '<img src="../media/products/image_non_dispo.jpg" border="0" width="60" height="60" />';
-    }
+    $photo_html = photoProduits($row['id']);
 
     // Stock Toggle Button Logic
     $stock_status = intval($row['etat_stock']);
