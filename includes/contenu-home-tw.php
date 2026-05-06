@@ -74,57 +74,77 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.875rem;
+  gap: 1rem;
 }
 .hp-categ-card {
-    flex: 0 0 calc(33.333% - 0.875rem);
-    min-width: 100px;
+    flex: 0 0 calc(33.333% - 1rem);
+    min-width: 110px;
+    --categ-accent: #3b82f6; /* Modern Blue/Indigo */
 }
 @media (min-width: 640px) {
-    .hp-categ-card { flex: 0 0 calc(25% - 0.875rem); }
+    .hp-categ-card { flex: 0 0 calc(25% - 1rem); }
 }
 @media (min-width: 1024px) {
-    .hp-categ-card { flex: 0 0 calc(14.28% - 0.875rem); }
+    .hp-categ-card { flex: 0 0 calc(14.28% - 1rem); }
 }
 
 .hp-categ-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.625rem;
-  padding: 1.25rem 0.5rem 1rem;
-  border-radius: 1rem;
+  gap: 0.75rem;
+  padding: 1.5rem 0.5rem 1.25rem;
+  border-radius: 1.25rem;
   background: var(--shop-surface);
   border: 1px solid var(--shop-border);
   text-decoration: none;
   color: var(--shop-text-primary);
-  transition: all 250ms ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 .hp-categ-card:hover {
-  border-color: var(--shop-primary);
-  background: color-mix(in srgb, var(--shop-primary) 5%, var(--shop-surface));
-  transform: translateY(-3px);
-  box-shadow: var(--shop-shadow-card);
-  color: var(--shop-primary);
+  border-color: var(--categ-accent);
+  background: var(--shop-surface);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px -10px color-mix(in srgb, var(--categ-accent) 30%, transparent);
+  color: var(--categ-accent);
   text-decoration: none;
 }
+/* Supprimer l'éventuelle bande grise au hover */
+.hp-categ-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--categ-accent) 8%, transparent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.hp-categ-card:hover::after {
+    opacity: 1;
+}
+
 .hp-categ-icon {
-  width: 56px; height: 56px;
-  border-radius: 1rem;
-  background: color-mix(in srgb, var(--shop-primary) 10%, transparent);
+  width: 58px; height: 58px;
+  border-radius: 1.1rem;
+  background: color-mix(in srgb, var(--categ-accent) 10%, transparent);
   display: flex; align-items: center; justify-content: center;
-  color: var(--shop-primary);
-  font-size: 1.75rem;
-  transition: background 250ms ease;
+  color: var(--categ-accent);
+  font-size: 1.85rem;
+  transition: all 0.3s ease;
+  z-index: 2;
 }
 .hp-categ-card:hover .hp-categ-icon {
-  background: color-mix(in srgb, var(--shop-primary) 18%, transparent);
+  background: var(--categ-accent);
+  color: white;
+  transform: scale(1.1) rotate(5deg);
 }
 .hp-categ-name {
-  font-size: 0.7875rem;
-  font-weight: 600;
-  line-height: 1.3;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  z-index: 2;
 }
 
 /* ── Promo Banner ── */
@@ -934,7 +954,7 @@
             $iconClass = !empty($cat_item['icone']) ? htmlspecialchars($cat_item['icone']) : 'fa-solid fa-layer-group';
         ?>
           <a href="<?php echo htmlspecialchars($cat_item['lien']); ?>" class="hp-categ-card">
-            <div class="hp-categ-icon" style="font-size:1.75rem; color:var(--color-primary); display:flex; align-items:center; justify-content:center; width:100%; height:100%;">
+            <div class="hp-categ-icon">
                 <i class="<?php echo $iconClass; ?>"></i>
             </div>
             <span class="hp-categ-name"><?php echo htmlspecialchars($cat_item['titre']); ?></span>
