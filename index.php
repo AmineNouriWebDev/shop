@@ -53,6 +53,9 @@ if (lienAccueil()) {
 </head>
 
 <body>
+    <?php if (basename($_SERVER['PHP_SELF']) == 'index.php' || basename($_SERVER['PHP_SELF']) == ''): ?>
+    <h1 class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">Offipro : Votre Spécialiste High-Tech en Tunisie</h1>
+    <?php endif; ?>
     <?php include('includes/feedback.php'); ?>
 
     <!-- ═══ HEADER TAILWIND (top bar + nav + mobile drawer) ═══ -->

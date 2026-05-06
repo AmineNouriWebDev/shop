@@ -83,7 +83,7 @@
                             <div class="product-meta-data">
                                 <!-- Mobile Price block removed in favor of unhidden sidebar block below -->
                                 <div class="line"></div>
-                                <h2><?php echo $titre; ?></h2>
+                                <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.2;"><?php echo $titre; ?></h1>
                                 <?php if (marquesProduits($id) != '0' && ApercuMarque(marquesProduits($id)) != '') { ?>
                                     <div class="mb-3" style="height:60px;overflow:hidden"><img
                                             src="<?php echo photoMarqueSite(marquesProduits($id)); ?>" class="img-fluid"

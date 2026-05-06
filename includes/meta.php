@@ -75,6 +75,7 @@
     <meta property="og:type" content="<?php echo $og_type; ?>" />
     <meta property="og:url" content="<?php echo $og_url; ?>" />
     <meta property="og:image" content="<?php echo $og_img; ?>" />
+    <link rel="canonical" href="<?php echo $og_url; ?>" />
     
     <?php 
         if(isset($price) && $price!="" && $price!="0.000"){
