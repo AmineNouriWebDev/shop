@@ -74,15 +74,23 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .hp-categ-grid { gap: 1rem; }
 }
 .hp-categ-card {
-    flex: 0 0 calc(33.333% - 1rem);
-    min-width: 110px;
+    flex: 0 0 calc(25% - 0.5rem);
+    min-width: 75px;
+    padding: 1rem 0.25rem 0.875rem;
     --categ-accent: #3b82f6; /* Modern Blue/Indigo */
 }
 @media (min-width: 640px) {
-    .hp-categ-card { flex: 0 0 calc(25% - 1rem); }
+    .hp-categ-card { 
+        flex: 0 0 calc(25% - 1rem); 
+        min-width: 110px;
+        padding: 1.5rem 0.5rem 1.25rem;
+    }
 }
 @media (min-width: 1024px) {
     .hp-categ-card { flex: 0 0 calc(14.28% - 1rem); }
@@ -126,14 +134,21 @@
 }
 
 .hp-categ-icon {
-  width: 58px; height: 58px;
-  border-radius: 1.1rem;
+  width: 46px; height: 46px;
+  border-radius: 0.9rem;
   background: color-mix(in srgb, var(--categ-accent) 10%, transparent);
   display: flex; align-items: center; justify-content: center;
   color: var(--categ-accent);
-  font-size: 1.85rem;
+  font-size: 1.4rem;
   transition: all 0.3s ease;
   z-index: 2;
+}
+@media (min-width: 640px) {
+    .hp-categ-icon {
+      width: 58px; height: 58px;
+      border-radius: 1.1rem;
+      font-size: 1.85rem;
+    }
 }
 .hp-categ-card:hover .hp-categ-icon {
   background: var(--categ-accent);
@@ -141,10 +156,13 @@
   transform: scale(1.1) rotate(5deg);
 }
 .hp-categ-name {
-  font-size: 0.8125rem;
+  font-size: 0.65rem;
   font-weight: 700;
   line-height: 1.2;
   z-index: 2;
+}
+@media (min-width: 640px) {
+    .hp-categ-name { font-size: 0.8125rem; }
 }
 
 /* ── Promo Banner ── */
