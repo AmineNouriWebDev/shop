@@ -192,15 +192,21 @@
                                     <!-- 1. COLORS -->
                                     <?php
                                     $first_color_id = null;
-                                    $q_cols = executeRequete("SELECT pc.idcouleur, c.nom, c.code_hexa FROM produit_couleurs pc JOIN couleurs c ON pc.idcouleur=c.id WHERE pc.idproduit='$id' ORDER BY c.nom");
+                                    $q_cols = executeRequete("SELECT pc.idcouleur, c.nom, c.code_hexa, c.code FROM produit_couleurs pc JOIN couleurs c ON pc.idcouleur=c.id WHERE pc.idproduit='$id' ORDER BY c.nom");
                                     if (mysqli_num_rows($q_cols) > 0) {
+                                        echo '<style>
+                                        .color-swatch-modern { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 0 1px #cbd5e1, inset 0 2px 4px rgba(0,0,0,0.1); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); margin-right: 12px; }
+                                        .color-swatch-modern:hover { transform: scale(1.1); box-shadow: 0 0 0 1px #94a3b8, inset 0 2px 4px rgba(0,0,0,0.1); }
+                                        .color-swatch-modern.active { transform: scale(1.15); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--shop-primary, #5A31F4), inset 0 2px 4px rgba(0,0,0,0.1) !important; }
+                                        </style>';
                                         echo '<div class="variation-group-row d-flex align-items-center mb-3">';
                                         echo '<div class="variation-label-box" style="min-width: 100px;"><h6 class="mb-0 fw-bold" style="font-size:0.9rem;">Couleur :</h6></div>';
-                                        echo '<div class="d-flex flex-wrap gap-2 align-items-center">';
+                                        echo '<div class="d-flex flex-wrap align-items-center">';
                                         while ($col = mysqli_fetch_assoc($q_cols)) {
                                             if (!$first_color_id)
                                                 $first_color_id = $col['idcouleur'];
-                                            echo '<div class="color-swatch-modern" data-color-id="' . $col['idcouleur'] . '" data-color-name="' . $col['nom'] . '" style="width: 28px; height: 28px; border-radius: 50%; background-color: ' . $col['code_hexa'] . '; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 0 1px #e2e8f0; transition: all 0.2s;" onclick="selectColor(this, ' . $col['idcouleur'] . ')"></div>';
+                                            $bgColor = !empty($col['code_hexa']) ? $col['code_hexa'] : $col['code'];
+                                            echo '<div class="color-swatch-modern" data-color-id="' . $col['idcouleur'] . '" data-color-name="' . htmlspecialchars($col['nom']) . '" style="background-color: ' . htmlspecialchars($bgColor) . ';" onclick="selectColor(this, ' . $col['idcouleur'] . ')"></div>';
                                         }
                                         echo '<span id="selected-color-name" class="ms-2 fw-medium text-secondary" style="font-size: 0.85rem;">Choisissez</span>';
                                         echo '</div></div>';
@@ -266,12 +272,8 @@
                                     function selectColor(element, colorId) {
                                         // 1. Update visual style of color swatches
                                         document.querySelectorAll('.color-swatch-modern').forEach(el => {
-                                            el.style.borderColor = '#fff';
-                                            el.style.boxShadow = '0 0 0 1px #e2e8f0';
                                             el.classList.remove('active');
                                         });
-                                        element.style.borderColor = '#fff';
-                                        element.style.boxShadow = '0 0 0 2px var(--shop-primary, #5A31F4)';
                                         element.classList.add('active');
 
                                         // 2. Update color name label

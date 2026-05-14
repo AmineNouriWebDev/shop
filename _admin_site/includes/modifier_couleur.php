@@ -11,7 +11,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'mod'){
     $nom   = formReception($_POST['nom']);
     $code  = formReception($_POST['code']);
     $ordre = (int)($_POST['ordre'] ?? 0);
-    executeRequete("UPDATE `couleurs` SET `nom`='$nom',`code`='$code',`ordre`='$ordre' WHERE `id`='$id'");
+    executeRequete("UPDATE `couleurs` SET `nom`='$nom',`code`='$code',`code_hexa`='$code',`ordre`='$ordre' WHERE `id`='$id'");
     phpToastRedirect('Couleur modifiée avec succès.', 'index.php?r=couleurs', 'success');
 }
 ?>

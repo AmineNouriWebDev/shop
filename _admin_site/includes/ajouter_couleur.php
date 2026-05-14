@@ -12,7 +12,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'ajt'){
     $nom   = formReception($_POST['nom']);
     $code  = formReception($_POST['code']);
     $ordre = (int)($_POST['ordre'] ?? 0);
-    executeRequete("INSERT INTO `couleurs` (`nom`,`code`,`ordre`) VALUES ('$nom','$code','$ordre')");
+    executeRequete("INSERT INTO `couleurs` (`nom`,`code`,`code_hexa`,`ordre`) VALUES ('$nom','$code','$code','$ordre')");
     phpToastRedirect('Couleur ajoutée avec succès.', 'index.php?r=couleurs', 'success');
 }
 ?>
