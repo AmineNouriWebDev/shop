@@ -44,3 +44,7 @@ Thumbs.db
 *.bak
 error_log
 
+# Fichiers masqués du statut git (Locaux)
+_admin_site/debug_login.php
+error404.html
+media/products/4185-produits-1778766882-0-4189-produits-1777938048-0-smartphone-xiaomi-redmi-a5-4g-3go-64go-vert-lac-x.webp
