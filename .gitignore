@@ -14,7 +14,7 @@ env.php
 .env.example
 *.txt
 !robots.txt
-!root-deployment-offipro.txt
+# root-deployment-offipro.txt is now ignored
 offipro-configurateur-camera.md
 
 # Docker local config
