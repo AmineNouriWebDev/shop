@@ -327,13 +327,14 @@
         } 
         */
 
+        /*---------------------------------------------------------------------------------------------------------------------------------------------------*/
+        
+        }
+
 		if ($send_initial_email) {
 			$payload_client['email_html'] = str_replace('%%PLATEFORM%%', '', $payload_client['email_html']);
 			envoiEmail_n8n($payload_client);
 		}
-        /*---------------------------------------------------------------------------------------------------------------------------------------------------*/
-        
-        }
 
         if($moyen_paiement == 11){
         $urlOg .= $descriptionCmd;
@@ -355,12 +356,10 @@
 	<script language="javascript">
       <!--
       window.open('<?php echo $payment_link;?>');
+      window.location = '<?php echo lienConfirm($cmd); ?>';
       -->
     </script>
-    <?php 
-    
-    curl_close($ch); 
-    
+<?php 
     }else{ ?>
     <script language="javascript">
 	 <!--
