@@ -185,6 +185,24 @@ if(isset($_GET['cmd'])){
 
   <?php include('includes/footer-tw.php'); ?>
   <?php include('includes/script-footer.php'); ?>
+
+  <!-- ===== Google Customer Reviews Opt-In ===== -->
+  <script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+  <script>
+    window.renderOptIn = function() {
+      window.gapi.load('surveyoptin', function() {
+        window.gapi.surveyoptin.render({
+          "merchant_id":            5792762874,
+          "order_id":               "<?php echo addslashes($idc); ?>",
+          "email":                  "<?php echo addslashes($emailclient); ?>",
+          "delivery_country":       "TN",
+          "estimated_delivery_date":"<?php echo date('Y-m-d', strtotime('+3 days')); ?>"
+        });
+      });
+    };
+  </script>
+  <!-- ===== /Google Customer Reviews ===== -->
+
 </body>
 </html>
 <?php 
