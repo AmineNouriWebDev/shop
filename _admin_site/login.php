@@ -128,8 +128,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data_2fa));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 5); // Don't block for too long
-                curl_exec($ch);
+                $result = curl_exec($ch);
+                if (curl_errno($ch)) {
+                    error_log("Erreur cURL 2FA : " . curl_error($ch));
+                }
                 curl_close($ch);
                 // --- 2FA LOGIC END ---
 			}
