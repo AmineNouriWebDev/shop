@@ -4,9 +4,15 @@ session_start();
 include("includes/include.php");
 $erreur = false;
 $msg = "";
+
+if (isset($_GET['cancel_2fa'])) {
+    unset($_SESSION['2fa_pending'], $_SESSION['2fa_pending_user'], $_SESSION['2fa_code'], $_SESSION['2fa_expiry']);
+    header("Location: login.php");
+    exit();
+}
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     $turnstile_valid = true;
-    if (!empty($cloudflare_secret_key)) {
+    if (!empty($cloudflare_secret_key) && !(isset($_POST['code_2fa']) && isset($_SESSION['2fa_pending']))) {
         $turnstile_response = $_POST['cf-turnstile-response'] ?? '';
         $verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
         $data_cf = [
@@ -31,6 +37,41 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!$turnstile_valid) {
         $erreur = true;
         $msg = "La vérification anti-spam a échoué. Veuillez réessayer."; 
+    } elseif (isset($_POST['code_2fa']) && isset($_SESSION['2fa_pending'])) {
+        // Handle 2FA submission
+        if (time() > $_SESSION['2fa_expiry']) {
+            $erreur = true;
+            $msg = "Le code a expiré. Veuillez vous reconnecter.";
+            unset($_SESSION['2fa_pending'], $_SESSION['2fa_pending_user'], $_SESSION['2fa_code'], $_SESSION['2fa_expiry']);
+        } elseif ($_POST['code_2fa'] === $_SESSION['2fa_code']) {
+            // Success! Create session
+            $row = $_SESSION['2fa_pending_user'];
+            $sess_id = md5(microtime());
+			$_SESSION['editor_id']=$row['editor_id'];
+			$_SESSION['editor_login']=$row['editor_user_name'];
+			$_SESSION['editor_group']=$row['editor_group'];
+			$_SESSION['editor_name']=$row['editor_name'];
+			$_SESSION['editor_surname']=$row['editor_surname'];
+			$_SESSION['sess_id'] = $sess_id;
+			$strSQL1 = "UPDATE `editor` SET ses_id='$sess_id' WHERE editor_id='$row[editor_id]' ";
+			$result1 = mysqli_query($connexion,$strSQL1) or die($strSQL1.' '.mysqli_error($connexion));
+			$entree = time();
+            $ip_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+			$rq = 'INSERT INTO `editor_state` ( `editor_id`, `entree`, `sess_id`, `ip`) VALUES ( "'. $row['editor_id'] .'", "'. $entree .'", "'. $sess_id .'", "'. $ip_addr .'" ) ';
+			$rs = mysqli_query($connexion,$rq);
+            
+            unset($_SESSION['2fa_pending'], $_SESSION['2fa_pending_user'], $_SESSION['2fa_code'], $_SESSION['2fa_expiry']);
+            
+             if (!headers_sent()) {
+                 header("location: index.php");
+             } else {
+                 echo '<script>window.location.href="index.php";</script>';
+             }
+			 exit();
+        } else {
+            $erreur = true;
+            $msg = "Code incorrect. Veuillez réessayer.";
+        }
     } else {
       $login = formReception($_POST['editor_user']);
       $pass = md5(formReception($_POST['editor_pass']));
@@ -63,26 +104,34 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 			else
 			{
 				$row = mysqli_fetch_array($result);
-			$erreur=false;
-			$sess_id = md5(microtime());
-			$_SESSION['editor_id']=$row['editor_id'];
-			$_SESSION['editor_login']=$row['editor_user_name'];
-			$_SESSION['editor_group']=$row['editor_group'];
-			$_SESSION['editor_name']=$row['editor_name'];
-			$_SESSION['editor_surname']=$row['editor_surname'];
-			$_SESSION['sess_id'] = $sess_id;
-			$strSQL1 = "UPDATE `editor` SET ses_id='$sess_id' WHERE editor_id='$row[editor_id]' ";
-			$result1 = mysqli_query($connexion,$strSQL1) or die($strSQL1.' '.mysqli_error($connexion));
-			$entree = time();
-            $ip_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-			$rq = 'INSERT INTO `editor_state` ( `editor_id`, `entree`, `sess_id`, `ip`) VALUES ( "'. $row['editor_id'] .'", "'. $entree .'", "'. $sess_id .'", "'. $ip_addr .'" ) ';
-			$rs = mysqli_query($connexion,$rq);
-             if (!headers_sent()) {
-                 header("location: index.php");
-             } else {
-                 echo '<script>window.location.href="index.php";</script>';
-             }
-			 exit();
+			    $erreur=false;
+                
+                // --- 2FA LOGIC START ---
+                $code_2fa = sprintf("%06d", mt_rand(1, 999999));
+                $_SESSION['2fa_pending'] = true;
+                $_SESSION['2fa_pending_user'] = $row;
+                $_SESSION['2fa_code'] = $code_2fa;
+                $_SESSION['2fa_expiry'] = time() + (15 * 60); // 15 minutes
+
+                $webhook_url = 'https://n8n.deposark.com/webhook/1d35647c-18e3-4743-9a68-7be87c2a7f3b';
+                $ip_addr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+                $data_2fa = [
+                    'username' => $row['editor_user_name'],
+                    'code' => $code_2fa,
+                    'expiry' => '15 minutes',
+                    'ip' => $ip_addr,
+                    'email' => $row['editor_email']
+                ];
+                
+                $ch = curl_init($webhook_url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data_2fa));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 5); // Don't block for too long
+                curl_exec($ch);
+                curl_close($ch);
+                // --- 2FA LOGIC END ---
 			}
     }
    }
@@ -504,7 +553,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <!-- ─── Login Form ─── -->
-            <div id="loginWrap">
+            <div id="loginWrap" <?php if(isset($_SESSION['2fa_pending'])) echo 'style="display:none;"'; ?>>
                 <div class="login-heading">
                     <h1>Bon retour 👋</h1>
                     <p>Connectez-vous pour accéder à votre espace.</p>
@@ -578,6 +627,50 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     <span class="status-dot"></span>
                     Tous les systèmes opérationnels
                 </div>
+            </div>
+
+            <!-- ─── 2FA Form ─── -->
+            <div id="twoFaWrap" <?php if(!isset($_SESSION['2fa_pending'])) echo 'style="display:none;"'; ?>>
+                <div class="login-heading">
+                    <h1>Vérification 2FA 🔐</h1>
+                    <p>Un code vous a été envoyé par email/Telegram. Veuillez le saisir ci-dessous.</p>
+                </div>
+
+                <div class="login-divider"></div>
+
+                <?php if($erreur && $msg != "" && isset($_SESSION['2fa_pending'])): ?>
+                <div class="login-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd"/>
+                    </svg>
+                    <?php echo htmlspecialchars($msg); ?>
+                </div>
+                <?php endif; ?>
+
+                <form id="twofaform" action="" method="post">
+                    <div class="field">
+                        <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                        </svg>
+                        <input class="field-input" type="text" name="code_2fa" id="code_2fa" required placeholder="Code à 6 chiffres" autocomplete="one-time-code" pattern="\d{6}" maxlength="6" style="text-align: center; letter-spacing: 0.5em; font-weight: bold; font-size: 1.2rem;">
+                    </div>
+                    
+                    <?php if (!empty($cloudflare_site_key)): ?>
+                        <!-- Ensure we send CF Turnstile token again if needed, or simply pass empty since it might have been validated -->
+                        <input type="hidden" name="cf-turnstile-response" value="skip">
+                    <?php endif; ?>
+
+                    <button type="submit" class="btn-login">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Vérifier
+                    </button>
+                    
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <a href="?cancel_2fa=1" class="back-link" style="margin-top: 0;">Annuler et retourner à la connexion</a>
+                    </div>
+                </form>
             </div>
 
             <!-- ─── Recovery Form ─── -->
