@@ -115,52 +115,29 @@
          } 
 
 		// ──────────────────────────────────────────────────────────
-		// Confiva Logistics API - Création du colis
+		// Best Delivery SOAP API - Création du colis
 		// ──────────────────────────────────────────────────────────
-		$confiva_key = !empty($confiva_api_key) ? $confiva_api_key : '';
-		if(!empty($confiva_key)) {
-		    // On nettoie le contenu
-		    $clean_contenu = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
-		    
-		    $confiva_data = [
-		        'nom_client' => $nom . ' ' . $prenom,
-		        'adresse'    => $adresse,
-		        'gouvernorat'=> $gouvernorat, // La liste exacte du select
-		        'city'       => $ville,
-		        'telephone'  => $phone,
-		        'prix'       => $globale,
-		        'contenu'    => substr($clean_contenu, 0, 100), // Limite pour sécurité
-		        'echange'    => "0",
-		        'autoriser_ouverture' => "0"
-		    ];
-		    
-		    $chConf = curl_init('https://expediteur.confiva-logistics.com/api/client/colis/create');
-		    curl_setopt($chConf, CURLOPT_RETURNTRANSFER, true);
-		    curl_setopt($chConf, CURLOPT_POST, true);
-		    curl_setopt($chConf, CURLOPT_HTTPHEADER, [
-		        'Content-Type: application/json',
-		        'x-api-key: ' . $confiva_key
-		    ]);
-		    curl_setopt($chConf, CURLOPT_POSTFIELDS, json_encode($confiva_data));
-		    curl_setopt($chConf, CURLOPT_TIMEOUT, 5); // Timeout pour ne pas bloquer
-		    curl_setopt($chConf, CURLOPT_SSL_VERIFYPEER, false);
-		    curl_setopt($chConf, CURLOPT_SSL_VERIFYHOST, false);
-		    
-		    $confiva_resp = curl_exec($chConf);
-		    $confiva_code = curl_getinfo($chConf, CURLINFO_HTTP_CODE);
-		    $confiva_error = curl_error($chConf);
-		    curl_close($chConf);
-		    
-		    file_put_contents('debug_confiva.txt', "Time: " . date('Y-m-d H:i:s') . "\nEndpoint: https://expediteur.confiva-logistics.com/api/client/colis/create\nPayload: " . json_encode($confiva_data) . "\nKey: " . substr($confiva_key, 0, 5) . "...\nHTTP Code: $confiva_code\nResponse: $confiva_resp\ncURL Error: $confiva_error\n\n", FILE_APPEND);
-		    
-		    if ($confiva_code == 200 || $confiva_code == 201) {
-		        $c_res = json_decode($confiva_resp, true);
-		        if(isset($c_res['code_barres']) && !empty($c_res['code_barres'])) {
-		            $barcode = sanitize($c_res['code_barres']);
-		            executeRequete("UPDATE `commandes` SET `code_envoi`='".$barcode."' WHERE `id`='".$id_cmd."'");
-		        }
+		require_once(__DIR__ . '/../includes/best_delivery.php');
+		$clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
+		$bd_result = bestDelivery_createPickup(
+		    $nom . ' ' . $prenom,   // nom complet
+		    $gouvernorat,            // gouvernerat
+		    $ville,                  // ville
+		    $adresse,                // adresse
+		    $phone,                  // tel
+		    $globale,                // prix (montant à encaisser)
+		    $clean_designation,      // designation
+		    $commentaire,            // msg
+		    0                        // echange = 0 (livraison standard)
+		);
+		if ($bd_result['success'] && !empty($bd_result['code_barre'])) {
+		    $barcode = sanitize($bd_result['code_barre']);
+		    executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+		    if (!empty($bd_result['url'])) {
+		        executeRequete("UPDATE `commandes` SET `lien_paiement`='" . sanitize($bd_result['url']) . "' WHERE `id`='" . $id_cmd . "'");
 		    }
 		}
+
 
 		// ──────────────────────────────────────────────────────────
 		// Telegram + n8n notification after successful order insert
