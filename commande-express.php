@@ -162,24 +162,30 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
     }
 
     // ──────────────────────────────────────────────────────────
-    // Best Delivery SOAP API - Création du colis (Express)
+    // Best Delivery SOAP API - Création du colis (non-bloquant)
     // ──────────────────────────────────────────────────────────
-    require_once(__DIR__ . '/includes/best_delivery.php');
-    $clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd)) . ' (Express)';
-    $bd_result = bestDelivery_createPickup(
-        $nom . ' ' . $prenom,   // nom complet
-        ucfirst(strtolower($ville)), // gouvernerat (express : on utilise la ville comme gouvernorat)
-        $ville,                  // ville
-        $adresse,                // adresse
-        $phone,                  // tel
-        $globale,                // prix (montant à encaisser)
-        $clean_designation,      // designation
-        $commentaire,            // msg
-        0                        // echange = 0
-    );
-    if ($bd_result['success'] && !empty($bd_result['code_barre'])) {
-        $barcode = sanitize($bd_result['code_barre']);
-        executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+    try {
+        if (class_exists('SoapClient')) {
+            require_once(__DIR__ . '/includes/best_delivery.php');
+            $clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd)) . ' (Express)';
+            $bd_result = bestDelivery_createPickup(
+                $nom . ' ' . $prenom,
+                ucfirst(strtolower($ville)),
+                $ville,
+                $adresse,
+                $phone,
+                $globale,
+                $clean_designation,
+                $commentaire,
+                0
+            );
+            if (!empty($bd_result['success']) && !empty($bd_result['code_barre'])) {
+                $barcode = sanitize($bd_result['code_barre']);
+                executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+            }
+        }
+    } catch (Exception $e) {
+        error_log('[BestDelivery] Erreur non bloquante express: ' . $e->getMessage());
     }
     // ──────────────────────────────────────────────────────────
 
