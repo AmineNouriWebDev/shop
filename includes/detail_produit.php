@@ -12,6 +12,94 @@
                                 <!-- Main Image with Zoom -->
                                 <div
                                     style="border:1px solid var(--shop-border, #e5e7eb); border-radius:1rem; overflow:hidden; background:var(--shop-surface, #fff); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; position:relative;">
+
+                                    <?php
+                                    // ── Auto-patch DB : créer colonnes si absentes (exécuté une seule fois) ──
+                                    $connexion_dp = ouvrirCnx();
+                                    $dp_cols = ['badge1_texte'=>"VARCHAR(80) DEFAULT ''",'badge1_couleur'=>"VARCHAR(20) DEFAULT '#5a31f4'",'badge2_texte'=>"VARCHAR(80) DEFAULT ''",'badge2_couleur'=>"VARCHAR(20) DEFAULT '#10b981'",'stock_label_couleur'=>"VARCHAR(20) DEFAULT '#e53e3e'"];
+                                    foreach($dp_cols as $dc=>$dt){$chk=mysqli_query($connexion_dp,"SHOW COLUMNS FROM `produits` LIKE '$dc'");if(mysqli_num_rows($chk)===0){mysqli_query($connexion_dp,"ALTER TABLE `produits` ADD `$dc` $dt");}}
+                                    // ── Étiquettes produit ──────────────────────────────────
+                                    $q_etiq = executeRequete("SELECT etat_stock, badge1_texte, badge1_couleur, badge2_texte, badge2_couleur, stock_label_couleur FROM `produits` WHERE `id`='$id'");
+                                    $d_etiq = mysqli_fetch_assoc($q_etiq);
+                                    $etiq_stock_color  = !empty($d_etiq['stock_label_couleur']) ? htmlspecialchars($d_etiq['stock_label_couleur']) : '#e53e3e';
+                                    $etiq_in_stock     = isset($d_etiq['etat_stock']) ? ((int)$d_etiq['etat_stock'] === 1) : true;
+                                    $etiq_b1_texte     = trim($d_etiq['badge1_texte'] ?? '');
+                                    $etiq_b1_color     = !empty($d_etiq['badge1_couleur']) ? htmlspecialchars($d_etiq['badge1_couleur']) : '#5a31f4';
+                                    $etiq_b2_texte     = trim($d_etiq['badge2_texte'] ?? '');
+                                    $etiq_b2_color     = !empty($d_etiq['badge2_couleur']) ? htmlspecialchars($d_etiq['badge2_couleur']) : '#10b981';
+                                    ?>
+
+                                    <style>
+                                    /* ── Ruban stock haut-gauche incliné ── */
+                                    .prod-ribbon-wrap {
+                                        position: absolute;
+                                        top: 0; left: 0;
+                                        width: 90px; height: 90px;
+                                        overflow: hidden;
+                                        z-index: 10;
+                                        pointer-events: none;
+                                    }
+                                    .prod-ribbon {
+                                        position: absolute;
+                                        top: 18px; left: -24px;
+                                        width: 110px;
+                                        text-align: center;
+                                        font-size: 0.65rem;
+                                        font-weight: 700;
+                                        color: #fff;
+                                        letter-spacing: 0.04em;
+                                        text-transform: uppercase;
+                                        padding: 5px 0;
+                                        transform: rotate(-45deg);
+                                        box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+                                    }
+                                    /* ── Badges haut-droit ── */
+                                    .prod-badges-right {
+                                        position: absolute;
+                                        top: 0.6rem; right: 0.6rem;
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 0.35rem;
+                                        z-index: 10;
+                                        pointer-events: none;
+                                    }
+                                    .prod-badge-pill {
+                                        display: inline-block;
+                                        color: #fff;
+                                        font-size: 0.68rem;
+                                        font-weight: 700;
+                                        letter-spacing: 0.03em;
+                                        text-transform: uppercase;
+                                        padding: 4px 10px;
+                                        border-radius: 99px;
+                                        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+                                        white-space: nowrap;
+                                    }
+                                    </style>
+
+                                    <!-- Ruban stock (haut-gauche incliné) -->
+                                    <div class="prod-ribbon-wrap">
+                                        <div class="prod-ribbon" style="background:<?php echo $etiq_stock_color; ?>">
+                                            <?php echo $etiq_in_stock ? 'En Stock' : 'Rupture'; ?>
+                                        </div>
+                                    </div>
+
+                                    <!-- Badges haut-droit (non inclinés) -->
+                                    <?php if (!empty($etiq_b1_texte) || !empty($etiq_b2_texte)): ?>
+                                    <div class="prod-badges-right">
+                                        <?php if (!empty($etiq_b1_texte)): ?>
+                                        <span class="prod-badge-pill" style="background:<?php echo $etiq_b1_color; ?>">
+                                            <?php echo htmlspecialchars($etiq_b1_texte); ?>
+                                        </span>
+                                        <?php endif; ?>
+                                        <?php if (!empty($etiq_b2_texte)): ?>
+                                        <span class="prod-badge-pill" style="background:<?php echo $etiq_b2_color; ?>">
+                                            <?php echo htmlspecialchars($etiq_b2_texte); ?>
+                                        </span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php endif; ?>
+
                                     <img id="main-product-image" class="myImage"
                                         src="<?php echo $photo; ?>"
                                         alt="<?php echo htmlspecialchars($titre); ?>"

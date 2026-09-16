@@ -72,6 +72,13 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
     $ancre               = isset($_POST['ancre']) ? formReception($_POST['ancre']) : 'Commander';
     $note_avis           = round(min(5, max(0, floatval(str_replace(',','.',$_POST['note_avis'] ?? 0)))), 2);
     $nb_avis             = intval($_POST['nb_avis'] ?? 0);
+    // ── Étiquettes image produit ─────────────────────────────────────────
+    $stock_label_couleur = formReception($_POST['stock_label_couleur'] ?? '#e53e3e');
+    $badge1_texte        = formReception($_POST['badge1_texte'] ?? '');
+    $badge1_couleur      = formReception($_POST['badge1_couleur'] ?? '#5a31f4');
+    $badge2_texte        = formReception($_POST['badge2_texte'] ?? '');
+    $badge2_couleur      = formReception($_POST['badge2_couleur'] ?? '#10b981');
+    // ─────────────────────────────────────────────────────────────────────
     
     // SEO: Handle link change and archive old one for 301 redirection
     $q_old = executeRequete("SELECT `link`, `link_old` FROM `produits` WHERE `id` = '$id'");
@@ -88,6 +95,23 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
         executeRequete("INSERT INTO `produits_redirects` (`id_produit`, `old_link`) VALUES ('$id', '$old_link_esc')");
     }
     
+    // ── Auto-patch DB : ajouter colonnes étiquettes si absentes ──────────
+    $connexion_patch = ouvrirCnx();
+    $cols_to_add = [
+        'badge1_texte'        => "VARCHAR(80) DEFAULT ''",
+        'badge1_couleur'      => "VARCHAR(20) DEFAULT '#5a31f4'",
+        'badge2_texte'        => "VARCHAR(80) DEFAULT ''",
+        'badge2_couleur'      => "VARCHAR(20) DEFAULT '#10b981'",
+        'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
+    ];
+    foreach ($cols_to_add as $col => $def) {
+        $chk = mysqli_query($connexion_patch, "SHOW COLUMNS FROM `produits` LIKE '$col'");
+        if (mysqli_num_rows($chk) === 0) {
+            mysqli_query($connexion_patch, "ALTER TABLE `produits` ADD `$col` $def");
+        }
+    }
+    // ─────────────────────────────────────────────────────────────────────
+
     // Single optimized update query
     $query = "UPDATE `produits` SET 
                 `titre` = '$titre', 
@@ -114,7 +138,12 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                 `remarque` = '$remarque', 
                 `video` = '$video',
                 `note_avis` = '$note_avis',
-                `nb_avis` = '$nb_avis'
+                `nb_avis` = '$nb_avis',
+                `badge1_texte` = '$badge1_texte',
+                `badge1_couleur` = '$badge1_couleur',
+                `badge2_texte` = '$badge2_texte',
+                `badge2_couleur` = '$badge2_couleur',
+                `stock_label_couleur` = '$stock_label_couleur'
               WHERE `id` = '$id'";
     
     executeRequete($query);
@@ -1064,6 +1093,49 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                             </label>
                                         </div>
                                     </div>
+                                    <!-- Étiquettes / Badges sur l'image produit -->
+                                    <?php
+                                    $q_badges_img = executeRequete("SELECT badge1_texte, badge1_couleur, badge2_texte, badge2_couleur, stock_label_couleur FROM `produits` WHERE `id`='" . intval($_GET['id']) . "'");
+                                    $d_badges_img = mysqli_fetch_assoc($q_badges_img);
+                                    $ex_stock_color  = htmlspecialchars($d_badges_img['stock_label_couleur'] ?? '#e53e3e');
+                                    $ex_badge1_texte = htmlspecialchars($d_badges_img['badge1_texte'] ?? '');
+                                    $ex_badge1_color = htmlspecialchars($d_badges_img['badge1_couleur'] ?? '#5a31f4');
+                                    $ex_badge2_texte = htmlspecialchars($d_badges_img['badge2_texte'] ?? '');
+                                    $ex_badge2_color = htmlspecialchars($d_badges_img['badge2_couleur'] ?? '#10b981');
+                                    ?>
+                                    <div class="admin-form-group" style="border:1px solid var(--color-border,#e2e8f0); border-radius:10px; padding:1.25rem; background:var(--color-bg-alt,#f8fafc); margin-top:1rem;">
+                                        <label style="font-weight:700; font-size:0.95rem; margin-bottom:1rem; display:block;">🏷️ &#201;tiquettes sur l'image produit</label>
+                                        <div class="row mb-3 align-items-center">
+                                            <div class="col-md-8"><label style="font-size:0.82rem; color:#64748b; font-weight:600;">Ruban stock (haut-gauche, inclin&#233;) &mdash; texte auto : En Stock / Rupture</label></div>
+                                            <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem;">
+                                                <label style="font-size:0.82rem; margin:0;">Couleur :</label>
+                                                <input type="color" name="stock_label_couleur" value="<?php echo $ex_stock_color; ?>" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                            </div>
+                                        </div>
+                                        <hr style="margin:0.75rem 0;">
+                                        <div class="row mb-3 align-items-center">
+                                            <div class="col-md-8">
+                                                <label style="font-size:0.82rem; color:#64748b; font-weight:600;">Badge 1 (haut-droit) &mdash; ex: Nouveau, Promo, -20%</label>
+                                                <input type="text" name="badge1_texte" value="<?php echo $ex_badge1_texte; ?>" class="admin-input" placeholder="Laisser vide pour masquer" maxlength="30" style="margin-top:4px;">
+                                            </div>
+                                            <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem; padding-top:22px;">
+                                                <label style="font-size:0.82rem; margin:0;">Couleur :</label>
+                                                <input type="color" name="badge1_couleur" value="<?php echo $ex_badge1_color; ?>" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center">
+                                            <div class="col-md-8">
+                                                <label style="font-size:0.82rem; color:#64748b; font-weight:600;">Badge 2 (bas-droit) &mdash; ex: Livraison gratuite</label>
+                                                <input type="text" name="badge2_texte" value="<?php echo $ex_badge2_texte; ?>" class="admin-input" placeholder="Laisser vide pour masquer" maxlength="30" style="margin-top:4px;">
+                                            </div>
+                                            <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem; padding-top:22px;">
+                                                <label style="font-size:0.82rem; margin:0;">Couleur :</label>
+                                                <input type="color" name="badge2_couleur" value="<?php echo $ex_badge2_color; ?>" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- fin etiquettes -->
+
                                     <div class="row">
                                      <div class="col-md-6">
                                       <div class="admin-form-group">

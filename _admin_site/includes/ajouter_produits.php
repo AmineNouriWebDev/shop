@@ -33,7 +33,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$description         = formReception($_POST['description']);
 	$note_avis           = round(min(5, max(0, floatval(str_replace(',','.',$_POST['note_avis'] ?? 0)))), 2);
 	$nb_avis             = intval($_POST['nb_avis'] ?? 0);
-	
+	// ── Étiquettes image produit ─────────────────────────────────────────
+	$stock_label_couleur = formReception($_POST['stock_label_couleur'] ?? '#e53e3e');
+	$badge1_texte        = formReception($_POST['badge1_texte'] ?? '');
+	$badge1_couleur      = formReception($_POST['badge1_couleur'] ?? '#5a31f4');
+	$badge2_texte        = formReception($_POST['badge2_texte'] ?? '');
+	$badge2_couleur      = formReception($_POST['badge2_couleur'] ?? '#10b981');
+	// ─────────────────────────────────────────────────────────────────────
 	$link    		     = nett(formReception($_POST['titre']));
 	if(isset($_POST['ancre'])){ $ancre = formReception($_POST['ancre']); } else { $ancre = "Commander";}
 	$datec        = timestampTD(date("d/m/Y H:i:s"));
@@ -41,15 +47,33 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	
 	$connexion=ouvrirCnx() or die("erreur cnx");
 
+	// ── Auto-patch DB : ajouter colonnes étiquettes si absentes ──────────
+	$cols_to_add = [
+	    'badge1_texte'        => "VARCHAR(80) DEFAULT ''",
+	    'badge1_couleur'      => "VARCHAR(20) DEFAULT '#5a31f4'",
+	    'badge2_texte'        => "VARCHAR(80) DEFAULT ''",
+	    'badge2_couleur'      => "VARCHAR(20) DEFAULT '#10b981'",
+	    'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
+	];
+	foreach ($cols_to_add as $col => $def) {
+	    $chk = mysqli_query($connexion, "SHOW COLUMNS FROM `produits` LIKE '$col'");
+	    if (mysqli_num_rows($chk) === 0) {
+	        mysqli_query($connexion, "ALTER TABLE `produits` ADD `$col` $def");
+	    }
+	}
+	// ─────────────────────────────────────────────────────────────────────
+
     // Convert Image to WebP Helper has been moved to fction_db.php
 
 	$requete = 'INSERT INTO `produits`
 	(`titre`,`court_contenu`, `caracteristique`,`remarque`, `link`, `categorie`,`idparent_categ`, `prix_vente`, `prix_promo`, `etat_stock`, `quantite`, `marque`, `type`, `afficher_accueil`,
-	`video`, `delai`, `nbr_vod`, `nbr_chaine_hd`, `ancre`, `ordre`, `etat`, `titre_page`, `description`, `keywords`, `auteur`, `datecreation`, `note_avis`, `nb_avis`) 
+	`video`, `delai`, `nbr_vod`, `nbr_chaine_hd`, `ancre`, `ordre`, `etat`, `titre_page`, `description`, `keywords`, `auteur`, `datecreation`, `note_avis`, `nb_avis`,
+	`badge1_texte`, `badge1_couleur`, `badge2_texte`, `badge2_couleur`, `stock_label_couleur`) 
 	VALUES
 	("'. $titre .'","'. $court_contenu .'","'. $contenu .'","'. $remarque .'","'. $link .'","'. $categorie .'","'. $idprt .'","'. $prix_vente .'","'. $prix_promo .'","'. $etat_stock .'","'. $quantite .'","'. $marque .'","'. $type .'","'
 	. $afficher_accueil .'","'.$video.'","'. $duree .'","'. $nbr_vod .'","'. $nbr_chaine_hd .'","'. $ancre .'","'. $ordre .'", "'. $etat .'","'. $titre_page .'","'. $description .'",
-	"'. $keywords .'","'. $auteur .'","'. $datec .'","'.$note_avis.'","'.$nb_avis.'")';
+	"'. $keywords .'","'. $auteur .'","'. $datec .'","'.$note_avis.'","'.$nb_avis.'",
+	"'. $badge1_texte .'","'. $badge1_couleur .'","'. $badge2_texte .'","'. $badge2_couleur .'","'. $stock_label_couleur .'")';
 		
     $result  = mysqli_query($connexion, $requete);	
     $idp     = mysqli_insert_id($connexion);
