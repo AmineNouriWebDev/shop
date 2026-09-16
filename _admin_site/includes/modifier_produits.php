@@ -118,7 +118,11 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
     $cols_to_add = [
         'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
         'stock_label_texte'   => "VARCHAR(100) DEFAULT ''",
-        'badges_droite_json'  => "TEXT NULL"
+        'badges_droite_json'  => "TEXT NULL",
+        'badge1_texte'        => "VARCHAR(80) DEFAULT ''",
+        'badge1_couleur'      => "VARCHAR(20) DEFAULT '#5a31f4'",
+        'badge2_texte'        => "VARCHAR(80) DEFAULT ''",
+        'badge2_couleur'      => "VARCHAR(20) DEFAULT '#10b981'"
     ];
     foreach ($cols_to_add as $col => $def) {
         $chk = mysqli_query($connexion_patch, "SHOW COLUMNS FROM `produits` LIKE '$col'");

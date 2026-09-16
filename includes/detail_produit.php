@@ -16,7 +16,15 @@
                                     <?php
                                     // ── Auto-patch DB : créer colonnes si absentes (exécuté une seule fois) ──
                                     $connexion_dp = ouvrirCnx();
-                                    $dp_cols = ['stock_label_couleur'=>"VARCHAR(20) DEFAULT '#e53e3e'", 'stock_label_texte'=>"VARCHAR(100) DEFAULT ''", 'badges_droite_json'=>"TEXT NULL"];
+                                    $dp_cols = [
+                                        'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
+                                        'stock_label_texte'   => "VARCHAR(100) DEFAULT ''",
+                                        'badges_droite_json'  => "TEXT NULL",
+                                        'badge1_texte'        => "VARCHAR(80) DEFAULT ''",
+                                        'badge1_couleur'      => "VARCHAR(20) DEFAULT '#5a31f4'",
+                                        'badge2_texte'        => "VARCHAR(80) DEFAULT ''",
+                                        'badge2_couleur'      => "VARCHAR(20) DEFAULT '#10b981'"
+                                    ];
                                     foreach($dp_cols as $dc=>$dt){$chk=mysqli_query($connexion_dp,"SHOW COLUMNS FROM `produits` LIKE '$dc'");if(mysqli_num_rows($chk)===0){mysqli_query($connexion_dp,"ALTER TABLE `produits` ADD `$dc` $dt");}}
                                     
                                     // ── Étiquettes produit ──────────────────────────────────
