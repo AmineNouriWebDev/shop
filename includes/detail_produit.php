@@ -16,17 +16,36 @@
                                     <?php
                                     // ── Auto-patch DB : créer colonnes si absentes (exécuté une seule fois) ──
                                     $connexion_dp = ouvrirCnx();
-                                    $dp_cols = ['badge1_texte'=>"VARCHAR(80) DEFAULT ''",'badge1_couleur'=>"VARCHAR(20) DEFAULT '#5a31f4'",'badge2_texte'=>"VARCHAR(80) DEFAULT ''",'badge2_couleur'=>"VARCHAR(20) DEFAULT '#10b981'",'stock_label_couleur'=>"VARCHAR(20) DEFAULT '#e53e3e'"];
+                                    $dp_cols = ['stock_label_couleur'=>"VARCHAR(20) DEFAULT '#e53e3e'", 'stock_label_texte'=>"VARCHAR(100) DEFAULT ''", 'badges_droite_json'=>"TEXT NULL"];
                                     foreach($dp_cols as $dc=>$dt){$chk=mysqli_query($connexion_dp,"SHOW COLUMNS FROM `produits` LIKE '$dc'");if(mysqli_num_rows($chk)===0){mysqli_query($connexion_dp,"ALTER TABLE `produits` ADD `$dc` $dt");}}
+                                    
                                     // ── Étiquettes produit ──────────────────────────────────
-                                    $q_etiq = executeRequete("SELECT etat_stock, badge1_texte, badge1_couleur, badge2_texte, badge2_couleur, stock_label_couleur FROM `produits` WHERE `id`='$id'");
+                                    $q_etiq = executeRequete("SELECT etat_stock, stock_label_texte, stock_label_couleur, badges_droite_json, badge1_texte, badge1_couleur, badge2_texte, badge2_couleur FROM `produits` WHERE `id`='$id'");
                                     $d_etiq = mysqli_fetch_assoc($q_etiq);
+                                    
+                                    // Ruban stock
                                     $etiq_stock_color  = !empty($d_etiq['stock_label_couleur']) ? htmlspecialchars($d_etiq['stock_label_couleur']) : '#e53e3e';
                                     $etiq_in_stock     = isset($d_etiq['etat_stock']) ? ((int)$d_etiq['etat_stock'] === 1) : true;
-                                    $etiq_b1_texte     = trim($d_etiq['badge1_texte'] ?? '');
-                                    $etiq_b1_color     = !empty($d_etiq['badge1_couleur']) ? htmlspecialchars($d_etiq['badge1_couleur']) : '#5a31f4';
-                                    $etiq_b2_texte     = trim($d_etiq['badge2_texte'] ?? '');
-                                    $etiq_b2_color     = !empty($d_etiq['badge2_couleur']) ? htmlspecialchars($d_etiq['badge2_couleur']) : '#10b981';
+                                    $etiq_stock_texte  = !empty(trim($d_etiq['stock_label_texte'] ?? '')) ? htmlspecialchars(trim($d_etiq['stock_label_texte'])) : ($etiq_in_stock ? 'En Stock' : 'Rupture');
+                                    
+                                    // Badges droite dynamiques
+                                    $badges_droite = json_decode($d_etiq['badges_droite_json'] ?? '[]', true) ?: [];
+                                    
+                                    // Fallback si vide
+                                    if (empty($badges_droite)) {
+                                        if (!empty(trim($d_etiq['badge1_texte'] ?? ''))) {
+                                            $badges_droite[] = [
+                                                'texte' => trim($d_etiq['badge1_texte']),
+                                                'couleur' => trim($d_etiq['badge1_couleur'] ?? '#5a31f4')
+                                            ];
+                                        }
+                                        if (!empty(trim($d_etiq['badge2_texte'] ?? ''))) {
+                                            $badges_droite[] = [
+                                                'texte' => trim($d_etiq['badge2_texte']),
+                                                'couleur' => trim($d_etiq['badge2_couleur'] ?? '#10b981')
+                                            ];
+                                        }
+                                    }
                                     ?>
 
                                     <style>
@@ -80,23 +99,20 @@
                                     <!-- Ruban stock (haut-gauche incliné) -->
                                     <div class="prod-ribbon-wrap">
                                         <div class="prod-ribbon" style="background:<?php echo $etiq_stock_color; ?>">
-                                            <?php echo $etiq_in_stock ? 'En Stock' : 'Rupture'; ?>
+                                            <?php echo $etiq_stock_texte; ?>
                                         </div>
                                     </div>
 
-                                    <!-- Badges haut-droit (non inclinés) -->
-                                    <?php if (!empty($etiq_b1_texte) || !empty($etiq_b2_texte)): ?>
+                                    <!-- Badges haut-droit (non inclinés, dynamiques) -->
+                                    <?php if (!empty($badges_droite)): ?>
                                     <div class="prod-badges-right">
-                                        <?php if (!empty($etiq_b1_texte)): ?>
-                                        <span class="prod-badge-pill" style="background:<?php echo $etiq_b1_color; ?>">
-                                            <?php echo htmlspecialchars($etiq_b1_texte); ?>
-                                        </span>
-                                        <?php endif; ?>
-                                        <?php if (!empty($etiq_b2_texte)): ?>
-                                        <span class="prod-badge-pill" style="background:<?php echo $etiq_b2_color; ?>">
-                                            <?php echo htmlspecialchars($etiq_b2_texte); ?>
-                                        </span>
-                                        <?php endif; ?>
+                                        <?php foreach ($badges_droite as $badge): ?>
+                                            <?php if (!empty(trim($badge['texte']))): ?>
+                                            <span class="prod-badge-pill" style="background:<?php echo htmlspecialchars($badge['couleur'] ?? '#10b981'); ?>">
+                                                <?php echo htmlspecialchars(trim($badge['texte'])); ?>
+                                            </span>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
                                     </div>
                                     <?php endif; ?>
 

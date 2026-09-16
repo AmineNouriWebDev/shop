@@ -35,25 +35,34 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$nb_avis             = intval($_POST['nb_avis'] ?? 0);
 	// ── Étiquettes image produit ─────────────────────────────────────────
 	$stock_label_couleur = formReception($_POST['stock_label_couleur'] ?? '#e53e3e');
-	$badge1_texte        = formReception($_POST['badge1_texte'] ?? '');
-	$badge1_couleur      = formReception($_POST['badge1_couleur'] ?? '#5a31f4');
-	$badge2_texte        = formReception($_POST['badge2_texte'] ?? '');
-	$badge2_couleur      = formReception($_POST['badge2_couleur'] ?? '#10b981');
+	$stock_label_texte   = formReception($_POST['stock_label_texte'] ?? '');
+	
+	$connexion = ouvrirCnx() or die("erreur cnx");
+	
+	// Badges dynamiques à droite
+	$badges_droite = [];
+	if (isset($_POST['badges_img']) && is_array($_POST['badges_img'])) {
+	    foreach ($_POST['badges_img'] as $b) {
+	        if (!empty(trim($b['texte']))) {
+	            $badges_droite[] = [
+	                'texte' => trim($b['texte']),
+	                'couleur' => trim($b['couleur'])
+	            ];
+	        }
+	    }
+	}
+	$badges_droite_json = mysqli_real_escape_string($connexion, json_encode($badges_droite, JSON_UNESCAPED_UNICODE));
 	// ─────────────────────────────────────────────────────────────────────
 	$link    		     = nett(formReception($_POST['titre']));
 	if(isset($_POST['ancre'])){ $ancre = formReception($_POST['ancre']); } else { $ancre = "Commander";}
 	$datec        = timestampTD(date("d/m/Y H:i:s"));
 	$auteur       = auteur_id();
 	
-	$connexion=ouvrirCnx() or die("erreur cnx");
-
 	// ── Auto-patch DB : ajouter colonnes étiquettes si absentes ──────────
 	$cols_to_add = [
-	    'badge1_texte'        => "VARCHAR(80) DEFAULT ''",
-	    'badge1_couleur'      => "VARCHAR(20) DEFAULT '#5a31f4'",
-	    'badge2_texte'        => "VARCHAR(80) DEFAULT ''",
-	    'badge2_couleur'      => "VARCHAR(20) DEFAULT '#10b981'",
 	    'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
+	    'stock_label_texte'   => "VARCHAR(100) DEFAULT ''",
+	    'badges_droite_json'  => "TEXT NULL"
 	];
 	foreach ($cols_to_add as $col => $def) {
 	    $chk = mysqli_query($connexion, "SHOW COLUMNS FROM `produits` LIKE '$col'");
@@ -68,12 +77,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	$requete = 'INSERT INTO `produits`
 	(`titre`,`court_contenu`, `caracteristique`,`remarque`, `link`, `categorie`,`idparent_categ`, `prix_vente`, `prix_promo`, `etat_stock`, `quantite`, `marque`, `type`, `afficher_accueil`,
 	`video`, `delai`, `nbr_vod`, `nbr_chaine_hd`, `ancre`, `ordre`, `etat`, `titre_page`, `description`, `keywords`, `auteur`, `datecreation`, `note_avis`, `nb_avis`,
-	`badge1_texte`, `badge1_couleur`, `badge2_texte`, `badge2_couleur`, `stock_label_couleur`) 
+	`stock_label_couleur`, `stock_label_texte`, `badges_droite_json`) 
 	VALUES
 	("'. $titre .'","'. $court_contenu .'","'. $contenu .'","'. $remarque .'","'. $link .'","'. $categorie .'","'. $idprt .'","'. $prix_vente .'","'. $prix_promo .'","'. $etat_stock .'","'. $quantite .'","'. $marque .'","'. $type .'","'
 	. $afficher_accueil .'","'.$video.'","'. $duree .'","'. $nbr_vod .'","'. $nbr_chaine_hd .'","'. $ancre .'","'. $ordre .'", "'. $etat .'","'. $titre_page .'","'. $description .'",
 	"'. $keywords .'","'. $auteur .'","'. $datec .'","'.$note_avis.'","'.$nb_avis.'",
-	"'. $badge1_texte .'","'. $badge1_couleur .'","'. $badge2_texte .'","'. $badge2_couleur .'","'. $stock_label_couleur .'")';
+	"'. $stock_label_couleur .'","'. mysqli_real_escape_string($connexion, $stock_label_texte) .'","'. $badges_droite_json .'")';
 		
     $result  = mysqli_query($connexion, $requete);	
     $idp     = mysqli_insert_id($connexion);
@@ -699,6 +708,63 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                             </label>
                                         </div>
                                     </div>
+
+                                    <!-- ═══════════════════════════════════════════════════════ -->
+                                    <!-- Étiquettes / Badges sur l'image produit                -->
+                                    <!-- ═══════════════════════════════════════════════════════ -->
+                                    <div class="admin-form-group" style="border:1px solid var(--color-border,#e2e8f0); border-radius:10px; padding:1.25rem; background:var(--color-bg-alt,#f8fafc); margin-top:1rem;">
+                                        <label style="font-weight:700; font-size:0.95rem; margin-bottom:1rem; display:block;">🏷️ &#201;tiquettes sur l'image produit</label>
+                                        
+                                        <!-- Ruban stock -->
+                                        <div class="row mb-3 align-items-center">
+                                            <div class="col-md-5">
+                                                <label style="font-size:0.82rem; color:#64748b; font-weight:600;">🎀 Ruban stock (haut-gauche, inclin&#233;)</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" name="stock_label_texte" class="admin-input" placeholder="Texte auto: En Stock/Rupture (Laissez vide)" maxlength="40">
+                                            </div>
+                                            <div class="col-md-3" style="display:flex; align-items:center; gap:0.5rem;">
+                                                <label style="font-size:0.82rem; margin:0;">Couleur :</label>
+                                                <input type="color" name="stock_label_couleur" value="#e53e3e" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                            </div>
+                                        </div>
+                                        
+                                        <hr style="margin:0.75rem 0;">
+                                        
+                                        <!-- Badges droits -->
+                                        <label style="font-size:0.82rem; color:#64748b; font-weight:600;">🔖 Badges dynamiques (haut-droit) &mdash; ex: Nouveau, Promo, -20%</label>
+                                        <div id="badges-img-container">
+                                            <!-- Vide par défaut pour un nouveau produit -->
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addBadgeImgRow()">
+                                            <i class="fa fa-plus"></i> Ajouter une &#233;tiquette
+                                        </button>
+                                        
+                                        <script>
+                                        function addBadgeImgRow() {
+                                            const container = document.getElementById('badges-img-container');
+                                            const div = document.createElement('div');
+                                            div.className = 'row mb-2 align-items-center badge-img-row';
+                                            const idx = 'new_' + Date.now();
+                                            div.innerHTML = `
+                                                <div class="col-md-6">
+                                                    <input type="text" name="badges_img[${idx}][texte]" class="admin-input" placeholder="Texte de l'&#233;tiquette (ex: Bestseller)">
+                                                </div>
+                                                <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem;">
+                                                    <label style="font-size:0.82rem; margin:0;">Couleur :</label>
+                                                    <input type="color" name="badges_img[${idx}][couleur]" value="#10b981" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                                </div>
+                                                <div class="col-md-2 text-right">
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.badge-img-row').remove()"><i class="fa fa-close"></i></button>
+                                                </div>
+                                            `;
+                                            container.appendChild(div);
+                                            badgeImgIndex++;
+                                        }
+                                        </script>
+                                    </div>
+                                    <!-- ═══════════════════════════════════════════════════════ -->
+
                                     <div class="row">
                                      <div class="col-md-6">
                                       <div class="admin-form-group">
