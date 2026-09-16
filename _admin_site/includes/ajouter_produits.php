@@ -745,11 +745,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                         </button>
                                         
                                         <script>
+                                        let badgeCounter = 1000;
                                         function addBadgeImgRow() {
                                             const container = document.getElementById('badges-img-container');
                                             const div = document.createElement('div');
                                             div.className = 'row mb-2 align-items-center badge-img-row';
-                                            const idx = 'new_' + Date.now();
+                                            badgeCounter++;
+                                            const idx = badgeCounter;
                                             div.innerHTML = `
                                                 <div class="col-md-6">
                                                     <input type="text" name="badges_img[${idx}][texte]" class="admin-input" placeholder="Texte de l'&#233;tiquette (ex: Bestseller)">
