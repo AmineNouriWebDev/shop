@@ -41,13 +41,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
 	
 	// Badges dynamiques à droite
 	$badges_droite = [];
-	if (isset($_POST['badges_img']) && is_array($_POST['badges_img'])) {
-	    foreach ($_POST['badges_img'] as $b) {
-	        if (!empty(trim($b['texte']))) {
-	            $badges_droite[] = [
-	                'texte' => trim($b['texte']),
-	                'couleur' => trim($b['couleur'])
-	            ];
+	if (!empty($_POST['badges_droite_json_val'])) {
+	    $decoded = json_decode($_POST['badges_droite_json_val'], true);
+	    if (is_array($decoded)) {
+	        foreach ($decoded as $b) {
+	            $txt = isset($b['texte']) ? trim($b['texte']) : '';
+	            $col = isset($b['couleur']) ? trim($b['couleur']) : '#10b981';
+	            if (!empty($txt)) {
+	                $badges_droite[] = [
+	                    'texte' => $txt,
+	                    'couleur' => $col
+	                ];
+	            }
 	        }
 	    }
 	}
@@ -627,6 +632,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                                 if (document.getElementById('list-carac')) {
                                                     observer.observe(document.getElementById('list-carac'), { childList: true });
                                                 }
+                                                $('form').on('submit', function() {
+                                                    var badges = [];
+                                                    $('.badge-img-row').each(function() {
+                                                        var txt = $(this).find('input[name="badge_texte_temp"]').val();
+                                                        var col = $(this).find('input[name="badge_couleur_temp"]').val();
+                                                        if (txt && txt.trim() !== '') {
+                                                            badges.push({texte: txt.trim(), couleur: col});
+                                                        }
+                                                    });
+                                                    $('#badges_droite_json_val').val(JSON.stringify(badges));
+                                                });
                                             }
                                         }, 100);
                                     });
@@ -745,20 +761,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                         </button>
                                         
                                         <script>
-                                        let badgeCounter = 1000;
                                         function addBadgeImgRow() {
                                             const container = document.getElementById('badges-img-container');
                                             const div = document.createElement('div');
                                             div.className = 'row mb-2 align-items-center badge-img-row';
-                                            badgeCounter++;
-                                            const idx = badgeCounter;
                                             div.innerHTML = `
                                                 <div class="col-md-6">
-                                                    <input type="text" name="badges_img[${idx}][texte]" class="admin-input" placeholder="Texte de l'&#233;tiquette (ex: Bestseller)">
+                                                    <input type="text" name="badge_texte_temp" class="admin-input" placeholder="Texte de l'&#233;tiquette (ex: Bestseller)">
                                                 </div>
                                                 <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem;">
                                                     <label style="font-size:0.82rem; margin:0;">Couleur :</label>
-                                                    <input type="color" name="badges_img[${idx}][couleur]" value="#10b981" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                                    <input type="color" name="badge_couleur_temp" value="#10b981" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
                                                 </div>
                                                 <div class="col-md-2 text-right">
                                                     <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.badge-img-row').remove()"><i class="fa fa-close"></i></button>
@@ -829,6 +842,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajout' )
                                         <button type="submit" class="admin-btn admin-btn-primary">Enregistrer</button>
                                         <button type="reset" class="admin-btn admin-btn-ghost" onclick="location.href='index.php?r=produits'">Annuler</button>
                                         <input name="action" type="hidden" id="action" value="ajout">
+                                        <input type="hidden" name="badges_droite_json_val" id="badges_droite_json_val" value="">
                                     </div>
                                 </form>
                             </div>

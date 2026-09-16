@@ -79,15 +79,18 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
     // Badges dynamiques à droite
     $connexion = ouvrirCnx();
     $badges_droite = [];
-    if (isset($_POST['badges_img']) && is_array($_POST['badges_img'])) {
-        foreach ($_POST['badges_img'] as $b) {
-            $txt = isset($b['texte']) ? trim($b['texte']) : '';
-            $col = isset($b['couleur']) ? trim($b['couleur']) : '#10b981';
-            if (!empty($txt)) {
-                $badges_droite[] = [
-                    'texte' => $txt,
-                    'couleur' => $col
-                ];
+    if (!empty($_POST['badges_droite_json_val'])) {
+        $decoded = json_decode($_POST['badges_droite_json_val'], true);
+        if (is_array($decoded)) {
+            foreach ($decoded as $b) {
+                $txt = isset($b['texte']) ? trim($b['texte']) : '';
+                $col = isset($b['couleur']) ? trim($b['couleur']) : '#10b981';
+                if (!empty($txt)) {
+                    $badges_droite[] = [
+                        'texte' => $txt,
+                        'couleur' => $col
+                    ];
+                }
             }
         }
     }
@@ -95,7 +98,7 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
     $badges_droite_json = mysqli_real_escape_string($connexion, $raw_json);
     
     // Debug
-    file_put_contents(__DIR__.'/debug_badges.txt', print_r($_POST['badges_img'] ?? 'No badges_img', true) . "\nJSON: " . $raw_json . "\nEscaped: " . $badges_droite_json);
+    file_put_contents(__DIR__.'/debug_badges.txt', print_r($_POST['badges_droite_json_val'] ?? 'No badges json', true) . "\nJSON: " . $raw_json . "\nEscaped: " . $badges_droite_json);
     // ─────────────────────────────────────────────────────────────────────
     
     // SEO: Handle link change and archive old one for 301 redirection
@@ -439,9 +442,21 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                         });
                                         $('#variations_json').val(JSON.stringify(variations));
                                         
+                                        // Serialization des badges droits
+                                        var badges = [];
+                                        $('.badge-img-row').each(function() {
+                                            var txt = $(this).find('input[name="badge_texte_temp"]').val();
+                                            var col = $(this).find('input[name="badge_couleur_temp"]').val();
+                                            if (txt && txt.trim() !== '') {
+                                                badges.push({texte: txt.trim(), couleur: col});
+                                            }
+                                        });
+                                        $('#badges_droite_json_val').val(JSON.stringify(badges));
+                                        
                                         return true;
                                     }
                                     </script>
+                                    <input type="hidden" name="badges_droite_json_val" id="badges_droite_json_val" value="">
                                     <div class="admin-form-group">
                                         <label>Titre <span class="text-danger">*</span></label>
                                         <div class="controls">
@@ -1162,24 +1177,22 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                         <label style="font-size:0.82rem; color:#64748b; font-weight:600;">🔖 Badges dynamiques (haut-droit) — ex: Nouveau, Promo, -20%</label>
                                         <div id="badges-img-container">
                                             <?php
-                                            $badgeImgIndex = 0;
                                             foreach ($ex_badges_arr as $badge) {
                                                 $b_txt = htmlspecialchars($badge['texte'] ?? '');
                                                 $b_col = htmlspecialchars($badge['couleur'] ?? '#10b981');
                                                 echo '
                                                 <div class="row mb-2 align-items-center badge-img-row">
                                                     <div class="col-md-6">
-                                                        <input type="text" name="badges_img['.$badgeImgIndex.'][texte]" value="'.$b_txt.'" class="admin-input" placeholder="Texte de l\'étiquette">
+                                                        <input type="text" name="badge_texte_temp" value="'.$b_txt.'" class="admin-input" placeholder="Texte de l\'étiquette">
                                                     </div>
                                                     <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem;">
                                                         <label style="font-size:0.82rem; margin:0;">Couleur :</label>
-                                                        <input type="color" name="badges_img['.$badgeImgIndex.'][couleur]" value="'.$b_col.'" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                                        <input type="color" name="badge_couleur_temp" value="'.$b_col.'" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
                                                     </div>
                                                     <div class="col-md-2 text-right">
                                                         <button type="button" class="btn btn-sm btn-danger" onclick="this.closest(\'.badge-img-row\').remove()"><i class="fa fa-close"></i></button>
                                                     </div>
                                                 </div>';
-                                                $badgeImgIndex++;
                                             }
                                             ?>
                                         </div>
@@ -1188,20 +1201,17 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                         </button>
 
                                         <script>
-                                        let badgeCounter = 1000;
                                         function addBadgeImgRow() {
                                             const container = document.getElementById('badges-img-container');
                                             const div = document.createElement('div');
                                             div.className = 'row mb-2 align-items-center badge-img-row';
-                                            badgeCounter++;
-                                            const idx = badgeCounter;
                                             div.innerHTML = `
                                                 <div class="col-md-6">
-                                                    <input type="text" name="badges_img[${idx}][texte]" class="admin-input" placeholder="Texte de l'étiquette (ex: Bestseller)">
+                                                    <input type="text" name="badge_texte_temp" class="admin-input" placeholder="Texte de l'étiquette (ex: Bestseller)">
                                                 </div>
                                                 <div class="col-md-4" style="display:flex; align-items:center; gap:0.5rem;">
                                                     <label style="font-size:0.82rem; margin:0;">Couleur :</label>
-                                                    <input type="color" name="badges_img[${idx}][couleur]" value="#10b981" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
+                                                    <input type="color" name="badge_couleur_temp" value="#10b981" class="admin-input" style="width:50px; height:36px; padding:2px; cursor:pointer;">
                                                 </div>
                                                 <div class="col-md-2 text-right">
                                                     <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.badge-img-row').remove()"><i class="fa fa-close"></i></button>
