@@ -189,10 +189,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'mod' )
                                             <select name="type_section" id="type_section_select" onchange="toggleProductSettings()" required class="admin-input">
                                                 <option value="0" selected="selected">-- Selectionnez  --</option>
                                                  <?php
-            	                                 $req = 'SELECT * FROM `liste_sections` ORDER BY `id` ASC';
-            	                                 $res = executeRequete($req);
-            	                                  while ($data = mysqli_fetch_array($res)) { ?>
-        	                                        <option value="<?php echo $data['id']; ?>" <?php if(typeSectionBloc($_GET['id'])==$data['id']) echo "selected"; ?>><?php echo afficheChamp($data['titre']); ?></option>
+                                                 // Auto-patch: Assure l'existence des types de section Témoignages et Screenshots
+                                                 $connexion_patch = ouvrirCnx();
+                                                 mysqli_query($connexion_patch, "INSERT IGNORE INTO `liste_sections` (`id`, `titre`, `etat`) VALUES (11, 'Témoignages', '1'), (12, 'Screenshots', '1')");
+                                                 
+            	                                 $req_sec = 'SELECT * FROM `liste_sections` ORDER BY `id` ASC';
+            	                                 $res_sec = executeRequete($req_sec);
+            	                                  while ($data_sec = mysqli_fetch_array($res_sec)) { ?>
+        	                                        <option value="<?php echo $data_sec['id']; ?>" <?php if(typeSectionBloc($_GET['id'])==$data_sec['id']) echo "selected"; ?>><?php echo afficheChamp($data_sec['titre']); ?></option>
         	                                      <?php } ?> 
                                             </select>
                                         </div>

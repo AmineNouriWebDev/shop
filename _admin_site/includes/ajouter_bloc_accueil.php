@@ -161,6 +161,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajt' )
                                             <select name="type_section" id="type_section_select" onchange="toggleProductSettings()" required class="admin-input">
                                                 <option value="0" selected="selected">-- Selectionnez  --</option>
                                                  <?php
+                                                 // Auto-patch: Assure l'existence des types de section Témoignages et Screenshots
+                                                 $connexion_patch = ouvrirCnx();
+                                                 mysqli_query($connexion_patch, "INSERT IGNORE INTO `liste_sections` (`id`, `titre`, `etat`) VALUES (11, 'Témoignages', '1'), (12, 'Screenshots', '1')");
+                                                 
             	                                 $req = 'SELECT * FROM `liste_sections` ORDER BY `id` ASC';
             	                                 $res = executeRequete($req);
             	                                  while ($data = mysqli_fetch_array($res)) { ?>

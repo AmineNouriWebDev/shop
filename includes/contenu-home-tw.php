@@ -983,6 +983,299 @@
   </div>
   <div class="hp-divider"></div>
 
+  <?php elseif ($type_bloc == '11'): // ── Témoignages (Testimonials) ──
+    $req_sc = "SELECT * FROM `liste_section_content` WHERE idbloc='$bloc_id'";
+    $res_sc = executeRequete($req_sc);
+    $sc_items_original = []; 
+    while ($sc = mysqli_fetch_array($res_sc)) $sc_items_original[] = $sc;
+    // Duplicate for seamless marquee if there are items
+    $sc_items = array_merge($sc_items_original, $sc_items_original);
+  ?>
+  <?php if (!empty($sc_items_original)): ?>
+  <style>
+    .testimonial-marquee-wrapper {
+      overflow: hidden;
+      width: 100%;
+      padding: 1rem 0 2rem 0;
+      position: relative;
+    }
+    /* Gradient masks for smooth fade in/out on edges */
+    .testimonial-marquee-wrapper::before,
+    .testimonial-marquee-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 50px;
+      height: 100%;
+      z-index: 2;
+    }
+    .testimonial-marquee-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--shop-bg, #fff), transparent);
+    }
+    .testimonial-marquee-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--shop-bg, #fff), transparent);
+    }
+    .testimonial-marquee-track {
+      display: flex;
+      gap: 2rem;
+      width: max-content;
+      animation: testimonial-scroll 30s linear infinite;
+    }
+    .testimonial-marquee-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes testimonial-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 1rem)); }
+    }
+    .testimonial-card {
+      flex: 0 0 auto;
+      width: 350px;
+      background: var(--shop-bg-alt, #f8fafc);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--color-border, #e2e8f0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 640px) {
+      .testimonial-card { width: 300px; padding: 1.5rem; }
+    }
+  </style>
+
+  <div class="<?php echo $section_class; ?>" id="<?php echo ancreBloc($bloc_id); ?>" style="overflow: hidden;">
+    <div class="hp-container">
+      <?php if (affichageTitreBloc($bloc_id) == '1'): ?>
+        <div class="hp-section-header" style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:3rem;">
+          <h2 class="hp-section-title" style="margin:0; padding:0; justify-content:center;"><?php echo titreBloc($bloc_id); ?></h2>
+          <?php $contenu_bloc = htmlspecialchars_decode(stripslashes($bloc['contenu'] ?? '')); if(trim(strip_tags($contenu_bloc)) != ''): ?>
+            <p style="color:var(--shop-text-secondary); max-width:600px; margin:1rem auto 0; font-size:1.1rem; line-height:1.6;"><?php echo strip_tags($contenu_bloc); ?></p>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      <div class="testimonial-marquee-wrapper">
+        <div class="testimonial-marquee-track">
+          <?php foreach ($sc_items as $sci):
+              $sci_img = !empty($sci['photo']) ? 'media/site/' . $sci['photo'] : 'https://ui-avatars.com/api/?name='.urlencode($sci['titre'] ?? 'User').'&background=random';
+              $sci_nom = !empty($sci['titre']) ? $sci['titre'] : 'Client satisfait';
+              $sci_avis = !empty($sci['contenu']) ? strip_tags(htmlspecialchars_decode(stripslashes($sci['contenu']))) : '';
+              $sci_metier = !empty($sci['lien']) ? $sci['lien'] : '';
+              $sci_pays = !empty($sci['titre_bouton']) ? $sci['titre_bouton'] : '';
+          ?>
+          <div class="testimonial-card">
+            
+            <!-- Stars -->
+            <div style="display:flex; gap:0.25rem; color:#f59e0b; margin-bottom:1.5rem;">
+              <?php for($i=0; $i<5; $i++): ?>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <?php endfor; ?>
+            </div>
+
+            <!-- Review Text -->
+            <p style="font-size:1.05rem; line-height:1.6; color:var(--shop-text-main, #334155); margin-bottom:2rem; flex-grow:1; font-style:italic;">
+              "<?php echo htmlspecialchars($sci_avis); ?>"
+            </p>
+
+            <!-- Customer Info -->
+            <div style="display:flex; align-items:center; gap:1rem; border-top:1px solid var(--color-border, #e2e8f0); padding-top:1.5rem;">
+              <img src="<?php echo htmlspecialchars($sci_img); ?>" alt="<?php echo htmlspecialchars($sci_nom); ?>" style="width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--shop-primary, #3b82f6);">
+              <div style="display:flex; flex-direction:column; min-width:0;">
+                <span style="font-weight:700; font-size:1.05rem; color:var(--shop-text-dark, #1e293b); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?php echo htmlspecialchars($sci_nom); ?></span>
+                
+                <?php if($sci_metier || $sci_pays): ?>
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:0.4rem; font-size:0.85rem; color:var(--shop-text-secondary, #64748b); font-weight:500; margin-top:0.2rem;">
+                  <?php if($sci_metier): ?>
+                    <span style="display:flex; align-items:center; gap:0.2rem;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                      <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="<?php echo htmlspecialchars($sci_metier); ?>"><?php echo htmlspecialchars($sci_metier); ?></span>
+                    </span>
+                  <?php endif; ?>
+                  
+                  <?php if($sci_metier && $sci_pays): ?>
+                    <span style="color:#cbd5e1;">|</span>
+                  <?php endif; ?>
+
+                  <?php if($sci_pays): ?>
+                    <span style="display:flex; align-items:center; gap:0.2rem;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;" title="<?php echo htmlspecialchars($sci_pays); ?>"><?php echo htmlspecialchars($sci_pays); ?></span>
+                    </span>
+                  <?php endif; ?>
+                </div>
+                <?php endif; ?>
+
+              </div>
+            </div>
+
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+
+  <?php elseif ($type_bloc == '12'): // ── Screenshots ──
+    $req_sc = "SELECT * FROM `liste_section_content` WHERE idbloc='$bloc_id'";
+    $res_sc = executeRequete($req_sc);
+    $sc_items_original = []; 
+    while ($sc = mysqli_fetch_array($res_sc)) $sc_items_original[] = $sc;
+    // Duplicate for seamless marquee if there are items
+    $sc_items = array_merge($sc_items_original, $sc_items_original);
+  ?>
+  <?php if (!empty($sc_items_original)): ?>
+  <style>
+    .screenshot-marquee-wrapper {
+      overflow: hidden;
+      width: 100%;
+      padding: 1rem 0 3rem 0;
+      position: relative;
+    }
+    .screenshot-marquee-wrapper::before,
+    .screenshot-marquee-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 50px;
+      height: 100%;
+      z-index: 2;
+    }
+    .screenshot-marquee-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--shop-bg, #fff), transparent);
+    }
+    .screenshot-marquee-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--shop-bg, #fff), transparent);
+    }
+    .screenshot-marquee-track {
+      display: flex;
+      gap: 3rem;
+      width: max-content;
+      animation: screenshot-scroll 35s linear infinite;
+    }
+    .screenshot-marquee-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes screenshot-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 1.5rem)); }
+    }
+    
+    /* iPhone style mockup */
+    .phone-mockup {
+      flex: 0 0 auto;
+      width: 260px;
+      height: 530px;
+      background: #000;
+      border-radius: 40px;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15), inset 0 0 0 10px #1a1a1a;
+      border: 2px solid #333;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .phone-mockup:hover {
+      transform: translateY(-10px) scale(1.02);
+      z-index: 5;
+    }
+    /* Dynamic Island / Notch */
+    .phone-notch {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 24px;
+      background: #000;
+      border-radius: 12px;
+      z-index: 10;
+    }
+    /* Hardware buttons */
+    .phone-mockup::before {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: 100px;
+      width: 2px;
+      height: 25px;
+      background: #444;
+      border-radius: 2px 0 0 2px;
+    }
+    .phone-mockup::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: 120px;
+      width: 2px;
+      height: 40px;
+      background: #444;
+      border-radius: 0 2px 2px 0;
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 30px;
+      overflow: hidden;
+      background: #fff;
+      margin: 10px; /* Leaves space for the bezel */
+      position: relative;
+    }
+    .phone-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    @media (max-width: 640px) {
+      .phone-mockup { width: 220px; height: 460px; border-radius: 32px; box-shadow: inset 0 0 0 8px #1a1a1a; }
+      .phone-screen { border-radius: 24px; margin: 8px; }
+      .phone-notch { width: 60px; height: 18px; top: 12px; }
+    }
+  </style>
+
+  <div class="<?php echo $section_class; ?>" id="<?php echo ancreBloc($bloc_id); ?>" style="overflow: hidden; padding:4rem 0;">
+    <div class="hp-container">
+      <?php if (affichageTitreBloc($bloc_id) == '1'): ?>
+        <div class="hp-section-header" style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:3.5rem;">
+          <h2 class="hp-section-title" style="margin:0; padding:0; justify-content:center;"><?php echo titreBloc($bloc_id); ?></h2>
+          <?php $contenu_bloc = htmlspecialchars_decode(stripslashes($bloc['contenu'] ?? '')); if(trim(strip_tags($contenu_bloc)) != ''): ?>
+            <p style="color:var(--shop-text-secondary); max-width:600px; margin:1rem auto 0; font-size:1.1rem; line-height:1.6;"><?php echo strip_tags($contenu_bloc); ?></p>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+      <div class="screenshot-marquee-wrapper">
+        <div class="screenshot-marquee-track">
+          <?php foreach ($sc_items as $sci):
+              if(empty($sci['photo']) && empty($sci['lien_url'])) continue;
+              $sci_img = !empty($sci['photo']) ? 'media/site/' . $sci['photo'] : $sci['lien_url'];
+          ?>
+          <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <img src="<?php echo htmlspecialchars($sci_img); ?>" alt="Screenshot Client">
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+
   <?php endif; // end type checks
   endwhile; // end blocs loop
   ?>

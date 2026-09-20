@@ -42,7 +42,12 @@ if(isset($_POST["action"])){
         $query .= " AND ( pr.titre LIKE '%$s%' OR pr.link LIKE '%$s%' )";
     }
     if(isset($_POST["marque"]) && $_POST["marque"] != ''){
-        $query .= " AND ( pr.marque LIKE '%".idraisonMarque($_POST["marque"])."%' )";
+        $m_id = idraisonMarque($_POST["marque"]);
+        if(!empty($m_id)) {
+            $query .= " AND pr.marque = '".$m_id."'";
+        } else {
+            $query .= " AND 1=0"; // Marque non trouvée
+        }
     }
     if(isset($_POST["categoryByTitre"]) && $_POST["categoryByTitre"] != ''){
         $ctg = $_POST["categoryByTitre"];
