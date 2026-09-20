@@ -1124,6 +1124,11 @@ if (isset($_POST['action']) && $_POST['action'] == "mod") {
                                                 <span class="custom-control-indicator"></span>
                                                 <span class="custom-control-description">En Rupture</span>
                                             </label>
+                                            <label class="custom-control custom-radio">
+                                                <input id="radio3" name="etat_stock" type="radio" <?php if( etatStockProduits($_GET['id']) == '2' ) echo "checked"; ?> value="2" class="custom-control-input">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">Sur commande</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <!-- ═══════════════════════════════════════════════════════ -->

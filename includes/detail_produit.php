@@ -32,9 +32,20 @@
                                     $d_etiq = mysqli_fetch_assoc($q_etiq);
                                     
                                     // Ruban stock
-                                    $etiq_stock_color  = !empty($d_etiq['stock_label_couleur']) ? htmlspecialchars($d_etiq['stock_label_couleur']) : '#e53e3e';
-                                    $etiq_in_stock     = isset($d_etiq['etat_stock']) ? ((int)$d_etiq['etat_stock'] === 1) : true;
-                                    $etiq_stock_texte  = !empty(trim($d_etiq['stock_label_texte'] ?? '')) ? htmlspecialchars(trim($d_etiq['stock_label_texte'])) : ($etiq_in_stock ? 'En Stock' : 'Rupture');
+                                    $etat_stock_val = isset($d_etiq['etat_stock']) ? (int)$d_etiq['etat_stock'] : 1;
+                                    if ($etat_stock_val === 1) {
+                                        $fallback_text = 'En Stock';
+                                        $fallback_color = '#10b981';
+                                    } elseif ($etat_stock_val === 2) {
+                                        $fallback_text = 'Sur commande';
+                                        $fallback_color = '#f59e0b';
+                                    } else {
+                                        $fallback_text = 'Rupture';
+                                        $fallback_color = '#ef4444';
+                                    }
+                                    
+                                    $etiq_stock_color  = !empty($d_etiq['stock_label_couleur']) ? htmlspecialchars($d_etiq['stock_label_couleur']) : $fallback_color;
+                                    $etiq_stock_texte  = !empty(trim($d_etiq['stock_label_texte'] ?? '')) ? htmlspecialchars(trim($d_etiq['stock_label_texte'])) : $fallback_text;
                                     
                                     // Badges droite dynamiques
                                     $badges_droite = json_decode($d_etiq['badges_droite_json'] ?? '[]', true) ?: [];
@@ -61,46 +72,49 @@
                                     .prod-ribbon-wrap {
                                         position: absolute;
                                         top: 0; left: 0;
-                                        width: 90px; height: 90px;
+                                        width: 120px; height: 120px;
                                         overflow: hidden;
                                         z-index: 10;
                                         pointer-events: none;
+                                        border-radius: 1rem 0 0 0;
                                     }
                                     .prod-ribbon {
                                         position: absolute;
-                                        top: 18px; left: -24px;
-                                        width: 110px;
+                                        top: 25px; left: -30px;
+                                        width: 160px;
                                         text-align: center;
-                                        font-size: 0.65rem;
-                                        font-weight: 700;
+                                        font-size: 0.85rem;
+                                        font-weight: 800;
                                         color: #fff;
-                                        letter-spacing: 0.04em;
+                                        letter-spacing: 0.05em;
                                         text-transform: uppercase;
-                                        padding: 5px 0;
+                                        padding: 7px 0;
                                         transform: rotate(-45deg);
-                                        box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+                                        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
                                     }
-                                    /* ── Badges haut-droit ── */
+                                    /* ── Badges haut-droit (Effet Couverture/Bookmark) ── */
                                     .prod-badges-right {
                                         position: absolute;
-                                        top: 0.6rem; right: 0.6rem;
+                                        top: 2.5rem; right: 0;
                                         display: flex;
                                         flex-direction: column;
-                                        gap: 0.35rem;
+                                        gap: 0.6rem;
                                         z-index: 10;
                                         pointer-events: none;
+                                        align-items: flex-end;
                                     }
                                     .prod-badge-pill {
                                         display: inline-block;
                                         color: #fff;
-                                        font-size: 0.68rem;
+                                        font-size: 0.8rem;
                                         font-weight: 700;
-                                        letter-spacing: 0.03em;
+                                        letter-spacing: 0.05em;
                                         text-transform: uppercase;
-                                        padding: 4px 10px;
-                                        border-radius: 99px;
-                                        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+                                        padding: 6px 16px 6px 18px;
+                                        border-radius: 20px 0 0 20px;
+                                        box-shadow: -3px 4px 10px rgba(0,0,0,0.25);
                                         white-space: nowrap;
+                                        position: relative;
                                     }
                                     </style>
 
@@ -294,11 +308,31 @@
                                     </div>
                                 <?php endif; /* end rating block */ ?>
 
-                                <?php if ($etatStock == '1') { ?>
-                                    <p class="avaibility"><i class="fa fa-circle"></i> En Stock</p>
-                                <?php } else { ?>
-                                    <p class="avaibility"><i class="fa fa-circle rupture"></i> En Rupture</p>
-                                <?php } ?>
+                                <?php
+                                $badge_bg = '';
+                                $badge_color = '';
+                                $badge_border = '';
+                                $badge_text = '';
+                                $badge_icon = '';
+                                
+                                if ($etatStock == '1') {
+                                    $badge_bg = '#d1fae5'; $badge_color = '#047857'; $badge_border = '#a7f3d0';
+                                    $badge_text = 'En Stock';
+                                    $badge_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+                                } elseif ($etatStock == '2') {
+                                    $badge_bg = '#fef3c7'; $badge_color = '#b45309'; $badge_border = '#fde68a';
+                                    $badge_text = 'Sur commande';
+                                    $badge_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
+                                } else {
+                                    $badge_bg = '#fee2e2'; $badge_color = '#b91c1c'; $badge_border = '#fecaca';
+                                    $badge_text = 'En Rupture';
+                                    $badge_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+                                }
+                                ?>
+                                <div style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.8rem; border-radius: 2rem; font-weight: 600; font-size: 0.85rem; margin-bottom: 1rem; background-color: <?php echo $badge_bg; ?>; color: <?php echo $badge_color; ?>; border: 1px solid <?php echo $badge_border; ?>; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                    <?php echo $badge_icon; ?>
+                                    <span><?php echo $badge_text; ?></span>
+                                </div>
 
                                 <!-- Desktop Price moved to the right column context (below) -->
 
@@ -710,11 +744,16 @@
                                         class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3 fs-6"
                                         style="border-radius:1rem" onclick="handleAddCart(<?php echo $id; ?>);"><i
                                             class="fa fa-shopping-bag me-2"></i> ACHETER</button>
+                                <?php } elseif ($etatStock == '2') { ?>
+                                    <button type="button" name="addtocart" value="5"
+                                        class="btn-primary-tw w-100 border-0 shadow-none text-uppercase py-3 fs-6"
+                                        style="border-radius:1rem; background-color:#f59e0b;" onclick="handleAddCart(<?php echo $id; ?>);"><i
+                                            class="fa fa-shopping-bag me-2"></i> COMMANDER</button>
                                 <?php } else { ?>
                                     <button type="button" name="addtocart" value="5"
                                         class="btn-secondary-tw w-100 border-0 text-uppercase py-3 fs-6"
                                         style="border-radius:1rem" onclick="handleAddCart(<?php echo $id; ?>);" disabled><i
-                                            class="fa fa-shopping-bag me-2"></i> ACHETER</button>
+                                            class="fa fa-shopping-bag me-2"></i> RUPTURE</button>
                                 <?php } ?>
                             </form>
                             <div
@@ -1088,7 +1127,9 @@
                                                 </style>
                                                 <div class="payment-grid">
                                                     <?php
-                                                    if (typeProduits($id) == "A") {
+                                                    if ($etatStock == '2') {
+                                                        $requetepay = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1" AND `id` = 9'; // Assuming 9 is Cash on delivery
+                                                    } elseif (typeProduits($id) == "A") {
                                                         $requetepay = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1" AND id <>"9"';
                                                     } else {
                                                         $requetepay = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1"';
@@ -1541,14 +1582,20 @@ if ($sim_count > 0):
                                 </div>
 
                                 <div class="hp-card-btn-row">
-                                    <button type="button" onclick="addToCart(<?php echo intval($sp_id); ?>,'1')" <?php echo (!$sp_stock ? 'disabled' : ''); ?> class="hp-btn-cart">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2.5">
-                                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                                            <path d="M16 10a4 4 0 0 1-8 0" />
-                                        </svg>
-                                        <?php echo ($sp_stock ? 'Ajouter' : 'Rupture'); ?>
-                                    </button>
+                                    <?php
+                                    $etat_s_sp = (int)etatStockProduits($sp_id);
+                                    if($etat_s_sp === 1) {
+                                    ?>
+                                        <button type="button" onclick="addToCart(<?php echo intval($sp_id); ?>,'1')" class="hp-btn-cart">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><path d="M16 10a4 4 0 0 1-8 0" /></svg> Ajouter
+                                        </button>
+                                    <?php } elseif($etat_s_sp === 2) { ?>
+                                        <button type="button" onclick="addToCart(<?php echo intval($sp_id); ?>,'1')" class="hp-btn-cart" style="background:#f59e0b; border-color:#f59e0b; color:#fff;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><path d="M16 10a4 4 0 0 1-8 0" /></svg> Commander
+                                        </button>
+                                    <?php } else { ?>
+                                        <button disabled class="hp-btn-cart">Rupture</button>
+                                    <?php } ?>
 
                                     <button class="hp-btn-compare-mobile compare-ol"
                                         data-compare-id="<?php echo intval($sp_id); ?>"

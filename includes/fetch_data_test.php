@@ -71,7 +71,7 @@ if(isset($_POST["action"])){
     }
     
     if($sort === 'stock') {
-        $query .= " AND pr.etat_stock = '1'";
+        $query .= " AND pr.etat_stock IN ('1', '2')";
     }
 
     if(isset($_POST["minimum_price"]) && $_POST["minimum_price"] != '' && isset($_POST["maximum_price"]) && $_POST["maximum_price"] != ''){
@@ -111,7 +111,8 @@ if(isset($_POST["action"])){
        HELPERS
     ======================================================== */
     function renderGridCard($id_p, $link_p, $qty){
-        $stock = (etatStockProduits($id_p) == '1');
+        $etat_s = (int)etatStockProduits($id_p);
+        $stock = ($etat_s === 1 || $etat_s === 2);
         $titre = titreProduits($id_p);
         $photo = photoProduitsSite($id_p);
         
@@ -176,8 +177,10 @@ if(isset($_POST["action"])){
 
         /* Buttons row */
         $o .= '<div class="hp-card-btn-row">';
-        if($stock){
+        if($etat_s === 1){
             $o .= '<button type="button" onclick="addToCart('.intval($id_p).',\'1\')" class="hp-btn-cart"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Ajouter</button>';
+        }elseif($etat_s === 2){
+            $o .= '<button type="button" onclick="addToCart('.intval($id_p).',\'1\')" class="hp-btn-cart" style="background:#f59e0b; border-color:#f59e0b; color:#fff;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Commander</button>';
         }else{
             $o .= '<button disabled class="hp-btn-cart">Rupture</button>';
         }
@@ -197,7 +200,8 @@ if(isset($_POST["action"])){
 
 
     function renderListCard($id_p, $link_p, $qty){
-        $stock = (etatStockProduits($id_p) == '1');
+        $etat_s = (int)etatStockProduits($id_p);
+        $stock = ($etat_s === 1 || $etat_s === 2);
         
         $l_pv  = prixVenteProduits($id_p);
         $l_pp  = prixPromoProduits($id_p);
@@ -231,9 +235,13 @@ if(isset($_POST["action"])){
         $o .= '<div class="list-body">';
         $o .= '<a href="'.lienProduits($link_p).'" class="list-title">'.titreProduits($id_p).'</a>';
         $o .= '<div class="list-desc">'.tronquer(strip_tags(courtContenuProduits($id_p)),200).'</div>';
-        $o .= $stock
-            ? '<p class="prod-stock in-stock"><i class="fa fa-circle"></i> En Stock</p>'
-            : '<p class="prod-stock out-stock"><i class="fa fa-circle"></i> En Rupture</p>';
+        if($etat_s === 1) {
+            $o .= '<p class="prod-stock in-stock"><i class="fa fa-circle"></i> En Stock</p>';
+        } elseif($etat_s === 2) {
+            $o .= '<p class="prod-stock" style="color: #f59e0b;"><i class="fa fa-circle"></i> Sur commande</p>';
+        } else {
+            $o .= '<p class="prod-stock out-stock"><i class="fa fa-circle"></i> En Rupture</p>';
+        }
         $o .= '</div>';
         /* Right */
         $o .= '<div class="list-right">';
@@ -250,8 +258,10 @@ if(isset($_POST["action"])){
         }
         $o .= '</div>';
         $o .= '<a href="'.lienProduits($link_p).'" class="btn-view w-block"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/></svg> Voir détail</a>';
-        if($stock){
+        if($etat_s === 1){
             $o .= '<button type="button" onclick="addToCart('.afficheChamp($id_p).','.$qty.')" class="btn-cart w-block"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Ajouter</button>';
+        }elseif($etat_s === 2){
+            $o .= '<button type="button" onclick="addToCart('.afficheChamp($id_p).','.$qty.')" class="btn-cart w-block" style="background:#f59e0b; border-color:#f59e0b;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Commander</button>';
         }else{
             $o .= '<button disabled class="btn-cart w-block btn-cart-disabled">Rupture de stock</button>';
         }

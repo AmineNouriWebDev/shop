@@ -584,7 +584,7 @@
     elseif($tri_type == 'prix_desc') $order_sql = "is_manual DESC, prix_vente DESC";
     elseif($tri_type == 'random') $order_sql = "is_manual DESC, RAND()";
 
-    $stock_sql = ($stock_only == 1) ? " AND pr.etat_stock = '1' " : "";
+    $stock_sql = ($stock_only == 1) ? " AND pr.etat_stock IN ('1', '2') " : "";
 
     // Vérifier si la colonne idproduit existe (safe check)
     $has_idproduit = false;
@@ -692,7 +692,8 @@
           $plink = $prod['link'];
           $prix_vente = prixVenteProduits($pid);
           $prix_promo = prixPromoProduits($pid);
-          $in_stock   = (etatStockProduits($pid) == '1');
+          $etat_s     = (int)etatStockProduits($pid);
+          $in_stock   = ($etat_s === 1 || $etat_s === 2);
 
           $flash_info_query = executeRequete("SELECT promo_end_date, is_flash FROM produits WHERE id='$pid'");
           $flash_info = mysqli_fetch_assoc($flash_info_query);
@@ -774,10 +775,11 @@
                   class="hp-btn-cart"
                   onclick="addToCart(<?php echo intval($pid); ?>, '1')"
                   <?php echo (!$in_stock ? 'disabled' : ''); ?>
-                  title="<?php echo ($in_stock ? 'Ajouter au panier' : 'Rupture de stock'); ?>"
+                  <?php if($etat_s === 2) echo 'style="background:#f59e0b; border-color:#f59e0b; color:#fff;"'; ?>
+                  title="<?php echo ($etat_s === 1 ? 'Ajouter au panier' : ($etat_s === 2 ? 'Commander' : 'Rupture de stock')); ?>"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                  <?php echo ($in_stock ? 'Ajouter' : 'Rupture'); ?>
+                  <?php echo ($etat_s === 1 ? 'Ajouter' : ($etat_s === 2 ? 'Commander' : 'Rupture')); ?>
                 </button>
                 <button class="hp-btn-compare-mobile compare-ol" 
                   data-compare-id="<?php echo intval($pid); ?>"

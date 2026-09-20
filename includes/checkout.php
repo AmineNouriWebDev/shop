@@ -117,28 +117,40 @@
 		// ──────────────────────────────────────────────────────────
 		// Best Delivery SOAP API - Création du colis (non-bloquant)
 		// ──────────────────────────────────────────────────────────
-		try {
-		    if (class_exists('SoapClient')) {
-		        require_once(__DIR__ . '/../includes/best_delivery.php');
-		        $clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
-		        $bd_result = bestDelivery_createPickup(
-		            $nom . ' ' . $prenom,
-		            $gouvernorat,
-		            $ville,
-		            $adresse,
-		            $phone,
-		            $globale,
-		            $clean_designation,
-		            $commentaire,
-		            0
-		        );
-		        if (!empty($bd_result['success']) && !empty($bd_result['code_barre'])) {
-		            $barcode = sanitize($bd_result['code_barre']);
-		            executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+		$has_preorder = false;
+		if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
+		    foreach ($_SESSION['panier']['idcart'] as $id_cart_item) {
+		        if (etatStockProduits($id_cart_item) == '2') {
+		            $has_preorder = true;
+		            break;
 		        }
 		    }
-		} catch (Exception $e) {
-		    error_log('[BestDelivery] Erreur non bloquante checkout: ' . $e->getMessage());
+		}
+
+		if (!$has_preorder) {
+		    try {
+		        if (class_exists('SoapClient')) {
+		            require_once(__DIR__ . '/../includes/best_delivery.php');
+		            $clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
+		            $bd_result = bestDelivery_createPickup(
+		                $nom . ' ' . $prenom,
+		                $gouvernorat,
+		                $ville,
+		                $adresse,
+		                $phone,
+		                $globale,
+		                $clean_designation,
+		                $commentaire,
+		                0
+		            );
+		            if (!empty($bd_result['success']) && !empty($bd_result['code_barre'])) {
+		                $barcode = sanitize($bd_result['code_barre']);
+		                executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+		            }
+		        }
+		    } catch (Exception $e) {
+		        error_log('[BestDelivery] Erreur non bloquante checkout: ' . $e->getMessage());
+		    }
 		}
 
 
@@ -568,7 +580,21 @@ foreach($supported_codes as $code) {
 
                             <div class="payment-grid">
                             <?php
-                                $requete = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1"';
+                                $has_preorder_cart = false;
+                                if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
+                                    foreach ($_SESSION['panier']['idcart'] as $id_cart_item) {
+                                        if (etatStockProduits($id_cart_item) == '2') {
+                                            $has_preorder_cart = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if ($has_preorder_cart) {
+                                    $requete = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1" AND `id` = 9'; // Assuming 9 is Paiement à la livraison
+                                } else {
+                                    $requete = 'SELECT * FROM `moyens_paiement` WHERE `etat` = "1" AND `type` ="1"';
+                                }
                                 $res     = executeRequete($requete);
                                 $first = true;
                                while($datapay = mysqli_fetch_array($res)){

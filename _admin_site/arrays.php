@@ -111,9 +111,30 @@ while ($row = mysqli_fetch_assoc($empRecords)) {
 
     // Stock Toggle Button Logic
     $stock_status = intval($row['etat_stock']);
-    $stock_btn_color = ($stock_status === 1) ? '#10B981' : '#EF4444';
-    $stock_btn_text = ($stock_status === 1) ? 'En stock' : 'En rupture';
-    $stock_btn = '<button onclick="toggleStock('.$row['id'].', this)" data-status="'.$stock_status.'" type="button" class="admin-btn btn-sm" style="padding:0.4rem 0.6rem; width: 85px; font-weight:600; font-size:0.75rem; color:#fff; background-color:'.$stock_btn_color.'; border:none; border-radius:0.375rem; transition:background-color 0.2s;" data-tippy-content="Modifier l\'état du stock">'.$stock_btn_text.'</button>';
+    
+    if ($stock_status === 1) {
+        $stock_btn_color = '#10B981';
+        $stock_btn_text = 'En stock';
+    } elseif ($stock_status === 0) {
+        $stock_btn_color = '#EF4444';
+        $stock_btn_text = 'En rupture';
+    } else {
+        $stock_btn_color = '#9CA3AF';
+        $stock_btn_text = '-';
+    }
+    
+    if ($stock_status === 2) {
+        $cmd_btn_color = '#F59E0B';
+        $cmd_btn_text_color = '#fff';
+    } else {
+        $cmd_btn_color = '#e5e7eb';
+        $cmd_btn_text_color = '#6b7280';
+    }
+
+    $stock_btn = '
+    <button id="btn-cmd-'.$row['id'].'" onclick="toggleSurCommande('.$row['id'].', this)" data-status="'.$stock_status.'" type="button" class="admin-btn btn-sm" style="padding:0.4rem 0.6rem; width: 95px; font-weight:600; font-size:0.72rem; color:'.$cmd_btn_text_color.'; background-color:'.$cmd_btn_color.'; border:none; border-radius:0.375rem; transition:all 0.2s;" data-tippy-content="Basculer sur commande">Sur commande</button>
+    <button id="btn-stock-'.$row['id'].'" onclick="toggleStock('.$row['id'].', this)" data-status="'.$stock_status.'" type="button" class="admin-btn btn-sm" style="padding:0.4rem 0.6rem; width: 85px; font-weight:600; font-size:0.75rem; color:#fff; background-color:'.$stock_btn_color.'; border:none; border-radius:0.375rem; transition:background-color 0.2s;" data-tippy-content="Modifier l\'état du stock">'.$stock_btn_text.'</button>
+    ';
 
     $data[] = array(
         "" => '<input type="checkbox" class="sub_chk" data-id="'.$row['id'].'" style="position:relative;left:0;opacity:1">',

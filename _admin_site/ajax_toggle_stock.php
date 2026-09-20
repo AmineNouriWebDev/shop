@@ -12,7 +12,7 @@ $id = intval($_POST['id']);
 $status = intval($_POST['status']);
 
 // Validate status
-if ($status !== 0 && $status !== 1) {
+if ($status !== 0 && $status !== 1 && $status !== 2) {
     echo json_encode(array('success' => false, 'message' => 'Statut invalide'));
     exit;
 }
