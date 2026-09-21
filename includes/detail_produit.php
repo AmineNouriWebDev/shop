@@ -14,7 +14,7 @@
                                     style="border:1px solid var(--shop-border, #e5e7eb); border-radius:1rem; overflow:hidden; background:var(--shop-surface, #fff); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; position:relative;">
 
                                     <?php
-                                    // ── Auto-patch DB : créer colonnes si absentes (exécuté une seule fois) ──
+                                    // -- Auto-patch DB : cr�er colonnes si absentes (ex�cut� une seule fois) --
                                     $connexion_dp = ouvrirCnx();
                                     $dp_cols = [
                                         'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
@@ -27,7 +27,7 @@
                                     ];
                                     foreach($dp_cols as $dc=>$dt){$chk=mysqli_query($connexion_dp,"SHOW COLUMNS FROM `produits` LIKE '$dc'");if(mysqli_num_rows($chk)===0){mysqli_query($connexion_dp,"ALTER TABLE `produits` ADD `$dc` $dt");}}
                                     
-                                    // ── Étiquettes produit ──────────────────────────────────
+                                    // -- �tiquettes produit ----------------------------------
                                     $q_etiq = executeRequete("SELECT etat_stock, stock_label_texte, stock_label_couleur, badges_droite_json, badge1_texte, badge1_couleur, badge2_texte, badge2_couleur FROM `produits` WHERE `id`='$id'");
                                     $d_etiq = mysqli_fetch_assoc($q_etiq);
                                     
@@ -68,7 +68,7 @@
                                     ?>
 
                                     <style>
-                                    /* ── Ruban stock haut-gauche incliné ── */
+                                    /* -- Ruban stock haut-gauche inclin� -- */
                                     .prod-ribbon-wrap {
                                         position: absolute;
                                         top: 0; left: 0;
@@ -92,7 +92,7 @@
                                         transform: rotate(-45deg);
                                         box-shadow: 0 4px 10px rgba(0,0,0,0.25);
                                     }
-                                    /* ── Badges haut-droit (Effet Couverture/Bookmark) ── */
+                                    /* -- Badges haut-droit (Effet Couverture/Bookmark) -- */
                                     .prod-badges-right {
                                         position: absolute;
                                         top: 2.5rem; right: 0;
@@ -118,14 +118,14 @@
                                     }
                                     </style>
 
-                                    <!-- Ruban stock (haut-gauche incliné) -->
+                                    <!-- Ruban stock (haut-gauche inclin�) -->
                                     <div class="prod-ribbon-wrap">
                                         <div class="prod-ribbon" style="background:<?php echo $etiq_stock_color; ?>">
                                             <?php echo $etiq_stock_texte; ?>
                                         </div>
                                     </div>
 
-                                    <!-- Badges haut-droit (non inclinés, dynamiques) -->
+                                    <!-- Badges haut-droit (non inclin�s, dynamiques) -->
                                     <?php if (!empty($badges_droite)): ?>
                                     <div class="prod-badges-right">
                                         <?php foreach ($badges_droite as $badge): ?>
@@ -148,11 +148,11 @@
                                     </div>
                                 </div>
 
-                                <!-- Thumbnails Row — hidden/shown by selectColor() -->
+                                <!-- Thumbnails Row � hidden/shown by selectColor() -->
                                 <div id="thumbnail-container"
                                     style="display:flex; gap:0.625rem; overflow-x:auto; padding-bottom:0.25rem;">
                                     <?php
-                                    /* Main photo — generic (no color) */
+                                    /* Main photo � generic (no color) */
                                     $mainSrc = $photo;
                                     ?>
                                     <button type="button" class="thumb-btn active-thumb" data-color-group="0"
@@ -220,7 +220,7 @@
                                 <?php } ?>
 
                                 <?php
-                                // ── Star Rating Block ─────────────────────────────────
+                                // -- Star Rating Block ---------------------------------
                                 $prod_note = floatval(noteAvisProduits($id));
                                 $prod_nb = intval(nbAvisProduits($id));
                                 $client_logged = !empty($_SESSION['id_client']) ? intval($_SESSION['id_client'])
@@ -283,7 +283,7 @@
                                                 style="font-size:0.78rem; color:var(--shop-text-secondary,#6b7280); display:block; margin-bottom:3px;">
                                                 <?php
                                                 if ($client_logged) {
-                                                    echo $client_vote ? 'Votre note : ' . $client_vote . '/5 — Modifier :' : 'Notez ce produit :';
+                                                    echo $client_vote ? 'Votre note : ' . $client_vote . '/5 � Modifier :' : 'Notez ce produit :';
                                                 } else {
                                                     echo 'Notez ce produit :';
                                                 }
@@ -487,7 +487,7 @@
                                             buttons.forEach(function (btn) {
                                                 var valId = parseInt(btn.getAttribute('data-val-id'));
 
-                                                // ── NEW LOGIC: Is this value part of the variation price system at all? ──
+                                                // -- NEW LOGIC: Is this value part of the variation price system at all? --
                                                 // If it's not in any key of variationsMap, it's a Static Property and should always show.
                                                 var isParticipating = false;
                                                 for (var key in variationsMap) {
@@ -506,7 +506,7 @@
                                                     return;
                                                 }
 
-                                                // ── Participating value: apply hierarchical filtering ──
+                                                // -- Participating value: apply hierarchical filtering --
                                                 // Available if there's a variation with THIS val AND ALL parents
                                                 var isAvailable = false;
                                                 for (var key in variationsMap) {
@@ -568,7 +568,7 @@
                                     }
 
                                     function selectVariation(element) {
-                                        // UI styling — highlight within same group
+                                        // UI styling � highlight within same group
                                         let group = element.closest('.variation-group-row');
                                         group.querySelectorAll('.variation-pill').forEach(el => {
                                             el.classList.remove('active');
@@ -617,7 +617,7 @@
                                         if (pPromo > 0 && pPromo < pVente) {
                                             priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">' + pPromo.toFixed(3) + ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size: 24px; font-weight:500; margin-left:10px;">' + pVente.toFixed(3) + ' DT</span></div>';
                                             let savings = (pVente - pPromo).toFixed(3);
-                                            priceHtml += '<div style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: inline-block;"><i class="fa fa-tag me-1"></i> Économisez ' + savings + ' DT !</div>';
+                                            priceHtml += '<div style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: inline-block;"><i class="fa fa-tag me-1"></i> �conomisez ' + savings + ' DT !</div>';
                                         } else {
                                             priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">' + pVente.toFixed(3) + ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span></div>';
                                         }
@@ -690,7 +690,7 @@
                                 <div class="flash-sale-badge mb-3"
                                     style="background: rgba(255,100,0,0.1); border:1px solid #ffb74d; color: #e65100; border-radius: 12px; padding: 12px; text-align: center; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px;">
                                     <div style="display:flex; align-items:center; gap:8px;"><span
-                                            style="font-size: 1.2rem;">🔥</span> <span>Vente Flash se termine dans :</span>
+                                            style="font-size: 1.2rem;">??</span> <span>Vente Flash se termine dans :</span>
                                     </div>
                                     <span class="flash-countdown text-danger fs-5"
                                         data-end="<?php echo strtotime($p_end); ?>"
@@ -705,7 +705,7 @@
                                         <?php if ($PrixPromo != '0.000') {
                                             echo $PrixPromo . ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size:24px;font-weight:500; margin-left:10px;">' . $PrixVente . ' DT</span>';
                                             $economie = number_format($PrixVente - $PrixPromo, 3, '.', '');
-                                            echo '<div class="economisez-tag shadow-sm d-block mt-2"><i class="fa fa-tag me-1"></i> Économisez ' . $economie . ' DT !</div>';
+                                            echo '<div class="economisez-tag shadow-sm d-block mt-2"><i class="fa fa-tag me-1"></i> �conomisez ' . $economie . ' DT !</div>';
                                         } else {
                                             echo $PrixVente . ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span>';
                                         } ?>
@@ -721,7 +721,7 @@
                                         <span
                                             class="qty-minus text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center"
                                             style="cursor:pointer; width:35px; height:35px; background:var(--shop-bg-alt); font-size:1.5rem; line-height:1;"
-                                            onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;">−</span>
+                                            onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;">-</span>
                                         <input type="number"
                                             class="qty-text border-0 bg-transparent text-center fw-bold fs-5 mx-2"
                                             style="width:50px; outline:none; color:var(--shop-text-primary);" id="qty"
@@ -767,7 +767,7 @@
 
                                     /* Facebook */
                                     // On utilise uniquement le sharer classique.
-                                    // Comme l'application Facebook est en mode Développement, 
+                                    // Comme l'application Facebook est en mode D�veloppement, 
                                     // passer un App ID via dialog/feed bloquerait le partage.
                                     $fbLink = 'https://www.facebook.com/sharer/sharer.php?u=' . $shareUrl;
 
@@ -783,10 +783,10 @@
                                                 // Success on mobile/modern browsers
                                                 navigator.share({
                                                     title: decodedTitle,
-                                                    text: "Découvrez ce produit : " + decodedTitle,
+                                                    text: "D�couvrez ce produit : " + decodedTitle,
                                                     url: decodedUrl
                                                 }).then(() => {
-                                                    console.log('Produit partagé avec succès');
+                                                    console.log('Produit partag� avec succ�s');
                                                 }).catch((error) => {
                                                     console.log('Erreur de partage:', error);
                                                 });
@@ -801,7 +801,7 @@
                                                     document.body.removeChild(dummy);
 
                                                     // Beautifully inform the user
-                                                    alert("Lien du produit copié ! \n\nInstagram ne permettant pas le partage direct d'URL depuis un navigateur, vous pouvez maintenant ouvrir Instagram et coller le lien (en Story ou en message).");
+                                                    alert("Lien du produit copi� ! \n\nInstagram ne permettant pas le partage direct d'URL depuis un navigateur, vous pouvez maintenant ouvrir Instagram et coller le lien (en Story ou en message).");
                                                 } catch (err) {
                                                     console.error('Erreur lors de la copie:', err);
                                                     window.open("https://www.instagram.com/", "_blank");
@@ -863,7 +863,7 @@
                                         </a>
 
                                         <?php
-                                        /* Réseaux BDD */
+                                        /* R�seaux BDD */
                                         $reqShare = executeRequete("SELECT * FROM `social_network` WHERE `etat`='1' ORDER BY `ordre` ASC");
                                         while ($sn = mysqli_fetch_array($reqShare)) {
                                             $tt = strtolower(trim(afficheChamp($sn['titre'])));
@@ -965,9 +965,9 @@
                             } else {
                                 // Fallback to default badges if none defined for this product
                                 $defaults = [
-                                    ['ico' => 'fa-solid fa-rotate-left', 'txt' => 'Satisfait ou remboursé 30 jours'],
-                                    ['ico' => 'fa-solid fa-truck-fast', 'txt' => 'Livraison suivie et sécurisée'],
-                                    ['ico' => 'fa-solid fa-headset', 'txt' => 'Support client réactif 7j/7']
+                                    ['ico' => 'fa-solid fa-rotate-left', 'txt' => 'Satisfait ou rembours� 30 jours'],
+                                    ['ico' => 'fa-solid fa-truck-fast', 'txt' => 'Livraison suivie et s�curis�e'],
+                                    ['ico' => 'fa-solid fa-headset', 'txt' => 'Support client r�actif 7j/7']
                                 ];
                                 foreach ($defaults as $dbadge) {
                                     ?>
@@ -1010,13 +1010,13 @@
                                                         required>
                                                 </div>
                                                 <div class="col-md-12 form-group mb-3">
-                                                    <label class="fw-semibold text-secondary small">Prénom <span
+                                                    <label class="fw-semibold text-secondary small">Pr�nom <span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" name="prenom" class="form-control form-control-tw"
                                                         required>
                                                 </div>
                                                 <div class="col-md-12 form-group mb-3">
-                                                    <label class="fw-semibold text-secondary small">Téléphone <span
+                                                    <label class="fw-semibold text-secondary small">T�l�phone <span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" name="tel" class="form-control form-control-tw"
                                                         required>
@@ -1068,7 +1068,7 @@
                                                     style="color:#000; font-size: 13px;">
                                                     <input type="checkbox" class="form-check-input" id="cgv" required>
                                                     J'accepte les <a href="#politique" data-toggle="modal"
-                                                        class="politique">Conditions Générales de Ventes</a>
+                                                        class="politique">Conditions G�n�rales de Ventes</a>
                                                 </div>
                                             </div>
                                             <hr>
@@ -1192,21 +1192,21 @@
             </div>
 
             <?php if ($contenu != '' || $video != ''): ?>
-                <!-- ═══ DÉTAILS DU PRODUIT — Full-width below both columns ═══ -->
+                <!-- --- D�TAILS DU PRODUIT � Full-width below both columns --- -->
                 <div class="row mt-5">
                     <div class="col-12 px-4 px-lg-5" id="details-complets">
                         <?php if ($contenu != ''): ?>
                             <h4 class="fw-bold mb-4 text-center"
                                 style="border-bottom:2px solid var(--shop-border,#e5e7eb); padding-bottom:0.75rem;">
-                                Caractéristiques</h4>
+                                Caract�ristiques</h4>
                             <div class="product-long-content text-secondary lh-lg" style="font-size:0.95rem;">
                                 <?php echo $contenu; ?>
                             </div>
                         <?php endif; ?>
                         <?php if ($video != ''): ?>
                             <h4 class="fw-bold mb-4 mt-5 text-center"
-                                style="border-bottom:2px solid var(--shop-border,#e5e7eb); padding-bottom:0.75rem;">Vidéo de
-                                présentation</h4>
+                                style="border-bottom:2px solid var(--shop-border,#e5e7eb); padding-bottom:0.75rem;">Vid�o de
+                                pr�sentation</h4>
                             <div class="ratio ratio-16x9 rounded-2xl overflow-hidden shadow-sm border mx-auto"
                                 style="max-width: 800px;">
                                 <?php echo $video; ?>
@@ -1258,7 +1258,7 @@
     document.getElementById('commandeExpressForm').addEventListener('submit', function (event) {
         event.preventDefault();
         if (!document.getElementById('cgv').checked) {
-            alert('Veuillez accepter les Conditions Générales de Ventes.');
+            alert('Veuillez accepter les Conditions G�n�rales de Ventes.');
             return;
         }
 
@@ -1266,7 +1266,7 @@
         if (typeof turnstile !== 'undefined') {
             const response = turnstile.getResponse();
             if (!response) {
-                alert('Veuillez valider la vérification anti-spam (Cloudflare Turnstile).');
+                alert('Veuillez valider la v�rification anti-spam (Cloudflare Turnstile).');
                 return;
             }
         }
@@ -1282,7 +1282,7 @@
 
         // Improved payment method selection
         const paymentRadio = document.querySelector('input[name="paymentMethod"]:checked');
-        const payment = paymentRadio ? document.querySelector(`label[for="${paymentRadio.id}"] span`).textContent.trim() : 'Paiement à la livraison';
+        const payment = paymentRadio ? document.querySelector(`label[for="${paymentRadio.id}"] span`).textContent.trim() : 'Paiement � la livraison';
 
         const productTitle = '<?php echo addslashes($titre); ?>';
         const productPrice = '<?php if ($PrixPromo != "0.000") {
@@ -1293,25 +1293,25 @@
         const productUrl = window.location.href;
 
         const message = `
-🌟 *Nouvelle Commande Express* 🌟
+?? *Nouvelle Commande Express* ??
 
-🛍️ *Produit:* _${productTitle}_ (Lien: ${productUrl} )
-💵 *Prix:* _${productPrice} DT_
-📦 *Quantité:* ${Quantity}
+??? *Produit:* _${productTitle}_ (Lien: ${productUrl} )
+?? *Prix:* _${productPrice} DT_
+?? *Quantit�:* ${Quantity}
 
-────────────────
+----------------
 
-👤 *Informations Client:*
-👨‍💼 *Nom:* ${nom} ${prenom}
-📞 *Téléphone:* ${tel}
-📧 *Email:* ${email}
-💳 *Paiement:* ${payment}
+?? *Informations Client:*
+????? *Nom:* ${nom} ${prenom}
+?? *T�l�phone:* ${tel}
+?? *Email:* ${email}
+?? *Paiement:* ${payment}
 
-────────────────
+----------------
 
-✅ Merci de *confirmer* cette commande dès que possible.
-🗓️ *Date de commande:* ${date}
-⏰ *Heure:* ${time}
+? Merci de *confirmer* cette commande d�s que possible.
+??? *Date de commande:* ${date}
+? *Heure:* ${time}
     `.trim();
 
         const encodedMessage = encodeURIComponent(message);
@@ -1336,7 +1336,7 @@
 </script>
 
 <script>
-    // Smooth scroll for "Afficher plus de détails"
+    // Smooth scroll for "Afficher plus de d�tails"
     document.querySelectorAll('a[href="#details-complets"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1349,7 +1349,7 @@
 </script>
 
 <script>
-    /* ── Star Rating JS ─────────────────────────────────────────── */
+    /* -- Star Rating JS ------------------------------------------- */
     function highlightStars(prodId, val) {
         document.querySelectorAll('#stars-vote-' + prodId + ' .vote-star').forEach(function (s) {
             s.style.fill = parseInt(s.dataset.val) <= val ? '#F59E0B' : '#e5e7eb';
@@ -1396,7 +1396,7 @@
                     }
 
                     var lbl = document.getElementById('vote-label-' + prodId);
-                    if (lbl) lbl.textContent = 'Votre note : ' + userVote + '/5 — Modifier :';
+                    if (lbl) lbl.textContent = 'Votre note : ' + userVote + '/5 � Modifier :';
 
                     // IMPORTANT: Update the onmouseout values for all stars to keep the new vote filled
                     document.querySelectorAll('#stars-vote-' + prodId + ' .vote-star').forEach(function (s) {
@@ -1405,7 +1405,7 @@
 
                     // Success Toast
                     Toastify({
-                        text: "⭐ Merci ! Votre avis a été enregistré.",
+                        text: "? Merci ! Votre avis a �t� enregistr�.",
                         duration: 3000,
                         gravity: "bottom",
                         position: "right",
@@ -1424,7 +1424,7 @@
                 } else {
                     if (data.error === 'non_connecte') {
                         Toastify({
-                            text: "🔒 Vous devez être connecté pour noter. Cliquez ici pour vous connecter.",
+                            text: "?? Vous devez �tre connect� pour noter. Cliquez ici pour vous connecter.",
                             duration: 5000,
                             destination: "connexion.php",
                             newWindow: false,
@@ -1446,7 +1446,7 @@
                         }).showToast();
                     } else {
                         Toastify({
-                            text: "❌ " + (data.message || "Une erreur est survenue."),
+                            text: "? " + (data.message || "Une erreur est survenue."),
                             duration: 4000,
                             gravity: "bottom",
                             position: "right",
@@ -1464,7 +1464,7 @@
             .catch(function (err) {
                 console.error(err);
                 Toastify({
-                    text: "⚠️ Erreur technique. Veuillez réessayer.",
+                    text: "?? Erreur technique. Veuillez r�essayer.",
                     duration: 4000,
                     gravity: "bottom",
                     position: "right",
@@ -1488,8 +1488,8 @@
     }
 </script>
 <?php
-/* ─── Similar Products ─── */
-/* ─── Similar Products ─── */
+/* --- Similar Products --- */
+/* --- Similar Products --- */
 $req_sim = 'SELECT DISTINCT id, link FROM produits 
                     WHERE categorie = "' . $id_categ . '" AND etat = "1" AND id != "' . $id . '"
                     ORDER BY id DESC LIMIT 12';
@@ -1533,7 +1533,7 @@ if ($sim_count > 0):
                             <?php if ($is_flash && $sp_pp && $sp_pp != '0.000' && !empty($p_end) && strtotime($p_end) > time()): ?>
                                 <div
                                     style="position: absolute; bottom: 8px; left: 8px; right: 8px; background: rgba(0,0,0,0.75); color: white; border-radius: 6px; padding: 6px; text-align: center; font-weight: 700; font-size: 0.75rem; z-index: 10; display: flex; align-items: center; justify-content: center; gap: 6px; backdrop-filter: blur(4px); box-shadow: 0 2px 10px rgba(0,0,0,0.3); outline: 1px solid rgba(255,152,0,0.5);">
-                                    <span style="color: #ffb74d;">🔥 Flash</span>
+                                    <span style="color: #ffb74d;">?? Flash</span>
                                     <span class="flash-countdown" data-end="<?php echo strtotime($p_end); ?>"
                                         style="letter-spacing: 1px;">Calcul...</span>
                                 </div>
@@ -1570,7 +1570,7 @@ if ($sim_count > 0):
                                 <div class="hp-price-row">
                                     <?php if (hasVariationPrices($sp_id)): ?>
                                         <span
-                                            style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">À
+                                            style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">�
                                             partir de</span>
                                     <?php endif; ?>
                                     <?php if ($sp_pp && $sp_pp != '0.000'): ?>
@@ -1615,7 +1615,7 @@ if ($sim_count > 0):
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                             <circle cx="12" cy="12" r="3" />
                                         </svg>
-                                        <span class="hp-btn-text">Détails</span>
+                                        <span class="hp-btn-text">D�tails</span>
                                     </a>
                                 </div>
                             </div>
@@ -1634,7 +1634,7 @@ if ($sim_count > 0):
 </div>
 
 <style>
-    /* ── Slick Carousel Overrides ── */
+    /* -- Slick Carousel Overrides -- */
     .prod-similaire .slick-track {
         display: flex !important;
     }
@@ -1732,7 +1732,7 @@ if ($sim_count > 0):
         color: #fff !important;
     }
 
-    /* ── Floating Compare Button ── */
+    /* -- Floating Compare Button -- */
     .prod-cmp-floating-btn {
         position: absolute;
         top: 0.6rem;
@@ -1802,7 +1802,7 @@ if ($sim_count > 0):
         color: #fff !important;
     }
 
-    /* ══ PREMIUM BUTTONS ══ */
+    /* -- PREMIUM BUTTONS -- */
     .btn-primary-tw {
         display: inline-flex;
         align-items: center;
@@ -2032,7 +2032,7 @@ if ($sim_count > 0):
         }
     }
 
-    /* ── Thumbnail buttons ── */
+    /* -- Thumbnail buttons -- */
     .thumb-btn {
         flex-shrink: 0;
         width: 72px;
@@ -2063,12 +2063,12 @@ if ($sim_count > 0):
         box-shadow: 0 0 0 3px color-mix(in srgb, var(--shop-primary, #5a31f4) 20%, transparent);
     }
 
-    /* ── Similar products scroller hide scrollbar ── */
+    /* -- Similar products scroller hide scrollbar -- */
     .similar-scroller::-webkit-scrollbar {
         display: none;
     }
 
-    /* ── Thumbnail container scrollbar ── */
+    /* -- Thumbnail container scrollbar -- */
     #thumbnail-container::-webkit-scrollbar {
         height: 4px;
     }
