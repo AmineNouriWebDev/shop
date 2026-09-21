@@ -7,11 +7,11 @@
  */
 
 // ─── Identifiants (à déplacer dans la config admin plus tard) ───────────────
-define('BEST_DELIVERY_LOGIN', 'emnaemna@best.com');
-define('BEST_DELIVERY_PWD',   'emnaemna');
-define('BEST_DELIVERY_WSDL',  'https://api.best-delivery-staging.com/serviceShipments.php?wsdl');
-// Pour basculer en production, remplacer par :
-// define('BEST_DELIVERY_WSDL', 'https://api.best-delivery.net/serviceShipments.php?wsdl');
+define('BEST_DELIVERY_LOGIN', 'offipro@best.com');
+define('BEST_DELIVERY_PWD',   'offipro26');
+define('BEST_DELIVERY_WSDL',  'https://api.best-delivery.net/serviceShipments.php?wsdl');
+// Pour repasser en test, utiliser :
+// define('BEST_DELIVERY_WSDL', 'https://api.best-delivery-staging.com/serviceShipments.php?wsdl');
 // ────────────────────────────────────────────────────────────────────────────
 
 /**
