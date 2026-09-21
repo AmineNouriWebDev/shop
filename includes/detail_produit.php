@@ -1,4 +1,4 @@
-<?php // v1.1 Force Sync ?>
+ï»¿<?php // v1.1 Force Sync ?>
 <div class="main main-content-wrapper pb-5 mb-5" style="overflow-x: hidden;">
     <!-- Product Details Area Start -->
     <div class="single-product-area section-padding-20 clearfix pb-5">
@@ -14,7 +14,7 @@
                                     style="border:1px solid var(--shop-border, #e5e7eb); border-radius:1rem; overflow:hidden; background:var(--shop-surface, #fff); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; position:relative;">
 
                                     <?php
-                                    // -- Auto-patch DB : créer colonnes si absentes (exécuté une seule fois) --
+                                    // -- Auto-patch DB : crÃ©er colonnes si absentes (exÃ©cutÃ© une seule fois) --
                                     $connexion_dp = ouvrirCnx();
                                     $dp_cols = [
                                         'stock_label_couleur' => "VARCHAR(20) DEFAULT '#e53e3e'",
@@ -27,7 +27,7 @@
                                     ];
                                     foreach($dp_cols as $dc=>$dt){$chk=mysqli_query($connexion_dp,"SHOW COLUMNS FROM `produits` LIKE '$dc'");if(mysqli_num_rows($chk)===0){mysqli_query($connexion_dp,"ALTER TABLE `produits` ADD `$dc` $dt");}}
                                     
-                                    // -- Étiquettes produit ----------------------------------
+                                    // -- Ã‰tiquettes produit ----------------------------------
                                     $q_etiq = executeRequete("SELECT etat_stock, stock_label_texte, stock_label_couleur, badges_droite_json, badge1_texte, badge1_couleur, badge2_texte, badge2_couleur FROM `produits` WHERE `id`='$id'");
                                     $d_etiq = mysqli_fetch_assoc($q_etiq);
                                     
@@ -68,7 +68,7 @@
                                     ?>
 
                                     <style>
-                                    /* -- Ruban stock haut-gauche incliné -- */
+                                    /* -- Ruban stock haut-gauche inclinÃ© -- */
                                     .prod-ribbon-wrap {
                                         position: absolute;
                                         top: 0; left: 0;
@@ -118,14 +118,14 @@
                                     }
                                     </style>
 
-                                    <!-- Ruban stock (haut-gauche incliné) -->
+                                    <!-- Ruban stock (haut-gauche inclinÃ©) -->
                                     <div class="prod-ribbon-wrap">
                                         <div class="prod-ribbon" style="background:<?php echo $etiq_stock_color; ?>">
                                             <?php echo $etiq_stock_texte; ?>
                                         </div>
                                     </div>
 
-                                    <!-- Badges haut-droit (non inclinés, dynamiques) -->
+                                    <!-- Badges haut-droit (non inclinÃ©s, dynamiques) -->
                                     <?php if (!empty($badges_droite)): ?>
                                     <div class="prod-badges-right">
                                         <?php foreach ($badges_droite as $badge): ?>
@@ -148,11 +148,11 @@
                                     </div>
                                 </div>
 
-                                <!-- Thumbnails Row — hidden/shown by selectColor() -->
+                                <!-- Thumbnails Row â€” hidden/shown by selectColor() -->
                                 <div id="thumbnail-container"
                                     style="display:flex; gap:0.625rem; overflow-x:auto; padding-bottom:0.25rem;">
                                     <?php
-                                    /* Main photo — generic (no color) */
+                                    /* Main photo â€” generic (no color) */
                                     $mainSrc = $photo;
                                     ?>
                                     <button type="button" class="thumb-btn active-thumb" data-color-group="0"
@@ -283,7 +283,7 @@
                                                 style="font-size:0.78rem; color:var(--shop-text-secondary,#6b7280); display:block; margin-bottom:3px;">
                                                 <?php
                                                 if ($client_logged) {
-                                                    echo $client_vote ? 'Votre note : ' . $client_vote . '/5 — Modifier :' : 'Notez ce produit :';
+                                                    echo $client_vote ? 'Votre note : ' . $client_vote . '/5 â€” Modifier :' : 'Notez ce produit :';
                                                 } else {
                                                     echo 'Notez ce produit :';
                                                 }
@@ -568,7 +568,7 @@
                                     }
 
                                     function selectVariation(element) {
-                                        // UI styling — highlight within same group
+                                        // UI styling â€” highlight within same group
                                         let group = element.closest('.variation-group-row');
                                         group.querySelectorAll('.variation-pill').forEach(el => {
                                             el.classList.remove('active');
@@ -617,7 +617,7 @@
                                         if (pPromo > 0 && pPromo < pVente) {
                                             priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">' + pPromo.toFixed(3) + ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size: 24px; font-weight:500; margin-left:10px;">' + pVente.toFixed(3) + ' DT</span></div>';
                                             let savings = (pVente - pPromo).toFixed(3);
-                                            priceHtml += '<div style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: inline-block;"><i class="fa fa-tag me-1"></i> Économisez ' + savings + ' DT !</div>';
+                                            priceHtml += '<div style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; font-weight: bold; margin-top: 5px; display: inline-block;"><i class="fa fa-tag me-1"></i> Ã‰conomisez ' + savings + ' DT !</div>';
                                         } else {
                                             priceHtml = '<div class="fw-black text-primary mt-2" style="font-weight: 900; letter-spacing: -1px; color: var(--shop-primary) !important; font-size: 3.2rem; line-height:1.1;">' + pVente.toFixed(3) + ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span></div>';
                                         }
@@ -705,7 +705,7 @@
                                         <?php if ($PrixPromo != '0.000') {
                                             echo $PrixPromo . ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span> <span style="text-decoration:line-through;color:#aaa;font-size:24px;font-weight:500; margin-left:10px;">' . $PrixVente . ' DT</span>';
                                             $economie = number_format($PrixVente - $PrixPromo, 3, '.', '');
-                                            echo '<div class="economisez-tag shadow-sm d-block mt-2"><i class="fa fa-tag me-1"></i> Économisez ' . $economie . ' DT !</div>';
+                                            echo '<div class="economisez-tag shadow-sm d-block mt-2"><i class="fa fa-tag me-1"></i> Ã‰conomisez ' . $economie . ' DT !</div>';
                                         } else {
                                             echo $PrixVente . ' <span style="font-size:1.2rem; font-weight:700; color:var(--shop-text-primary);">DT</span> <span style="font-size:0.9rem; font-weight:600; color:var(--shop-text-primary);">TTC</span>';
                                         } ?>
@@ -767,7 +767,7 @@
 
                                     /* Facebook */
                                     // On utilise uniquement le sharer classique.
-                                    // Comme l'application Facebook est en mode Développement, 
+                                    // Comme l'application Facebook est en mode DÃ©veloppement, 
                                     // passer un App ID via dialog/feed bloquerait le partage.
                                     $fbLink = 'https://www.facebook.com/sharer/sharer.php?u=' . $shareUrl;
 
@@ -783,10 +783,10 @@
                                                 // Success on mobile/modern browsers
                                                 navigator.share({
                                                     title: decodedTitle,
-                                                    text: "Découvrez ce produit : " + decodedTitle,
+                                                    text: "DÃ©couvrez ce produit : " + decodedTitle,
                                                     url: decodedUrl
                                                 }).then(() => {
-                                                    console.log('Produit partagé avec succès');
+                                                    console.log('Produit partagÃ© avec succÃ¨s');
                                                 }).catch((error) => {
                                                     console.log('Erreur de partage:', error);
                                                 });
@@ -801,7 +801,7 @@
                                                     document.body.removeChild(dummy);
 
                                                     // Beautifully inform the user
-                                                    alert("Lien du produit copié ! \n\nInstagram ne permettant pas le partage direct d'URL depuis un navigateur, vous pouvez maintenant ouvrir Instagram et coller le lien (en Story ou en message).");
+                                                    alert("Lien du produit copiÃ© ! \n\nInstagram ne permettant pas le partage direct d'URL depuis un navigateur, vous pouvez maintenant ouvrir Instagram et coller le lien (en Story ou en message).");
                                                 } catch (err) {
                                                     console.error('Erreur lors de la copie:', err);
                                                     window.open("https://www.instagram.com/", "_blank");
@@ -863,7 +863,7 @@
                                         </a>
 
                                         <?php
-                                        /* Réseaux BDD */
+                                        /* RÃ©seaux BDD */
                                         $reqShare = executeRequete("SELECT * FROM `social_network` WHERE `etat`='1' ORDER BY `ordre` ASC");
                                         while ($sn = mysqli_fetch_array($reqShare)) {
                                             $tt = strtolower(trim(afficheChamp($sn['titre'])));
@@ -965,9 +965,9 @@
                             } else {
                                 // Fallback to default badges if none defined for this product
                                 $defaults = [
-                                    ['ico' => 'fa-solid fa-rotate-left', 'txt' => 'Satisfait ou remboursé 30 jours'],
-                                    ['ico' => 'fa-solid fa-truck-fast', 'txt' => 'Livraison suivie et sécurisée'],
-                                    ['ico' => 'fa-solid fa-headset', 'txt' => 'Support client réactif 7j/7']
+                                    ['ico' => 'fa-solid fa-rotate-left', 'txt' => 'Satisfait ou remboursÃ© 30 jours'],
+                                    ['ico' => 'fa-solid fa-truck-fast', 'txt' => 'Livraison suivie et sÃ©curisÃ©e'],
+                                    ['ico' => 'fa-solid fa-headset', 'txt' => 'Support client rÃ©actif 7j/7']
                                 ];
                                 foreach ($defaults as $dbadge) {
                                     ?>
@@ -1010,13 +1010,13 @@
                                                         required>
                                                 </div>
                                                 <div class="col-md-12 form-group mb-3">
-                                                    <label class="fw-semibold text-secondary small">Prénom <span
+                                                    <label class="fw-semibold text-secondary small">PrÃ©nom <span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" name="prenom" class="form-control form-control-tw"
                                                         required>
                                                 </div>
                                                 <div class="col-md-12 form-group mb-3">
-                                                    <label class="fw-semibold text-secondary small">Téléphone <span
+                                                    <label class="fw-semibold text-secondary small">TÃ©lÃ©phone <span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" name="tel" class="form-control form-control-tw"
                                                         required>
@@ -1068,7 +1068,7 @@
                                                     style="color:#000; font-size: 13px;">
                                                     <input type="checkbox" class="form-check-input" id="cgv" required>
                                                     J'accepte les <a href="#politique" data-toggle="modal"
-                                                        class="politique">Conditions Générales de Ventes</a>
+                                                        class="politique">Conditions GÃ©nÃ©rales de Ventes</a>
                                                 </div>
                                             </div>
                                             <hr>
@@ -1192,21 +1192,21 @@
             </div>
 
             <?php if ($contenu != '' || $video != ''): ?>
-                <!-- --- DÉTAILS DU PRODUIT — Full-width below both columns --- -->
+                <!-- --- DÃ‰TAILS DU PRODUIT â€” Full-width below both columns --- -->
                 <div class="row mt-5">
                     <div class="col-12 px-4 px-lg-5" id="details-complets">
                         <?php if ($contenu != ''): ?>
                             <h4 class="fw-bold mb-4 text-center"
                                 style="border-bottom:2px solid var(--shop-border,#e5e7eb); padding-bottom:0.75rem;">
-                                Caractéristiques</h4>
+                                CaractÃ©ristiques</h4>
                             <div class="product-long-content text-secondary lh-lg" style="font-size:0.95rem;">
                                 <?php echo $contenu; ?>
                             </div>
                         <?php endif; ?>
                         <?php if ($video != ''): ?>
                             <h4 class="fw-bold mb-4 mt-5 text-center"
-                                style="border-bottom:2px solid var(--shop-border,#e5e7eb); padding-bottom:0.75rem;">Vidéo de
-                                présentation</h4>
+                                style="border-bottom:2px solid var(--shop-border,#e5e7eb); padding-bottom:0.75rem;">VidÃ©o de
+                                prÃ©sentation</h4>
                             <div class="ratio ratio-16x9 rounded-2xl overflow-hidden shadow-sm border mx-auto"
                                 style="max-width: 800px;">
                                 <?php echo $video; ?>
@@ -1258,7 +1258,7 @@
     document.getElementById('commandeExpressForm').addEventListener('submit', function (event) {
         event.preventDefault();
         if (!document.getElementById('cgv').checked) {
-            alert('Veuillez accepter les Conditions Générales de Ventes.');
+            alert('Veuillez accepter les Conditions GÃ©nÃ©rales de Ventes.');
             return;
         }
 
@@ -1266,7 +1266,7 @@
         if (typeof turnstile !== 'undefined') {
             const response = turnstile.getResponse();
             if (!response) {
-                alert('Veuillez valider la vérification anti-spam (Cloudflare Turnstile).');
+                alert('Veuillez valider la vÃ©rification anti-spam (Cloudflare Turnstile).');
                 return;
             }
         }
@@ -1282,7 +1282,7 @@
 
         // Improved payment method selection
         const paymentRadio = document.querySelector('input[name="paymentMethod"]:checked');
-        const payment = paymentRadio ? document.querySelector(`label[for="${paymentRadio.id}"] span`).textContent.trim() : 'Paiement à la livraison';
+        const payment = paymentRadio ? document.querySelector(`label[for="${paymentRadio.id}"] span`).textContent.trim() : 'Paiement Ã  la livraison';
 
         const productTitle = '<?php echo addslashes($titre); ?>';
         const productPrice = '<?php if ($PrixPromo != "0.000") {
@@ -1297,19 +1297,19 @@
 
 ??? *Produit:* _${productTitle}_ (Lien: ${productUrl} )
 ?? *Prix:* _${productPrice} DT_
-?? *Quantité:* ${Quantity}
+?? *QuantitÃ©:* ${Quantity}
 
 ----------------
 
 ?? *Informations Client:*
 ????? *Nom:* ${nom} ${prenom}
-?? *Téléphone:* ${tel}
+?? *TÃ©lÃ©phone:* ${tel}
 ?? *Email:* ${email}
 ?? *Paiement:* ${payment}
 
 ----------------
 
-? Merci de *confirmer* cette commande dès que possible.
+? Merci de *confirmer* cette commande dÃ¨s que possible.
 ??? *Date de commande:* ${date}
 ? *Heure:* ${time}
     `.trim();
@@ -1336,7 +1336,7 @@
 </script>
 
 <script>
-    // Smooth scroll for "Afficher plus de détails"
+    // Smooth scroll for "Afficher plus de dÃ©tails"
     document.querySelectorAll('a[href="#details-complets"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1396,7 +1396,7 @@
                     }
 
                     var lbl = document.getElementById('vote-label-' + prodId);
-                    if (lbl) lbl.textContent = 'Votre note : ' + userVote + '/5 — Modifier :';
+                    if (lbl) lbl.textContent = 'Votre note : ' + userVote + '/5 â€” Modifier :';
 
                     // IMPORTANT: Update the onmouseout values for all stars to keep the new vote filled
                     document.querySelectorAll('#stars-vote-' + prodId + ' .vote-star').forEach(function (s) {
@@ -1405,7 +1405,7 @@
 
                     // Success Toast
                     Toastify({
-                        text: "? Merci ! Votre avis a été enregistré.",
+                        text: "? Merci ! Votre avis a Ã©tÃ© enregistrÃ©.",
                         duration: 3000,
                         gravity: "bottom",
                         position: "right",
@@ -1424,7 +1424,7 @@
                 } else {
                     if (data.error === 'non_connecte') {
                         Toastify({
-                            text: "?? Vous devez être connecté pour noter. Cliquez ici pour vous connecter.",
+                            text: "?? Vous devez Ãªtre connectÃ© pour noter. Cliquez ici pour vous connecter.",
                             duration: 5000,
                             destination: "connexion.php",
                             newWindow: false,
@@ -1464,7 +1464,7 @@
             .catch(function (err) {
                 console.error(err);
                 Toastify({
-                    text: "?? Erreur technique. Veuillez réessayer.",
+                    text: "?? Erreur technique. Veuillez rÃ©essayer.",
                     duration: 4000,
                     gravity: "bottom",
                     position: "right",
@@ -1570,7 +1570,7 @@ if ($sim_count > 0):
                                 <div class="hp-price-row">
                                     <?php if (hasVariationPrices($sp_id)): ?>
                                         <span
-                                            style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">À
+                                            style="font-size:0.7rem; color:var(--shop-text-secondary,#6b7280); font-weight:400; display:block; width:100%; margin-bottom:-2px;">Ã€
                                             partir de</span>
                                     <?php endif; ?>
                                     <?php if ($sp_pp && $sp_pp != '0.000'): ?>
@@ -1615,7 +1615,7 @@ if ($sim_count > 0):
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                             <circle cx="12" cy="12" r="3" />
                                         </svg>
-                                        <span class="hp-btn-text">Détails</span>
+                                        <span class="hp-btn-text">DÃ©tails</span>
                                     </a>
                                 </div>
                             </div>
