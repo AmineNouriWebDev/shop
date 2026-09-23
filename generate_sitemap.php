@@ -114,7 +114,7 @@ function generateSitemap($silent = false) {
     }
 
     // 5. Pages statiques
-    $static_pages = ['boutique', 'contact', 'recherche', 'applications', 'configurateur-camera'];
+    $static_pages = ['boutique', 'contact', 'recherche', 'applications', 'configurateur-camera', 'configurateur-pc'];
     foreach ($static_pages as $slug) {
         $xml_content .= "  <url>\n";
         $xml_content .= "    <loc>" . $base . $slug . "/</loc>\n";

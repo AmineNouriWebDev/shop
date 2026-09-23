@@ -3,12 +3,18 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>http://localhost/shop/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://localhost/shop/politiques-de-retour/</loc>
+    <lastmod>2026-03-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/mentions-legales/</loc>
     <lastmod>2026-03-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -122,454 +128,1710 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>http://localhost/shop/conditions-retour-echange/</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://localhost/shop/boutique/orca/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/televiseurs/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/tv-led/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/tv-smart/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/accessoires-tv/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/support-tv/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost/shop/boutique/recepteurs-et-paraboles/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <loc>http://localhost/shop/boutique/recepteurs/</loc>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/recepteur-numerique/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/box-tv-android-tunisie/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/accessoire-parabole/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/sharing/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/abonnement-iptv-12-mois/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/xtream-iptv-12-mois/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/abonnement-iptv-6-mois/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/netflix/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/spotify-starzplay/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/tod/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/shahid-vip/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/bein-sports/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/telephonie/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/telephone-portable/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/tablettes/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/smartphone-tunisie/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/smartwatch/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/son/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/forever-vip-sharing/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/airpods/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/informatique/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/jeux-ps4/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/jeux-ps5/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/accessoires/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/souris-et-tapis/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/reseau/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/souris/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/manettes-de-jeux/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/claviers/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/consommables/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/camera-de-surveillance/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/memoire-et-stockage/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/accessoires-divers/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/power-bank/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/ooredoo/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/composants/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/papier/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/classement-archivage/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/accessoires-smartphone/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/tondeuse-cheveux/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/apollo-iks/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/ordinateur-portable/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/ordinateur-de-bureau/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/pc-gamer-bureautique/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/processeur-intel/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/carte-graphique/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/boitier/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/aircooling/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/carte-mere-intel/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/barrettes-memoire-ram/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/bloc-d-alimentation/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/disque-dur-ssd-nvme/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/watercooling/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/imprimante/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/ecrans/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/activation-players/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/abonnement-iptv-gratuit/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/consoles/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/playstation/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/xbox/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/camera-wifi/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/camera-cable-coaxial/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/camera-cable-ip/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/enregistreur-dvr/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/enregistreur-nvr/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/disque-dur-surveillance/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/abonnements/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/shop/boutique/iptv/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/boutique/streaming/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/boutique/tod-official/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/boutique/shahid/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/boutique/bein-sport-officiel/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/boutique/console-de-jeu-retro/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/kisonli-c80-haut-parleur-2-1-bluetooth-11w/</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4312-produits-1790149298-0-kisonli-c80-noir-bluetooth-2-1-tunisie.webp</image:loc>
+      <image:title>Kisonli C80 Haut-Parleur 2.1 Bluetooth 11W</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/nokia-110-power-gris-tunisie-double-sim-1750mah/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4311-c1-1790027529-0-Femalepromoteradvertisingprod20260921225101.webp</image:loc>
+      <image:title>Nokia 110 Power Gris Tunisie – Double SIM &amp; 1750mAh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/nokia-125-2g-noir-tunisie-double-sim-radio-fm-mp3/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4310-c1-1790027080-0-telephone-portable-nokia-125-2g-noir.webp</image:loc>
+      <image:title>Nokia 125 2G Noir Tunisie – Double SIM | Radio FM &amp; MP3</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/hmd-100-tunisie-telephone-classique-2g-800mah/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4309-c1-1790026837-0-telephone-portable-hmd-100-rouge.webp</image:loc>
+      <image:title>HMD 100 Tunisie – Téléphone Classique 2G 800mAh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/vivo-y05-8go-64go-4g-tunisie-6500mah-120hz/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4308-c11-1790026376-0-smartphonevivoy058go64go4g-vivo-y05-464-black-g.webp</image:loc>
+      <image:title>Vivo Y05 8Go 64Go 4G  Tunisie | 6500mAh 120Hz</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/nokia-105-crazy-5-tunisie/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4307-produits-1790025520-0-telephone-portable-nokia-105-noir.webp</image:loc>
+      <image:title>Nokia 105 Crazy 5  Tunisie</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/honor-t10-6go-32go-4g-silver-tunisie/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4306-produits-1790025015-0-smartphonehonort106go32go4g-honor-t10-332-silver-z.webp</image:loc>
+      <image:title>HONOR T10 6Go 32Go 4G Silver Tunisie</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/samsung-galaxy-a16-6go-128go-tunisie-super-amoled-90hz/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4305-produits-1790013256-0-smartphone-samsung-galaxy-a16-6go-128go-gris.webp</image:loc>
+      <image:title>Samsung Galaxy A16 6Go 128Go Tunisie | Super AMOLED 90Hz</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/camera-uniview-uho-p1a-m3f4d-3mp-wifi-ptz-tunisie/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4301-produits-1789925265-0-CamraUNIVIEWUHO-P1A-M3F4D3MPWiFiPTZTunisieOffiPro3.webp</image:loc>
+      <image:title>Caméra UNIVIEW UHO-P1A-M3F4D 3MP WiFi PTZ Tunisie</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/samsat-20-25-mini-full-hd-1080p-avec-cle-wi-fi/</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4300-produits-1789899653-0-SAMSAT20-25MiniFullHD1080PavecClWi-Fi4.webp</image:loc>
+      <image:title>SAMSAT 20-25 Mini Full HD 1080P avec Clé Wi-Fi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/recepteur-samsat-hd-20-20-super-full-hd-1080p-wi-fi/</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4299-produits-1789668586-0-images15.webp</image:loc>
+      <image:title>Récepteur SAMSAT HD 20-20 Super – Full HD 1080P + Wi-Fi</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/console-portable-r36hd-ecran-ips-3-5/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4298-produits-1789593708-0-ConsolePortableR36SRetro.webp</image:loc>
+      <image:title>🎮 Console Portable R36HD  Écran IPS 3,5″</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/hoco-y38-amoled-bluetooth-calling/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4297-produits-1789549290-0-Y38-SI-10-1100x1100-1-600x600.webp</image:loc>
+      <image:title>⌚ HOCO Y38 AMOLED – Bluetooth Calling</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/hoco-y39-bluetooth-calling-smart-watch/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4296-produits-1789547558-0-Y39-BK-550x550.webp</image:loc>
+      <image:title>⌚ HOCO Y39 Bluetooth Calling Smart Watch</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/telephone-portable-senior-kgtel-k349-2-4-dual-sim/</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4295-produits-1789290344-0-tlphoneportableseniorkgtelk349kgtel-k349-blue24-k.webp</image:loc>
+      <image:title>Téléphone Portable Senior KGTEL K349 2.4″ Dual SIM</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/montre-connectee-t900-ultra-gris/</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4294-produits-1789289386-0-1681053331Hf3e55679d26241eebb8f4c8297900dbcu.webp</image:loc>
+      <image:title>⌚ Montre Connectée T900 Ultra Gris</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/montre-connectee-t800-ultra-orange/</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4293-produits-1789288695-0-montre-connectee-t800-ultra-orange.webp</image:loc>
+      <image:title>⌚ Montre Connectée T800 Ultra – Orange</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/infinix-hot-70-4g-12go-128go-ecran-120hz-charge-45w/</loc>
+    <lastmod>2026-08-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4292-produits-1787995687-0-smartphone-infinix-hot-70-4g-12go-128go-bleu.webp</image:loc>
+      <image:title>Infinix Hot 70 4G 12Go 128Go  – Écran 120Hz &amp; Charge 45W</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/oppo-a6c-4go-128go-4g-ecran-120hz-batterie-6600mah/</loc>
+    <lastmod>2026-08-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4291-produits-1787994011-0-images-durability-mo-img-2-1-3bf8b2jpg.webp</image:loc>
+      <image:title>OPPO A6c 4Go 128Go 4G  Écran 120Hz &amp; Batterie 6600mAh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/power-bank-pzx-v92-30000mah-22-5w-charge-rapide/</loc>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4290-produits-1787937333-0-power-bank-30000mah1.webp</image:loc>
+      <image:title>Power Bank PZX V92 30000mAh 22.5W Charge Rapide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/itel-a100c-4g-2go-64go/</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4289-produits-1786812567-0-smartphone-itel-a100c-6go-2go-4go-extensible-64go-noir.webp</image:loc>
+      <image:title>ITEL A100C 4G  2GO 64Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/mini-ventilateur-portable-rechargeable-inca-fmi-12b/</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4288-produits-1786191491-0-12B-3.webp</image:loc>
+      <image:title>Mini Ventilateur Portable Rechargeable INCA FMI-12B</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-anker-nano-45w-usb-c-rapide/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4287-produits-1785959644-0-00e5d6ac-d275-4bd0-8dcc-0d6c7e1e9ed01000x1000.webp</image:loc>
+      <image:title>Chargeur Anker Nano 45W USB-C Rapide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/xiaomi-redmi-a7-pro-4go-64go-4go-128go/</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4286-produits-1785516745-0-smartphone-xiaomi-redmi-a7-pro-4g-4go-128go-noir-h.webp</image:loc>
+      <image:title>Xiaomi Redmi A7 Pro (4Go / 64Go &amp; 4Go / 128Go)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/xiaomi-redmi-a7-3go-64go/</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4285-produits-1785516010-0-smartphone-xiaomi-redmi-a7-3go-64go-noir-j.webp</image:loc>
+      <image:title>Xiaomi Redmi A7 (3Go / 64Go)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/enceinte-bluetooth-b206-04-double-subwoofer-6-5/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4284-produits-1783015709-0-Screenshot2026-07-02190433.webp</image:loc>
+      <image:title>Enceinte Bluetooth B206-04 Double Subwoofer 6.5</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-inca-iwm-531-rechargeable-bluetooth-sans-fil-1600-dpi/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4283-produits-1783010826-0-SourisINCAIWM-531RechargeableBluetoothSansFil1600DPI.webp</image:loc>
+      <image:title>Souris INCA IWM-531 Rechargeable Bluetooth Sans Fil 1600 DPI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-inca-iwm-551-sans-fil-rechargeable-rgb-1600-dpi/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4282-produits-1782997634-0-souris-sans-fil-inca-iwm-551-rechargeable-rgb-noir-vert-r.webp</image:loc>
+      <image:title>Souris INCA IWM-551 Sans Fil Rechargeable RGB 1600 DPI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-inca-img-326mx-sans-fil-rgb-rechargeable-gaming-8000-dpi/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4281-produits-1782994553-0-souris-sans-fil-inca-img-326mx-programmable-rechargeable-noir-x.webp</image:loc>
+      <image:title>Souris INCA IMG-326MX Sans Fil RGB Rechargeable Gaming 8000 DPI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/toner-hp-85a-ce285a-compatible-noir-2000-pages/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4280-produits-1782211517-0-toner-hp-85a-ce285a-compatible.webp</image:loc>
+      <image:title>Toner HP 85A CE285A Compatible Noir 2000 Pages</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/toner-hp-44a-cf244a-compatible-noir-1000-pages/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4279-produits-1782210731-0-TonerHP44ACF244ACompatibleNoir1000Pages.webp</image:loc>
+      <image:title>Toner HP 44A CF244A Compatible Noir 1000 Pages</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-samsung-45w-type-c-super-fast-charging-2-0/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4278-produits-1782208151-0-ChargeurSamsung45WType-CSuperFast.webp</image:loc>
+      <image:title>Chargeur Samsung 45W Type-C Super Fast Charging 2.0</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-sans-fil-inca-iwm-553s-bluetooth-rechargeable-silencieuse/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4277-produits-1782057405-0-1764173877746.webp</image:loc>
+      <image:title>Souris Sans Fil INCA IWM-553S Bluetooth Rechargeable Silencieuse</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-sans-fil-inca-iwm-555-bluetooth-rechargeable/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4276-produits-1782057122-0-1764174027598.webp</image:loc>
+      <image:title>Souris Sans Fil INCA IWM-555 Bluetooth Rechargeable</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-radio-ns-7211bt-5w-bois-bluetooth/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4275-produits-1782053262-0-haut-parleur-radio-ns-7211bt-5w-bois.webp</image:loc>
+      <image:title>Haut-Parleur Radio NS-7211BT 5W Bois Bluetooth</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/ecouteurs-anker-soundcore-r60i-nc-anc-50h-bluetooth/</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4274-c2-1781978352-0-D1202H21.webp</image:loc>
+      <image:title>Écouteurs Anker Soundcore R60i NC ANC 50H Bluetooth</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/casque-bluetooth-hoguo-mz-300-sans-fil-stereo/</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4273-produits-1781953764-0-CasqueBluetoothHoguoMZ-300tn.webp</image:loc>
+      <image:title>Casque Bluetooth Hoguo MZ-300 Sans Fil Stéréo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/tablette-infinix-xpad-30e-11/</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4272-produits-1781875633-0-tablette-infinix-xpad-30e-11-4go-extensible-8-go-128go-violet.webp</image:loc>
+      <image:title>Tablette Infinix Xpad 30E 11</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/manette-ps5-dualsense-noir/</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4271-produits-1781626770-0-manette-ps5-dualsense-black3.webp</image:loc>
+      <image:title>Manette PS5 DualSense Noir</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/starsat-sr-401hd-tunisie-recepteur-hd/</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4270-produits-1781003141-0-rcepteurstarsatsr-401hd1abonnements12mois11.webp</image:loc>
+      <image:title>Starsat SR-401HD Tunisie – Récepteur HD</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/starsat-sr-441fhd-tunisie-recepteur-full-hd/</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4269-produits-1781001807-0-recepteur-starsat-sr-441fhd-6-abonnements-12-mois-cle-wifi.webp</image:loc>
+      <image:title>Starsat SR-441FHD Tunisie – Récepteur Full HD</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alphasatinfinity-android-box-iptv-4k-avec-abonnement-12-mois/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4268-produits-1780869471-0-box-android-alpha-infinity-8k-4go-64-go-avec-un-1-an-abonnement-alpha-shopping-en-ligne-last-price-tunisie.webp</image:loc>
+      <image:title>AlphasatInfinity – Android Box IPTV 4K avec Abonnement 12 Mois</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alphasat-lifetime-wifi-tunisie-recepteur-full-hd/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4267-produits-1780868835-0-2023-10-18-170433.webp</image:loc>
+      <image:title>Alphasat Lifetime WiFi Tunisie – Récepteur Full HD</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alphasat-uno-wifi-tunisie-recepteur-full-hd/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4266-produits-1780868466-0-uno-300x300.webp</image:loc>
+      <image:title>Alphasat UNO WiFi Tunisie – Récepteur Full HD</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/abonnement-shahid-premium-12-mois/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4265-produits-1780857396-0-13.webp</image:loc>
+      <image:title>Abonnement Shahid Premium 12 Mois</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/tapis-de-souris-gamer-inca-imp-018k-xxl/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4264-produits-1780785413-0-8681949010156-inca-imp-018-tapis-de-souris-tapis-de-souris-de-jeu-noir-4.webp</image:loc>
+      <image:title>Tapis de Souris Gamer INCA IMP-018K XXL</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-gamer-inca-img-347-rgb-7200-dpi-8-boutons-programmables/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4263-produits-1780785186-0-1724684625451.webp</image:loc>
+      <image:title>Souris Gamer INCA IMG-347 RGB 7200 DPI – 8 Boutons Programmables</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/souris-gamer-inca-img-344-rgb-7200-dpi-8-boutons/</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4262-produits-1780676110-0-SourisGamerINCAIMG-344RGB7200DPI8Boutons.webp</image:loc>
+      <image:title>Souris Gamer INCA IMG-344 RGB 7200 DPI 8 Boutons</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h86-magnetique-ventouse-360/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4261-produits-1780609193-0-Sbbb806e7bb1344aeb04f25c197823cabr.webp</image:loc>
+      <image:title>Support Voiture Hoco H86 Magnétique Ventouse 360°</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h89-crown-ventouse-grand-format/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4260-produits-1780608838-0-EDA008632601A7.webp</image:loc>
+      <image:title>Support Voiture Hoco H89 Crown Ventouse Grand Format</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h19-mighty-automatique-dashboard/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4259-produits-1780608255-0-hoco-h19-mighty-car-center-console-phone-holder-rod.webp</image:loc>
+      <image:title>Support Voiture Hoco H19 Mighty Automatique Dashboard</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h65-gamble-ventouse-bras-telescopique/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4258-produits-1780607170-0-hoco-h65-gamble-one-button-car-center-console-holder.webp</image:loc>
+      <image:title>Support Voiture Hoco H65 Gamble Ventouse &amp; Bras Télescopique</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h20-mighty-ventouse-pare-brise/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4257-produits-1780606744-0-hoco-h20-mighty-car-windshield-phone-holder.webp</image:loc>
+      <image:title>Support Voiture Hoco H20 Mighty Ventouse Pare-brise</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h18-mighty-pince-grille-aeration/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4256-produits-1780604924-0-hoco-h18-mighty-car-air-outlet-phone-holder.webp</image:loc>
+      <image:title>Support Voiture Hoco H18 Mighty Pince Grille Aération</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h22-dragon-automatique-tableau-de-bord/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4255-produits-1780603983-0-hoco-h22-dragon-car-center-console-phone-holder-packaging.webp</image:loc>
+      <image:title>Support Voiture Hoco H22 Dragon Automatique Tableau de Bord</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-voiture-hoco-h74-crown-ring-magnetique-360/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4254-produits-1780603650-0-hoco-h74-crown-ring-car-air-vent-magnetic-holder.webp</image:loc>
+      <image:title>Support Voiture Hoco H74 Crown Ring Magnétique 360°</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/support-telephone-voiture-hoco-h32-magnetique/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4253-produits-1780603288-0-hoco-h32-cheetah-car-air-outlet-magnetic-phone-holder.webp</image:loc>
+      <image:title>Support Téléphone Voiture Hoco H32 Magnétique</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/console-game-player-g5-500-jeux-portable-avec-manette/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4252-produits-1780597712-0-ConsoleGamePlayerG5500JeuxPortableavecManette.webp</image:loc>
+      <image:title>Console Game Player G5 500 Jeux Portable avec Manette</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/console-game-box-400-jeux-in-1-portable-retro/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4251-produits-1780597523-0-sup-game-box-400-en-1-avec-400-jeux-classiques-rouge-h.webp</image:loc>
+      <image:title>Console Game Box 400 Jeux in 1 Portable Rétro</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/camera-hikvision-ds-2ce70kf0t-mfs-5mp-colorvu-audio/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4250-produits-1780582943-0-Hikvision-DS-2CE70KF0T-MFS.webp</image:loc>
+      <image:title>Caméra Hikvision DS-2CE70KF0T-MFS 5MP ColorVu Audio</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/camera-hikvision-ds-2ce10kf0t-fs-5mp-colorvu/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4249-produits-1780581919-0-DS-2CE10KF3T-LEUK-.webp</image:loc>
+      <image:title>Caméra Hikvision DS-2CE10KF0T-FS 5MP ColorVu</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/dvr-hikvision-ids-7204hqhi-m1-e-4-canaux-1080p-acusense/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4248-produits-1780579770-0-DVRHikvision4Canaux1080p.webp</image:loc>
+      <image:title>DVR Hikvision iDS-7204HQHI-M1/E 4 Canaux 1080p AcuSense</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/casque-gaming-fantech-hg28-portal-7-1-rgb-usb/</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4247-produits-1780436686-0-fea4308f.webp</image:loc>
+      <image:title>Casque Gaming Fantech HG28 Portal 7.1 RGB USB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-sans-fil-vidvie-wlc1413-3-en-1-15w-magnetique/</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4246-produits-1780212687-0-ChargeurSansFilVidvieWLC14133-en-115WMagntique2.webp</image:loc>
+      <image:title>Chargeur Sans Fil Vidvie WLC1413 3-en-1 15W Magnétique</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-sans-fil-vidvie-wlc1410-3-en-1-15w-magnetique/</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4245-produits-1780211216-0-ChargeurSansFilVidvieWLC14103-en-115WMagntiqueTunisie2.webp</image:loc>
+      <image:title>Chargeur Sans Fil Vidvie WLC1410 3-en-1 15W Magnétique</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/boitier-msi-mag-forge-m100r-rgb-micro-atx-airflow/</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4244-produits-1780175646-0-BotierMSIMAGFORGEM100RRGBMicro-ATXAirflowprix.webp</image:loc>
+      <image:title>Boîtier MSI MAG FORGE M100R RGB Micro-ATX Airflow</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/boitier-msi-mag-forge-320r-airflow-blanc-rgb/</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4243-produits-1780170094-0-boitier-gaming-msi-mag-forge-320r-airflow-blanc.webp</image:loc>
+      <image:title>Boîtier MSI MAG FORGE 320R Airflow Blanc RGB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/boitier-msi-mag-forge-320r-airflow-rgb-noir/</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4242-produits-1780007672-0-boitier-gamer-msi-mag-forge-320-r-airflow-noir.webp</image:loc>
+      <image:title>Boîtier MSI MAG FORGE 320R Airflow RGB Noir</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/boitier-msi-mpg-gungnir-110r-blanc-rgb/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4241-produits-1780003468-0-BotierMSIMPGGUNGNIR110RBlancRGBTunisiePrix.webp</image:loc>
+      <image:title>Boîtier MSI MPG GUNGNIR 110R Blanc RGB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alimentation-msi-mag-a300n-h-300w/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4240-produits-1779974482-0-AlimentationMSIMAGA300N-H300WTunisiePrixPasCher.webp</image:loc>
+      <image:title>Alimentation MSI MAG A300N-H 300W</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alimentation-msi-mag-a500dn-500w/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4239-produits-1779974013-0-AlimentationMSIMAGA500DN500W.webp</image:loc>
+      <image:title>Alimentation MSI MAG A500DN 500W</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alimentation-msi-mag-a500n-h-500w/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4238-produits-1779973258-0-c5urdV5Ro1OwYDZzmBFOVCP2OqRd8Jftk3WJFXl9XHJY8cpmrriIHOFTTrghBp5IHRUgJ1IyhQ-vWF7QbgS77exnMw8hRwa57mQvdSk6E4d5PgjLW7Ta2b3gyE0npb86l-snLCdxXNR1gqo9ONft-4W2J93RIhazlsX6LsdQK12oNaIXdkuoHUqiTgs7lqW.webp</image:loc>
+      <image:title>Alimentation MSI MAG A500N-H 500W</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/alimentation-msi-mag-a650bnl-white-650w-80-bronze-tunisie/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4237-produits-1779972838-0-NoOpa7YOrqdZBGqze1GJzFCugpHQJWpCZzfkcYgkCCC9SBPVJrhdhgyPGySsDfhfR7lwdVLcQFYtLXiqgA0gqw-4-nT2WaxDfoSqoDPa-v-id7irBqFNdtHCoRIzoSC5xCJG-OL5ptO6s-s7vdTG2jnyycVbZIpo3u3y3PjT75Qc2EAUhE7q4udT5JkDfo.webp</image:loc>
+      <image:title>Alimentation MSI MAG A650BNL WHITE 650W 80+ Bronze Tunisie</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/ecouteurs-hoco-ew81-anc-ecran-bluetooth-5-4/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4236-produits-1779965039-0-Photosfromdifferentangles202605281142.webp</image:loc>
+      <image:title>Écouteurs HOCO EW81 ANC Écran | Bluetooth 5.4</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/power-bank-xiaomi-redmi-20000mah-18w-charge-rapide/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4235-produits-1779858744-0-MiPowerBank20000mAh.webp</image:loc>
+      <image:title>Power Bank Xiaomi Redmi 20000mAh 18W | Charge Rapide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-kaku-kk-8213-avec-micro-rgb/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4234-produits-1779814641-0-Hc3499ec969bb4f4d985c27862cb78450e.webp</image:loc>
+      <image:title>Haut-Parleur Bluetooth Kaku KK-8213 avec Micro &amp; RGB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-kaku-kk-6202/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4233-produits-1779813840-0-43008569.webp</image:loc>
+      <image:title>Haut-Parleur Bluetooth Kaku KK-6202</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-zqs4290-avec-micro-sans-fil-rgb/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4232-produits-1779807611-0-a3milidesphotojdod202605261559.webp</image:loc>
+      <image:title>Haut-Parleur Bluetooth ZQS4290 avec Micro Sans Fil RGB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/kakusiga-8-pouces-haut-parleur-bluetooth-enceinte-karaoke/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4231-produits-1779755077-0-H26691c1a73e842e28defe08a227348e0V.webp</image:loc>
+      <image:title>Kakusiga 8 Pouces Haut-Parleur Bluetooth | Enceinte Karaoke</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-zqs-8107s-bluetooth-enceinte-avec-micro/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4230-produits-1779752346-0-a3milidesphotominzawaya202605260038.webp</image:loc>
+      <image:title>Haut-parleur ZQS-8107S Bluetooth | Enceinte avec Micro</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/cable-hdmi-30m-4k-hdmi-longue-distance/</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4229-produits-1779747366-0-a3milidesphotominzawaya202605252315.webp</image:loc>
+      <image:title>Câble HDMI 30m 4K HDMI Longue Distance</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/inca-inc-321rx-refroidisseur-pc-portable-gaming/</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4228-produits-1779739187-0-refroidisseur-inca-inc-321rx-pour-pc-portable-noir-k.webp</image:loc>
+      <image:title>INCA INC-321RX Refroidisseur PC Portable Gaming</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/refroidisseur-pc-portable-inca-inc-606tgs-rgb/</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4227-produits-1779663318-0-a3milidesphotohot202605242353.webp</image:loc>
+      <image:title>Refroidisseur PC Portable INCA INC-606TGS RGB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/refroidisseur-pc-portable-inca-inc-341fxs/</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4226-produits-1779662882-0-Photohotdifferentposition3d202605242345.webp</image:loc>
+      <image:title>Refroidisseur PC Portable INCA INC-341FXS</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/ecouteurs-bluetooth-anker-soundcore-k20i/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4225-produits-1779657583-0-couteursBluetoothAnkerSoundc202605242219.webp</image:loc>
+      <image:title>Écouteurs Bluetooth Anker Soundcore K20i</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-tranyoo-t-b10/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4224-produits-1779652973-0-haut-parleur-bluetooth-tranyoo-t-b10-tunisie1.webp</image:loc>
+      <image:title>Haut-parleur Bluetooth Tranyoo T-B10</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-best-sound-t10-avec-fm/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4223-produits-1779652400-0-Photohotdifferentposition3d202605242049.webp</image:loc>
+      <image:title>Haut-parleur Bluetooth Best Sound T10 avec FM</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-tranyoo-t-b9-noir/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4222-produits-1779633732-0-3dphotodifferentpositions202605241540.webp</image:loc>
+      <image:title>Haut Parleur Bluetooth Tranyoo T-b9 Noir</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/tranyoo-t-b3-prix-tunisie-haut-parleur-bluetooth-portable/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4221-produits-1779566469-0-3.webp</image:loc>
+      <image:title>Tranyoo T-B3 Prix Tunisie | Haut-Parleur Bluetooth Portable</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/hoco-ew73-ecouteurs-bluetooth-avec-ecran-tactile/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4220-produits-1779489359-0-a3milidesphotominzawaya202605222335.webp</image:loc>
+      <image:title>HOCO EW73 | Écouteurs Bluetooth avec Écran Tactile</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/power-bank-hoco-j72-10000mah/</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4219-produits-1779488315-0-hoco-j72-easy-travel-power-bank-10000mah-interior.webp</image:loc>
+      <image:title>Power Bank HOCO J72 10000mAh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/telephone-clever-f10-mobile-simple-double-sim/</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4218-produits-1779486179-0-a3milidesphotoo5rinen202605221930.webp</image:loc>
+      <image:title>Téléphone Clever F10 Mobile Simple Double SIM</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/samsung-galaxy-a17-4g-6go-ram-128go-amoled/</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4217-produits-1778538093-0-3dphotosfromangles202605112319.webp</image:loc>
+      <image:title>Samsung Galaxy A17 4G | 6Go RAM 128Go AMOLED</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/hoco-ew50-ecouteurs-bluetooth-5-3-style-airpods/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4216-produits-1778507765-0-EDA004012901A.webp</image:loc>
+      <image:title>HOCO EW50 | Écouteurs Bluetooth 5.3 Style AirPods</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/redmi-buds-6-play-bluetooth-5-4-autonomie-36h/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4215-produits-1778506934-0-Photosfrommultipleangles202605111441.webp</image:loc>
+      <image:title>Redmi Buds 6 Play Bluetooth 5.4 Autonomie 36h</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/redmi-buds-8-active-bluetooth-5-4/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4214-produits-1778506448-0-a3miledesphoto3d202605111424.webp</image:loc>
+      <image:title>Redmi Buds 8 Active Bluetooth 5.4</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/redmi-buds-8-lite-anc-42db-bluetooth-5-4/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4213-produits-1778487228-0-a3mildesphotominzawaya202605110913.webp</image:loc>
+      <image:title>Redmi Buds 8 Lite | ANC 42dB Bluetooth 5.4</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/ecouteurs-hoco-ew77-bluetooth-5-4-tws/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4212-produits-1778485966-0-tai-nghe-bluetooth-ew77-za0s7bLibZV4H4ydFJyJjpg-600x600.webp</image:loc>
+      <image:title>Écouteurs HOCO EW77 | Bluetooth 5.4 TWS</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/ecouteurs-hoco-eq24-bluetooth-5-4-tws-28h/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4211-produits-1778482001-0-hoco-eq24-estrella-wireless-bt-headset-earbuds.webp</image:loc>
+      <image:title>Écouteurs HOCO EQ24 | Bluetooth 5.4 TWS 28H</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-hoco-n62-30w-usb-c-charge-rapide/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4210-produits-1778361096-0-EDA007514201A2.webp</image:loc>
+      <image:title>Chargeur HOCO N62 30W | USB-C Charge Rapide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-hoco-n68-20w-usb-c-charge-rapide/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4209-produits-1778360075-0-EDA008074001A4.webp</image:loc>
+      <image:title>Chargeur HOCO N68 20W | USB-C Charge Rapide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-hoco-n75-65w-gan-usb-c-pd-usb-a-rapide/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4207-produits-1778331288-0-coc-sac-hoco-n75-grande-65w-2c1a-moi-eu-XBzg6dFilEGdXhH70vPi.webp</image:loc>
+      <image:title>Chargeur HOCO N75 65W GaN USB-C PD + USB-A Rapide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-hoco-n75-65w-pd-usb-c-double-usb-a/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4206-produits-1778290068-0-EDA008769301A5.webp</image:loc>
+      <image:title>Chargeur HOCO N75 65W PD | USB-C Double + USB-A</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/chargeur-hoco-n48-65w-pd-rapide-usb-c/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4205-produits-1778287316-0-a3milidesautrephoto3d202605090140.webp</image:loc>
+      <image:title>Chargeur HOCO N48 65W PD  Rapide USB-C</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/ring-light-ljj-45-45cm-eclairage-led-pro/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4204-produits-1778286861-0-a3milidesautrephoto3d202605090133.webp</image:loc>
+      <image:title>Ring Light LJJ-45 45cm  Éclairage LED Pro</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/oscal-pad-9-10-1-4g-128go/</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4203-produits-1778193336-0-tablette-oscal-pad-9-10-1-wi-fi-4g-gris.webp</image:loc>
+      <image:title>OSCAL Pad 9 10.1 4G 128Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/oscal-flat-2-12go-128go/</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4202-produits-1778192221-0-a3milidesphotoo5rin202605072316.webp</image:loc>
+      <image:title>OSCAL Flat 2 12Go 128Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/oscal-marine-2-12go-64go-smartphone-incassable/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4201-produits-1778191264-0-a3milidesphotoo5rin202605072259.webp</image:loc>
+      <image:title>OSCAL Marine 2 12Go 64Go | Smartphone Incassable</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/infinix-smart-20-4go-64go-128go/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4200-produits-1778153793-0-a3mildesenglemo5talfinel202605071235.webp</image:loc>
+      <image:title>Infinix Smart 20 4Go 64Go/128Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/sing-e-zqs8170-haut-parleur-bluetooth/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4199-produits-1778110414-0-72wAEsX8fN.webp</image:loc>
+      <image:title>SING-E ZQS8170 Haut-Parleur Bluetooth</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-sing-e-jqs908s-bluetooth/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4198-produits-1778109727-0-HBJKHBJB-5.webp</image:loc>
+      <image:title>Haut-parleur SING-E JQS908S Bluetooth</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/oppo-a6x-4go-128go/</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4195-produits-1778057595-0-a6x.webp</image:loc>
+      <image:title>OPPO A6x 4Go 128Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/infinix-hot-60i-5g-4go-128go-6000mah/</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4194-produits-1778021301-0-smartphone-infinix-hot-60i-5g-4go-128go-sleek-black-1.webp</image:loc>
+      <image:title>Infinix Hot 60i 5G | 4Go 128Go 6000mAh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/xiaomi-redmi-15c-6000mah/</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4193-produits-1778018568-0-smartphone-xiaomi-redmi-15c-6go-128go-blue-a.webp</image:loc>
+      <image:title>Xiaomi Redmi 15C  6000mAh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/vivo-y04-4go-ram-64go/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4192-produits-1777979505-0-promptProfessionalproductphotography202605051146.webp</image:loc>
+      <image:title>Vivo Y04 4Go RAM 64Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/samsung-galaxy-a07/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4191-produits-1777940373-0-smartphone-samsung-galaxy-a07-64go-4go-vert-u.webp</image:loc>
+      <image:title>Samsung Galaxy A07</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/honor-play-10-4g-64go-3go/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4190-produits-1777938760-0-smartphone-honor-play-10-3go-64go-noir-11.webp</image:loc>
+      <image:title>Honor Play 10 4G 64Go 3Go</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/xiaomi-redmi-a5-4g/</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4189-produits-1777938048-0-smartphone-xiaomi-redmi-a5-4g-3go-64go-vert-lac-x.webp</image:loc>
+      <image:title>Xiaomi Redmi A5 4G</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-subwoofer-boombox-ndr-a55/</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4188-produits-1777807809-0-ndrspeakera55product.webp</image:loc>
+      <image:title>Haut-parleur Subwoofer Boombox Ndr A55</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-veler-915-bluetooth/</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4187-produits-1777762930-0-GeminiGeneratedImagey958hby958hby958.webp</image:loc>
+      <image:title>Haut-parleur Veler 915 Bluetooth</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-bluetooth-veler-v111/</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4186-produits-1777760155-0-velerv111offipropromo.webp</image:loc>
+      <image:title>Haut Parleur Bluetooth Veler V111</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://localhost/shop/produit/haut-parleur-gts-k102-40w/</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>http://localhost/shop/media/products/4185-produits-1778108246-0-editedgtsspeakers.webp</image:loc>
+      <image:title>Haut Parleur Gts K102  40w</image:title>
+    </image:image>
   </url>
   <url>
     <loc>http://localhost/shop/produit/disque-dur-seagate-1tb/</loc>
@@ -617,7 +1879,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/4179-produits-1777377189-0-mcx01-1.webp</image:loc>
+      <image:loc>http://localhost/shop/media/products/4179-produits-1779490674-0-4179-produits-1777377189-0-mcx01-1.webp</image:loc>
       <image:title>Microphone Fantech MCX01 Leviosa</image:title>
     </image:image>
   </url>
@@ -953,7 +2215,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/camera-wifi-360-uniarch-uho-p1a-m5f4d/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -997,7 +2259,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/4141-produits-1776856435-0-405c3bd2e45f61a2b946a540c1f7c3d5.webp</image:loc>
+      <image:loc>http://localhost/shop/media/products/4141-produits-1782144809-0-main-Photoroom.webp</image:loc>
       <image:title>Anker Soundcore R50i</image:title>
     </image:image>
   </url>
@@ -1112,13 +2374,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/boitier-externe-argus-gd-25000-2-5-3-0-transparent/</loc>
+    <loc>http://localhost/shop/produit/boitier-externe-argus-gd-25000-2-5/</loc>
     <lastmod>2025-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/4059-produits-boitier-externe-argus-gd-25000-2-5-transparent_1_.jpg</image:loc>
-      <image:title>Boitier Externe Argus Gd-25000 2.5" 3.0 - Transparent</image:title>
+      <image:title>Boitier Externe Argus Gd-25000 2.5</image:title>
     </image:image>
   </url>
   <url>
@@ -1192,13 +2454,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/infinity-iptv-4k/</loc>
+    <loc>http://localhost/shop/abonnement/infinity-iptv-abonnement-premium-hd-fhd-4k-12-mois/</loc>
     <lastmod>2025-02-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/4050-produits-inf2.png</image:loc>
-      <image:title>Infinity Iptv 4k</image:title>
+      <image:title>Infinity IPTV Abonnement Premium HD FHD 4K 12 Mois</image:title>
     </image:image>
   </url>
   <url>
@@ -1302,13 +2564,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/ecouteurs-hoco-ew72-avec-ecran-lcd/</loc>
+    <loc>http://localhost/shop/produit/ecouteurs-hoco-ew72-anc-ecran-hd-bluetooth-5-4/</loc>
     <lastmod>2024-12-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/4039-produits-1.png</image:loc>
-      <image:title>Ecouteurs Hoco Ew72 Avec Écran Lcd</image:title>
+      <image:loc>http://localhost/shop/media/products/4039-produits-1778484656-0-Hoco-EW72-TWS-Earbuds-2-600x600.webp</image:loc>
+      <image:title>Écouteurs HOCO EW72 ANC Écran HD | Bluetooth 5.4</image:title>
     </image:image>
   </url>
   <url>
@@ -1317,7 +2579,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/4038-produits-3-3.jpg</image:loc>
+      <image:loc>http://localhost/shop/media/products/4038-produits-1779355670-0-a3milidesphotoo5rin3d202605211024.webp</image:loc>
       <image:title>Écouteurs Sans Fil Hoco Ew60</image:title>
     </image:image>
   </url>
@@ -1332,13 +2594,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/ecouteurs-sans-fil-hoco-ew61/</loc>
+    <loc>http://localhost/shop/produit/ecouteurs-hoco-ew61-bluetooth-5-3-prix-tunisie-autonomie-7h/</loc>
     <lastmod>2024-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/4036-produits-hoco-ew61-june-tws-headset-black.jpg</image:loc>
-      <image:title>Ecouteurs Sans Fil Hoco Ew61</image:title>
+      <image:title>Écouteurs HOCO EW61 Bluetooth 5.3 Prix Tunisie | Autonomie 7h</image:title>
     </image:image>
   </url>
   <url>
@@ -1352,13 +2614,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/casque-sans-fil-hoco-w35-air/</loc>
+    <loc>http://localhost/shop/produit/casque-hoco-w35-air-bluetooth-5-3/</loc>
     <lastmod>2024-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/4034-produits-Hoco-Casque-Bluetooth-sans-Fil-HOCO-W35-Air.png</image:loc>
-      <image:title>Casque Sans Fil Hoco W35 Air</image:title>
+      <image:title>Casque HOCO W35 Air Bluetooth 5.3</image:title>
     </image:image>
   </url>
   <url>
@@ -1552,13 +2814,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/couteurs-sans-fil-hoco-eq1-blanc/</loc>
+    <loc>http://localhost/shop/produit/ecouteurs-hoco-eq1-bluetooth-5-3-autonomie-7h-led/</loc>
     <lastmod>2024-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/4014-produits-medium-k9tw4ESZdruyScUuxbcZxHXGbrGZG3JSOogDBj06.jpg</image:loc>
-      <image:title>Couteurs Sans Fil Hoco Eq1  - Blanc</image:title>
+      <image:loc>http://localhost/shop/media/products/4014-produits-1779970901-0-couteursHOCOEQ1Bluetooth53s.webp</image:loc>
+      <image:title>Écouteurs HOCO EQ1 Bluetooth 5.3 | Autonomie 7h LED</image:title>
     </image:image>
   </url>
   <url>
@@ -1692,13 +2954,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/lenovo-v15-g3-iap-i3-12e-gen-8-go-noir-avec-sacoche-pour-pc-portable-15-6-lenovo-t210/</loc>
+    <loc>http://localhost/shop/produit/lenovo-v15-g3-iap-i3-12e-gen-8-go-noir-avec-sacoche-pour-pc-portable-15-6/</loc>
     <lastmod>2024-09-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3998-produits-pc-portable-lenovo-v15-g3-iap-i3-12e-gen-8-go-noir-avec-sacoche-pour-pc-portable-156-lenovo-t210-(2).jpg</image:loc>
-      <image:title>Lenovo V15 G3 Iap / I3 12è Gén / 8 Go / Noir / Avec Sacoche Pour Pc Portable 15.6" Lenovo T210</image:title>
+      <image:title>Lenovo V15 G3 Iap / I3 12è Gén / 8 Go / Noir / Avec Sacoche Pour Pc Portable 15.6</image:title>
     </image:image>
   </url>
   <url>
@@ -1732,13 +2994,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/gigabyte-b760-ds3h-ddr5/</loc>
+    <loc>http://localhost/shop/produit/carte-mere-gigabyte-b760-ds3h-ddr4-lga1700-atx/</loc>
     <lastmod>2024-09-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3994-produits-gigabyte-b760.jpg</image:loc>
-      <image:title>Gigabyte B760 Ds3h Ddr5</image:title>
+      <image:title>Carte Mère GIGABYTE B760 DS3H DDR4 LGA1700 ATX</image:title>
     </image:image>
   </url>
   <url>
@@ -1802,23 +3064,23 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/ecran-gaming-aiwa-27-ips-full-hd-ips-100-hz-noir/</loc>
+    <loc>http://localhost/shop/produit/ecran-gaming-aiwa-27/</loc>
     <lastmod>2024-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3987-produits-ecran-gaming-aiwa-27-ips-full-hd-ips-100-hz-noir.jpg</image:loc>
-      <image:title>Écran Gaming Aiwa 27" Ips Full Hd Ips / 100 Hz / Noir</image:title>
+      <image:title>Écran Gaming Aiwa 27</image:title>
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/ecran-gaming-aiwa-md2403-24-full-hd-ips-180-hz/</loc>
+    <loc>http://localhost/shop/produit/ecran-gaming-aiwa-md2403-24/</loc>
     <lastmod>2024-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3986-produits-aiwa-24.jpg</image:loc>
-      <image:title>Écran Gaming Aiwa Md2403 24" Full Hd Ips / 180 Hz</image:title>
+      <image:title>Écran Gaming Aiwa Md2403 24</image:title>
     </image:image>
   </url>
   <url>
@@ -1962,23 +3224,23 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/boite-d-alimentation-msi-mag-a650bnl-atx-650-watts-80-plus-bronze/</loc>
+    <loc>http://localhost/shop/produit/alimentation-msi-mag-a650bnl-650w-80-bronze/</loc>
     <lastmod>2024-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3970-produits-boite-d-alimentation-msi-mag-a650bnl-atx-650-watts-80-plus-bronze-(3).jpg</image:loc>
-      <image:title>Boîte D'alimentation Msi Mag A650bnl Atx / 650 Watts / 80 Plus Bronze</image:title>
+      <image:title>Alimentation MSI MAG A650BNL 650W 80+ Bronze</image:title>
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/boite-d-alimentation-modulaire-msi-850w-mag-a850gl-pcie5-80plus-gold/</loc>
+    <loc>http://localhost/shop/produit/msi-mag-a850gl-pcie5-850w-gold-tunisie/</loc>
     <lastmod>2024-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3969-produits-boite-d-alimentation-modulaire-msi-850w-mag-a850gl-pcie5-80plus-gold.jpg</image:loc>
-      <image:title>Boite D'alimentation Modulaire Msi 850w Mag A850gl Pcie5 / 80plus Gold</image:title>
+      <image:title>MSI MAG A850GL PCIE5  850W Gold Tunisie</image:title>
     </image:image>
   </url>
   <url>
@@ -2022,13 +3284,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/tablette-samsung-galaxy-tab-a9-4g-lte-8-7/</loc>
+    <loc>http://localhost/shop/produit/samsung-galaxy-tab-a9-4g/</loc>
     <lastmod>2024-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3964-produits-tablette-samsung-galaxy-tab-a9-4g-lte-8-7-graphite-tab-a9-4-64-g.jpg</image:loc>
-      <image:title>Tablette SAMSUNG Galaxy Tab A9 4G LTE 8.7''</image:title>
+      <image:loc>http://localhost/shop/media/products/3964-produits-1778536184-0-tablette-samsung-a9-4g-4-go-64-go-gris.webp</image:loc>
+      <image:title>Samsung Galaxy Tab A9 4G</image:title>
     </image:image>
   </url>
   <url>
@@ -2103,7 +3365,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/haut-parleur-bluetooth-avec-microphone-super-2803/</loc>
-    <lastmod>2024-07-16</lastmod>
+    <lastmod>2024-07-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2193,7 +3455,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/vidvie-microphone-sans-fil-mc01/</loc>
-    <lastmod>2024-07-03</lastmod>
+    <lastmod>2024-07-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2213,7 +3475,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/smartphone-xiaomi-redmi-note-13-6go-128go/</loc>
-    <lastmod>2024-07-01</lastmod>
+    <lastmod>2024-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2223,7 +3485,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/smartphone-xiaomi-redmi-a3-4go-128go/</loc>
-    <lastmod>2024-07-01</lastmod>
+    <lastmod>2024-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2363,7 +3625,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/haut-parleur-sac-a-dos-sans-fil-ndr-q69-led/</loc>
-    <lastmod>2024-06-27</lastmod>
+    <lastmod>2024-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2373,7 +3635,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/haut-parleur-sans-fil-ndr-610/</loc>
-    <lastmod>2024-06-27</lastmod>
+    <lastmod>2024-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2423,7 +3685,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/k1-sezar-haut-parleurs-sans-fil-bluetooth-karaoke/</loc>
-    <lastmod>2024-05-28</lastmod>
+    <lastmod>2024-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2432,8 +3694,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-365-jours-5-ecrans-4k/</loc>
-    <lastmod>2024-05-23</lastmod>
+    <loc>http://localhost/shop/produit/tod-365-jours-5-ecrans-4k/</loc>
+    <lastmod>2024-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2442,8 +3704,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-365-jours-5-ecrans/</loc>
-    <lastmod>2024-05-23</lastmod>
+    <loc>http://localhost/shop/produit/tod-365-jours-5-ecrans/</loc>
+    <lastmod>2024-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2452,8 +3714,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-180-jours-5-ecrans-4k/</loc>
-    <lastmod>2024-05-23</lastmod>
+    <loc>http://localhost/shop/produit/tod-180-jours-5-ecrans-4k/</loc>
+    <lastmod>2024-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2462,8 +3724,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-180-jours-5-ecrans/</loc>
-    <lastmod>2024-05-23</lastmod>
+    <loc>http://localhost/shop/produit/tod-180-jours-5-ecrans/</loc>
+    <lastmod>2024-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2472,8 +3734,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-90-jours-5-ecrans-4k/</loc>
-    <lastmod>2024-05-23</lastmod>
+    <loc>http://localhost/shop/produit/tod-90-jours-5-ecrans-4k/</loc>
+    <lastmod>2024-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2482,7 +3744,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-365-jours-1-ecrans-mobile/</loc>
+    <loc>http://localhost/shop/produit/tod-365-jours-1-ecrans-mobile/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -2492,7 +3754,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-180-jours-1-ecrans-mobile/</loc>
+    <loc>http://localhost/shop/produit/tod-180-jours-1-ecrans-mobile/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -2502,7 +3764,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-90-jours-1-ecrans-mobile/</loc>
+    <loc>http://localhost/shop/produit/tod-90-jours-1-ecrans-mobile/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -2513,7 +3775,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/netflix-90-jours-2-ecran/</loc>
-    <lastmod>2024-05-18</lastmod>
+    <lastmod>2024-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2532,7 +3794,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-90-jours-5-ecrans/</loc>
+    <loc>http://localhost/shop/produit/tod-90-jours-5-ecrans/</loc>
     <lastmod>2024-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -2542,7 +3804,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-30-jours-5-ecrans-4k/</loc>
+    <loc>http://localhost/shop/produit/tod-30-jours-5-ecrans-4k/</loc>
     <lastmod>2024-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -2552,7 +3814,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/tod-30-jours-5-ecrans/</loc>
+    <loc>http://localhost/shop/produit/tod-30-jours-5-ecrans/</loc>
     <lastmod>2024-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -2583,7 +3845,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/mytv-iptv-12-mois/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2593,7 +3855,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/oranium-iptv-12-mois/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2603,7 +3865,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/zoom-iptv-12-mois/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2613,7 +3875,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/haut-parleurs-sans-fil-portable-inkax-bs-50/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2623,7 +3885,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/haut-parleur-bluetooth-inkax-bs-32/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2633,7 +3895,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/casque-bluetooth-inkax-hp-56-noir/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2643,7 +3905,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/casque-bluetooth-inkax-hp-55-noir/</loc>
-    <lastmod>2024-05-09</lastmod>
+    <lastmod>2024-05-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2762,13 +4024,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/support-mural-tv-19-32-fixe-vontech-vt-22s/</loc>
+    <loc>http://localhost/shop/produit/support-mural-tv-19/</loc>
     <lastmod>2024-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3881-produits-vt_22_s-(1).jpg</image:loc>
-      <image:title>Support Mural TV 19"-32" Fixe VONTECH VT-22S</image:title>
+      <image:title>Support Mural TV 19</image:title>
     </image:image>
   </url>
   <url>
@@ -2822,28 +4084,28 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/strong-iptv-4k/</loc>
+    <loc>http://localhost/shop/abonnement/strong-8k/</loc>
     <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3875-produits-strong4klogo.png</image:loc>
-      <image:title>Strong Iptv 4k</image:title>
+      <image:title>Strong 8k</image:title>
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/dlta4k-1-ans/</loc>
+    <loc>http://localhost/shop/abonnement/abonnement-iptv-dlta-4k-12-mois/</loc>
     <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3874-produits-1710205180.png</image:loc>
-      <image:title>Dlta4k  1 ans</image:title>
+      <image:title>Abonnement IPTV DLTA 4K 12 mois</image:title>
     </image:image>
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/sky-iptv-12-mois/</loc>
-    <lastmod>2024-04-26</lastmod>
+    <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2853,7 +4115,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/scorpion-iptv-12-mois/</loc>
-    <lastmod>2024-04-26</lastmod>
+    <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2863,7 +4125,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/fenix-iptv-12-mois/</loc>
-    <lastmod>2024-04-26</lastmod>
+    <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2873,7 +4135,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/net-tv-iptv-12-mois/</loc>
-    <lastmod>2024-04-26</lastmod>
+    <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2883,7 +4145,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/cobra-iptv-12-mois/</loc>
-    <lastmod>2024-04-26</lastmod>
+    <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -2893,7 +4155,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/abonnement/magunm-iptv-12-mois/</loc>
-    <lastmod>2024-04-26</lastmod>
+    <lastmod>2024-04-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -3742,13 +5004,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/miqia-mf20-wireless-headphones/</loc>
+    <loc>http://localhost/shop/produit/casque-miqia-mf20-bluetooth/</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3776-produits-miqiamf203.jpg</image:loc>
-      <image:title>Miqia Mf20  Wireless Headphones</image:title>
+      <image:title>Casque Miqia MF20 Bluetooth</image:title>
     </image:image>
   </url>
   <url>
@@ -3793,7 +5055,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/charger-vidvie-ple245-2-4a-2xusb-cable-usb/</loc>
-    <lastmod>2024-03-18</lastmod>
+    <lastmod>2024-03-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -3803,7 +5065,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/charger-vidvie-ce12-2-4a-white/</loc>
-    <lastmod>2024-03-18</lastmod>
+    <lastmod>2024-03-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -3872,23 +5134,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/box-tv-android-x96q-4k-2go-32go/</loc>
+    <loc>http://localhost/shop/produit/x96q-pro-4go-32go-12-mois-satpromax/</loc>
     <lastmod>2024-03-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3763-produits-box-tv-android-x96q-4k-4go-64go-abonnement-iptv-24mois.jpg</image:loc>
-      <image:title>Box Tv Android X96Q  4k  2go-32go</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>http://localhost/shop/produit/box-tv-android-x96q-pro-4go-32go/</loc>
-    <lastmod>2024-03-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>http://localhost/shop/media/products/3762-produits-box-tv-android-x96q-pro-4go-32go-abonnement-blue-iptv-12-mois1.jpg</image:loc>
-      <image:title>Box Tv Android X96q Pro 4go 32go</image:title>
+      <image:loc>http://localhost/shop/media/products/3763-produits-1781215109-0-box-android-tv-x96q-pro-alpha-4go-32go-noir.webp</image:loc>
+      <image:title>X96Q Pro 4Go 32Go +  12 Mois Satpromax</image:title>
     </image:image>
   </url>
   <url>
@@ -4142,23 +5394,23 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/celebrat-watch-8-ultra-sw8-pro/</loc>
+    <loc>http://localhost/shop/produit/smartwatch-8-ultra-sw8-pro-max/</loc>
     <lastmod>2024-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3735-produits-smartwatch-8-ultra-multifonction-sw8-pro-max-orange-et-noir-(3).jpg</image:loc>
-      <image:title>Celebrat watch 8 Ultra  Sw8 Pro</image:title>
+      <image:loc>http://localhost/shop/media/products/3735-produits-1779978196-0-Smartwatch8UltraSW8ProMaxTunisiePrix.webp</image:loc>
+      <image:title>Smartwatch 8 Ultra SW8 Pro Max</image:title>
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/montre-connectee-kieslect-calling-watch-ks-mini-noir-bleu/</loc>
+    <loc>http://localhost/shop/produit/smartwatch-kieslect-ks-mini-amoled-appel-bluetooth/</loc>
     <lastmod>2024-02-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3734-produits-montre-connectee-kieslect-calling-watch-ks-mini-bleu.jpg</image:loc>
-      <image:title>Montre Connectée Kieslect Calling Watch Ks Mini - Noir&amp;bleu</image:title>
+      <image:loc>http://localhost/shop/media/products/3734-produits-1779987774-0-SmartwatchKieslectKSMiniAMOLEDAppelBluetoothTunisiePrix.webp</image:loc>
+      <image:title>Smartwatch Kieslect KS Mini AMOLED Appel Bluetooth</image:title>
     </image:image>
   </url>
   <url>
@@ -4212,13 +5464,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/box-tv-android-x96q-pro-2go-16go/</loc>
+    <loc>http://localhost/shop/produit/x96q-pro-2go-16go-iptv-12-mois-alpha-tunisie-box-android-4k/</loc>
     <lastmod>2024-01-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3728-produits-box-tv-android-x96q-pro1.jpg</image:loc>
-      <image:title>Box Tv Android X96q Pro 2go 16go</image:title>
+      <image:loc>http://localhost/shop/media/products/3728-produits-1781027205-0-box-tv-android-x96q-pro-2-16go-4k-uhd-avec-abonnement-12-mois.webp</image:loc>
+      <image:title>X96Q Pro 2Go 16Go + IPTV 12 Mois ALPHA Tunisie – Box Android 4K</image:title>
     </image:image>
   </url>
   <url>
@@ -4247,7 +5499,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3725-produits-recepteur-starsat-t14-extreme-avec-abonnement-24mois-abonnement-12mois-sharing.jpg</image:loc>
+      <image:loc>http://localhost/shop/media/products/3725-produits-1779539085-0-a3milidesphotoo5rin3d202605231324.webp</image:loc>
       <image:title>Récepteur Starsat T140 Pro</image:title>
     </image:image>
   </url>
@@ -4262,23 +5514,23 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/montre-connectee-xiaomi-mibro-c3/</loc>
+    <loc>http://localhost/shop/produit/smartwatch-mibro-c3-bluetooth-appel-1-85/</loc>
     <lastmod>2024-01-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3653-produits-mibro-smartwatch-c3.jpg</image:loc>
-      <image:title>Montre Connectée Xiaomi Mibro C3</image:title>
+      <image:loc>http://localhost/shop/media/products/3653-produits-1780176411-0-SmartwatchMibroC3BluetoothAppel185.webp</image:loc>
+      <image:title>Smartwatch Mibro C3 Bluetooth Appel 1.85</image:title>
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/montre-connectee-xiaomi-mibro-gs/</loc>
+    <loc>http://localhost/shop/produit/smartwatch-mibro-watch-gs-amoled-gps/</loc>
     <lastmod>2024-01-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3651-produits-montre-connectee-xiaomi-mibro-gs-gris_1.jpg</image:loc>
-      <image:title>Montre Connectée Xiaomi Mibro Gs</image:title>
+      <image:loc>http://localhost/shop/media/products/3651-produits-1779976959-0-SmartwatchMibroWatchGSAMOLEDGPSTunisie.webp</image:loc>
+      <image:title>Smartwatch Mibro Watch GS AMOLED GPS</image:title>
     </image:image>
   </url>
   <url>
@@ -4303,7 +5555,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/recepteur-starsat-t40-extreme/</loc>
-    <lastmod>2023-12-31</lastmod>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -4313,7 +5565,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/recepteur-starsat-sr-t50-full-hd-extreme/</loc>
-    <lastmod>2023-12-31</lastmod>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -4323,7 +5575,7 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/recepteur-starsat-sr-4060hd-full-hd/</loc>
-    <lastmod>2023-12-31</lastmod>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -4333,11 +5585,11 @@
   </url>
   <url>
     <loc>http://localhost/shop/produit/recepteur-starsat-sr-ps56/</loc>
-    <lastmod>2023-12-31</lastmod>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3639-produits-recepteur-starsat-sr-ps56-cle-wifi-abonnement-12-mois-iptv-orca-pro-max-12-mois-forever.jpg</image:loc>
+      <image:loc>http://localhost/shop/media/products/3639-produits-1779532926-0-a3milidesphotoo5rin3d202605231141.webp</image:loc>
       <image:title>Récepteur Starsat Sr-Ps56</image:title>
     </image:image>
   </url>
@@ -4429,26 +5681,6 @@
     <image:image>
       <image:loc>http://localhost/shop/media/products/3619-produits-1600.png</image:loc>
       <image:title>Adaptable Toner Canon Gpr-18 C-exv14</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>http://localhost/shop/produit/tondeuse-cheveux-wahl-home-pro-100-combo-rouge/</loc>
-    <lastmod>2023-12-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>http://localhost/shop/media/products/3617-produits-02_1395-0466-Home-Pro-100-Combo_kit.jpg</image:loc>
-      <image:title>Tondeuse Cheveux Wahl Home Pro 100 Combo-rouge</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>http://localhost/shop/produit/tondeuse-cheveux-wahl-home-pro-100-noir/</loc>
-    <lastmod>2023-12-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>http://localhost/shop/media/products/3615-produits-1395-0460-1.jpg</image:loc>
-      <image:title>Tondeuse Cheveux Wahl Home Pro 100 - Noir</image:title>
     </image:image>
   </url>
   <url>
@@ -6267,7 +7499,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3376-produits-manette-ps4-dualshock-40-v2-bleu-nuit.jpg</image:loc>
+      <image:loc>http://localhost/shop/media/products/3376-produits-1781627247-0-manette-de-jeux-sans-fil-ps4-fortnite.webp</image:loc>
       <image:title>Manette Sans Fil Dualshock 4 Adaptable Pour Ps4</image:title>
     </image:image>
   </url>
@@ -6277,7 +7509,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3375-produits-manette-sans-fil-doubleshock-3-pour-playstation-3-tunisie.jpg</image:loc>
+      <image:loc>http://localhost/shop/media/products/3375-produits-1781863180-0-manette-de-jeux-sans-fil-pour-ps3-noir-20.webp</image:loc>
       <image:title>Manette Sans Fil Pour Playstation 3 (Ps3)</image:title>
     </image:image>
   </url>
@@ -6437,7 +7669,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3359-produits-souris-filaire-gaming-havit-hv-ms1005.jpg</image:loc>
+      <image:loc>http://localhost/shop/media/products/3359-produits-1781501297-0-souris-gaming-filaire-optique-havit-ms1005-rgb-noir.webp</image:loc>
       <image:title>Souris Filaire Gaming Havit Hv-ms1005</image:title>
     </image:image>
   </url>
@@ -6962,16 +8194,6 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/orca-pro-6-mois/</loc>
-    <lastmod>2023-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>http://localhost/shop/media/products/3303-produits-a015287db3b963c2ee765bf46b383eeb.png</image:loc>
-      <image:title>Orca Pro+ 6 Mois</image:title>
-    </image:image>
-  </url>
-  <url>
     <loc>http://localhost/shop/produit/gran-turismo-7-playstation-5/</loc>
     <lastmod>2023-11-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -7132,13 +8354,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/ndr-portable-speaker-15-y15-2-microphones-black/</loc>
+    <loc>http://localhost/shop/produit/ndr-portable-speaker-y15/</loc>
     <lastmod>2023-11-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>http://localhost/shop/media/products/3277-produits-6465f16583256_1684402533.png</image:loc>
-      <image:title>NDR Portable Speaker 15" Y15 - 2 Microphones - Black</image:title>
+      <image:title>NDR Portable Speaker Y15</image:title>
     </image:image>
   </url>
   <url>
@@ -7292,13 +8514,13 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/produit/haino-teko-g9-ultra-max-golden-edition/</loc>
+    <loc>http://localhost/shop/produit/smartwatch-haino-teko-g9-max-ultra-gold-appel-bluetooth-tunisie/</loc>
     <lastmod>2023-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3258-produits-montre-connectee-haino-teko-g9-ultra-max-golden-edition.jpg</image:loc>
-      <image:title>Haino Teko G9 Ultra Max Golden Edition</image:title>
+      <image:loc>http://localhost/shop/media/products/3258-produits-1780210737-0-SmartwatchHainoTekoG9MaxUltraGoldAppelBluetoothTunisie1.webp</image:loc>
+      <image:title>Smartwatch Haino Teko G9 Max Ultra Gold Appel Bluetooth Tunisie</image:title>
     </image:image>
   </url>
   <url>
@@ -7392,7 +8614,7 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/abonnement-tod-30-jours-1-ecran-mobile/</loc>
+    <loc>http://localhost/shop/produit/abonnement-tod-30-jours-1-ecran-mobile/</loc>
     <lastmod>2023-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -7467,7 +8689,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3234-produits-fuego.png</image:loc>
+      <image:loc>http://localhost/shop/media/products/3234-produits-1780905369-0-fuego.webp</image:loc>
       <image:title>Fuego Iptv 12 Mois</image:title>
     </image:image>
   </url>
@@ -7637,7 +8859,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3191-produits-neo.png</image:loc>
+      <image:loc>http://localhost/shop/media/products/3191-produits-1780578261-0-neo.webp</image:loc>
       <image:title>Neo4k  Iptv 12 Mois</image:title>
     </image:image>
   </url>
@@ -7687,7 +8909,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3184-produits-4a56bd403fa8303f0cddd157984585f5.png</image:loc>
+      <image:loc>http://localhost/shop/media/products/3184-produits-1786884066-0-ATLAS.webp</image:loc>
       <image:title>AtlasPro 12 Mois</image:title>
     </image:image>
   </url>
@@ -7757,7 +8979,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/3175-produits-avatr-diwen.png</image:loc>
+      <image:loc>http://localhost/shop/media/products/3175-produits-1780954130-0-avatardiwen.webp</image:loc>
       <image:title>Avatar Iptv 12 Mois</image:title>
     </image:image>
   </url>
@@ -7942,23 +9164,23 @@
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/bein-sport-6mois/</loc>
+    <loc>http://localhost/shop/produit/bein-sports-premium-abonnement-3-mois/</loc>
     <lastmod>2021-02-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/270-produits-pack-6-mois-bein-sport-premium-standard_2.jpg</image:loc>
-      <image:title>BEIN SPORT 6mois</image:title>
+      <image:loc>http://localhost/shop/media/products/270-produits-1780936496-0-offipro3mois.webp</image:loc>
+      <image:title>beIN Sports Premium – Abonnement 3 Mois</image:title>
     </image:image>
   </url>
   <url>
-    <loc>http://localhost/shop/abonnement/abonnements-bein-sports-iptv-3mois/</loc>
+    <loc>http://localhost/shop/produit/bein-sports-premium-abonnement-6-mois/</loc>
     <lastmod>2021-02-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/269-produits-pack-3-mois-bein-sport-premium-standard_2.jpg</image:loc>
-      <image:title>Abonnements beIN Sports IPTV 3mois</image:title>
+      <image:loc>http://localhost/shop/media/products/269-produits-1780937316-0-offipro6mois.webp</image:loc>
+      <image:title>beIN Sports Premium – Abonnement 6 Mois</image:title>
     </image:image>
   </url>
   <url>
@@ -8147,7 +9369,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://localhost/shop/media/products/196-produits-alpha1.png</image:loc>
+      <image:loc>http://localhost/shop/media/products/196-produits-1779469271-0-alpha.webp</image:loc>
       <image:title>Alpha Iptv 12 Mois</image:title>
     </image:image>
   </url>
@@ -8353,31 +9575,37 @@
   </url>
   <url>
     <loc>http://localhost/shop/boutique/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/shop/contact/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/shop/recherche/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/shop/applications/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/shop/configurateur-camera/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>http://localhost/shop/configurateur-pc/</loc>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

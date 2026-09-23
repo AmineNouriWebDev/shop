@@ -527,6 +527,11 @@ if (file_exists("../generate_sitemap.php")) {
 			 include("includes/configurateur.php");
 			 break;
 
+			 case "configurateur_pc" : 
+			 include("includes/fonctions/fction_produits.php"); 
+			 include("includes/configurateur_pc.php");
+			 break;
+
 			 case "nconfigurateur" : 
 			 include("includes/fonctions/fction_produits.php"); 
 			 include("includes/ajouter_configurateur.php");

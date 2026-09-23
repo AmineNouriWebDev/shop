@@ -446,7 +446,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                         }
                         
                         let html = '';
-                        data.kits.forEach(kit => {
+                        data.kits.filter(k => k.titre !== '__PC_BUILDER__').forEach(kit => {
                             let iconHtml = '';
                             if (kit.photo && kit.photo.trim() !== '') {
                                 if (kit.photo.includes('fa-') || kit.photo.startsWith('fa ')) {

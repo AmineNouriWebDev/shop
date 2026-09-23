@@ -858,6 +858,12 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
           <span class="sh-blink-link-text">Je configure mon système surveillance</span>
         </a>
 
+        <!-- Configurateur PC (Desktop) -->
+        <a href="<?php echo $chemin_absolu; ?>configurateur-pc/" class="sh-blink-link" id="nav-pc-config-link" style="background: color-mix(in srgb, #6366f1 12%, transparent); border-color: color-mix(in srgb, #6366f1 30%, transparent); color: #6366f1;">
+          <svg class="sh-blink-link-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#6366f1;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span class="sh-blink-link-text" style="color:#6366f1;">Configurer mon PC</span>
+        </a>
+
         <!-- Dark mode toggle -->
         <button class="sh-dark-toggle" id="dark-mode-toggle" onclick="window.__toggleTheme()" aria-label="Toggle dark mode">
           <!-- Soleil -->
@@ -1067,6 +1073,10 @@ $search_val = (isset($_POST['action']) && $_POST['action'] == 'search') ? htmlsp
       <a href="<?php echo $chemin_absolu; ?>diagnostic-securite/" class="sh-blink-link" style="margin-top:1.5rem; width:100%; justify-content:center; box-sizing:border-box;">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Je configure mon système surveillance
+      </a>
+      <a href="<?php echo $chemin_absolu; ?>configurateur-pc/" class="sh-blink-link" style="margin-top:0.75rem; width:100%; justify-content:center; box-sizing:border-box; background: color-mix(in srgb, #6366f1 12%, transparent); border-color: color-mix(in srgb, #6366f1 30%, transparent); color: #6366f1;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#6366f1;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Configurer mon PC sur mesure
       </a>
     <?php endif; ?>
 
