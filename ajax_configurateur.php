@@ -95,7 +95,7 @@ if ($action == 'get_steps') {
             $ids_list   = implode(',', array_keys($product_ids_to_load));
             $req_prods  = "SELECT id, titre, link, prix_vente, photo, etat_stock
                            FROM produits
-                           WHERE id IN ($ids_list) AND etat = '1'
+                           WHERE id IN ($ids_list) AND etat = '1' AND etat_stock != '0'
                            ORDER BY FIELD(id, $ids_list)";
             $res_prods  = executeRequete($req_prods);
 

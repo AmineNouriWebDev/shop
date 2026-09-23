@@ -345,6 +345,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                                     </a>
                                     <div class="cli-name">
                                         <h4 class="product-title" title="${p.titre}">${p.titre}</h4>
+                                        ${p.stock == 2 ? `<div style="margin-top:4px; margin-bottom:2px;"><span class="spec-badge" style="background:#fffbeb; color:#d97706; border-color:#fde68a;">⏳ Sur commande</span></div>` : ''}
                                         ${specBadges ? `<div style="margin-top:3px;">${specBadges}</div>` : ''}
                                     </div>
                                 </div>

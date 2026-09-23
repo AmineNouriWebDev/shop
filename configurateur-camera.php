@@ -134,11 +134,8 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
 
       /* Desktop: single row [img] [name] [price+btn] */
       @media (min-width: 641px) {
-          .conf-list-item {
-              display: flex;
-              align-items: center;
-              gap: 0.7rem;
-          }
+          .conf-list-item { display: flex; align-items: center; gap: 1rem; justify-content: space-between; }
+          .cli-row1 { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0; }
           .cli-name { flex: 1; min-width: 0; }
           .cli-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
       }
@@ -540,6 +537,7 @@ $base_url = rtrim($chemin_absolu, '/') . '/';
                                     </a>
                                     <div class="cli-name">
                                         <h4 class="product-title" title="${p.titre}">${p.titre}</h4>
+                                        ${p.stock == 2 ? `<div style="margin-top:4px; margin-bottom:2px;"><span class="spec-badge" style="background:#fffbeb; color:#d97706; border-color:#fde68a;">⏳ Sur commande</span></div>` : ''}
                                     </div>
                                 </div>
                                 <div class="cli-actions" id="action-${p.id}">
