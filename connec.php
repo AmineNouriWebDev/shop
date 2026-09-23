@@ -128,7 +128,13 @@ if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'offipro.net') {
 
 if ($is_local) {
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost:8080';
-    $chemin_absolu = "http://" . $host . "/";
+    
+    // Dynamically detect the base path (e.g., /shop) using the current directory
+    $doc_root = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+    $dir = str_replace('\\', '/', __DIR__);
+    $base_path = str_replace($doc_root, '', $dir);
+    $chemin_absolu = "http://" . $host . $base_path . "/";
+    
     // Désactiver Cloudflare Turnstile en local pour éviter les erreurs de domaine
     $cloudflare_site_key = "";
     $cloudflare_secret_key = "";

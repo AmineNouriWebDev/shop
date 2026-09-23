@@ -6,8 +6,12 @@ if(!isset($_GET['action'])) exit;
 $action = $_GET['action'];
 
 if ($action == 'search') {
-    $q = mysqli_real_escape_string($connexion, $_GET['q']);
-    $req = "SELECT id, titre, photo FROM produits WHERE titre LIKE '%$q%' ORDER BY id DESC LIMIT 10";
+    $s = trim($_GET['q']);
+    $s_esc = mysqli_real_escape_string($connexion, $s);
+    $s_fuzzy = preg_replace('/[eéèêëaàâä]/iu', '%', $s);
+    $s_fuzzy = mysqli_real_escape_string($connexion, $s_fuzzy);
+    
+    $req = "SELECT id, titre, photo FROM produits WHERE (`titre` LIKE '%$s_esc%' OR `titre` LIKE '%$s_fuzzy%') ORDER BY id DESC LIMIT 10";
     $res = executeRequete($req);
     
     if(mysqli_num_rows($res) == 0) {
@@ -17,7 +21,7 @@ if ($action == 'search') {
             $img = !empty($row['photo']) ? '../media/products/'.$row['photo'] : '../media/products/image_non_dispo.jpg';
             echo '<div onclick="selectProduitPromo('.$row['id'].')" class="flex items-center p-3 border-b cursor-pointer transition-colors duration-200" style="border-color:rgba(0,0,0,0.1);" onmouseover="this.style.background=\'rgba(0,0,0,0.05)\'" onmouseout="this.style.background=\'transparent\'">';
             echo '<img src="'.$img.'" class="w-12 h-12 object-cover rounded shadow-sm mr-4" alt="img">';
-            echo '<span class="font-medium" style="color:inherit;">'.htmlspecialchars($row['titre']).'</span>';
+            echo '<span class="font-medium" style="color:inherit;">'.htmlspecialchars(html_entity_decode($row['titre'], ENT_QUOTES, 'UTF-8')).'</span>';
             echo '</div>';
         }
     }
@@ -56,7 +60,7 @@ if ($action == 'load_config') {
     echo '<input type="hidden" name="id_produit" value="'.$id.'">';
     
     echo '<div class="mb-6">';
-    echo '<h5 class="text-xl font-bold" style="color:inherit;">Confguration promo : <span style="color:#3b82f6;">'.htmlspecialchars($prod['titre']).'</span></h5>';
+    echo '<h5 class="text-xl font-bold" style="color:inherit;">Confguration promo : <span style="color:#3b82f6;">'.htmlspecialchars(html_entity_decode($prod['titre'], ENT_QUOTES, 'UTF-8')).'</span></h5>';
     echo '</div>';
     
     // 1. PRICE CONFIGURATION
@@ -85,7 +89,7 @@ if ($action == 'load_config') {
             $v_pp = $var['prix_promo'] > 0 ? $var['prix_promo'] : '';
             
             echo '<tr class="transition-colors" onmouseover="this.style.background=\'rgba(0,0,0,0.05)\'" onmouseout="this.style.background=\'transparent\'">';
-            echo '<td class="px-4 py-3 font-medium leading-tight" style="color:inherit;">'.htmlspecialchars($vlabel).'</td>';
+            echo '<td class="px-4 py-3 font-medium leading-tight" style="color:inherit;">'.htmlspecialchars(html_entity_decode($vlabel, ENT_QUOTES, 'UTF-8')).'</td>';
             echo '<td class="px-4 py-3 line-through" style="opacity:0.6;">'.number_format((float)$v_pv, 3, '.', '').' DT</td>';
             echo '<td class="px-4 py-3">';
             echo '<input type="number" step="0.001" name="var_promo['.$vid.']" value="'.$v_pp.'" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm outline-none" style="background:transparent; color:inherit; border-color:rgba(0,0,0,0.2);" placeholder="0.000" required>';

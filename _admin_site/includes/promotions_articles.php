@@ -18,9 +18,13 @@ $per_page = 20;
 
 $cond = " 1=1 ";
 if(isset($_POST['search'])) {
-    $s = mysqli_real_escape_string($connexion, $_POST['search']);
+    $s = trim($_POST['search']);
     if(!empty($s)) {
-        $cond .= " AND `titre` LIKE '%$s%' ";
+        $s_esc = mysqli_real_escape_string($connexion, $s);
+        // Replace 'e' and 'a' (and variants) with '%' to match HTML entities like &eacute; and &agrave;
+        $s_fuzzy = preg_replace('/[eéèêëaàâä]/iu', '%', $s);
+        $s_fuzzy = mysqli_real_escape_string($connexion, $s_fuzzy);
+        $cond .= " AND (`titre` LIKE '%$s_esc%' OR `titre` LIKE '%$s_fuzzy%') ";
     }
 }
 
@@ -108,7 +112,7 @@ $res_list = executeRequete($req_list);
                             <img src="<?php echo $img; ?>" class="w-10 h-10 object-cover rounded shadow-sm border border-gray-100 dark:border-slate-600" alt="img">
                         </td>
                         <td class="px-6 py-3 font-medium min-w-[200px]" style="color:inherit;">
-                            <?php echo htmlspecialchars($row['titre']); ?>
+                            <?php echo htmlspecialchars(html_entity_decode($row['titre'], ENT_QUOTES, 'UTF-8')); ?>
                         </td>
                         <td class="px-6 py-3 line-through" style="opacity:0.6;">
                             <?php echo $row['prix_vente']; ?> DT
