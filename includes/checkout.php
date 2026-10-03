@@ -116,41 +116,52 @@
 
 		// ──────────────────────────────────────────────────────────
 		// Best Delivery SOAP API - Création du colis (non-bloquant)
+		// Uniquement : paiement à la livraison + au moins un équipement (pas d'abonnement)
 		// ──────────────────────────────────────────────────────────
-		$has_preorder = false;
-		if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
-		    foreach ($_SESSION['panier']['idcart'] as $id_cart_item) {
-		        if (etatStockProduits($id_cart_item) == '2') {
-		            $has_preorder = true;
-		            break;
-		        }
-		    }
-		}
+		try {
+		    require_once(__DIR__ . '/../includes/best_delivery.php');
 
-		if (!$has_preorder) {
-		    try {
-		        if (class_exists('SoapClient')) {
-		            require_once(__DIR__ . '/../includes/best_delivery.php');
-		            $clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd));
-		            $bd_result = bestDelivery_createPickup(
-		                $nom . ' ' . $prenom,
-		                $gouvernorat,
-		                $ville,
-		                $adresse,
-		                $phone,
-		                $globale,
-		                $clean_designation,
-		                $commentaire,
-		                0
-		            );
-		            if (!empty($bd_result['success']) && !empty($bd_result['code_barre'])) {
-		                $barcode = sanitize($bd_result['code_barre']);
-		                executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+		    $has_preorder = false;
+		    if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
+		        foreach ($_SESSION['panier']['idcart'] as $id_cart_item) {
+		            if (etatStockProduits($id_cart_item) == '2') {
+		                $has_preorder = true;
+		                break;
 		            }
 		        }
-		    } catch (Exception $e) {
-		        error_log('[BestDelivery] Erreur non bloquante checkout: ' . $e->getMessage());
 		    }
+
+		    $bd_ids = (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart']))
+		        ? $_SESSION['panier']['idcart'] : [];
+		    $bd_livrables = bestDelivery_livrableIds($bd_ids);
+
+		    if (!$has_preorder && !empty($bd_livrables) && bestDelivery_paiementEstLivraison($moyen_paiement) && class_exists('SoapClient')) {
+		        // Désignation : équipements uniquement
+		        $bd_designation = '';
+		        foreach ($_SESSION['panier']['idcart'] as $bd_i => $bd_id) {
+		            if (!in_array($bd_id, $bd_livrables)) continue;
+		            $bd_name = !empty($_SESSION['panier']['name'][$bd_i]) ? $_SESSION['panier']['name'][$bd_i] : titreProduits($bd_id);
+		            $bd_designation .= ($bd_designation !== '' ? ', ' : '') . $_SESSION['panier']['qte_prd'][$bd_i] . 'x' . $bd_name;
+		        }
+		        $clean_designation = strip_tags($bd_designation);
+		        $bd_result = bestDelivery_createPickup(
+		            $nom . ' ' . $prenom,
+		            $gouvernorat,
+		            $ville,
+		            $adresse,
+		            $phone,
+		            $globale,
+		            $clean_designation,
+		            $commentaire,
+		            0
+		        );
+		        if (!empty($bd_result['success']) && !empty($bd_result['code_barre'])) {
+		            $barcode = sanitize($bd_result['code_barre']);
+		            executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
+		        }
+		    }
+		} catch (Throwable $e) {
+		    error_log('[BestDelivery] Erreur non bloquante checkout: ' . $e->getMessage());
 		}
 
 

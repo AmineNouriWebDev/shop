@@ -163,25 +163,39 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
 
     // ──────────────────────────────────────────────────────────
     // Best Delivery SOAP API - Création du colis (non-bloquant)
+    // Uniquement : paiement à la livraison + au moins un équipement (pas d'abonnement)
     // ──────────────────────────────────────────────────────────
-    $has_preorder = false;
-    if (etatStockProduits($prod_cmd) == '2') {
-        $has_preorder = true;
-    }
-    if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
-        foreach ($_SESSION['panier']['idcart'] as $id_cart_item) {
+    try {
+        require_once(__DIR__ . '/includes/best_delivery.php');
+
+        $bd_all_ids = [$prod_cmd];
+        if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
+            $bd_all_ids = array_merge($bd_all_ids, $_SESSION['panier']['idcart']);
+        }
+
+        $has_preorder = false;
+        foreach ($bd_all_ids as $id_cart_item) {
             if (etatStockProduits($id_cart_item) == '2') {
                 $has_preorder = true;
                 break;
             }
         }
-    }
 
-    if (!$has_preorder) {
-        try {
-            if (class_exists('SoapClient')) {
-            require_once(__DIR__ . '/includes/best_delivery.php');
-            $clean_designation = strip_tags(str_replace(' x ', 'x', $descriptionCmd)) . ' (Express)';
+        $bd_livrables = bestDelivery_livrableIds($bd_all_ids);
+
+        if (!$has_preorder && !empty($bd_livrables) && bestDelivery_paiementEstLivraison($moyen_paiement) && class_exists('SoapClient')) {
+            // Désignation : équipements uniquement
+            $bd_designation = '';
+            if (typeProduits($prod_cmd) !== 'A') {
+                $bd_designation = $qte_cmd . 'x' . titreProduits($prod_cmd);
+            }
+            if (isset($_SESSION['panier']['idcart']) && is_array($_SESSION['panier']['idcart'])) {
+                foreach ($_SESSION['panier']['idcart'] as $bd_i => $bd_id) {
+                    if (typeProduits($bd_id) === 'A') continue;
+                    $bd_designation .= ($bd_designation !== '' ? ', ' : '') . $_SESSION['panier']['qte_prd'][$bd_i] . 'x' . titreProduits($bd_id);
+                }
+            }
+            $clean_designation = strip_tags($bd_designation) . ' (Express)';
             $bd_result = bestDelivery_createPickup(
                 $nom . ' ' . $prenom,
                 ucfirst(strtolower($ville)),
@@ -197,11 +211,12 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
                 $barcode = sanitize($bd_result['code_barre']);
                 executeRequete("UPDATE `commandes` SET `code_envoi`='" . $barcode . "' WHERE `id`='" . $id_cmd . "'");
             }
-        } catch (Exception $e) {
-            // Ignorer l'erreur pour ne pas bloquer la commande
-            error_log('[BestDelivery] Erreur non bloquante express: ' . $e->getMessage());
         }
-    }  // ──────────────────────────────────────────────────────────
+    } catch (Throwable $e) {
+        // Ignorer l'erreur pour ne pas bloquer la commande
+        error_log('[BestDelivery] Erreur non bloquante express: ' . $e->getMessage());
+    }
+    // ──────────────────────────────────────────────────────────
 
     $msg="Votre commande a été bien enregistrée.";
 

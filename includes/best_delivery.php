@@ -49,6 +49,28 @@ function bestDelivery_log($method, $params, $response, $error = '') {
 }
 
 /**
+ * Retourne les IDs des produits physiques (équipements) à livrer parmi une liste d'IDs.
+ * Les abonnements (produits.type = 'A') sont exclus : on ne les livre pas.
+ * Retourne [] si rien n'est à livrer.
+ */
+function bestDelivery_livrableIds($ids) {
+    $livrables = [];
+    if (!is_array($ids)) return $livrables;
+    foreach ($ids as $id) {
+        if (typeProduits($id) === 'A') continue;
+        $livrables[] = $id;
+    }
+    return $livrables;
+}
+
+/**
+ * La livraison Best Delivery n'est déclenchée que pour le "Paiement à la livraison" (moyens_paiement.id = 9).
+ */
+function bestDelivery_paiementEstLivraison($moyen_paiement) {
+    return (string) $moyen_paiement === '9';
+}
+
+/**
  * 1. CreatePickup — Créer un colis
  *
  * @param string $nom         Nom complet du client
