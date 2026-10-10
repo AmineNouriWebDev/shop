@@ -78,6 +78,8 @@ if(isset($_POST['action']) && $_POST['action']=="cmd_express" ){
     $client = $nom.' '.$prenom;
 
     $sender_email = envoiEmail(9);
+    $headersMail  = 'MIME-Version: 1.0' . "\r\n";
+    $headersMail .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
     $headersMail .= 'From:'.$nom_site.' <'.$sender_email.'>'. "\r\n";
     $sujet    = sujetEmail(9);
     $sujet    = str_replace('%%NCMD%%',$cmd,$sujet);
