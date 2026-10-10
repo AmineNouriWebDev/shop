@@ -1,4 +1,4 @@
-﻿<?php // v1.1 Force Sync ?>
+<?php // v1.1 Force Sync ?>
 <div class="main main-content-wrapper pb-5 mb-5" style="overflow-x: hidden;">
     <!-- Product Details Area Start -->
     <div class="single-product-area section-padding-20 clearfix pb-5">
@@ -1284,7 +1284,7 @@
         const paymentRadio = document.querySelector('input[name="paymentMethod"]:checked');
         const payment = paymentRadio ? document.querySelector(`label[for="${paymentRadio.id}"] span`).textContent.trim() : 'Paiement à la livraison';
 
-        const productTitle = '<?php echo addslashes($titre); ?>';
+        const productTitle = '<?php echo addslashes(html_entity_decode($titre ?? "", ENT_QUOTES | ENT_HTML5, "UTF-8")); ?>';
         const productPrice = '<?php if ($PrixPromo != "0.000") {
             echo $PrixPromo;
         } else {
@@ -1293,25 +1293,25 @@
         const productUrl = window.location.href;
 
         const message = `
-?? *Nouvelle Commande Express* ??
+🛒 *Nouvelle Commande Express* 🛒
 
-??? *Produit:* _${productTitle}_ (Lien: ${productUrl} )
-?? *Prix:* _${productPrice} DT_
-?? *Quantité:* ${Quantity}
-
-----------------
-
-?? *Informations Client:*
-????? *Nom:* ${nom} ${prenom}
-?? *Téléphone:* ${tel}
-?? *Email:* ${email}
-?? *Paiement:* ${payment}
+📦 *Produit:* _${productTitle}_ (Lien: ${productUrl} )
+💰 *Prix:* _${productPrice} DT_
+🔢 *Quantité:* ${Quantity}
 
 ----------------
 
-? Merci de *confirmer* cette commande dès que possible.
-??? *Date de commande:* ${date}
-? *Heure:* ${time}
+👤 *Informations Client:*
+📛 *Nom:* ${nom} ${prenom}
+📞 *Téléphone:* ${tel}
+📧 *Email:* ${email}
+💳 *Paiement:* ${payment}
+
+----------------
+
+⏳ Merci de *confirmer* cette commande dès que possible.
+📅 *Date de commande:* ${date}
+⏰ *Heure:* ${time}
     `.trim();
 
         const encodedMessage = encodeURIComponent(message);
