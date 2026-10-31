@@ -16,6 +16,36 @@ if (isset($_POST['action_cmd'])) {
         supprimerCommandesMultiples($_POST['ids']);
         exit;
     }
+    if ($_POST['action_cmd'] == 'accepter' && isset($_POST['id'])) {
+        $id_commande = intval($_POST['id']);
+        if ($id_commande > 0) {
+            $new_etat = 3;
+            $date = date('Y-m-d H:i:s');
+            $commentaire = "Commande acceptée directement depuis la liste des commandes";
+            $notify = '1';
+            executeRequete("UPDATE `commandes` SET `etat` = '$new_etat' WHERE `id` = '$id_commande'");
+            executeRequete("INSERT INTO `historique_etat_commande` (`idcommande`, `idetat`, `date`, `commentaire`, `notif_client`) 
+                           VALUES ('$id_commande', '$new_etat', '$date', '$commentaire', '$notify')");
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => "Commande #$id_commande acceptée avec succès."]);
+            exit;
+        }
+    }
+    if ($_POST['action_cmd'] == 'expedier' && isset($_POST['id'])) {
+        $id_commande = intval($_POST['id']);
+        if ($id_commande > 0) {
+            $new_etat = 2;
+            $date = date('Y-m-d H:i:s');
+            $commentaire = "Commande marquée comme expédiée depuis la liste des commandes";
+            $notify = '1';
+            executeRequete("UPDATE `commandes` SET `etat` = '$new_etat' WHERE `id` = '$id_commande'");
+            executeRequete("INSERT INTO `historique_etat_commande` (`idcommande`, `idetat`, `date`, `commentaire`, `notif_client`) 
+                           VALUES ('$id_commande', '$new_etat', '$date', '$commentaire', '$notify')");
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => "Commande #$id_commande marquée comme expédiée avec succès."]);
+            exit;
+        }
+    }
 }
 
 $idclient = isset($_GET['id']) ? intval($_GET['id']) : 0;

@@ -14,7 +14,7 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
 # 2. Redirection HTTP vers HTTPS (sauf en local)
 RewriteCond %{HTTPS} off
-RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)$ [NC]
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
 # Prevent access to sensitive files

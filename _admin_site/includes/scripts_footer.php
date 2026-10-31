@@ -396,7 +396,12 @@
 					            "targets": 1,
 					            "visible": false
 					        }
-					    ]
+					    ],
+					    "drawCallback": function() {
+					        if (typeof tippy === 'function') {
+					            tippy('[data-tippy-content]', { allowHTML: true });
+					        }
+					    }
 					});
 
 					$('#checkAllCmd').on('change', function () {
@@ -443,6 +448,194 @@
 					};
 					window.confirmDeleteCmd = function(id) {
 					    confirmGlobalDelete('javascript:executeDeleteCmd(' + id + ')');
+					};
+
+					// Toggle product list under order number
+					window.toggleCmdProducts = function(cmdId, triggerEl) {
+					    var $drawer = $('#cmd-products-' + cmdId);
+					    var $toggle = $(triggerEl);
+					    if ($drawer.is(':visible')) {
+					        $drawer.slideUp(180);
+					        $toggle.removeClass('is-open');
+					    } else {
+					        $drawer.slideDown(200);
+					        $toggle.addClass('is-open');
+					    }
+					};
+
+					var pendingAcceptCmdId = null;
+
+					// Ouvrir la boîte de dialogue pour accepter la commande
+					window.accepterCommande = function(id) {
+					    pendingAcceptCmdId = id;
+					    var modal = document.getElementById('globalAcceptModal');
+					    var cmdNumSpan = document.getElementById('acceptModalCmdNum');
+					    if (modal) {
+					        if (cmdNumSpan) cmdNumSpan.textContent = '#' + id;
+					        modal.style.display = 'block';
+					    } else {
+					        if (confirm('Voulez-vous accepter la commande #' + id + ' ?\nSon statut passera à "Traitement en cours".')) {
+					            window.executeAcceptCmd(id);
+					        }
+					    }
+					};
+
+					// Clic sur le bouton de confirmation du modal
+					$(document).on('click', '#confirmGlobalAcceptBtn', function() {
+					    if (pendingAcceptCmdId) {
+					        var id = pendingAcceptCmdId;
+					        if (typeof closeGlobalAcceptModal === 'function') {
+					            closeGlobalAcceptModal();
+					        }
+					        window.executeAcceptCmd(id);
+					    }
+					});
+
+					// Exécuter l'acceptation via AJAX
+					window.executeAcceptCmd = function(id) {
+					    $.ajax({
+					        type: 'POST',
+					        url: 'ajax/ajax_commande.php',
+					        data: {
+					            action: 'accepter',
+					            id: id
+					        },
+					        dataType: 'json',
+					        success: function(res) {
+					            if (res && res.success) {
+					                if (typeof showToast === 'function') {
+					                    showToast(res.message || 'Commande #' + id + ' acceptée avec succès !', 'success');
+					                } else {
+					                    alert(res.message || 'Commande acceptée.');
+					                }
+					                if ($.fn.DataTable.isDataTable('#tableCmd')) {
+					                    $('#tableCmd').DataTable().ajax.reload(null, false);
+					                } else {
+					                    window.location.reload();
+					                }
+					            } else {
+					                var errMsg = (res && res.error) ? res.error : 'Erreur lors de l\'acceptation.';
+					                if (typeof showToast === 'function') {
+					                    showToast(errMsg, 'error');
+					                } else {
+					                    alert(errMsg);
+					                }
+					            }
+					        },
+					        error: function() {
+					            // Fallback si l'endpoint AJAX rencontre un souci
+					            $.ajax({
+					                type: 'POST',
+					                url: 'index.php?r=commandes',
+					                data: { action_cmd: 'accepter', id: id },
+					                dataType: 'json',
+					                success: function(res2) {
+					                    if (typeof showToast === 'function') {
+					                        showToast(res2.message || 'Commande acceptée avec succès.', 'success');
+					                    }
+					                    if ($.fn.DataTable.isDataTable('#tableCmd')) {
+					                        $('#tableCmd').DataTable().ajax.reload(null, false);
+					                    } else {
+					                        window.location.reload();
+					                    }
+					                },
+					                error: function() {
+					                    if (typeof showToast === 'function') {
+					                        showToast('Erreur serveur lors de la mise à jour.', 'error');
+					                    } else {
+					                        alert('Erreur serveur.');
+					                    }
+					                }
+					            });
+					        }
+					    });
+					};
+
+					var pendingExpedieCmdId = null;
+
+					// Ouvrir la boîte de dialogue pour expédier la commande (icône checkbox à côté de l'œil)
+					window.expedierCommande = function(id) {
+					    pendingExpedieCmdId = id;
+					    var modal = document.getElementById('globalExpedieModal');
+					    var cmdNumSpan = document.getElementById('expedieModalCmdNum');
+					    if (modal) {
+					        if (cmdNumSpan) cmdNumSpan.textContent = '#' + id;
+					        modal.style.display = 'block';
+					    } else {
+					        if (confirm('Voulez-vous marquer la commande #' + id + ' comme expédiée ?')) {
+					            window.executeExpedieCmd(id);
+					        }
+					    }
+					};
+
+					// Clic sur le bouton de confirmation du modal expédition
+					$(document).on('click', '#confirmGlobalExpedieBtn', function() {
+					    if (pendingExpedieCmdId) {
+					        var id = pendingExpedieCmdId;
+					        if (typeof closeGlobalExpedieModal === 'function') {
+					            closeGlobalExpedieModal();
+					        }
+					        window.executeExpedieCmd(id);
+					    }
+					});
+
+					// Exécuter l'expédition via AJAX
+					window.executeExpedieCmd = function(id) {
+					    $.ajax({
+					        type: 'POST',
+					        url: 'ajax/ajax_commande.php',
+					        data: {
+					            action: 'expedier',
+					            id: id
+					        },
+					        dataType: 'json',
+					        success: function(res) {
+					            if (res && res.success) {
+					                if (typeof showToast === 'function') {
+					                    showToast(res.message || 'Commande #' + id + ' marquée comme expédiée !', 'success');
+					                } else {
+					                    alert('Commande #' + id + ' marquée comme expédiée !');
+					                }
+					                if ($.fn.DataTable.isDataTable('#tableCmd')) {
+					                    $('#tableCmd').DataTable().ajax.reload(null, false);
+					                } else {
+					                    window.location.reload();
+					                }
+					            } else {
+					                var errMsg = (res && res.error) ? res.error : 'Erreur lors de la mise à jour.';
+					                if (typeof showToast === 'function') {
+					                    showToast(errMsg, 'error');
+					                } else {
+					                    alert(errMsg);
+					                }
+					            }
+					        },
+					        error: function() {
+					            $.ajax({
+					                type: 'POST',
+					                url: 'index.php?r=commandes',
+					                data: { action_cmd: 'expedier', id: id },
+					                dataType: 'json',
+					                success: function(res2) {
+					                    if (typeof showToast === 'function') {
+					                        showToast(res2.message || 'Commande marquée comme expédiée.', 'success');
+					                    }
+					                    if ($.fn.DataTable.isDataTable('#tableCmd')) {
+					                        $('#tableCmd').DataTable().ajax.reload(null, false);
+					                    } else {
+					                        window.location.reload();
+					                    }
+					                },
+					                error: function() {
+					                    if (typeof showToast === 'function') {
+					                        showToast('Erreur serveur lors de la mise à jour.', 'error');
+					                    } else {
+					                        alert('Erreur serveur.');
+					                    }
+					                }
+					            });
+					        }
+					    });
 					};
 
 					// Stock Toggle AJAX Function

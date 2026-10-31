@@ -116,5 +116,90 @@ html.dark .admin-select {
 .view-btn:hover { background: var(--color-primary, #5a31f4); color: #fff; }
 .delete-btn { background: rgba(239,68,68,0.08); color: #ef4444; }
 .delete-btn:hover { background: #ef4444; color: #fff; }
+.accept-btn { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.25); cursor: pointer; }
+.accept-btn:hover { background: #10b981 !important; color: #fff !important; border-color: #10b981 !important; }
+.ship-btn { background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.25); cursor: pointer; }
+.ship-btn:hover { background: #3b82f6 !important; color: #fff !important; border-color: #3b82f6 !important; }
+
+/* Quick Accept Button in Status Column */
+.btn-quick-accept {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #10b981; color: #fff; border: none; border-radius: 5px;
+    padding: 3px 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+    transition: all 0.15s ease; box-shadow: 0 1px 2px rgba(16,185,129,0.2);
+    text-decoration: none !important;
+}
+.btn-quick-accept:hover { background: #059669; color: #fff; transform: translateY(-1px); box-shadow: 0 2px 4px rgba(16,185,129,0.3); }
+.btn-quick-accept:active { transform: translateY(0); }
+
+/* Commandes Product Preview under order number */
+.cmd-num-cell { min-width: 190px; }
+.cmd-num-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer; user-select: none; padding: 3px 8px; margin-left: -6px;
+    border-radius: 6px; transition: all 0.15s ease;
+    text-decoration: none !important;
+}
+.cmd-num-toggle:hover { background: rgba(90,49,244,0.08); }
+.cmd-badge {
+    font-weight: 700; color: var(--color-primary, #5a31f4);
+    font-size: 0.95rem; letter-spacing: 0.3px;
+}
+.cmd-chevron-wrap {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(90,49,244,0.08); color: var(--color-primary, #5a31f4);
+    transition: transform 0.2s ease, background 0.15s ease;
+}
+.cmd-num-toggle:hover .cmd-chevron-wrap {
+    background: var(--color-primary, #5a31f4); color: #fff;
+}
+.cmd-num-toggle.is-open .cmd-chevron-wrap {
+    transform: rotate(180deg);
+    background: var(--color-primary, #5a31f4); color: #fff;
+}
+.cmd-count-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(90,49,244,0.1); color: var(--color-primary, #5a31f4);
+    font-size: 0.68rem; font-weight: 700; padding: 1px 5px; border-radius: 10px;
+    min-width: 16px; height: 16px;
+}
+.cmd-date-text { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+.cmd-products-drawer {
+    margin-top: 6px; padding: 8px; background: #f8fafc;
+    border: 1px solid #e2e8f0; border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    max-width: 320px;
+}
+.cmd-products-list { display: flex; flex-direction: column; gap: 5px; }
+.cmd-prod-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 6px; background: #ffffff;
+    border: 1px solid #e2e8f0; border-radius: 6px;
+}
+.cmd-prod-img {
+    width: 36px; height: 36px; object-fit: contain;
+    border-radius: 4px; background: #fff; border: 1px solid rgba(0,0,0,0.06);
+    flex-shrink: 0;
+}
+.cmd-prod-info { flex: 1; min-width: 0; }
+.cmd-prod-name {
+    font-size: 0.78rem; font-weight: 600; color: #1e293b;
+    line-height: 1.25; word-break: break-word;
+}
+.cmd-prod-meta {
+    display: flex; align-items: center; gap: 6px; margin-top: 2px;
+    font-size: 0.72rem;
+}
+.cmd-prod-qty {
+    background: rgba(90,49,244,0.1); color: var(--color-primary, #5a31f4);
+    padding: 1px 5px; border-radius: 4px; font-weight: 700;
+}
+.cmd-prod-price { color: #059669; font-weight: 600; }
+
+html.dark .cmd-products-drawer { background: #1e293b; border-color: #334155; }
+html.dark .cmd-prod-item { background: #0f172a; border-color: #334155; }
+html.dark .cmd-prod-name { color: #f1f5f9; }
+html.dark .cmd-date-text { color: #94a3b8; }
 </style>
 
