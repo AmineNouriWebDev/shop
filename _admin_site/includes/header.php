@@ -12,6 +12,7 @@ $page_titles = [
     'commandes'         => 'Commandes',
     'dcommande'         => 'Détail commande',
     'etat_commandes'    => 'États des commandes',
+    'stats_commandes'   => 'Statistiques des commandes',
     'clients'           => 'Clients',
     'nclient'           => 'Nouveau client',
     'mclient'           => 'Modifier client',

@@ -676,6 +676,14 @@ if (file_exists("../generate_sitemap.php")) {
 			 include("includes/etat_commandes.php");
 			 
 			 break;
+
+			 case "stats_commandes" :
+			     
+			 include("includes/fonctions/fction_commandes.php");
+			 
+			 include("includes/stats_commandes.php");
+			 
+			 break;
 			 
 			 case "export_ventes" :
 
